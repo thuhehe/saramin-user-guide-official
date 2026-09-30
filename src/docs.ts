@@ -44,6 +44,12 @@ export type DocBlock =
      to and then misapplied, while the same rule shown running on real dates and
      real numbers is a version the reader can check their own case against. */
   | { kind: 'example'; heading: string; scenario: string; cols: string[]; rows: string[][]; note?: string }
+  /* A screenshot of the real console. The point of the guide's second half is
+     that a reader recognises the screen, so the picture carries the step and the
+     prose only says what to look at — never a click-by-click transcript, which
+     goes stale the moment a button moves. `where` names the surface, because the
+     same flow is three screens on three different sites. */
+  | { kind: 'shot'; src: string; caption: string; where?: 'Admin' | 'Company site' | 'Jobseeker site'; note?: string }
 
 export interface ModuleDoc {
   /** shown as its own entry at the top of the module's menu */
@@ -918,7 +924,51 @@ export const PAGE_DOCS: Record<string, PageDoc> = {
         text:
           '**Bốn điểm cần chốt với khách.** (1) **Khoá tiêu đề sau 72 giờ** với tin do công ty đăng (HQ miễn) — cần xác nhận đã build trên trang công ty chưa. (2) **Ngành Y tế chưa có job role nào** (nhóm “medical professionals” bị import thành nhóm lọc), nên **bệnh viện không đăng tin được** vì thiếu field bắt buộc. (3) **Tin miễn phí không nâng lên tier trả phí được** và không có vị trí cao cấp — khách có đồng ý giới hạn đó không. (4) **Duplicate tin** có trong requirement nhưng **console chưa làm** — có nằm trong đợt này không.',
       },
-    ],
+          {
+        kind: 'p',
+        text: '**Màn hình thật.** Sáu ảnh này là toàn bộ vòng đời một tin, từ lúc chọn gói tới lúc nâng bậc.',
+      },
+      {
+        kind: 'shot',
+        src: '/shots/50-jobs-list.jpg',
+        where: 'Admin',
+        caption: 'Danh sách tin. Tab trạng thái là **4 giá trị**: `DRAFT · SCHEDULE · OPEN · CLOSED`.',
+        note: '**Không còn hàng đợi duyệt tin và không còn trạng thái Archived** — chúng đã bị gỡ (svn-be V468, 09/09/2026). Tin công ty tự đăng đi thẳng vào `OPEN`.',
+      },
+      {
+        kind: 'shot',
+        src: '/shots/53-job-new-posting-setup.jpg',
+        where: 'Admin',
+        caption: 'Form tạo tin, mục **Posting setup** — nơi tin gặp phần đã bán.',
+      },
+      {
+        kind: 'shot',
+        src: '/shots/54-job-po-selected.jpg',
+        where: 'Admin',
+        caption: 'Chọn công ty rồi chọn **PO**.',
+      },
+      {
+        kind: 'shot',
+        src: '/shots/55-job-main-product-from-po.jpg',
+        where: 'Admin',
+        caption: 'Sau khi chọn PO, danh sách **Main product chỉ còn các dòng đã trả tiền của PO đó**.',
+        note: 'Không chọn PO thì danh sách chỉ còn các product **Free** — đó là lane “HQ đăng hộ miễn phí”, không trừ quota của ai.',
+      },
+      {
+        kind: 'shot',
+        src: '/shots/51-job-detail.jpg',
+        where: 'Admin',
+        caption: 'Chi tiết một tin. Dòng **Current tier** là bậc tin đang chiếm.',
+        note: '**Exposure độc lập với status**: tin có thể đang `OPEN` mà vẫn không ai thấy, nếu Exposure tắt.',
+      },
+      {
+        kind: 'shot',
+        src: '/shots/52-upgrade-tier-dialog.jpg',
+        where: 'Admin',
+        caption: 'Nâng bậc một tin đang chạy.',
+        note: 'Chỉ nâng **lên** được — đích phải đứng cao hơn trên Thang bậc tin. Mỗi lần nâng tạo một dòng JobPlacement **mới** và huỷ dòng cũ, không sửa tại chỗ.',
+      },
+],
   },
 
   applicants: {
@@ -1047,9 +1097,9 @@ export const PAGE_DOCS: Record<string, PageDoc> = {
         items: [
           '**⋯** chỉ chào các phán quyết mà trạng thái hiện tại cho phép — một trạng thái **nghi ngờ** chào cả *Duyệt CV…* (→ Đạt) và *Từ chối CV…* (→ Từ chối); một trạng thái **chung cuộc** chỉ chào **phép đảo ngược** của nó. Cả hai đều bắt **ghi chú nội bộ**.',
           '**Từ chối ở đây KHÔNG có bộ chọn lý do** — ứng viên sẽ nhận lời nhắn chung chung. **Khi lý do quan trọng, hãy quyết ở CV review.**',
-          '**Open in CV review ↗** xuất hiện trên **mọi dòng không phải *Đạt***, và nhảy thẳng tới mục hàng đợi của CV đó, có file và lý do máy quét ghi bên cạnh.',
+          '**Open in CV review ↗** xuất hiện trên **mọi dòng chưa đạt**, và nhảy thẳng tới mục hàng đợi của CV đó, có file và lý do máy quét ghi bên cạnh.',
           '**Filter** có *Status* và *CV search status*; cả hai thu hẹp **cùng một sự thật**, nên *Đạt* + *Ẩn* **không khớp gì cả** — trạng thái rỗng sẽ nói rõ hai bộ lọc nào đang đánh nhau.',
-          '**Cột Unlocks đọc là — khi CV chưa *Đạt***: CV đang ẩn thì không mở khoá được, nên **từ chối ở đây không hoàn tiền gì** trừ khi CV đang *Đang hiển thị*.',
+          '**Cột Unlocks đọc là — khi CV chưa đạt**: CV đang ẩn thì không mở khoá được, nên **từ chối ở đây không hoàn tiền gì** trừ khi CV đang *Đang hiển thị*.',
         ],
       },
       {
@@ -1058,7 +1108,7 @@ export const PAGE_DOCS: Record<string, PageDoc> = {
         note: 'Đây là mặt khách hàng của chính kho ứng viên. Hiểu nó để trả lời được “vì sao ứng viên này không ra kết quả tìm kiếm” và “vì sao khách bị trừ credit”.',
         cols: ['Hành động', 'Tốn gì', 'Chi tiết'],
         rows: [
-          ['**Tìm và lọc**', '**Miễn phí**', 'Tên bị che (`Long T***`). Công ty **không có gói đang chạy** vẫn đọc được **10 CV**, liên hệ vẫn che.'],
+          ['**Tìm và lọc**', '**Miễn phí**', 'Tên bị che (dạng `Long T***`). Công ty **không có gói đang chạy** vẫn đọc được **10 CV**, liên hệ vẫn che.'],
           ['**Save candidate**', '**Miễn phí**', 'Xếp ứng viên vào **một hoặc nhiều folder** (mỗi folder = một vị trí họ đang tuyển). Thẻ rơi vào cột *Saved*, **vẫn che**, gắn badge *Not unlocked*.'],
           ['**Mở khoá CV** (hoặc **kéo thẻ ra khỏi cột Saved**)', '**1 credit**', 'Lộ **tên, số điện thoại, email**, file CV và các link — **một lần, vĩnh viễn, cho cả công ty**. Lúc mở khoá, hệ thống hỏi xếp CV vào folder nào.'],
           ['**Di chuyển một ứng viên đã mở khoá**', '**Miễn phí**', '“Already unlocked — this move is free.” Mở lại CV, xếp vào folder thứ hai, archive rồi lưu lại — **không tính tiền lần nữa**.'],
@@ -1114,20 +1164,20 @@ export const PAGE_DOCS: Record<string, PageDoc> = {
       {
         kind: 'table',
         heading: 'Máy quét ghi gì — ba kết quả, không có “từ chối”',
-        note: 'Quy tắc là **OR**: có ít nhất **một kinh nghiệm làm việc** *hoặc* **một mục học vấn**. Máy đọc **các trường**, không quan tâm chúng từ đâu ra — một kỹ năng gõ tay tính hệt như một kỹ năng trích từ PDF.',
+        note: 'Quy tắc **đúng như trong code** (`CvQualificationRule.evaluate`): đạt khi có **≥ 1 kinh nghiệm làm việc**, **HOẶC** có **≥ 1 học vấn VÀ ≥ 1 dự án**. Nhánh học vấn **cần cả dự án** — một CV chỉ có mỗi mục học vấn thì **không** qua. Trước đó còn đòi ≥ 3 kỹ năng, nhưng điều kiện kỹ năng **đã bỏ ngày 11/09/2026**. Máy đọc **các trường**, không quan tâm chúng từ đâu ra — một mục gõ tay tính hệt như một mục trích từ PDF. Không có file đọc được chữ → **Không đọc được**.',
         cols: ['Kết quả', 'Khi nào', 'Nghĩa là gì'],
         rows: [
-          ['**Đạt**', 'Quy tắc được thoả', '**Chung cuộc.** CV gửi được tới nhà tuyển dụng và vào được tìm kiếm CV. Không ai phải xem.'],
-          ['**Chưa đủ thông tin**', 'File đọc được nhưng quy tắc không thoả', '**Tạm thời** — là một câu hỏi, chưa phải phán quyết. Chờ ứng viên bổ sung, hoặc chờ người duyệt quyết.'],
-          ['**Không đọc được**', 'File không có chữ nào trích ra được (ảnh scan, file hỏng…)', '**Tạm thời** — hệ quả y hệt *Chưa đủ thông tin*. Người có thể đọc được file bình thường; máy thì không trích được gì.'],
+          ['**Đạt**', '`kinh nghiệm ≥ 1` **hoặc** (`học vấn ≥ 1` **và** `dự án ≥ 1`)', '**Chung cuộc.** CV gửi được tới nhà tuyển dụng và vào được tìm kiếm CV. Không ai phải xem.'],
+          ['**Chưa đủ thông tin**', 'File đọc được nhưng **không** thoả công thức trên', '**Tạm thời** — là một câu hỏi, chưa phải phán quyết. Chờ ứng viên bổ sung, hoặc chờ người duyệt quyết.'],
+          ['**Không đọc được**', 'File **không có lớp chữ** nào trích ra được (ảnh scan, file hỏng…) — kiểm **trước** mọi điều kiện khác', '**Tạm thời** — hệ quả y hệt *Chưa đủ thông tin*. Người có thể đọc được file bình thường; máy thì không trích được gì.'],
         ],
       },
       {
         kind: 'list',
         heading: 'Những gì cố ý KHÔNG nằm trong quy tắc',
         items: [
-          '**Kỹ năng không nằm trong quy tắc** (bỏ ngày 11/09/2026). Master data kỹ năng nặng về IT và mỏng ở mọi ngành khác, nên một điều dưỡng hay một kế toán thường không tìm nổi ba kỹ năng có sẵn. Kỹ năng giờ chỉ **xếp hạng** CV trong tìm kiếm; nó không bao giờ chặn.',
-          '**Học vấn không bắt buộc với mọi người.** Đã cân nhắc và bác bỏ ngay trong ngày: nó sẽ loại bác tài hay anh tổ trưởng hai mươi năm nghề chưa bao giờ điền ô đó.',
+          '**Kỹ năng không còn nằm trong quy tắc.** Quy tắc cũ đòi thêm **≥ 3 kỹ năng**; commit `fix(recruitment): the CV scan no longer requires three skills` (11/09/2026) đã bỏ hẳn. Master data kỹ năng nặng về IT và mỏng ở mọi ngành khác, nên một điều dưỡng hay một kế toán thường không tìm nổi ba kỹ năng có sẵn. Kỹ năng vẫn được đếm và nhập vào, chúng chỉ **không giữ được một CV đọc tốt lại nữa** — giờ chúng chỉ **xếp hạng** CV trong tìm kiếm.',
+          '**Học vấn một mình không đủ.** Nhánh thứ hai là `học vấn VÀ dự án`, không phải học vấn đơn lẻ — một hồ sơ chỉ khai mỗi bằng cấp vẫn rơi vào *Chưa đủ thông tin*. Ngược lại, **một kinh nghiệm làm việc là đủ**, để không loại bác tài hay anh tổ trưởng hai mươi năm nghề chưa bao giờ điền ô học vấn.',
           'Quy tắc **thừa hưởng vùng ngôn ngữ của bộ trích xuất**. CV bằng ngôn ngữ bộ trích không xử lý được thì không ra trường nào → *Chưa đủ thông tin* → xếp hàng chờ một người duyệt đọc được ngôn ngữ đó.',
         ],
       },
@@ -1154,7 +1204,7 @@ export const PAGE_DOCS: Record<string, PageDoc> = {
         note: 'Vì sao lệch nhau: **CV Saramin là các trường ứng viên tự gõ vào form của mình** — lỗi là của họ và sửa mất vài giây. **File tải lên có thể hỏng vì bộ đọc của ta**, nên ứng viên không bao giờ bị chặn nộp đơn; thứ phải chờ là việc *giao*, và nó chờ một con người.',
         cols: ['', 'CV Saramin (soạn trong trình soạn)', 'CV tải lên (PDF / DOC)'],
         rows: [
-          ['Quy tắc KHÔNG thoả', 'Trạng thái = *Chưa đủ thông tin*', '*Chưa đủ thông tin*, hoặc *Không đọc được* khi không trích được chữ nào'],
+          ['Công thức KHÔNG thoả', 'Trạng thái = *Chưa đủ thông tin*', '*Chưa đủ thông tin*, hoặc *Không đọc được* khi không trích được chữ nào'],
           ['Ứng tuyển được bằng nó?', '**Không.** Không chọn được CV này ở bước nộp (và server từ chối nếu ép).', '**Được.** Đơn nộp thành công và trông bình thường — nhưng CV **không được gửi** tới NTD cho tới khi *Đạt*.'],
           ['Bật tìm kiếm CV được?', 'Không.', 'Được, nhưng CV vẫn **Ẩn** trong kho tới khi *Đạt*. Cái bật ghi lại **ý định**; hiển thị thì đi theo trạng thái.'],
           ['Ai đưa nó về *Đạt*', '**Ứng viên**, ngay trong trình soạn — thêm phần còn thiếu rồi lưu. Không cần người duyệt, không vào hàng đợi.', '**Người duyệt** ở CV review, HOẶC ứng viên thay bằng file khác qua được máy quét.'],
@@ -1268,9 +1318,9 @@ export const PAGE_DOCS: Record<string, PageDoc> = {
   /* ── User ────────────────────────────────────────────────────────────────── */
   'jobseeker-users': {
     logic: [
-      '**BA trạng thái, không phải bốn.** Active · Deactivated · Deleted. **Không tồn tại trạng thái “Unverified”** — ở đâu cũng vậy: tài khoản chỉ ra đời khi mã xác thực được nhập xong, nên **trạng thái đầu tiên một tài khoản từng có là Active**.',
+      '**BỐN giá trị từ server, hiện ra thành NĂM nhãn.** `ACTIVE` · `INACTIVE` (hiện là **Chưa xác thực**) · `DEACTIVATED` · `DELETED` (xoá mềm). Nhãn thứ năm là do tách `DEACTIVATED` làm hai — xem dòng cuối. **Requirement đã chốt rút xuống ba trạng thái và bỏ “Chưa xác thực”** — ở đâu cũng vậy: tài khoản chỉ ra đời khi mã xác thực được nhập xong, nên **trạng thái đầu tiên một tài khoản từng có là Active**.',
       '**Deactivated là KHOÁ CỬA, không phải thùng rác.** Hồ sơ còn nguyên, mở lại được, và **không đụng gì tới thứ nhà tuyển dụng đã cầm**.',
-      '**Delete là cánh cửa một chiều duy nhất.** Dữ liệu cá nhân bị huỷ **trong vòng 72 giờ**, email **không bao giờ dùng lại được**, và HQ chỉ khôi phục được **bên trong cửa sổ 72 giờ đó**.',
+      '**Delete là cánh cửa một chiều duy nhất.** Dữ liệu cá nhân bị huỷ hẳn **sau 30 ngày**, email **không bao giờ dùng lại được**, và HQ chỉ khôi phục được **bên trong cửa sổ 30 ngày đó**.',
       'HQ phân biệt hai loại Deactivated ngay trên màn hình: **Deactivated = HQ khoá**, **Withdrawn = chính ứng viên tự tạm dừng**. Cùng một cái khoá, khác lý do, khác nhãn.',
     ],
     how: [
@@ -1278,23 +1328,23 @@ export const PAGE_DOCS: Record<string, PageDoc> = {
       'Mở một tài khoản để xem chi tiết — **thao tác này được ghi log kèm tên người thao tác**.',
       'Tài khoản **Active** → **Deactivate** (bắt buộc nhập lý do) hoặc **gửi link đặt lại mật khẩu**.',
       'Tài khoản **Deactivated** hoặc **Withdrawn** → **Reactivate** (với Withdrawn thì làm khi chính ứng viên yêu cầu).',
-      'Tài khoản **Deleted** → **Restore**, **chỉ bật khi còn trong 72 giờ**.',
+      'Tài khoản **Deleted** → **Restore**, **chỉ bật khi còn trong 30 ngày**.',
     ],
     watch: [
       'Một tài khoản **Active mà CV đang ẩn** là trạng thái **bình thường** — công tắc hiển thị CV độc lập hoàn toàn với trạng thái tài khoản.',
       'Lý do nhập khi khoá là **ghi chú nội bộ, ứng viên không bao giờ thấy**.',
       '**Khoá một người KHÔNG từ chối CV của họ.** Muốn gỡ CV khỏi vòng duyệt nữa thì đó là **một quyết định thứ hai, riêng biệt** ở màn hình CV review — hộp thoại khoá chỉ nhắc, nó không tự làm hộ.',
-      'Sau 72 giờ thì **không còn gì để khôi phục** — đó là thiết kế, không phải lỗi.',
+      'Hết 30 ngày thì **không còn gì để khôi phục** — đó là thiết kế, không phải lỗi.',
     ],
     blocks: [
       {
         kind: 'table',
-        heading: 'Ba trạng thái',
+        heading: 'Bốn giá trị, năm nhãn — đúng như bản dựng',
         cols: ['Trạng thái', 'Nghĩa', 'Ai đặt', 'Mở lại được?', 'Nhà tuyển dụng thấy gì'],
         rows: [
           ['**Active**', 'Dùng site bình thường — **trạng thái đầu tiên một tài khoản từng có**', 'Hệ thống, khi đăng ký hoàn tất', '—', 'Bình thường'],
           ['**Deactivated**', 'Cửa bị khoá. Không đăng nhập được; **hồ sơ còn nguyên**', 'HQ (khoá, bắt buộc lý do) — hoặc chính ứng viên (tạm dừng)', '**Có** — HQ mở lại', '**Không đổi gì cả**'],
-          ['**Deleted**', 'Kết thúc hẳn. Dữ liệu cá nhân huỷ trong 72 giờ', 'Ứng viên (kèm OTP) — hoặc HQ theo yêu cầu pháp lý', '**Chỉ HQ, chỉ trong 72 giờ**', 'Đơn đang xử lý **bị rút**; đơn đã xong đọc là *“Ứng viên đã xóa tài khoản”*'],
+          ['**Deleted**', 'Kết thúc hẳn. Dữ liệu cá nhân bị huỷ hẳn sau 30 ngày', 'Ứng viên (kèm OTP) — hoặc HQ theo yêu cầu pháp lý', '**Chỉ HQ, chỉ trong 30 ngày**', 'Đơn đang xử lý **bị rút**; đơn đã xong đọc là *“Ứng viên đã xóa tài khoản”*'],
         ],
       },
       {
@@ -1319,8 +1369,8 @@ export const PAGE_DOCS: Record<string, PageDoc> = {
         cols: ['', 'Deactivate', 'Delete'],
         rows: [
           ['Ai làm', 'HQ (khoá) hoặc ứng viên (tạm dừng)', 'Ứng viên, kèm mã OTP — HQ chỉ khi có yêu cầu pháp lý'],
-          ['Hồ sơ', 'Nguyên vẹn', 'Dữ liệu cá nhân **huỷ trong 72 giờ**; giữ lại dòng đã ẩn danh'],
-          ['Quay lại được?', 'Có — HQ mở lại', '**Chỉ HQ, chỉ trong 72 giờ**'],
+          ['Hồ sơ', 'Nguyên vẹn', 'Dữ liệu cá nhân **bị huỷ hẳn sau 30 ngày**; giữ lại dòng đã ẩn danh'],
+          ['Quay lại được?', 'Có — HQ mở lại', '**Chỉ HQ, chỉ trong 30 ngày**'],
           ['Đơn đang xử lý', 'Ở nguyên', '**Bị rút**'],
           ['Đơn đã xong', 'Ở nguyên', 'Giữ kết quả, tên thay bằng *“Ứng viên đã xóa tài khoản”*'],
           ['Nhà tuyển dụng có được báo?', '**Không** — vô hình với họ', '**Có — mỗi công ty một email**'],
@@ -1329,7 +1379,7 @@ export const PAGE_DOCS: Record<string, PageDoc> = {
       },
       {
         kind: 'list',
-        heading: 'Trong 72 giờ — cái gì bị huỷ, cái gì giữ lại',
+        heading: 'Trong cửa sổ 30 ngày — cái gì bị huỷ, cái gì giữ lại',
         items: [
           '**Huỷ:** họ tên, email gốc, mật khẩu, số điện thoại, ngày sinh, giới tính, ảnh đại diện · toàn bộ nội dung hồ sơ và mọi file CV · ghi chú nhà tuyển dụng viết về ứng viên · việc đã lưu, thông báo, lịch sử xem.',
           '**Giữ, đã ẩn danh:** ID nội bộ, ngày xoá, mã lý do · **mã băm của email** (để chặn đăng ký lại) · **bản ghi đã mua lượt mở CV** — giữ sự kiện mua, bỏ nội dung · số liệu tổng hợp.',
@@ -1340,17 +1390,17 @@ export const PAGE_DOCS: Record<string, PageDoc> = {
       {
         kind: 'warn',
         text:
-          '**HQ không bao giờ xem hoặc đặt mật khẩu** — hành động duy nhất liên quan tới đăng nhập là **gửi link đặt lại**. HQ cũng **không sửa CV, hồ sơ hay nguyện vọng** của ứng viên, và **không khôi phục được tài khoản đã purge** — sau 72 giờ không còn gì để khôi phục.',
+          '**HQ không bao giờ xem hoặc đặt mật khẩu** — hành động duy nhất liên quan tới đăng nhập là **gửi link đặt lại**. HQ cũng **không sửa CV, hồ sơ hay nguyện vọng** của ứng viên, và **không khôi phục được tài khoản đã purge** — hết 30 ngày thì không còn gì để khôi phục.',
       },
       {
         kind: 'open',
         text:
-          '**Hai nguồn đang lệch nhau — cần xác nhận đang chạy bản nào trên dev.** Tài liệu Notion (24/09/2026, theo Privacy Policy 21/09) mô tả **3 trạng thái và purge 72 giờ**, và ghi rõ trạng thái “unverified” **biến mất cùng luồng đăng ký mới**. Tài liệu trong repo build thì vẫn mô tả **4 trạng thái API (có INACTIVE hiện là “Unverified”) và purge 30 ngày**. Trang này viết theo Notion vì nó mới hơn và là bản đã chốt chính sách — nhưng **nếu console bạn đang mở vẫn hiện tab “Unverified” thì build chưa theo kịp**, và con số 72 giờ cũng cần kiểm lại trước khi hứa với ai.',
+          '**Requirement và bản dựng đang lệch — trang này viết theo BẢN DỰNG.** Đã đọc thẳng source ngày 30/09/2026: `svn-be` / `PurgeExpiredCandidatesUseCase` ghi rõ **cửa sổ giữ lại 30 ngày** (cột `scheduled_hard_delete_at`), và `saramin-vn-admin` / `docs/features/jobseeker-users.md` cùng `resolveDisplayStatus()` vẫn phục vụ **4 giá trị API thành 5 nhãn**, trong đó có `INACTIVE` hiện là *Chưa xác thực*. Tài liệu Notion (24/09/2026, theo Privacy Policy 21/09) mô tả **3 trạng thái và purge 72 giờ**, và nói *Chưa xác thực* biến mất cùng luồng đăng ký mới. **Con số 72 giờ không tồn tại trong code**: chỗ duy nhất có 72 giờ là hạn của link mời / đặt mật khẩu cho nhân viên và thành viên công ty, một thứ hoàn toàn khác. Kết luận: 3 trạng thái và 72 giờ là **chính sách đã chốt nhưng CHƯA được build** — cần một ticket cho backend đổi cửa sổ purge và rút `INACTIVE`, trước khi hứa 72 giờ với khách.',
       },
       {
         kind: 'warn',
         text:
-          'Trang **Deleted accounts** (`/users/deleted-accounts`) mà tài liệu Notion mô tả **đã bị rút khỏi menu** ở bản sidebar mới — đường dẫn vẫn mở được. Đó là nơi tra: ngày xoá, ai xoá, lý do, **trạng thái purge** (Pending trong 72 giờ · Purged · Failed) và **email có bị chặn đăng ký lại không**.',
+          'Trang **Deleted accounts** (`/users/deleted-accounts`) mà tài liệu Notion mô tả **đã bị rút khỏi menu** ở bản sidebar mới — đường dẫn vẫn mở được. Đó là nơi tra: ngày xoá, ai xoá, lý do, **trạng thái purge** (Pending trong cửa sổ 30 ngày · Purged · Failed) và **email có bị chặn đăng ký lại không**.',
       },
     ],
   },
@@ -1493,7 +1543,42 @@ export const PAGE_DOCS: Record<string, PageDoc> = {
           ['**Site jobseeker**', 'Bước kiểm cuối: một tin đã đăng xuất hiện **đúng** các vùng mà Placement slots của bậc nó liệt kê, và tắt *Exposure* là nó biến khỏi mọi vùng.'],
         ],
       },
-    ],
+          {
+        kind: 'p',
+        text: '**Màn hình thật.** Nhìn năm ảnh này là thấy được toàn bộ đường đi của một sản phẩm, từ lúc khai tới lúc nó định nghĩa một bậc tin.',
+      },
+      {
+        kind: 'shot',
+        src: '/shots/20-products-catalog.jpg',
+        where: 'Admin',
+        caption: 'Catalogue. Đây là **định nghĩa**, không phải số dư của ai — không gì trên trang này cấp cái gì cho khách.',
+      },
+      {
+        kind: 'shot',
+        src: '/shots/21-product-new-drawer.jpg',
+        where: 'Admin',
+        caption: 'Tạo product mới. **Type** là ô đầu tiên vì nó quyết định mọi ô còn lại — và quyết định hoá đơn sẽ giao cái gì.',
+      },
+      {
+        kind: 'shot',
+        src: '/shots/22-product-new-fulfilment.jpg',
+        where: 'Admin',
+        caption: 'Khối **Fulfilment** đổi theo Type. Chọn sai Type thì giao sai thứ, **âm thầm**, và chỉ lộ ra lúc xuất hoá đơn.',
+      },
+      {
+        kind: 'shot',
+        src: '/shots/23-product-edit-jobposting.jpg',
+        where: 'Admin',
+        caption: 'Một product loại **Job posting** — cũng chính là một **bậc tin**: thời lượng hiển thị, nhịp auto-refresh, cửa sổ phải dùng trong.',
+      },
+      {
+        kind: 'shot',
+        src: '/shots/24-product-placement-slots.jpg',
+        where: 'Admin',
+        caption: '**Placement slots** — ô quan trọng nhất màn hình: tin ở bậc này sẽ hiện ở những vùng nào, và chiếm bao nhiêu phần cửa sổ hiển thị.',
+        note: 'Đây là **chiều sở hữu thật**: product khai nó nuôi vùng nào, chứ không phải vùng khai nó nhận bậc nào.',
+      },
+],
   },
   packages: {
     logic: [
@@ -1542,7 +1627,23 @@ export const PAGE_DOCS: Record<string, PageDoc> = {
           ['Chuyển một product thành phần sang Inactive', 'Kích hoạt package **thất bại** và **nêu tên** product đó'],
         ],
       },
-    ],
+          {
+        kind: 'p',
+        text: '**Màn hình thật.**',
+      },
+      {
+        kind: 'shot',
+        src: '/shots/25-packages-list.jpg',
+        where: 'Admin',
+        caption: 'Danh sách package. Một package là **một dòng trên báo giá**, nhưng tới lúc phát hành hoá đơn thì từng thành phần được cấp riêng.',
+      },
+      {
+        kind: 'shot',
+        src: '/shots/26-bundle-new.jpg',
+        where: 'Admin',
+        caption: 'Tạo package: chọn thành phần và số lượng, rồi đặt **giá của cả khối** — *Sum of parts* bên dưới chỉ để đối chiếu.',
+      },
+],
   },
   placements: {
     logic: [
@@ -1697,6 +1798,36 @@ export const PAGE_DOCS: Record<string, PageDoc> = {
         ],
         note: '**Không gì khác dịch chuyển được các trang này.** Không có bộ chọn tin riêng cho từng trang.',
       },
+      {
+        kind: 'p',
+        text: '**Màn hình thật.** Ba ảnh dưới đủ để nhận ra trang và biết mình đang sửa loại vùng nào.',
+      },
+      {
+        kind: 'shot',
+        src: '/shots/10-placements-list.jpg',
+        where: 'Admin',
+        caption: 'Danh sách vùng hiển thị. Cột **Format** là thứ chia registry làm đôi — và quyết định form sửa hiện ô nào.',
+      },
+      {
+        kind: 'shot',
+        src: '/shots/11-placement-edit-banner.jpg',
+        where: 'Admin',
+        caption: 'Sửa một vùng **Display**: kích thước creative, số booking chồng nhau, vòng xoay.',
+        note: 'Đặt **cả** rộng và cao mới bật được chốt chặn upload; chỉ đặt một trong hai là bị từ chối.',
+      },
+      {
+        kind: 'shot',
+        src: '/shots/12-placement-edit-contentpool.jpg',
+        where: 'Admin',
+        caption: 'Sửa một vùng **Job (content pool)**: số thẻ hiện ra, sức chứa pool, vòng xoay.',
+      },
+      {
+        kind: 'shot',
+        src: '/shots/61-web-job-bands.jpg',
+        where: 'Jobseeker site',
+        caption: 'Và đây là kết quả trên site công khai — các dải tin mà cấu hình ở trên vẽ ra.',
+        note: 'Không ai gán tay tin nào vào dải nào: dải đọc theo **bậc tin**, qua *Placement slots* của product.',
+      },
 ],
   },
 
@@ -1786,7 +1917,31 @@ export const PAGE_DOCS: Record<string, PageDoc> = {
         text:
           '**Liên kết không kế thừa bất cứ thứ gì, theo bất kỳ chiều nào.** Mỗi bản ghi giữ MST riêng, gói/quota riêng, báo giá riêng, hoá đơn riêng, người dùng riêng và sales owner riêng. **Một chi nhánh không bao giờ tiêu được quota của công ty mẹ.**',
       },
-    ],
+          {
+        kind: 'p',
+        text: '**Màn hình thật.**',
+      },
+      {
+        kind: 'shot',
+        src: '/shots/30-companies-list.jpg',
+        where: 'Admin',
+        caption: 'Danh sách khách hàng.',
+      },
+      {
+        kind: 'shot',
+        src: '/shots/31-company-detail.jpg',
+        where: 'Admin',
+        caption: 'Hồ sơ một công ty.',
+        note: 'Công ty **phải ACTIVE** thì tin của họ mới vào được trạng thái OPEN — đây là chốt chặn hay bị quên nhất.',
+      },
+      {
+        kind: 'shot',
+        src: '/shots/32-company-products-billing.jpg',
+        where: 'Admin',
+        caption: 'Tab **Products & billing** — nơi kiểm “khách đang thực sự giữ những gì”: từng product, số slot còn lại, hạn dùng.',
+        note: 'Sau khi phát hành hoá đơn, đây là màn hình để xác nhận quota đã về thật, chứ không chỉ tin vào toast báo thành công.',
+      },
+],
   },
   pipeline: {
     logic: ['Bảng sáu cột theo chặng bán, kéo thả để chuyển chặng. Một thẻ mở ra chính **báo giá** của nó.'],
@@ -1795,6 +1950,18 @@ export const PAGE_DOCS: Record<string, PageDoc> = {
       'Không có bản ghi “deal” tách biệt để sửa — mọi nội dung nằm ở báo giá.',
       'Kéo thẻ sang cột **Mất** **không** làm khách thành Churn; thắng một deal cũng **không** tự làm khách thành Existing. **Hoá đơn** mới đổi trục đó.',
       'Một công ty vừa **Existing** vừa đang **Negotiation** là tài khoản khoẻ mạnh — khách cũ đang mua tiếp — không phải dữ liệu mâu thuẫn.',
+    ],
+    blocks: [
+      {
+        kind: 'p',
+        text: '**Màn hình thật.**',
+      },
+      {
+        kind: 'shot',
+        src: '/shots/33-pipeline.jpg',
+        where: 'Admin',
+        caption: 'Bảng pipeline bán hàng.',
+      },
     ],
   },
   quotations: {
@@ -1858,7 +2025,30 @@ export const PAGE_DOCS: Record<string, PageDoc> = {
         note:
           'Ba option **không cộng dồn**. Sai lầm hay gặp là đọc báo giá như một bảng giá rồi dựng PO từ dòng nào trông quen nhất. PO **chép nguyên** option đã Accepted, nên chọn đúng option ở bước này là chọn đúng cả hoá đơn lẫn quota sẽ cấp.',
       },
-    ],
+          {
+        kind: 'p',
+        text: '**Màn hình thật.**',
+      },
+      {
+        kind: 'shot',
+        src: '/shots/37-quotation-new.jpg',
+        where: 'Admin',
+        caption: 'Lập báo giá: mỗi option là một **phương án thay thế nhau**, không cộng dồn — khách chọn đúng một.',
+      },
+      {
+        kind: 'shot',
+        src: '/shots/38-quotation-detail.jpg',
+        where: 'Admin',
+        caption: 'Báo giá đã được chấp nhận và đã **Issue ra PO**.',
+      },
+      {
+        kind: 'shot',
+        src: '/shots/34-quotations-list.jpg',
+        where: 'Admin',
+        caption: 'Danh sách báo giá.',
+        note: 'Trên dev danh sách này có lúc lỗi “Something went wrong” vì vài quotation seed có option không có dòng nào — đi vòng qua **CRM → Companies → công ty → Create quotation**.',
+      },
+],
   },
   'purchase-order': {
     logic: [
@@ -1912,7 +2102,23 @@ export const PAGE_DOCS: Record<string, PageDoc> = {
         text:
           '**PO là “đã thắng deal”, không phải “đã giao hàng”.** Nó không tạo tài khoản, không cấp quota, không bật trang công ty. Trạng thái khách hàng cũng **không đổi** ở bước này. Mọi thứ đó chờ kế toán phát hành hoá đơn.',
       },
-    ],
+          {
+        kind: 'p',
+        text: '**Màn hình thật.**',
+      },
+      {
+        kind: 'shot',
+        src: '/shots/39-purchase-order-detail.jpg',
+        where: 'Admin',
+        caption: 'Chi tiết một PO. Trạng thái **ACTIVE** mới chỉ đóng băng “sẽ cấp gì” — **nó chưa cấp gì cả**.',
+      },
+      {
+        kind: 'shot',
+        src: '/shots/35-purchase-orders-list.jpg',
+        where: 'Admin',
+        caption: 'Danh sách purchase order.',
+      },
+],
   },
   invoice: {
     logic: [
@@ -1974,7 +2180,24 @@ export const PAGE_DOCS: Record<string, PageDoc> = {
         text:
           '**Chưa chốt — phát hành trùng.** Sự kiện “hoá đơn đã phát hành” **có thể bắn hai lần** (nhà cung cấp hoá đơn timeout rồi thử lại là chuyện bình thường). Việc cấp quota phải khoá theo mã hoá đơn, nếu không khách **âm thầm nhận gấp đôi quota**. Đây là lỗi production dễ xảy ra nhất trong cả chuỗi.',
       },
-    ],
+          {
+        kind: 'p',
+        text: '**Màn hình thật.** Đây là màn hình quan trọng nhất trong toàn hệ thống — bấm nút ở đây là lúc khách có quyền lợi.',
+      },
+      {
+        kind: 'shot',
+        src: '/shots/40-invoice-detail.jpg',
+        where: 'Admin',
+        caption: 'Chi tiết hoá đơn. **Issue official invoice** vừa ghi số hoá đơn hợp pháp vừa cấp quota, trong **cùng một transaction**.',
+        note: 'Vì cùng transaction nên không có khoảng trễ: khách đăng tin được **ngay**, không phải chờ job nền nào chạy. Bấm lặp lại (double-click, retry) **không** cấp thêm lần hai.',
+      },
+      {
+        kind: 'shot',
+        src: '/shots/36-invoices-list.jpg',
+        where: 'Admin',
+        caption: 'Danh sách hoá đơn.',
+      },
+],
   },
   'company-claims': {
     logic: [
@@ -2015,7 +2238,17 @@ export const PAGE_DOCS: Record<string, PageDoc> = {
         text:
           '**Trả công ty về pool** trên một công ty đang có chủ sẽ nhả nó lại Free data. Lần trả đó là **một dòng trong Owner history** (chuỗi hiện *closed* — ngay lúc này không ai chịu trách nhiệm), và dòng về tới pool **mang theo lịch sử** cho người duyệt kế tiếp thấy.',
       },
-    ],
+          {
+        kind: 'p',
+        text: '**Màn hình thật.**',
+      },
+      {
+        kind: 'shot',
+        src: '/shots/42-claim-requests.jpg',
+        where: 'Admin',
+        caption: 'Yêu cầu nhận quyền quản lý một công ty đã có sẵn trên hệ thống.',
+      },
+],
   },
 
   'sign-ups': {
@@ -2059,7 +2292,17 @@ export const PAGE_DOCS: Record<string, PageDoc> = {
         text:
           '**Dòng chưa xác thực email vẫn hiện, gắn nhãn “Awaiting”, không bị ẩn.** Nó **archive được nhưng không place được** — server từ chối Move/Create dù giao diện có mời. Hộp thoại Move còn dừng ở hai trường hợp và nói rõ lý do: *“mã số thuế này chưa tới công ty nào”* (→ tạo công ty trước) và *“công ty đó vẫn ở Free data”* (→ mở công ty và promote). **Không ai bị đặt vào một công ty không tồn tại hoặc không có chủ.**',
       },
-    ],
+          {
+        kind: 'p',
+        text: '**Màn hình thật.**',
+      },
+      {
+        kind: 'shot',
+        src: '/shots/41-signups.jpg',
+        where: 'Admin',
+        caption: 'Hàng đợi đăng ký mới từ site nhà tuyển dụng.',
+      },
+],
   },
   'company-documents': {
     logic: [
@@ -2112,7 +2355,7 @@ export const PAGE_DOCS: Record<string, PageDoc> = {
     watch: [
       '**Ẩn bằng Visible = Off KHÔNG trả lại chỗ.** Chỉ **Draft · Archive · Delete** mới giải phóng vùng.',
       'Đã **Published** thì **vùng, đơn hàng và dòng hàng bị khoá** — muốn đổi thì phải tạo cái mới.',
-      '**Xoá một quảng cáo còn hạn sẽ trả booking về *Reserved*** — dùng lại được cho quảng cáo khác.',
+      '**Xoá một quảng cáo còn hạn sẽ trả booking về trạng thái Reserved** — dùng lại được cho quảng cáo khác.',
       'Admin **từ chối ảnh sai**, không bao giờ tự kéo giãn hay tự cắt. Form mở sẵn khung crop theo tỉ lệ vùng — **để chữ tránh xa mép**.',
       'Đăng rồi mà không thấy trên site: kiểm **Visible** · ngày bắt đầu còn ở tương lai · đã hết hạn · vùng một-ô thì **chờ hết một vòng xoay** (60 s hoặc 300 s).',
     ],
@@ -2520,7 +2763,7 @@ export const PAGE_DOCS: Record<string, PageDoc> = {
         kind: 'table',
         heading: 'Deactivate và Delete — hai nút, hai nghĩa khác hẳn',
         note: '**Dòng cuối là chủ đích:** lịch sử “ai đã làm việc này” **bắt buộc phải sống sót**. Người đã từng làm việc trong hệ thống thì **chỉ vô hiệu hoá được**, không xoá được.',
-        cols: ['', '**Deactivate**', '**Delete**'],
+        cols: ['', 'Deactivate', 'Delete'],
         rows: [
           ['Tác dụng', 'Giữ tài khoản, không đăng nhập được, liệt kê là *Inactive*', '**Xoá hẳn tài khoản**, giải phóng email'],
           ['Dùng cho', 'Người đã nghỉ hoặc đang tạm dừng', 'Lời mời gõ nhầm, trùng lặp, người chưa từng đăng nhập'],

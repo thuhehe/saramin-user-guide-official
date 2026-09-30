@@ -4,6 +4,7 @@ import { WORKFLOW, adminUrl } from './handbook'
 import type { WfBlock, WfSection } from './handbook'
 import { MODULE_DOCS, PAGE_DOCS } from './docs'
 import type { DocBlock } from './docs'
+import { OverviewFlow } from './overview'
 
 /* ── Saramin Admin — cẩm nang toàn bộ hệ thống ────────────────────────────────
    A site of its own, not a page on the requirement site. The requirement says
@@ -43,12 +44,13 @@ const sec = (id: string) => WORKFLOW.sections.find((s) => s.id === id)
 /** A selection is either a console page, a module's shared logic, or a handbook section. */
 type Sel =
   | { t: 'home' }
+  | { t: 'flow' }
   | { t: 'page'; key: string }
   | { t: 'module'; group: string }
   | { t: 'guide'; id: string }
 
 const selId = (s: Sel) =>
-  s.t === 'home' ? 'home' : s.t === 'page' ? `p:${s.key}` : s.t === 'module' ? `m:${s.group}` : `g:${s.id}`
+  s.t === 'home' ? 'home' : s.t === 'flow' ? 'flow' : s.t === 'page' ? `p:${s.key}` : s.t === 'module' ? `m:${s.group}` : `g:${s.id}`
 
 /* ── addressing ───────────────────────────────────────────────────────────────
    Every view has its own URL, because the commonest thing anyone does with a
@@ -65,6 +67,7 @@ const GROUP_BY_SLUG = new Map(GROUP_ORDER.map((g) => [slug(g), g]))
 
 function href(s: Sel): string {
   if (s.t === 'home') return '/'
+  if (s.t === 'flow') return '/toan-canh'
   if (s.t === 'guide') return `/huong-dan/${s.id}`
   if (s.t === 'module') return `/logic/${slug(s.group)}`
   return `/trang/${s.key}`
@@ -72,6 +75,7 @@ function href(s: Sel): string {
 
 function parse(pathname: string): Sel {
   const [, kind, rest] = pathname.replace(/\/+$/, '').split('/')
+  if (kind === 'toan-canh') return { t: 'flow' }
   if (kind === 'trang' && rest && ALL.some((p) => p.key === rest)) return { t: 'page', key: rest }
   if (kind === 'logic' && rest && GROUP_BY_SLUG.has(rest)) return { t: 'module', group: GROUP_BY_SLUG.get(rest)! }
   if (kind === 'huong-dan' && rest && WORKFLOW.sections.some((x) => x.id === rest)) return { t: 'guide', id: rest }
@@ -130,6 +134,7 @@ export function App() {
 
           <RailGroup label="Bắt đầu" />
           <RailItem label="Tổng quan" to={href({ t: 'home' })} on={cur === 'home'} onClick={() => pick({ t: 'home' })} />
+          <RailItem label="Toàn cảnh hệ thống" to={href({ t: 'flow' })} accent on={cur === 'flow'} onClick={() => pick({ t: 'flow' })} />
           {GUIDE_IDS.map((id) => {
             const s = sec(id)
             return s ? <RailItem key={id} label={s.label} to={href({ t: 'guide', id })} on={cur === `g:${id}`} onClick={() => pick({ t: 'guide', id })} /> : null
@@ -180,6 +185,8 @@ export function App() {
             <SearchResults hits={hits} q={q} onClear={() => setQ('')} onPick={(k) => pick({ t: 'page', key: k })} />
           ) : sel.t === 'home' ? (
             <Home onPick={pick} />
+          ) : sel.t === 'flow' ? (
+            <OverviewFlow />
           ) : sel.t === 'guide' ? (
             (() => { const s = sec(sel.id); return s ? <GuideView s={s} dev={dev} /> : null })()
           ) : sel.t === 'module' ? (
@@ -389,7 +396,7 @@ function ModuleView({ group, onPick }: { group: string; onPick: (key: string) =>
                 <span className="block truncate text-[13.5px] font-semibold">{p.label}</span>
                 <code className="block font-mono text-[10.5px] text-faint">{p.path}</code>
               </span>
-              <span className="min-w-0 self-center text-[12.5px] leading-[1.55] text-muted">{p.what}</span>
+              <span className="min-w-0 self-center text-[12.5px] leading-[1.55] text-muted">{md(p.what)}</span>
             </button>
           ))}
         </div>
@@ -407,7 +414,7 @@ function GuideView({ s, dev }: { s: WfSection; dev: boolean }) {
       <p className="font-mono text-[10.5px] uppercase tracking-[0.16em] text-faint">Cẩm nang</p>
       <h1 className="mt-1 border-b-2 border-ink pb-3 text-[30px] font-bold leading-[1.1] tracking-[-0.02em]">{s.title}</h1>
       {s.where && <code className="mt-2 block font-mono text-[11px] text-faint">{s.where}</code>}
-      {s.lead && <p className="mt-4 max-w-[76ch] text-[14.5px] leading-[1.7] text-ink/80">{s.lead}</p>}
+      {s.lead && <p className="mt-4 max-w-[76ch] text-[14.5px] leading-[1.7] text-ink/80">{md(s.lead)}</p>}
       <div className="mt-5 space-y-5">{blocks.map((b, i) => <Block key={i} b={b} />)}</div>
     </article>
   )
@@ -431,7 +438,7 @@ function SearchResults({ hits, q, onClear, onPick }: { hits: Page[]; q: string; 
               <code className="block font-mono text-[10.5px] text-faint">{p.path}</code>
             </span>
             <span className="min-w-0 self-center">
-              <span className="block text-[12.5px] leading-[1.55] text-muted">{p.what}</span>
+              <span className="block text-[12.5px] leading-[1.55] text-muted">{md(p.what)}</span>
               <span className="font-mono text-[10.5px] text-faint">{p.group}</span>
             </span>
           </button>
@@ -456,6 +463,33 @@ function DocBlockView({ b }: { b: DocBlock }) {
       <p className="max-w-[78ch] border-l-2 border-ink/30 py-1.5 pl-4 text-[13px] leading-[1.7] text-ink/80">
         <span className="mr-1.5 font-mono text-[9.5px] uppercase tracking-wider text-ink/45">lưu ý</span>{md(b.text)}
       </p>
+    )
+  }
+
+  /* A screenshot is the one block that must survive printing and a narrow
+     window, so it is a plain figure: full-width image, caption under it. The
+     surface tag matters more than it looks — the same purchase runs across three
+     different sites, and a reader who mistakes the company site for the admin
+     will look for a button that was never there. */
+  if (b.kind === 'shot') {
+    return (
+      <figure className="max-w-[860px]">
+        <img
+          src={b.src}
+          alt={b.caption}
+          loading="lazy"
+          className="w-full rounded-lg border border-line bg-surface shadow-[0_1px_2px_rgba(0,0,0,0.04)]"
+        />
+        <figcaption className="mt-2 text-[12px] leading-[1.65] text-muted">
+          {b.where && (
+            <span className="mr-2 rounded border border-line bg-surface px-1.5 py-0.5 font-mono text-[9.5px] uppercase tracking-wider text-brand">
+              {b.where}
+            </span>
+          )}
+          {md(b.caption)}
+          {b.note && <span className="mt-1 block text-faint">{md(b.note)}</span>}
+        </figcaption>
+      </figure>
     )
   }
 
@@ -572,7 +606,7 @@ function Block({ b }: { b: WfBlock }) {
     return (
       <div>
         {b.heading && <p className="mb-1 text-[13.5px] font-bold">{tag}{b.heading}</p>}
-        {b.note && <p className="mb-2 max-w-[78ch] text-[12px] text-muted">{b.note}</p>}
+        {b.note && <p className="mb-2 max-w-[78ch] text-[12px] text-muted">{md(b.note)}</p>}
         <div className="overflow-x-auto">
           <table className="w-full min-w-[560px] border-collapse text-left">
             <thead>
@@ -687,11 +721,26 @@ function RailItem({ label, to, on, onClick, accent }: { label: string; to: strin
 }
 
 /** **bold** and `code` only — enough to mark a field name, not enough to invite prose. */
+/* Bold, italic and code. Two passes, not one alternation: `**bold**` is matched
+   first and NON-GREEDY, then its contents are re-scanned for `*italic*`. A single
+   flat regex cannot do this — `**a *b* c**` either loses the inner italic or the
+   italic branch eats the opening stars of the bold run and the rest of the line
+   prints its asterisks. Italic carries the UI's own vocabulary throughout the doc
+   (status names, button labels), so it appears inside bold constantly. */
+function mdItalic(s: string, k: number) {
+  return s.split(/(\*[^*\n]+\*)/g).map((p, j) =>
+    p.startsWith('*') && p.endsWith('*') && p.length > 2
+      ? <i key={`${k}-${j}`} className="not-italic font-medium text-ink/90">{p.slice(1, -1)}</i>
+      : p,
+  )
+}
+
 function md(s: string) {
-  return s.split(/(\*\*[^*]+\*\*|`[^`]+`)/g).map((part, i) => {
-    if (part.startsWith('**') && part.endsWith('**')) return <b key={i} className="font-semibold text-ink">{part.slice(2, -2)}</b>
+  return s.split(/(\*\*[\s\S]+?\*\*|`[^`]+`)/g).map((part, i) => {
+    if (part.startsWith('**') && part.endsWith('**') && part.length > 4)
+      return <b key={i} className="font-semibold text-ink">{mdItalic(part.slice(2, -2), i)}</b>
     if (part.startsWith('`') && part.endsWith('`')) return <code key={i} className="font-mono text-[11.5px] text-brand">{part.slice(1, -1)}</code>
-    return part
+    return mdItalic(part, i)
   })
 }
 
