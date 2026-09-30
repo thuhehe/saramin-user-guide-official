@@ -32,8 +32,8 @@ const ALL = PAGES as Page[]
 
 /** Admin sidebar order, as the console itself renders it. */
 const GROUP_ORDER = [
-  'Analytics', 'Recruitment', 'Resume Management', 'User',
-  'Products & Packages', 'Call center', 'CRM', 'Content', 'System',
+  'Dashboards', 'Recruitment', 'Users', 'Product settings', 'Service delivery',
+  'CRM', 'Content', 'Notifications', 'Organisation', 'System',
 ]
 
 /** Handbook sections that stand on their own, before the modules. */
@@ -204,6 +204,33 @@ function Home({ onPick }: { onPick: (s: Sel) => void }) {
           </div>
         ))}
       </div>
+
+      {/* Routes the console still serves but no longer offers in its menu. Worth
+          stating: a bookmark that still works is not evidence a page is current,
+          and someone will arrive on one and assume the guide is missing a page. */}
+      <section className="mt-9">
+        <h2 className="border-b border-ink pb-1.5 text-[17px] font-bold tracking-tight">Đường dẫn đã rút khỏi menu</h2>
+        <p className="mt-2 max-w-[78ch] text-[12.5px] leading-[1.65] text-muted">
+          Các đường dẫn dưới đây <b className="text-ink/75">vẫn mở được</b> (bookmark cũ không gãy), nhưng{' '}
+          <b className="text-ink/75">không còn trong menu</b> — phần lớn chuyển hướng sang trang thay thế. Bookmark còn
+          chạy không có nghĩa là trang đó còn hiện hành.
+        </p>
+        <div className="mt-2">
+          {[
+            ['/content/displays · /content/banners · /content/popups', 'Boosting — banner và popup gộp một danh sách'],
+            ['/system/notifications', 'Notifications — tách thành 4 mục menu riêng'],
+            ['/analytics/sales-report · /analytics/recruit-report · /analytics/revenue-report', 'Dashboards — 4 bảng theo đội'],
+            ['/system/cv-search-usage', 'Service delivery → Quota usage'],
+            ['/system/faq · /system/zalo-templates', 'Đã chuyển sang Content → FAQ và Notifications → Zalo ZNS'],
+            ['/recruitment/resumes · /users/deleted-accounts · /system/environment', 'Còn route nhưng đã rút khỏi menu'],
+          ].map(([from, to]) => (
+            <div key={from} className="grid grid-cols-1 gap-x-5 border-b border-line-soft py-2 sm:grid-cols-[minmax(0,1.5fr)_minmax(0,1fr)]">
+              <code className="font-mono text-[11px] leading-relaxed text-faint">{from}</code>
+              <span className="text-[12px] text-muted">→ {to}</span>
+            </div>
+          ))}
+        </div>
+      </section>
 
       <h2 className="mt-9 border-b border-ink pb-1.5 text-[17px] font-bold tracking-tight">Các nhóm</h2>
       <div className="mt-1">

@@ -247,7 +247,7 @@ export const MODULE_DOCS: Record<string, ModuleDoc> = {
     ],
   },
 
-  'Products & Packages': {
+  'Product settings': {
     title: 'Logic chung — Products & Packages',
     lead:
       'Phía danh mục của việc kiếm tiền: **bán cái gì, và giá bao nhiêu**. Bán nó (báo giá → PO → hoá đơn) nằm ở CRM; thứ khách giữ sau đó nằm trên tài khoản của khách.',
@@ -469,8 +469,8 @@ export const MODULE_DOCS: Record<string, ModuleDoc> = {
     ],
   },
 
-  User: {
-    title: 'Logic chung — User',
+  Users: {
+    title: 'Logic chung — Users',
     lead:
       'Hai loại tài khoản hoàn toàn khác nhau nằm cạnh nhau: người tìm việc và người của công ty khách hàng. Tài khoản nhân viên Saramin **không** ở đây — nó ở System → Users.',
     headline: [
@@ -511,45 +511,43 @@ export const MODULE_DOCS: Record<string, ModuleDoc> = {
   Content: {
     title: 'Logic chung — Content',
     lead:
-      'Mọi thứ hiển thị trên trang jobseeker mà không phải tin tuyển dụng: banner, popup, bộ sưu tập tin, trang chiến dịch, menu và chân trang.',
+      'Nội dung biên tập trên trang jobseeker: bộ sưu tập tin, trang chiến dịch, menu, chân trang, thông báo và FAQ. **Banner và popup không còn ở đây** — chúng đã chuyển sang Service delivery → Boosting, vì chúng là thứ khách **mua**, không phải thứ mình **viết**.',
     headline: [
-      '**Banner nội bộ chiếm chỗ y như banner bán.** Nó là thứ giữ cho vị trí không trống — và cũng là thứ khiến một vị trí “đang chạy” mà không sinh doanh thu.',
-      '**Cùng vòng đời và cùng công tắc Exposure như tin tuyển dụng.** Học một lần dùng cho cả hai.',
+      '**Collection lưu ĐIỀU KIỆN, không lưu danh sách.** Tin mới khớp thì tự vào, tin hết hạn thì tự rơi ra — nên một mục menu có thể rỗng đi mà không ai đụng vào.',
+      '**Sửa một collection là sửa mọi nơi đang dùng nó.** Menu, zone, trang chiến dịch — tất cả đổi theo.',
     ],
     blocks: [
       {
         kind: 'table',
-        heading: 'Banner và Popup khác nhau chỗ nào',
-        note: 'Hai tab của cùng một trang, vì chúng là cùng một loại chứng từ thương mại.',
-        cols: ['', 'Banner', 'Popup'],
+        heading: 'Ba lớp, và lớp nào chứa nội dung thật',
+        note: 'Chỉ lớp đầu chứa điều kiện chọn tin. Hai lớp sau chỉ **bố cục** và **trỏ tới**.',
+        cols: ['Lớp', 'Là gì', 'Chứa gì'],
         rows: [
-          ['Chiếm chỗ', 'Một vị trí hiển thị, xoay vòng', 'Chen ngang — không nằm trong vị trí nào'],
-          ['Nhắm đối tượng', 'Theo vị trí', 'Theo **nhóm người xem**'],
-          ['Giới hạn', '— theo tỉ lệ xoay vòng', 'Có **giới hạn tần suất** để không hiện hai lần một ngày'],
-          ['Cùng lúc', 'Nhiều cái xoay vòng', '**Chỉ một** — nên cần thứ tự ưu tiên'],
-        ],
-      },
-      {
-        kind: 'list',
-        heading: 'Hai nguồn banner',
-        items: [
-          '**Sold** — khách mua, gắn PO và sản phẩm. Ngày kết thúc suy ra từ thời lượng sản phẩm.',
-          '**House** — Saramin tự chạy. Không có khách, không có PO, nên phải **tự đặt cả hai ngày** và **ghi mục đích** — vì không có đơn hàng nào giải thích hộ tại sao nó tồn tại.',
-        ],
-      },
-      {
-        kind: 'list',
-        heading: 'Collection và Zone',
-        items: [
-          '**Collection** là bộ tin hoặc bộ công ty đã đặt tên và lưu lại, site gọi theo slug. Đây là thứ mà một mục menu như “Korea” thực chất trỏ vào.',
-          '**Zone** (채용관) là trang chiến dịch có thương hiệu, có đường dẫn công khai riêng, ghép từ các collection.',
-          'Sửa một collection thì **mọi** menu và zone đang dùng nó đổi theo — đó là điểm mạnh và cũng là cái bẫy.',
+          ['**Collection**', 'Bộ tin / bộ công ty đã đặt tên, gọi theo slug', '**Điều kiện lọc** — đây là nơi nội dung thật sự được quyết định'],
+          ['**Zone**', 'Trang chiến dịch có đường dẫn công khai riêng', 'Bố cục các khối, mỗi khối trỏ vào một collection'],
+          ['**Site navigation**', 'Menu đầu trang', 'Các mục, mỗi mục có thể trỏ vào một collection'],
         ],
       },
       {
         kind: 'warn',
         text:
-          'Ảnh banner phải **đúng kích thước** của vị trí. Sai tỉ lệ bị từ chối khi lưu, hệ thống **không tự cắt** — vì một banner bị cắt là một thiết kế không ai duyệt.',
+          'Vì collection lưu **điều kiện** chứ không lưu danh sách, nó **rỗng đi được mà không ai đụng vào**: điều kiện quá hẹp, hoặc các tin khớp hết hạn cùng lúc. Một mục menu trỏ vào collection rỗng **vẫn hiện trên site** và dẫn người dùng tới trang trắng. Preview lúc tạo chỉ nói được hôm nay, không nói được tháng sau.',
+      },
+      {
+        kind: 'list',
+        heading: 'Slug là hợp đồng với site công khai',
+        items: [
+          'Slug của collection và zone là thứ **site công khai gọi** — đổi slug là **gãy mọi link đã phát ra ngoài**.',
+          'Một số slug bị **giữ chỗ** và không dùng được — trùng vào thì lưu hỏng.',
+          'Zone trông rỗng thường **không phải lỗi của zone**: kiểm các collection bên trong nó trước.',
+        ],
+      },
+      {
+        kind: 'list',
+        heading: 'Phần chưa chạy trên nền mới',
+        items: [
+          '**Pages · Boards · Blog** chưa có backend thật — chúng bị tắt bằng cờ tính năng. Thấy chúng trống hoặc lỗi thì đó là **chưa làm xong**, không phải hỏng.',
+        ],
       },
     ],
   },
@@ -596,47 +594,131 @@ export const MODULE_DOCS: Record<string, ModuleDoc> = {
     ],
   },
 
-  Analytics: {
-    title: 'Logic chung — Analytics',
-    lead: 'Ba báo cáo tách theo câu hỏi cần trả lời, không tách theo phòng ban.',
-    headline: ['**Doanh thu tính theo hoá đơn đã phát hành.** PO đã ký nhưng chưa phát hành hoá đơn thì chưa vào doanh thu.'],
+  Dashboards: {
+    title: 'Logic chung — Dashboards',
+    lead:
+      'Bốn bảng theo dõi, mỗi bảng cho một đội — Sales · Sales planning · Marketing · Product — cộng bảng xếp hạng gọi. Mỗi bảng có **quyền riêng**, nên đội này không mặc nhiên thấy số của đội kia.',
+    headline: [
+      '**Doanh thu tính theo hoá đơn đã phát hành.** PO đã ký nhưng chưa phát hành hoá đơn thì chưa vào doanh thu.',
+      '**Mỗi bảng một quyền.** Không thấy một bảng trong menu là **thiếu quyền**, không phải bảng đó chưa làm.',
+    ],
     blocks: [
       {
         kind: 'table',
-        heading: 'Ba báo cáo',
-        cols: ['Báo cáo', 'Trả lời câu hỏi', 'Đọc gì'],
+        heading: 'Năm bảng và câu hỏi mỗi bảng trả lời',
+        cols: ['Bảng', 'Trả lời câu hỏi', 'Quyền'],
         rows: [
-          ['Sales report', 'Ai bán được bao nhiêu, đang ở chặng nào', 'Phân bố khách theo chặng pipeline + ảnh chụp doanh thu'],
-          ['Recruit report', 'Tin và ứng tuyển chạy ra sao', 'Số tin / hồ sơ / lượt ứng tuyển, phễu, top tin'],
-          ['Revenue report', 'Tiền thực thu theo kỳ', 'Theo **ngày hoá đơn**, không theo ngày PO'],
+          ['**Sales**', 'Ai bán được bao nhiêu, đang ở chặng nào', '`dashboard_sales:read`'],
+          ['**Sales planning**', 'Kế hoạch và chỉ tiêu so với thực tế', '`dashboard_sales_planning:read`'],
+          ['**Marketing**', 'Hoạt động marketing chạy ra sao', '`dashboard_marketing:read`'],
+          ['**Product**', 'Sản phẩm và tin đăng chạy ra sao', '`dashboard_product:read`'],
+          ['**Ranking**', 'Xếp hạng nhân viên theo hoạt động gọi', '`telephony_call:read`'],
         ],
       },
       {
         kind: 'warn',
         text:
-          'Báo cáo phải đọc **ngày hoá đơn**, không bao giờ đọc ngày dự kiến ghi trên PO — PO ghi ngày *kế hoạch*, hoá đơn ghi ngày *sự thật*, và chính ngày hoá đơn khởi động đồng hồ kích hoạt.',
+          'Mọi báo cáo phải đọc **ngày hoá đơn**, không bao giờ đọc ngày dự kiến ghi trên PO — PO ghi ngày *kế hoạch*, hoá đơn ghi ngày *sự thật*, và chính ngày hoá đơn khởi động đồng hồ kích hoạt. Mọi mốc thời gian theo **giờ Việt Nam**.',
+      },
+      {
+        kind: 'warn',
+        text:
+          'Bốn bảng này nằm ở `/dashboards/*` và **khác với trang chủ** của admin ở `/`. Trang chủ là màn hình chung sau khi đăng nhập; bốn bảng này là báo cáo theo đội.',
       },
     ],
   },
 
-  'Call center': {
-    title: 'Logic chung — Call center',
-    lead: 'Dữ liệu cuộc gọi đồng bộ từ tổng đài Callio. Admin không tạo cuộc gọi — nó chỉ đọc lại và xếp hạng.',
-    headline: ['**Không gọi điện được từ đây.** Callio không có API quay số — đã kiểm với tài liệu và API thật của họ.'],
+  'Service delivery': {
+    title: 'Logic chung — Service delivery',
+    lead:
+      'Mặt **sau khi bán** của mọi sản phẩm: khách đã được cấp những gì, dùng tới đâu, và những thứ phải giao bằng tay. Bán hàng nằm ở CRM; danh mục nằm ở Product settings; phần này là “chúng ta đã giao chưa”.',
+    headline: [
+      '**Một dòng Quota usage = một quyền lợi do MỘT hoá đơn đã phát hành cấp ra.** Không có hoá đơn thì không có dòng nào — đúng nguyên tắc “không gì được cấp nếu chưa thanh toán”.',
+      '**Manual service không tự giao được.** Trả tiền chỉ mở ra một nhiệm vụ; phải có người ghi nhận đã giao thì dòng đó mới tính là xong.',
+    ],
     blocks: [
       {
-        kind: 'list',
-        heading: 'Ba trang',
-        items: [
-          '**Call logs** — lịch sử cuộc gọi, kèm hàng chờ các cuộc chưa gắn được vào công ty nào.',
-          '**Ranking** — xếp hạng nhân viên theo hoạt động gọi.',
-          '**Sync health** — tình trạng đồng bộ.',
+        kind: 'table',
+        heading: 'Ba trang, ba câu hỏi',
+        cols: ['Trang', 'Trả lời câu hỏi'],
+        rows: [
+          ['**Quota usage**', 'Khách đã được cấp gì, còn bao nhiêu, hạn tới khi nào'],
+          ['**Manual services**', 'Còn nợ khách buổi giao nào chưa làm'],
+          ['**Boosting**', 'Banner và popup nào đang chạy ở vị trí nào'],
         ],
       },
       {
         kind: 'warn',
         text:
-          'Dữ liệu ở đây là **bản sao**, không phải nguồn gốc. Sai lệch thì sửa ở tổng đài. Thấy số gọi thấp bất thường thì kiểm **Sync health** trước, đừng vội kết luận nhân viên không gọi.',
+          'Hai đồng hồ cần canh trên Quota usage: **cửa sổ kích hoạt** (quota chưa dùng sẽ hết hiệu lực) và **thời hạn sử dụng** (gói đang chạy sắp hết). Đồng hồ thứ hai gấp hơn — còn 40 lượt CV chưa mở mà gói hết hạn trong 7 ngày là **một cuộc gọi của sales**, không phải một email.',
+      },
+    ],
+  },
+
+  Notifications: {
+    title: 'Logic chung — Notifications',
+    lead:
+      'Bốn trang cho một cỗ máy gửi tin, cộng trang riêng cho mẫu Zalo. Trước đây là **một trang bốn tab**; giờ mỗi phần là một mục menu và **mỗi phần có quyền riêng**.',
+    headline: [
+      '**Mẫu và quy tắc tách nhau.** Một mẫu dùng cho nhiều quy tắc — nên sửa mẫu là sửa **mọi** nơi đang gửi nó.',
+      '**Mẫu Zalo không soạn ở đây.** Zalo duyệt mẫu; mình chỉ khai mã mẫu ứng với hành động nào.',
+    ],
+    blocks: [
+      {
+        kind: 'table',
+        heading: 'Bốn trang, và thứ tự nên dùng chúng',
+        cols: ['Trang', 'Dùng khi', 'Quyền'],
+        rows: [
+          ['**Message templates**', '**Làm trước** — soạn nội dung, kiểm phần xem trước', '`notification_template:read`'],
+          ['**Automation rules**', 'Nối sự kiện → mẫu → người nhận', '`notification_workflow:read`'],
+          ['**Send manually**', 'Gửi một lần, không đáng tạo quy tắc', '`notification_send:create`'],
+          ['**Delivery history**', 'Kiểm một thông báo có thật sự đi hay không', '`notification_history:read`'],
+        ],
+      },
+      {
+        kind: 'warn',
+        text:
+          'Quyền **gửi tay** là `create`, không phải `read` — gửi tin cho khách là một hành động, không phải một lần xem. Người xem được lịch sử chưa chắc gửi được.',
+      },
+    ],
+  },
+
+  Organisation: {
+    title: 'Logic chung — Organisation',
+    lead:
+      'Ba trang quản trị **người của Saramin**: phòng ban, tài khoản nhân viên, và vai trò. Tách khỏi System vì đây là con người, còn System là cấu hình.',
+    headline: [
+      '**Đây là nhân viên Saramin, không phải khách.** Tài khoản khách ở Users → Company users; tài khoản ứng viên ở Users → Jobseeker users.',
+      '**Thứ tự tạo là bắt buộc:** danh bạ → vai trò → operator → gán vai trò → gửi mời.',
+    ],
+    blocks: [
+      {
+        kind: 'table',
+        heading: 'Thứ tự tạo một operator',
+        note: 'Bỏ bước là kẹt ở bước sau: chưa có vai trò thì không gán được, chưa gán thì mời ra một tài khoản không làm được gì.',
+        cols: ['Bước', 'Việc'],
+        rows: [
+          ['1', 'Thêm người vào **danh bạ nhân sự** (một lần cho mỗi người)'],
+          ['2', 'Định nghĩa **vai trò** ở Roles & permissions'],
+          ['3', 'Tạo **operator** — chọn người từ danh bạ'],
+          ['4', 'Gán **vai trò đã lưu**'],
+          ['5', 'Gửi **lời mời**'],
+        ],
+      },
+      {
+        kind: 'warn',
+        text:
+          '**Không ai gõ mật khẩu hộ người khác.** Người được mời bấm link và tự đặt mật khẩu. Trạng thái: **Pending** (đã mời) → **Active** (đã bấm link và đặt mật khẩu) — giống hệt luồng mời bên phía công ty khách.',
+      },
+      {
+        kind: 'list',
+        heading: 'Vai trò do team tự quản',
+        items: [
+          'Có sẵn vài vai trò mặc định, nhưng chúng là **vai trò bình thường, sửa được** — không có “vai trò hệ thống” bị khoá cứng.',
+          '**Không xoá được vai trò đang có người giữ.** Gỡ người ra trước.',
+          '**Luôn phải còn ít nhất một vai trò giữ toàn quyền**, để không ai tự khoá mình ra khỏi hệ thống.',
+          'Gỡ = **vô hiệu hoá, không xoá cứng**. Mọi thay đổi vai trò và operator đều được ghi log.',
+        ],
       },
     ],
   },
@@ -644,35 +726,7 @@ export const MODULE_DOCS: Record<string, ModuleDoc> = {
 
 /* ── Page-level guidance ────────────────────────────────────────────────────── */
 
-/* ── Page-level guidance ────────────────────────────────────────────────────── */
-
 export const PAGE_DOCS: Record<string, PageDoc> = {
-  /* ── Analytics ───────────────────────────────────────────────────────────── */
-  dashboard: {
-    logic: ['Bốn con số tổng: số công ty, số tin tuyển dụng, số hồ sơ, số lượt ứng tuyển — lấy thẳng từ server, không lọc theo người xem.'],
-    how: [
-      'Mở sau khi đăng nhập — đây là trang mặc định.',
-      'Đọc bốn thẻ KPI để nắm quy mô hiện tại.',
-      'Cần chi tiết thì sang ba báo cáo trong cùng nhóm Analytics.',
-    ],
-  },
-  'sales-report': {
-    logic: ['Phân bố khách hàng theo từng chặng trong pipeline, kèm ảnh chụp doanh thu.'],
-    how: [
-      'Chọn kỳ muốn xem.',
-      'Đọc phân bố theo chặng để biết cơ hội đang đọng ở đâu.',
-      'Đối chiếu với Pipeline nếu thấy một chặng phình bất thường.',
-    ],
-  },
-  'recruit-report': {
-    logic: ['Số tin, số hồ sơ, số lượt ứng tuyển, phễu ứng tuyển và các tin nhiều ứng viên nhất.'],
-    how: ['Chọn kỳ.', 'Đọc phễu để biết ứng viên rơi ở bước nào.', 'Xem top tin theo lượt ứng tuyển để biết tin nào đang hiệu quả.'],
-  },
-  'revenue-report': {
-    logic: ['Tiền thực thu theo kỳ. Doanh thu tính theo **hoá đơn đã phát hành**, nên số ở đây đi cùng mốc Issued, không đi cùng PO.'],
-    how: ['Chọn kỳ.', 'Đối chiếu với danh sách Invoice nếu một con số trông lệch.'],
-    watch: ['PO đã ký nhưng chưa phát hành hoá đơn thì **chưa** vào doanh thu ở đây.'],
-  },
 
   /* ── Recruitment ─────────────────────────────────────────────────────────── */
   jobs: {
@@ -857,70 +911,7 @@ export const PAGE_DOCS: Record<string, PageDoc> = {
       },
     ],
   },
-  resumes: {
-    logic: [
-      'Hồ sơ ứng viên do admin quản lý — khác Talent pool ở chỗ đây là bản ghi admin tạo và sửa được.',
-      'Có tab hiển thị: Tất cả · Đang cho tìm · Đang ẩn.',
-      'Đây là nơi HQ dùng trục **kiểm duyệt** — trục duy nhất trong ba trục trạng thái CV mà HQ thực sự sở hữu ở màn hình này.',
-      'Mở khoá một CV cho công ty sẽ **trừ credit** của công ty đó.',
-    ],
-    how: [
-      'Lọc theo nguồn hoặc theo trạng thái hiển thị.',
-      'Mở một hồ sơ để xem/sửa.',
-      'Mở khoá cho khách: thao tác từ chính hồ sơ đó — credit trừ vào công ty.',
-    ],
-    watch: [
-      'Giá mở khoá một CV có thể được admin đặt riêng cho từng CV, không phải luôn bằng giá chung.',
-      'Tab “Đang ẩn” phản ánh **lựa chọn của ứng viên**, không phải hành động của HQ — thấy một ứng viên ở đó thì đó là quyền của họ, không phải việc cần sửa.',
-    ],
-    blocks: [
-      {
-        kind: 'table',
-        heading: 'Kiểm duyệt — ba giá trị, và cái thứ ba cần lý do bắt buộc',
-        cols: ['Giá trị', 'Nghĩa', 'Còn tìm thấy được?'],
-        rows: [
-          ['**Bình thường**', 'Mặc định. CV tham gia tìm kiếm, tuỳ theo lựa chọn hiển thị của chính ứng viên.', 'Có — nếu ứng viên để Cho tìm thấy'],
-          ['**Bị gắn cờ**', 'Đánh dấu để xem lại (nghi giả mạo, spam, nội dung phản cảm). **Đây là hàng đợi việc, không phải hình phạt.**', 'Có — vẫn tìm thấy được ở Phase-1'],
-          ['**Gỡ khỏi kho**', 'HQ loại khỏi CV search, **bắt buộc nhập lý do**.', 'Không'],
-        ],
-      },
-      {
-        kind: 'warn',
-        text:
-          '**Gỡ khỏi kho là gỡ khả năng được tìm thấy, không phải gỡ con người.** Ứng viên vẫn giữ CV và vẫn ứng tuyển bằng nó bình thường. Thao tác khôi phục đưa CV về Bình thường và **cũng được ghi log** như lúc gỡ.',
-      },
-    ],
-  },
 
-  /* ── Resume Management ───────────────────────────────────────────────────── */
-  'search-quality-tracking': {
-    logic: [
-      'Mọi lượt tìm CV **không ra kết quả** đều được phân vào đúng một trong hai loại: không hiểu từ khoá, hoặc hiểu nhưng kho không có ai.',
-      'Hai loại này do hai người khác nhau xử lý: loại đầu là việc của người quản trị danh mục, loại sau là việc của Sales/sourcing.',
-    ],
-    how: [
-      'Đọc danh sách từ khoá trả về 0 kết quả.',
-      'Từ nào **không hiểu** → thêm alias hoặc thêm kỹ năng mới ở **Master data**.',
-      'Từ nào **hiểu nhưng thiếu người** → chuyển cho Sales/sourcing, không sửa danh mục.',
-    ],
-    blocks: [
-      {
-        kind: 'table',
-        heading: 'Hai nguyên nhân — và chỉ một là lỗi của mình',
-        note: 'Mọi lượt tìm trả về 0 kết quả đều được phân vào **đúng một** trong hai loại, ngay lúc truy vấn chạy. Gộp chúng lại là mất luôn khả năng biết nên sửa gì.',
-        cols: ['Nguyên nhân', 'Nghĩa là', 'Ai xử lý', 'Sửa ở đâu'],
-        rows: [
-          ['**Không hiểu từ khoá**', 'Danh mục chưa có từ này, hoặc có nhưng dưới tên khác', '**Người quản trị danh mục**', 'Master data — thêm giá trị hoặc gắn alias'],
-          ['**Hiểu nhưng kho rỗng**', 'Hệ thống hiểu đúng, nhưng không có ứng viên nào khớp', '**Sales / sourcing**', 'Không sửa gì ở hệ thống — đây là việc đi tìm người'],
-        ],
-      },
-      {
-        kind: 'warn',
-        text:
-          'Sửa danh mục cho nhóm thứ hai là **sai hướng**: hệ thống đã hiểu đúng rồi, thêm alias không làm xuất hiện ứng viên nào. Ngược lại, chuyển nhóm thứ nhất cho Sales là bắt họ đi tìm người cho một từ mà hệ thống **vốn không tìm nổi**, dù kho có đủ người.',
-      },
-    ],
-  },
 
   /* ── User ────────────────────────────────────────────────────────────────── */
   'jobseeker-users': {
@@ -997,21 +988,6 @@ export const PAGE_DOCS: Record<string, PageDoc> = {
       },
     ],
   },
-  'deleted-accounts': {
-    logic: ['Tài khoản ứng viên đã kết thúc — tự rút hoặc bị HQ xoá. Xoá là **xoá mềm**: bản ghi vẫn còn nên luôn khôi phục được.'],
-    how: ['Tìm tài khoản cần tìm lại.', 'Bấm **Restore** để đưa tài khoản trở lại.'],
-    watch: [
-      'Sau 30 ngày hệ thống purge thật — lúc đó không khôi phục được nữa.',
-      'Trang này gộp **hai lối ra khác hẳn nhau**: ứng viên tự rút, và HQ xoá. Trước khi khôi phục, xem **ai** đã kết thúc tài khoản.',
-    ],
-    blocks: [
-      {
-        kind: 'warn',
-        text:
-          'Xoá là **xoá mềm** — bản ghi vẫn nằm trong cơ sở dữ liệu, nên trang này luôn liệt kê được và **Restore luôn có thứ để đưa về**. Đó là thiết kế, không phải việc dọn dẹp còn dở: một tài khoản đã kết thúc vẫn có các đơn ứng tuyển đã gửi, và xoá cứng sẽ để lại những đơn trỏ vào hư không ở phía nhà tuyển dụng.',
-      },
-    ],
-  },
 
   /* ── Products & Packages ─────────────────────────────────────────────────── */
   products: {
@@ -1072,7 +1048,7 @@ export const PAGE_DOCS: Record<string, PageDoc> = {
       },
     ],
   },
-  'cv-search-usage': {
+  'quota-usage': {
     logic: ['Khách mua gói tìm CV dùng tới đâu: mua bao nhiêu lượt, đã dùng bao nhiêu, còn bao nhiêu, lần dùng gần nhất.'],
     how: ['Đọc danh sách theo công ty.', 'Chú ý dòng mua nhiều mà dùng ít — gọi khách trước khi tới hạn gia hạn.'],
     watch: ['Khách mua rồi không dùng vẫn hiện “còn nhiều lượt” ở chỗ khác — nhưng ở đây nó là tín hiệu gia hạn sẽ hỏng.'],
@@ -1342,15 +1318,14 @@ export const PAGE_DOCS: Record<string, PageDoc> = {
   },
 
   /* ── Content ─────────────────────────────────────────────────────────────── */
-  displays: {
+  boosting: {
     logic: [
-      'Banner và Popup là **hai tab** của trang này, không phải hai trang.',
+      'Banner và Popup nay là **MỘT danh sách gộp**, không còn hai tab. Nút **New** hỏi **vùng hiển thị trước** (banner và popup chung một danh sách chọn — popup chỉ là một loại vị trí khác), rồi mới mở đúng form tương ứng.',
       'Mỗi banner có nguồn **Sold** (khách mua, gắn PO) hoặc **House** (Saramin tự chạy). Banner nội bộ vẫn chiếm chỗ xoay vòng như banner bán.',
       'Cùng vòng đời Draft → Schedule → Open → Expired và cùng có **Exposure** riêng.',
     ],
     how: [
-      'Chọn tab **Banners** hoặc **Popups**.',
-      'Tạo mới bằng nút trên tab đó — form mở ra ở drawer bên phải.',
+      'Bấm **New** → **chọn vùng hiển thị trước** → form banner hoặc popup tự mở theo vùng đã chọn.',
       'Banner bán: chọn công ty → PO → sản phẩm, rồi đặt ngày bắt đầu và tải ảnh.',
       'Banner nội bộ: chọn thẳng vị trí, tự đặt **cả hai** ngày, và ghi **mục đích**.',
       'Gỡ khỏi site mà không kết thúc booking: tắt **Exposure**.',
@@ -1564,31 +1539,114 @@ export const PAGE_DOCS: Record<string, PageDoc> = {
     ],
     watch: ['Đây là nơi tra khi có khiếu nại “ai đã xem/sửa cái này”.'],
   },
-  notifications: {
-    logic: [
-      'Bốn tab: **Auto rules** (quy tắc tự gửi) · **Manual** (gửi tay) · **History** (đã gửi) · **Template** (mẫu tin).',
-      'Mẫu và quy tắc **tách nhau**: một mẫu dùng được cho nhiều quy tắc, nên sửa mẫu là sửa mọi nơi đang gửi nó.',
-      'Mẫu mở ra **trang riêng, không phải drawer**, vì cần chỗ cho trình soạn nằm cạnh phần xem trước đã dựng.',
-    ],
-    watch: [
-      'Sửa một mẫu là đổi nội dung của **mọi** quy tắc đang dùng nó — kiểm trước xem có những quy tắc nào.',
-      'Zalo ZNS **không cấu hình ở đây**: mã mẫu Zalo nằm ở trang riêng, vì mẫu đó do Zalo duyệt chứ không phải mình soạn.',
-    ],
-    how: [
-      'Tạo mẫu trước ở tab **Template** — mẫu mở ra trang riêng, có xem trước.',
-      'Tạo quy tắc ở tab **Auto rules**: sự kiện nào thì gửi mẫu nào cho ai.',
-      'Gửi một lần thì dùng tab **Manual**.',
-      'Kiểm đã gửi hay chưa ở tab **History**.',
-    ],
-  },
   'zalo-templates': {
     logic: ['Ràng buộc mẫu Zalo ZNS theo từng hành động. Mẫu do Zalo duyệt; ở đây chỉ khai mã mẫu ứng với hành động nào.'],
     how: ['Mở hành động cần gắn → điền mã mẫu Zalo đã được duyệt → lưu.'],
     watch: ['Mẫu phải được Zalo duyệt trước; hệ thống không tạo mẫu hộ.'],
   },
-  environment: {
-    logic: ['Cờ bật/tắt tính năng. Tắt một cờ thì mục tương ứng biến mất khỏi menu của **mọi** người.'],
-    how: ['Xem trạng thái cờ.', 'Đổi cờ chỉ khi có yêu cầu rõ ràng từ kỹ thuật.'],
-    watch: ['Tắt nhầm một cờ trông hệt như hệ thống mất tính năng — kiểm chỗ này trước khi báo bug “trang biến mất”.'],
+  /* ── Dashboards (new group) ──────────────────────────────────────────────── */
+  'dashboard-sales': {
+    logic: ['Phễu bán, cơ cấu hoạt động và các chỉ số chính của đội Sales, cộng doanh thu theo nhóm ngành.'],
+    how: ['Chọn kỳ → đọc phễu để biết cơ hội đang đọng ở chặng nào.', 'Đối chiếu với **Pipeline** nếu một chặng phình bất thường.'],
+    watch: ['Doanh thu ở đây đọc theo **ngày hoá đơn**, không theo ngày PO.'],
+  },
+  'dashboard-sales-planning': {
+    logic: ['Kế hoạch và chỉ tiêu của đội Sales, đặt cạnh kết quả thực tế.'],
+    how: ['Chọn kỳ → so chỉ tiêu với thực tế → chỗ lệch nhiều là chỗ cần hỏi.'],
+  },
+  'dashboard-marketing': {
+    logic: ['Bảng theo dõi của đội Marketing.'],
+    how: ['Chọn kỳ → đọc các chỉ số của kỳ đó.'],
+  },
+  'dashboard-product': {
+    logic: ['Bảng theo dõi của đội Sản phẩm: sản phẩm và tin đăng chạy ra sao.'],
+    how: ['Chọn kỳ → đọc các chỉ số của kỳ đó.'],
+  },
+
+  /* ── Product settings ────────────────────────────────────────────────────── */
+  'product-ladder': {
+    logic: [
+      'Thang bậc tin đăng: **bậc nào đứng trên bậc nào**. Vị trí trên thang quyết định thứ tự tin xuất hiện trong danh sách **Gợi ý** công khai, và thứ tự bậc hiện ra ở các màn hình chọn gói.',
+      'Vị trí đặt bằng cách **kéo thả** — hệ thống tự tính giá trị nằm giữa hai bậc kề, nên **không bậc nào khác bị xê dịch**.',
+    ],
+    how: [
+      'Mở thang → kéo một bậc tới vị trí mong muốn → lưu.',
+      'Cũng đặt được từ chính form sản phẩm, ở ô vị trí thang.',
+    ],
+    watch: [
+      '**Hai bậc đang Active không được trùng vị trí** — hệ thống từ chối.',
+      'Khi hết số nguyên trống giữa hai bậc, hệ thống báo cần **giãn lại thang** — lúc đó mới phải sắp lại cả dãy.',
+      'Bậc nào lưu mà không đặt vị trí thì bị đẩy **xuống đáy**.',
+    ],
+  },
+
+  /* ── Content ─────────────────────────────────────────────────────────────── */
+  'site-notices': {
+    logic: [
+      'Bảng thông báo và sự kiện của trung tâm trợ giúp — phần khách truy cập đọc dưới mục 공지/이벤트.',
+      'Hai loại nội dung: **thông báo** (có danh mục, ngày, lượt xem) và **sự kiện**.',
+    ],
+    how: ['**New** → chọn loại → viết nội dung → đặt danh mục và ngày → lưu.'],
+  },
+
+  /* ── Notifications (new group) ───────────────────────────────────────────── */
+  'notification-rules': {
+    logic: [
+      'Một quy tắc nối **sự kiện → mẫu → người nhận**. Đây là phần gửi **tự động**.',
+      'Quy tắc mở ra **trang riêng, không phải drawer**, vì cần chỗ cho trình soạn nằm cạnh phần xem trước đã dựng.',
+    ],
+    how: [
+      '**Soạn mẫu trước** ở Message templates — quy tắc chỉ trỏ vào mẫu, không chứa nội dung.',
+      '**New rule** → chọn sự kiện kích hoạt → chọn mẫu → chọn người nhận → lưu.',
+      'Kiểm ở **Delivery history** xem nó có thật sự gửi không.',
+    ],
+    watch: ['Tắt một quy tắc **không** thu hồi những tin đã gửi — nó chỉ ngừng gửi tiếp.'],
+  },
+  'notification-send': {
+    logic: ['Gửi một lần cho một nhóm người nhận, không tạo quy tắc. Dùng cho thông báo không lặp lại.'],
+    how: ['Chọn mẫu → chọn người nhận → xem lại → gửi.'],
+    watch: [
+      'Quyền ở đây là **`create`, không phải `read`** — gửi tin cho khách là một hành động, nên người xem được lịch sử chưa chắc gửi được.',
+      '**Gửi rồi thì không rút lại được.** Xem kỹ danh sách người nhận trước khi bấm.',
+    ],
+  },
+  'notification-history': {
+    logic: ['Lịch sử mọi tin đã gửi — cả tự động lẫn gửi tay. Đây là nơi trả lời “khách có nhận được không”.'],
+    how: ['Lọc theo kỳ, theo mẫu hoặc theo người nhận → mở một dòng để xem trạng thái gửi.'],
+    watch: ['Khách báo không nhận được thì kiểm ở đây **trước**, rồi mới nghi ngờ quy tắc hay mẫu.'],
+  },
+  'notification-templates': {
+    logic: [
+      'Mẫu nội dung dùng chung cho các quy tắc tự động và các lần gửi tay.',
+      'Mẫu **tách khỏi** quy tắc: một mẫu dùng cho nhiều quy tắc.',
+    ],
+    how: ['**New template** → soạn nội dung → **kiểm phần xem trước với dữ liệu thật** → lưu.'],
+    watch: ['Sửa một mẫu là đổi nội dung của **mọi** quy tắc đang dùng nó — kiểm trước xem có những quy tắc nào.'],
+  },
+
+  /* ── System ──────────────────────────────────────────────────────────────── */
+  'analytics-logs': {
+    logic: [
+      'Log **thô** của tìm kiếm và thẻ hiển thị trên site. Hai tab: **Search log** và **Card & behaviour log**.',
+      '**Giai đoạn 1 chỉ hiện những gì đã thu được, đúng như đã thu** — chưa có tỉ lệ, chưa có CTR, chưa phân tích theo thứ hạng. Xử lý số liệu là giai đoạn 2, đã quyết như vậy.',
+    ],
+    how: [
+      'Chọn kỳ và công tắc lọc bot ở đầu trang.',
+      'Đọc các thẻ đếm, rồi mở tab cần xem.',
+      'Bấm một mã phiên để lần theo hành vi của phiên đó.',
+    ],
+    watch: ['Đừng đọc trang này như một báo cáo — nó là **dữ liệu thô**. Con số ở đây chưa loại nhiễu và chưa quy đổi thành tỉ lệ nào.'],
+  },
+  'export-history': {
+    logic: [
+      'Mọi lần xuất dữ liệu đều **chạy nền ở server**, không xuất ngay tại chỗ. Trang này là danh sách các lần xuất **của chính bạn** và nơi tải lại file đã xong.',
+      'Bấm Export ở một danh sách là **xếp hàng một việc**, không phải tải ngay — file về khi server làm xong.',
+    ],
+    how: [
+      'Bấm **Export** trên danh sách cần xuất (Quota usage, Audit log, Jobseeker users…).',
+      'Mở trang này để xem việc đó xong chưa.',
+      'Xong thì tải file về.',
+    ],
+    watch: ['Xuất dữ liệu có chứa thông tin cá nhân là **thao tác được ghi log**, và thường cần quyền riêng — không phải ai đọc được cũng xuất được.'],
   },
 }

@@ -1,42 +1,52 @@
 [
  {
-  "group": "Analytics",
-  "key": "dashboard",
-  "label": "Dashboard",
-  "path": "/",
-  "perm": "analytics:read",
+  "group": "Dashboards",
+  "key": "dashboard-sales",
+  "label": "Sales",
+  "path": "/dashboards/sales",
+  "perm": "dashboard_sales:read",
   "flag": "",
-  "what": "Màn hình đầu tiên sau khi đăng nhập — số liệu tổng quan của toàn hệ thống.",
+  "what": "Bảng theo dõi của đội Sales: ai bán được bao nhiêu, đang ở chặng nào.",
   "sub": []
  },
  {
-  "group": "Analytics",
-  "key": "sales-report",
-  "label": "Sales report",
-  "path": "/analytics/sales-report",
-  "perm": "analytics:read",
+  "group": "Dashboards",
+  "key": "dashboard-sales-planning",
+  "label": "Sales planning",
+  "path": "/dashboards/sales-planning",
+  "perm": "dashboard_sales_planning:read",
   "flag": "",
-  "what": "Doanh số theo nhân viên và theo kỳ: ai bán được bao nhiêu, đang ở chặng nào.",
+  "what": "Kế hoạch và chỉ tiêu của đội Sales, đối chiếu với thực tế.",
   "sub": []
  },
  {
-  "group": "Analytics",
-  "key": "recruit-report",
-  "label": "Recruit report",
-  "path": "/analytics/recruit-report",
-  "perm": "analytics:read",
+  "group": "Dashboards",
+  "key": "dashboard-marketing",
+  "label": "Marketing",
+  "path": "/dashboards/marketing",
+  "perm": "dashboard_marketing:read",
   "flag": "",
-  "what": "Tin tuyển dụng và ứng tuyển chạy ra sao trong kỳ.",
+  "what": "Bảng theo dõi của đội Marketing.",
   "sub": []
  },
  {
-  "group": "Analytics",
-  "key": "revenue-report",
-  "label": "Revenue report",
-  "path": "/analytics/revenue-report",
-  "perm": "analytics:read",
+  "group": "Dashboards",
+  "key": "dashboard-product",
+  "label": "Product",
+  "path": "/dashboards/product",
+  "perm": "dashboard_product:read",
   "flag": "",
-  "what": "Tiền thực thu theo kỳ, tách theo sản phẩm và khách hàng.",
+  "what": "Bảng theo dõi của đội Sản phẩm.",
+  "sub": []
+ },
+ {
+  "group": "Dashboards",
+  "key": "call-ranking",
+  "label": "Ranking",
+  "path": "/call-center/ranking",
+  "perm": "telephony_call:read",
+  "flag": "",
+  "what": "Xếp hạng nhân viên theo hoạt động gọi trong kỳ.",
   "sub": []
  },
  {
@@ -46,7 +56,7 @@
   "path": "/recruitment/jobs",
   "perm": "job:read",
   "flag": "",
-  "what": "Toàn bộ tin tuyển dụng của mọi công ty. Tạo, sửa, duyệt, đóng tin; đăng tin là lúc tiêu quota.",
+  "what": "Toàn bộ tin tuyển dụng của mọi công ty. Tạo, sửa, đóng tin; đăng tin là lúc tiêu quota.",
   "sub": [
    "/recruitment/jobs/new",
    "/recruitment/jobs/:id",
@@ -56,12 +66,14 @@
  {
   "group": "Recruitment",
   "key": "applicants",
-  "label": "Applicants",
-  "path": "/recruitment/applicants",
+  "label": "Applications",
+  "path": "/recruitment/applications",
   "perm": "job:read",
   "flag": "",
-  "what": "Danh sách ứng tuyển theo từng tin — ai đã nộp, đang ở bước nào.",
-  "sub": []
+  "what": "Danh sách ứng tuyển của mọi công ty — ai đã nộp vào tin nào, đang ở chặng nào.",
+  "sub": [
+   "/recruitment/applications/:id"
+  ]
  },
  {
   "group": "Recruitment",
@@ -72,7 +84,8 @@
   "flag": "",
   "what": "Kho ứng viên đã bật cho tìm kiếm CV. Một dòng một ứng viên, kèm CV và kết quả kiểm duyệt.",
   "sub": [
-   "/recruitment/talent-pool/:candidateId"
+   "/recruitment/talent-pool/:candidateId",
+   "/recruitment/talent-pool/:candidateId/detail"
   ]
  },
  {
@@ -84,46 +97,22 @@
   "flag": "",
   "what": "Hàng đợi CV cần người kiểm: các CV máy quét còn nghi ngờ, cùng hai nhánh kết quả.",
   "sub": [
-   "/recruitment/cv-review/:cvId"
+   "/recruitment/cv-review/:cvId",
+   "/recruitment/cv-review/:cvId/detail"
   ]
  },
  {
-  "group": "Recruitment",
-  "key": "resumes",
-  "label": "Resumes / candidates",
-  "path": "/recruitment/resumes",
-  "perm": "resume:read",
-  "flag": "",
-  "what": "Hồ sơ ứng viên do admin quản lý — tạo, sửa, mở khoá (tốn credit của công ty).",
-  "sub": [
-   "/recruitment/resumes/new",
-   "/recruitment/resumes/:id"
-  ]
- },
- {
-  "group": "Resume Management",
-  "key": "search-quality-tracking",
-  "label": "Search quality",
-  "path": "/resume-management/search-quality-tracking",
-  "perm": "curation:read",
-  "flag": "",
-  "what": "Theo dõi chất lượng tìm kiếm: từ khoá không ra kết quả, từ chưa hiểu.",
-  "sub": []
- },
- {
-  "group": "User",
+  "group": "Users",
   "key": "jobseeker-users",
   "label": "Jobseeker users",
   "path": "/users/jobseekers",
   "perm": "candidate:read",
   "flag": "jobseekerUsers",
   "what": "Tài khoản người tìm việc. 4 trạng thái API hiện thành 5 trạng thái trên màn hình.",
-  "sub": [
-   "/users/jobseekers/:id"
-  ]
+  "sub": []
  },
  {
-  "group": "User",
+  "group": "Users",
   "key": "company-users",
   "label": "Company users",
   "path": "/users/company-users",
@@ -133,17 +122,7 @@
   "sub": []
  },
  {
-  "group": "User",
-  "key": "deleted-accounts",
-  "label": "Deleted account",
-  "path": "/users/deleted-accounts",
-  "perm": "candidate:read",
-  "flag": "jobseekerUsers",
-  "what": "Tài khoản ứng viên đã kết thúc — tự rút hoặc bị xoá; xoá mềm, purge sau 30 ngày.",
-  "sub": []
- },
- {
-  "group": "Products & Packages",
+  "group": "Product settings",
   "key": "products",
   "label": "Products",
   "path": "/system/products",
@@ -155,7 +134,7 @@
   ]
  },
  {
-  "group": "Products & Packages",
+  "group": "Product settings",
   "key": "packages",
   "label": "Packages",
   "path": "/system/packages",
@@ -168,7 +147,17 @@
   ]
  },
  {
-  "group": "Products & Packages",
+  "group": "Product settings",
+  "key": "product-ladder",
+  "label": "Posting ladder",
+  "path": "/system/product-ladder",
+  "perm": "product:read",
+  "flag": "",
+  "what": "Thang bậc tin đăng: bậc nào hơn bậc nào, và mỗi bậc cho thêm những gì.",
+  "sub": []
+ },
+ {
+  "group": "Product settings",
   "key": "placements",
   "label": "Placements",
   "path": "/system/placements",
@@ -178,27 +167,7 @@
   "sub": []
  },
  {
-  "group": "Products & Packages",
-  "key": "cv-search-usage",
-  "label": "CV search usage",
-  "path": "/system/cv-search-usage",
-  "perm": "product:read",
-  "flag": "",
-  "what": "Khách đã mua gói tìm CV dùng tới đâu — mua bao nhiêu, đã dùng bao nhiêu.",
-  "sub": []
- },
- {
-  "group": "Products & Packages",
-  "key": "manual-services",
-  "label": "Manual services",
-  "path": "/system/manual-services",
-  "perm": "manual_service:read",
-  "flag": "",
-  "what": "Dịch vụ giao tay và nhật ký giao — mặt sau bán hàng của một sản phẩm trong danh mục.",
-  "sub": []
- },
- {
-  "group": "Products & Packages",
+  "group": "Product settings",
   "key": "image-gallery",
   "label": "Image gallery",
   "path": "/system/image-gallery",
@@ -208,7 +177,7 @@
   "sub": []
  },
  {
-  "group": "Products & Packages",
+  "group": "Product settings",
   "key": "discount-programmes",
   "label": "Discount programmes",
   "path": "/system/discount-programmes",
@@ -220,33 +189,33 @@
   ]
  },
  {
-  "group": "Call center",
-  "key": "call-logs",
-  "label": "Call logs",
-  "path": "/call-center/logs",
-  "perm": "telephony_call:read",
+  "group": "Service delivery",
+  "key": "quota-usage",
+  "label": "Quota usage",
+  "path": "/system/quota-usage",
+  "perm": "invoice:read",
   "flag": "",
-  "what": "Lịch sử cuộc gọi đồng bộ từ tổng đài Callio.",
+  "what": "Khách đã được cấp những gì và dùng tới đâu. Một dòng là **một quyền lợi do một hoá đơn đã phát hành cấp ra**.",
   "sub": []
  },
  {
-  "group": "Call center",
-  "key": "call-ranking",
-  "label": "Ranking",
-  "path": "/call-center/ranking",
-  "perm": "telephony_call:read",
+  "group": "Service delivery",
+  "key": "manual-services",
+  "label": "Manual services",
+  "path": "/system/manual-services",
+  "perm": "manual_service:read",
   "flag": "",
-  "what": "Xếp hạng nhân viên theo hoạt động gọi.",
+  "what": "Dịch vụ giao tay và nhật ký giao — mặt sau bán hàng của một sản phẩm trong danh mục.",
   "sub": []
  },
  {
-  "group": "Call center",
-  "key": "call-sync-health",
-  "label": "Sync health",
-  "path": "/call-center/sync-health",
-  "perm": "telephony_call:assign",
+  "group": "Service delivery",
+  "key": "boosting",
+  "label": "Boosting",
+  "path": "/content/boosting",
+  "perm": "content_display:read",
   "flag": "",
-  "what": "Tình trạng đồng bộ với tổng đài — dùng khi nghi ngờ thiếu dữ liệu cuộc gọi.",
+  "what": "Banner và popup, **gộp thành một danh sách duy nhất** (trước đây là trang Displays có hai tab).",
   "sub": []
  },
  {
@@ -271,7 +240,7 @@
   "path": "/crm/pipeline",
   "perm": "quote:read",
   "flag": "",
-  "what": "Bảng theo dõi cơ hội bán. Một thẻ mở ra chính báo giá của nó — không có bản ghi deal riêng.",
+  "what": "Bảng theo dõi cơ hội bán. Một thẻ mở ra chính báo giá của nó.",
   "sub": []
  },
  {
@@ -291,11 +260,11 @@
  {
   "group": "CRM",
   "key": "purchase-order",
-  "label": "Purchase order",
+  "label": "Purchase orders",
   "path": "/crm/purchase-orders",
   "perm": "purchase_order:read",
   "flag": "",
-  "what": "Đơn đã cam kết, dựng từ đúng option khách đã chấp nhận.",
+  "what": "Đơn đã cam kết, dựng từ đúng option khách đã chấp nhận. Nơi phát hành hoá đơn.",
   "sub": [
    "/crm/purchase-orders/:id"
   ]
@@ -303,7 +272,7 @@
  {
   "group": "CRM",
   "key": "invoice",
-  "label": "Invoice",
+  "label": "Invoices",
   "path": "/crm/invoices",
   "perm": "invoice:read",
   "flag": "",
@@ -329,7 +298,7 @@
   "path": "/crm/sign-ups",
   "perm": "signup:read",
   "flag": "",
-  "what": "Khách tự đăng ký từ employer site. Admin chọn Move · Create & activate · Archive.",
+  "what": "Khách tự đăng ký từ trang công ty. Admin chọn Move · Create & activate · Archive.",
   "sub": []
  },
  {
@@ -339,21 +308,28 @@
   "path": "/crm/company-documents",
   "perm": "company_document:review",
   "flag": "",
-  "what": "Giấy tờ công ty nộp lên để xác minh.",
+  "what": "Giấy tờ công ty nộp lên để xác minh, và yêu cầu đổi thông tin pháp lý trên hoá đơn.",
   "sub": []
  },
  {
-  "group": "Content",
-  "key": "displays",
-  "label": "Displays",
-  "path": "/content/displays",
-  "perm": "content_banner:read",
+  "group": "CRM",
+  "key": "call-logs",
+  "label": "Call logs",
+  "path": "/call-center/logs",
+  "perm": "telephony_call:read",
   "flag": "",
-  "what": "Banner và Popup — hai tab trên cùng một trang. Nơi đặt và lên lịch chạy quảng cáo.",
-  "sub": [
-   "/content/banners",
-   "/content/popups"
-  ]
+  "what": "Lịch sử cuộc gọi đồng bộ từ tổng đài Callio.",
+  "sub": []
+ },
+ {
+  "group": "CRM",
+  "key": "call-sync-health",
+  "label": "Sync health",
+  "path": "/call-center/sync-health",
+  "perm": "telephony_call:assign",
+  "flag": "",
+  "what": "Tình trạng đồng bộ với tổng đài — dùng khi nghi ngờ thiếu dữ liệu cuộc gọi.",
+  "sub": []
  },
  {
   "group": "Content",
@@ -362,7 +338,7 @@
   "path": "/content/collections",
   "perm": "job_collection:read",
   "flag": "",
-  "what": "Bộ sưu tập tin đã lưu, dùng làm nguồn cho một mục điều hướng.",
+  "what": "Bộ tin hoặc bộ công ty đã lưu, site công khai gọi theo slug.",
   "sub": [
    "/content/collections/new",
    "/content/collections/:id/edit"
@@ -375,7 +351,7 @@
   "path": "/content/zones",
   "perm": "zone:read",
   "flag": "",
-  "what": "Trang chiến dịch có thương hiệu, ghép từ hai collection.",
+  "what": "Trang chiến dịch có thương hiệu, ghép từ các collection.",
   "sub": [
    "/content/zones/new",
    "/content/zones/:id/edit"
@@ -388,7 +364,7 @@
   "path": "/content/navigation",
   "perm": "site_menu:read",
   "flag": "",
-  "what": "Menu đầu trang jobseeker — 4 tab tương ứng 4 vùng menu.",
+  "what": "Menu đầu trang jobseeker — mỗi tab một vùng menu.",
   "sub": []
  },
  {
@@ -397,8 +373,31 @@
   "label": "Site footer",
   "path": "/content/footer",
   "perm": "site_footer:read",
-  "flag": "contentPages",
+  "flag": "",
   "what": "Chân trang jobseeker: phần chữ và các khối link.",
+  "sub": []
+ },
+ {
+  "group": "Content",
+  "key": "site-notices",
+  "label": "Notices & events",
+  "path": "/content/notices",
+  "perm": "site_notice:read",
+  "flag": "",
+  "what": "Bảng thông báo và sự kiện của trung tâm trợ giúp (공지/이벤트).",
+  "sub": [
+   "/content/notices/new",
+   "/content/notices/:id/edit"
+  ]
+ },
+ {
+  "group": "Content",
+  "key": "faq",
+  "label": "FAQ",
+  "path": "/content/faq",
+  "perm": "site_faq:read",
+  "flag": "contentPages",
+  "what": "FAQ hiển thị trên site, mỗi tab một vùng.",
   "sub": []
  },
  {
@@ -432,7 +431,63 @@
   "sub": []
  },
  {
-  "group": "System",
+  "group": "Notifications",
+  "key": "notification-rules",
+  "label": "Automation rules",
+  "path": "/notifications/rules",
+  "perm": "notification_workflow:read",
+  "flag": "",
+  "what": "Quy tắc tự gửi: sự kiện nào thì gửi mẫu nào cho ai.",
+  "sub": [
+   "/notifications/rules/new",
+   "/notifications/rules/:id/edit"
+  ]
+ },
+ {
+  "group": "Notifications",
+  "key": "notification-send",
+  "label": "Send manually",
+  "path": "/notifications/send",
+  "perm": "notification_send:create",
+  "flag": "",
+  "what": "Gửi thông báo một lần, không cần tạo quy tắc.",
+  "sub": []
+ },
+ {
+  "group": "Notifications",
+  "key": "notification-history",
+  "label": "Delivery history",
+  "path": "/notifications/history",
+  "perm": "notification_history:read",
+  "flag": "",
+  "what": "Lịch sử đã gửi — nơi kiểm một thông báo có thật sự đi hay không.",
+  "sub": []
+ },
+ {
+  "group": "Notifications",
+  "key": "notification-templates",
+  "label": "Message templates",
+  "path": "/notifications/templates",
+  "perm": "notification_template:read",
+  "flag": "",
+  "what": "Mẫu tin dùng chung cho các quy tắc và lần gửi tay.",
+  "sub": [
+   "/notifications/templates/new",
+   "/notifications/templates/:id/edit"
+  ]
+ },
+ {
+  "group": "Notifications",
+  "key": "zalo-templates",
+  "label": "Zalo ZNS templates",
+  "path": "/notifications/zalo-templates",
+  "perm": "zalo_template:read",
+  "flag": "",
+  "what": "Ràng buộc mẫu Zalo ZNS theo từng hành động. Mẫu do Zalo duyệt.",
+  "sub": []
+ },
+ {
+  "group": "Organisation",
   "key": "departments",
   "label": "Departments",
   "path": "/system/departments",
@@ -444,7 +499,7 @@
   ]
  },
  {
-  "group": "System",
+  "group": "Organisation",
   "key": "users",
   "label": "Users",
   "path": "/system/users",
@@ -456,13 +511,13 @@
   ]
  },
  {
-  "group": "System",
+  "group": "Organisation",
   "key": "roles",
   "label": "Roles & permissions",
   "path": "/system/roles",
   "perm": "role:read",
   "flag": "",
-  "what": "Vai trò và quyền. Quyền có dạng `resource:action` kèm scope all · company · own.",
+  "what": "Vai trò và quyền. Quyền có dạng `resource:action` kèm phạm vi all · company · own.",
   "sub": [
    "/system/roles/new",
    "/system/roles/:id"
@@ -475,7 +530,7 @@
   "path": "/system/general-settings",
   "perm": "matching_settings:read",
   "flag": "",
-  "what": "Các thiết lập chung, mỗi tab một nhóm.",
+  "what": "Thiết lập chung: trọng số gợi ý việc và tỉ giá USD→VND.",
   "sub": []
  },
  {
@@ -485,7 +540,7 @@
   "path": "/system/company-information",
   "perm": "system_settings:read",
   "flag": "",
-  "what": "Thông tin pháp nhân Saramin dùng để phát hành hoá đơn.",
+  "what": "Pháp nhân của chính Saramin — bên phát hành hoá đơn.",
   "sub": []
  },
  {
@@ -500,22 +555,12 @@
  },
  {
   "group": "System",
-  "key": "faq",
-  "label": "FAQ",
-  "path": "/system/faq",
-  "perm": "site_faq:read",
-  "flag": "",
-  "what": "FAQ hiển thị trên site, mỗi tab một vùng.",
-  "sub": []
- },
- {
-  "group": "System",
   "key": "master-data",
   "label": "Master data",
   "path": "/system/master-data",
   "perm": "taxonomy:read",
   "flag": "",
-  "what": "Dữ liệu nền: ngành nghề, kỹ năng, khu vực, cấp bậc… Mỗi tab một nhóm, mỗi nhóm một quyền riêng.",
+  "what": "Dữ liệu nền: ngành nghề, kỹ năng, khu vực, cấp bậc… Mỗi tab một nhóm, một quyền riêng.",
   "sub": []
  },
  {
@@ -530,37 +575,22 @@
  },
  {
   "group": "System",
-  "key": "notifications",
-  "label": "Notifications",
-  "path": "/system/notifications",
-  "perm": "notification_workflow:read",
+  "key": "analytics-logs",
+  "label": "Search & card logs",
+  "path": "/system/analytics-logs",
+  "perm": "analytics_log:read",
   "flag": "",
-  "what": "Máy gửi thông báo: quy tắc tự động và mẫu tin, 4 tab.",
-  "sub": [
-   "/system/notifications/rules/new",
-   "/system/notifications/rules/:id/edit",
-   "/system/notifications/templates/new",
-   "/system/notifications/templates/:id/edit"
-  ]
- },
- {
-  "group": "System",
-  "key": "zalo-templates",
-  "label": "Zalo ZNS templates",
-  "path": "/system/zalo-templates",
-  "perm": "zalo_template:read",
-  "flag": "",
-  "what": "Ràng buộc mẫu Zalo ZNS theo từng hành động.",
+  "what": "Log thô của tìm kiếm và thẻ hiển thị — **giai đoạn 1 chỉ hiện dữ liệu đã thu, chưa xử lý**.",
   "sub": []
  },
  {
   "group": "System",
-  "key": "environment",
-  "label": "Environment",
-  "path": "/system/environment",
+  "key": "export-history",
+  "label": "Export history",
+  "path": "/system/export-history",
   "perm": "",
   "flag": "",
-  "what": "Cờ bật/tắt tính năng và cấu hình môi trường.",
+  "what": "Lịch sử các lần xuất dữ liệu của chính bạn, và nơi tải lại file đã xong.",
   "sub": []
  }
 ]
