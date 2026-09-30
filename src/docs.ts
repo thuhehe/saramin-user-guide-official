@@ -248,7 +248,7 @@ export const MODULE_DOCS: Record<string, ModuleDoc> = {
   },
 
   'Product settings': {
-    title: 'Logic chung — Products & Packages',
+    title: 'Logic chung — Product settings',
     lead:
       'Phía danh mục của việc kiếm tiền: **bán cái gì, và giá bao nhiêu**. Bán nó (báo giá → PO → hoá đơn) nằm ở CRM; thứ khách giữ sau đó nằm trên tài khoản của khách.',
     headline: [
@@ -989,7 +989,7 @@ export const PAGE_DOCS: Record<string, PageDoc> = {
     ],
   },
 
-  /* ── Products & Packages ─────────────────────────────────────────────────── */
+  /* ── Product settings ────────────────────────────────────────────────────── */
   products: {
     logic: [
       'Trang có nhiều tab: **Catalog · Bundles · Orders · Credits**. Mỗi tab có quyền riêng — thiếu quyền một tab thì chỉ tab đó không hiện.',
