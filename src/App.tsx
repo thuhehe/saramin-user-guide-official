@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import PAGES from './pages.json'
 import { WORKFLOW, adminUrl } from './handbook'
 import type { WfBlock, WfSection } from './handbook'
@@ -50,10 +50,45 @@ type Sel =
 const selId = (s: Sel) =>
   s.t === 'home' ? 'home' : s.t === 'page' ? `p:${s.key}` : s.t === 'module' ? `m:${s.group}` : `g:${s.id}`
 
+/* ── addressing ───────────────────────────────────────────────────────────────
+   Every view has its own URL, because the commonest thing anyone does with a
+   reference is send one page of it to a colleague. A single-URL document forces
+   "open the guide, then CRM, then Invoices" into every such message, and the
+   instruction decays the moment the menu is reorganised — which it just was.
+
+   Paths are readable rather than opaque ids: /trang/invoice says what it is in
+   the message it is pasted into. The rail's items are real <a href> elements, so
+   ⌘-click, middle-click and "copy link address" all work — a link you cannot
+   copy out of the browser is only half an address. */
+const slug = (g: string) => g.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '')
+const GROUP_BY_SLUG = new Map(GROUP_ORDER.map((g) => [slug(g), g]))
+
+function href(s: Sel): string {
+  if (s.t === 'home') return '/'
+  if (s.t === 'guide') return `/huong-dan/${s.id}`
+  if (s.t === 'module') return `/logic/${slug(s.group)}`
+  return `/trang/${s.key}`
+}
+
+function parse(pathname: string): Sel {
+  const [, kind, rest] = pathname.replace(/\/+$/, '').split('/')
+  if (kind === 'trang' && rest && ALL.some((p) => p.key === rest)) return { t: 'page', key: rest }
+  if (kind === 'logic' && rest && GROUP_BY_SLUG.has(rest)) return { t: 'module', group: GROUP_BY_SLUG.get(rest)! }
+  if (kind === 'huong-dan' && rest && WORKFLOW.sections.some((x) => x.id === rest)) return { t: 'guide', id: rest }
+  return { t: 'home' }
+}
+
 export function App() {
   const [dev, setDev] = useState(false)
   const [q, setQ] = useState('')
-  const [sel, setSel] = useState<Sel>({ t: 'home' })
+  const [sel, setSel] = useState<Sel>(() => parse(window.location.pathname))
+
+  /* Back / forward must move between pages, not out of the site. */
+  useEffect(() => {
+    const onPop = () => setSel(parse(window.location.pathname))
+    window.addEventListener('popstate', onPop)
+    return () => window.removeEventListener('popstate', onPop)
+  }, [])
 
   const hits = useMemo(() => {
     const t = q.trim().toLowerCase()
@@ -66,6 +101,8 @@ export function App() {
   }, [q])
 
   const pick = (s: Sel) => {
+    const to = href(s)
+    if (to !== window.location.pathname) window.history.pushState({}, '', to)
     setSel(s)
     setQ('')
     window.scrollTo({ top: 0 })
@@ -92,10 +129,10 @@ export function App() {
           />
 
           <RailGroup label="Bắt đầu" />
-          <RailItem label="Tổng quan" on={cur === 'home'} onClick={() => pick({ t: 'home' })} />
+          <RailItem label="Tổng quan" to={href({ t: 'home' })} on={cur === 'home'} onClick={() => pick({ t: 'home' })} />
           {GUIDE_IDS.map((id) => {
             const s = sec(id)
-            return s ? <RailItem key={id} label={s.label} on={cur === `g:${id}`} onClick={() => pick({ t: 'guide', id })} /> : null
+            return s ? <RailItem key={id} label={s.label} to={href({ t: 'guide', id })} on={cur === `g:${id}`} onClick={() => pick({ t: 'guide', id })} /> : null
           })}
 
           {GROUP_ORDER.map((g) => {
@@ -108,20 +145,21 @@ export function App() {
                 {mod && (
                   <RailItem
                     label="Logic chung"
+                    to={href({ t: 'module', group: g })}
                     accent
                     on={cur === `m:${g}`}
                     onClick={() => pick({ t: 'module', group: g })}
                   />
                 )}
                 {pages.map((p) => (
-                  <RailItem key={p.key} label={p.label} on={cur === `p:${p.key}`} onClick={() => pick({ t: 'page', key: p.key })} />
+                  <RailItem key={p.key} label={p.label} to={href({ t: 'page', key: p.key })} on={cur === `p:${p.key}`} onClick={() => pick({ t: 'page', key: p.key })} />
                 ))}
               </div>
             )
           })}
 
           <RailGroup label="Cuối" />
-          <RailItem label="Điểm cần xác nhận" on={cur === 'g:can-xac-nhan'} onClick={() => pick({ t: 'guide', id: 'can-xac-nhan' })} />
+          <RailItem label="Điểm cần xác nhận" to={href({ t: 'guide', id: 'can-xac-nhan' })} on={cur === 'g:can-xac-nhan'} onClick={() => pick({ t: 'guide', id: 'can-xac-nhan' })} />
         </aside>
 
         {/* ── content ────────────────────────────────────────────────────────── */}
@@ -134,6 +172,7 @@ export function App() {
             >
               {dev ? 'Đang xem: Developer' : 'Xem bản Developer'}
             </button>
+            <CopyLink />
             <button onClick={() => window.print()} className="rounded-md border border-line bg-surface px-3 py-1.5 text-[12px] font-medium text-muted hover:border-ink hover:text-ink">In / PDF</button>
           </div>
 
@@ -588,6 +627,30 @@ function Fact({ k, v, href, mono }: { k: string; v: string; href?: string; mono?
   )
 }
 
+/* Copy the address of whatever is on screen. The URL bar already holds it, but a
+   reference gets shared from the page, not from the chrome — and on a phone the
+   bar is often not even visible. */
+function CopyLink() {
+  const [done, setDone] = useState(false)
+  return (
+    <button
+      onClick={async () => {
+        try {
+          await navigator.clipboard.writeText(window.location.href)
+          setDone(true)
+          setTimeout(() => setDone(false), 1600)
+        } catch {
+          /* clipboard blocked (http, permissions) — the URL bar still has it */
+        }
+      }}
+      title="Sao chép link trang này"
+      className="rounded-md border border-line bg-surface px-2.5 py-1.5 text-[12px] font-medium text-muted hover:border-ink hover:text-ink"
+    >
+      {done ? '✓ Đã chép' : 'Chép link'}
+    </button>
+  )
+}
+
 function RailGroup({ label, n }: { label: string; n?: number }) {
   return (
     <p className="flex items-baseline gap-2 pb-1 pt-5 font-mono text-[9.5px] uppercase tracking-[0.14em] text-faint">
@@ -597,19 +660,29 @@ function RailGroup({ label, n }: { label: string; n?: number }) {
   )
 }
 
-/* Active is an accent RULE, not a filled pill — a pill on every row turns the rail
+/* An <a> with a real href, not a button. The plain click is intercepted so the
+   page never reloads, but ⌘-click, middle-click and "copy link address" keep
+   working — and those are how a reference actually gets shared.
+
+   Active is an accent RULE, not a filled pill: a pill on every row turns the rail
    into a stack of buttons, and only one of them is ever the answer. */
-function RailItem({ label, on, onClick, accent }: { label: string; on: boolean; onClick: () => void; accent?: boolean }) {
+function RailItem({ label, to, on, onClick, accent }: { label: string; to: string; on: boolean; onClick: () => void; accent?: boolean }) {
   return (
-    <button
-      onClick={onClick}
-      className={cx('flex w-full items-baseline gap-2 border-l-2 py-1 pl-2.5 pr-1 text-left text-[12.5px] leading-snug transition-colors',
+    <a
+      href={to}
+      onClick={(e) => {
+        // let the browser handle any click that means "open somewhere else"
+        if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || e.button !== 0) return
+        e.preventDefault()
+        onClick()
+      }}
+      className={cx('flex w-full items-baseline gap-2 border-l-2 py-1 pl-2.5 pr-1 text-left text-[12.5px] leading-snug no-underline transition-colors',
         on ? 'border-brand font-semibold text-ink'
            : accent ? 'border-transparent font-medium text-brand hover:border-brand/40'
            : 'border-transparent text-muted hover:border-line hover:text-ink')}
     >
       <span className="min-w-0 truncate">{label}</span>
-    </button>
+    </a>
   )
 }
 
