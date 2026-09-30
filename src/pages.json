@@ -49,7 +49,8 @@
   "what": "Toàn bộ tin tuyển dụng của mọi công ty. Tạo, sửa, duyệt, đóng tin; đăng tin là lúc tiêu quota.",
   "sub": [
    "/recruitment/jobs/new",
-   "/recruitment/jobs/:id"
+   "/recruitment/jobs/:id",
+   "/recruitment/jobs/:id/edit"
   ]
  },
  {
@@ -149,7 +150,9 @@
   "perm": "product:read",
   "flag": "",
   "what": "Danh mục bán: mỗi Product là một món bán được. Với Job posting thì Product chính là Tier.",
-  "sub": []
+  "sub": [
+   "/system/products/:id"
+  ]
  },
  {
   "group": "Products & Packages",
@@ -256,7 +259,9 @@
   "what": "Hồ sơ khách hàng. Mọi thứ bán được đều treo vào một công ty; MST là khoá chống trùng.",
   "sub": [
    "/crm/companies/new",
-   "/crm/companies/:id"
+   "/crm/companies/:id",
+   "/crm/companies/archived",
+   "/crm/free-data"
   ]
  },
  {
@@ -291,7 +296,9 @@
   "perm": "purchase_order:read",
   "flag": "",
   "what": "Đơn đã cam kết, dựng từ đúng option khách đã chấp nhận.",
-  "sub": []
+  "sub": [
+   "/crm/purchase-orders/:id"
+  ]
  },
  {
   "group": "CRM",
@@ -302,7 +309,6 @@
   "flag": "",
   "what": "Hoá đơn VAT. **Issued là lúc quota được cấp** — mốc quan trọng nhất toàn hệ thống.",
   "sub": [
-   "/crm/invoices/new",
    "/crm/invoices/:id"
   ]
  },
@@ -344,7 +350,10 @@
   "perm": "content_banner:read",
   "flag": "",
   "what": "Banner và Popup — hai tab trên cùng một trang. Nơi đặt và lên lịch chạy quảng cáo.",
-  "sub": []
+  "sub": [
+   "/content/banners",
+   "/content/popups"
+  ]
  },
  {
   "group": "Content",
@@ -455,6 +464,7 @@
   "flag": "",
   "what": "Vai trò và quyền. Quyền có dạng `resource:action` kèm scope all · company · own.",
   "sub": [
+   "/system/roles/new",
    "/system/roles/:id"
   ]
  },

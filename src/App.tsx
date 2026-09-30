@@ -234,7 +234,6 @@ function Home({ onPick }: { onPick: (s: Sel) => void }) {
 function PageView({ p, dev, onModule }: { p: Page; dev: boolean; onModule: () => void }) {
   const d = PAGE_DOCS[p.key]
   const mod = MODULE_DOCS[p.group]
-  const bare = !d || (!d.logic?.length && !d.how?.length && !d.watch?.length)
 
   return (
     <article>
@@ -256,7 +255,7 @@ function PageView({ p, dev, onModule }: { p: Page; dev: boolean; onModule: () =>
       {p.what && <p className="mt-4 max-w-[76ch] text-[14.5px] leading-[1.7] text-ink/80">{md(p.what)}</p>}
 
       {d?.logic?.length ? <Bullets title="Logic phía sau" items={d.logic} /> : null}
-      {d?.how?.length ? <Steps title="Cách dùng" items={d.how} /> : null}
+      {d?.how?.length ? <Steps title="Hướng dẫn sử dụng" items={d.how} /> : null}
       {d?.watch?.length ? <Bullets title="Cần để ý" items={d.watch} warn /> : null}
 
       {p.sub.length > 0 && (
@@ -269,13 +268,6 @@ function PageView({ p, dev, onModule }: { p: Page; dev: boolean; onModule: () =>
           </ul>
           <p className="mt-1.5 text-[11.5px] text-faint">Các route này không có mục riêng trên menu — mở từ chính trang trên.</p>
         </section>
-      )}
-
-      {bare && (
-        <p className="mt-7 border-l-2 border-ink/20 py-1 pl-4 text-[12.5px] leading-[1.65] text-muted">
-          Trang này chưa có phần logic và cách dùng riêng — mới có mô tả, đường dẫn và quyền. Cần người rành nghiệp vụ
-          bổ sung.
-        </p>
       )}
 
       {mod && (
