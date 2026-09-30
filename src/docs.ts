@@ -35,6 +35,11 @@ export type DocBlock =
   | { kind: 'list'; heading?: string; items: string[] }
   | { kind: 'warn'; text: string }
   | { kind: 'open'; text: string }
+  /* A worked example: one concrete case traced end to end. The requirement leans
+     on these heavily and for good reason — a rule stated abstractly gets agreed
+     to and then misapplied, while the same rule shown running on real dates and
+     real numbers is a version the reader can check their own case against. */
+  | { kind: 'example'; heading: string; scenario: string; cols: string[]; rows: string[][]; note?: string }
 
 export interface ModuleDoc {
   /** shown as its own entry at the top of the module's menu */
@@ -68,6 +73,38 @@ export const MODULE_DOCS: Record<string, ModuleDoc> = {
           ['Báo giá', 'Trong hồ sơ công ty → Create quotation', 'Sales', '1–3 option để khách chọn một'],
           ['PO', 'Từ option khách đã Accepted', 'Sales', 'Cam kết mua + yêu cầu thanh toán. **Chưa cấp quota**'],
           ['Hoá đơn GTGT', 'Trang chi tiết PO', 'Kế toán', 'Phát hành chính thức → **quota vào tài khoản ngay**'],
+        ],
+      },
+      {
+        kind: 'table',
+        heading: 'Hai nút tạo, hai chỗ ở — và vì sao đặt vậy',
+        note:
+          'Hai nút tạo nằm ở hai chỗ khác nhau có chủ đích: một cái **lúc nào cũng hợp lệ**, cái kia **gần như không bao giờ**. Đặt mỗi nút ở nơi nó luôn có nghĩa thì không cần một nút xám phải tự đi giải thích tại sao nó bị khoá.',
+        cols: ['Hành động', 'Nằm ở', 'Khi nào dùng được', 'Vì sao ở đó'],
+        rows: [
+          [
+            'Tạo báo giá',
+            'Header hồ sơ công ty (+ đầu danh sách Quotations)',
+            '**Luôn luôn** — mọi công ty, mọi trạng thái',
+            'Báo giá đầu cho khách mới, gia hạn cho khách cũ, kéo lại khách đã rời — cả ba đều hợp lệ. **Không có công ty nào mà mình không được phép báo giá.**',
+          ],
+          [
+            'Tạo PO',
+            'Đúng dòng báo giá đã được chấp nhận',
+            'Chỉ khi báo giá có option Accepted và **chưa hết hiệu lực**',
+            'PO chép **một** option đã chấp nhận sang. Báo giá đã accepted là ngữ cảnh duy nhất làm được điều đó, nên nút thuộc về chính nó.',
+          ],
+        ],
+      },
+      {
+        kind: 'list',
+        heading: 'Hệ quả của cách đặt nút đó',
+        items: [
+          'Header hồ sơ công ty vì vậy chỉ có **đúng một** nút tạo — Tạo báo giá. Không có nút “Tạo PO”, cũng không có nút “Chuyển thành khách hàng”: **hoá đơn** mới là thứ chuyển trạng thái, không phải một nút ai đó bấm trên hồ sơ.',
+          'Mở Tạo báo giá **từ trong công ty** thì công ty được chọn sẵn; mở từ danh sách Quotations thì phải chọn công ty. Kiểu gì báo giá cũng gắn vào một công ty — **không bao giờ trôi nổi**.',
+          'Form tạo PO **chép nguyên** option đã chấp nhận: dòng hàng (kể cả dòng tặng 0 ₫), số lượng, đơn giá, VAT, tổng sau VAT, cộng thông tin xuất hoá đơn đọc từ hồ sơ công ty — tên pháp lý, địa chỉ đăng ký, MST. **Không gõ lại gì cả**, vì đây chính là các giá trị mà hoá đơn điện tử sau này phải khớp.',
+          'PO hỏi thêm thứ mà báo giá không có: **điều khoản thanh toán** (mặc định 100% trả trước) và **số PO của chính khách** kèm file, cho những khách có bộ phận mua hàng tự phát hành PO. Khách không có quy trình mua hàng thì chỉ cần xác nhận đơn mình gửi.',
+          '**Báo giá đã hết hiệu lực thì không dựng PO được**, dù option đã accepted — phải gia hạn hiệu lực hoặc phát hành lại bản v2. Điều này chặn ở server, không phải chỉ ẩn nút.',
         ],
       },
       {
@@ -107,6 +144,48 @@ export const MODULE_DOCS: Record<string, ModuleDoc> = {
           '**Kích hoạt:** khách dùng một slot. Phải dùng trong cửa sổ khai trên chính sản phẩm đó — mặc định 12 tháng, tính **từ ngày hoá đơn**. Quá hạn thì quota chưa dùng **mất, không hoàn tiền**.',
           '**Sử dụng:** slot đã kích hoạt thì chạy 30 ngày.',
           'Nên khách mua 10 slot hôm nay, dùng 1 tuần sau và 1 sau tám tháng là hoàn toàn bình thường: cấp một lần cả 10, mỗi slot kích hoạt riêng và đốt cửa sổ riêng của nó.',
+        ],
+      },
+      {
+        kind: 'example',
+        heading: 'Ví dụ chạy thật — một đơn hàng, ba đồng hồ',
+        scenario:
+          'Công ty Vạn Phát chốt mua **10 slot Top Job**. Sales dựng PO ngày **05/01/2026**, khách chuyển tiền ngày **12/01**, kế toán phát hành hoá đơn GTGT ngày **20/01/2026**. Sản phẩm Top Job khai cửa sổ kích hoạt **12 tháng**, thời lượng hiển thị **30 ngày**.',
+        cols: ['Mốc', 'Ngày', 'Quota khách có', 'Vì sao'],
+        rows: [
+          ['Dựng PO', '05/01', '**0**', 'PO là cam kết, không cấp gì. Deal chuyển thành “thắng”, chỉ vậy thôi.'],
+          ['Tiền về tài khoản', '12/01', '**0**', 'Thanh toán **không** phải sự kiện cấp quota. Khách gọi hỏi lúc này là đúng — và câu trả lời là “chờ kế toán phát hành hoá đơn”.'],
+          ['Phát hành hoá đơn GTGT', '**20/01**', '**10 slot**', 'Đây là mốc duy nhất cấp quota. Cấp **ngay**, không hàng đợi, không bấm lần hai.'],
+          ['Hạn phải kích hoạt', '**20/01/2027**', '—', 'Ngày hoá đơn + 12 tháng. Tính từ **ngày hoá đơn**, không phải ngày PO (05/01) và không phải ngày trả tiền (12/01) — lệch 15 ngày.'],
+          ['Đăng tin thứ nhất', '03/02', '9 slot còn', 'Tin đó chạy 30 ngày, tới 05/03. Chín slot còn lại **vẫn đứng yên**, vẫn đếm tới 20/01/2027.'],
+          ['Đăng tin thứ hai', '10/09', '8 slot còn', 'Tám tháng sau vẫn hợp lệ — vẫn trong cửa sổ 12 tháng.'],
+          ['Tới hạn còn 3 slot chưa dùng', '20/01/2027', '**0**', 'Ba slot **hết hiệu lực, không hoàn tiền**. Khách đã trả tiền cho chúng.'],
+        ],
+        note:
+          'Ba con số dễ bị lấy nhầm làm mốc bắt đầu: ngày PO, ngày tiền về, ngày hoá đơn. Chỉ **ngày hoá đơn** đúng. Lấy nhầm ngày PO là tính hạn sớm hơn thực tế 15 ngày, và đó là 15 ngày quota của khách.',
+      },
+      {
+        kind: 'table',
+        heading: 'Đánh số — hai loại mã, hai luật ngược nhau',
+        note:
+          'Mã **bản ghi** (công ty) phải **không đoán được**, vì nó sống lâu và dãy số sẽ để lộ mình có bao nhiêu khách. Mã **chứng từ** phải **liên tục và có ngày**, vì đó là thứ làm nó lưu trữ được, gọi điện đọc cho nhau được, và — với hoá đơn GTGT — hợp pháp.',
+        cols: ['Loại', 'Định dạng', 'Ví dụ', 'Liên tục?'],
+        rows: [
+          ['Công ty (bản ghi)', 'CO- + 6 ký tự mã hoá + 1 ký tự kiểm tra', 'CO-P9FCEPD', '**Không** — xáo trộn có chủ đích'],
+          ['Báo giá', 'QUO-{6 số}-{tháng}-{năm}', 'QUO-009909-07-2026', 'Có'],
+          ['PO', 'PO-{6 số}-{tháng}-{năm}', 'PO-005864-08-2026', 'Có'],
+          ['Hoá đơn GTGT', 'Dãy số của nhà cung cấp hoá đơn điện tử', '1C26TTD-173', 'Có — **liên tục không đứt, luật bắt buộc**'],
+          ['Số PO của chính khách', 'Chữ tự do, ghi đúng như khách đưa', 'PO-VP/2026/044', 'Của khách, không phải của mình'],
+        ],
+      },
+      {
+        kind: 'list',
+        heading: 'Vài điều về mã số mà ít người để ý',
+        items: [
+          'Mọi mã đều do hệ thống cấp và **không sửa được** — trừ số PO của chính khách, cái đó gõ đúng như khách đưa.',
+          'Công ty nhận mã `CO-` **ngay khi bản ghi được tạo**: một lead đã có mã trước khi thành khách hàng, và mã đó **không đổi** suốt lead → khách hàng → rời bỏ → quay lại.',
+          'Số liên tục **có** để lộ sản lượng: khách cầm QUO-009909 suy ra được mình đã phát hành khoảng bao nhiêu báo giá, và hai chứng từ cách nhau một tháng để lộ tốc độ. Điều này được chấp nhận với chứng từ, và **không tránh được** với dãy số pháp lý.',
+          'Báo giá là thứ **lộ nhiều nhất**, vì báo giá gửi cho mọi khách tiềm năng — kể cả những khách đang so sánh mình với đối thủ — trong khi hoá đơn chỉ gửi cho khách đã mua. Nó cũng là số **duy nhất không bị luật ràng buộc**, nên nếu khách muốn thì đây là số duy nhất có thể xáo trộn được.',
         ],
       },
       {
@@ -195,6 +274,22 @@ export const MODULE_DOCS: Record<string, ModuleDoc> = {
           'Cửa sổ này không dừng vì bất cứ lý do gì. Cần dời hạn cho một khách thì đó là một lần gia hạn **có ghi log**, không phải sửa field này.',
           'Sản phẩm “luôn có sẵn” không có cửa sổ nào cả — chúng không bao giờ được xuất hoá đơn nên không có ngày nào để đếm.',
         ],
+      },
+      {
+        kind: 'example',
+        heading: 'Ví dụ — vì sao gói CV phải bấm mà tin đăng thì không',
+        scenario:
+          'Khách mua **2 gói COMBO 50** (50 lượt mở CV, dùng trong 30 ngày) trên cùng một hoá đơn phát hành **01/03/2026**. Cửa sổ kích hoạt của sản phẩm là **12 tháng**.',
+        cols: ['Ngày', 'Gói A', 'Gói B', 'Điều gì đang xảy ra'],
+        rows: [
+          ['01/03', 'Chưa kích hoạt', 'Chưa kích hoạt', 'Cả hai đã trả tiền, đã cấp. **Chưa mở được CV nào** — chưa ai bấm.'],
+          ['05/03 — bấm Kích hoạt gói A', '**Đang dùng** (tới 04/04)', 'Chưa kích hoạt', 'Đồng hồ ③ của gói A chạy. Gói B **không bấm được** — chỉ một gói Đang dùng tại một thời điểm.'],
+          ['04/04 — gói A hết hạn dùng, còn 12 lượt', 'Đã kết thúc', 'Chưa kích hoạt', '12 lượt của gói A **mất**. Và đúng lúc này gói B **mới bấm được**.'],
+          ['10/04 — bấm Kích hoạt gói B', 'Đã kết thúc', '**Đang dùng** (tới 09/05)', 'Đồng hồ ③ của gói B chạy từ ngày bấm, không phải từ ngày mua.'],
+          ['01/03/2027 — nếu gói B chưa bao giờ bấm', '—', '**Hết hạn kích hoạt**', 'Quá 12 tháng. Mất trọn 50 lượt, **không hoàn tiền**.'],
+        ],
+        note:
+          'Đây là lý do gói CV có nút Kích hoạt còn tin đăng thì không: tin đăng tự bắt đầu đồng hồ ③ khi publish, nên người mua không bao giờ phải nghĩ tới việc bàn giao. Gói CV thì việc bàn giao **là một cái nút** — và vì chỉ một gói chạy được tại một thời điểm, bấm sớm là tự đốt thời hạn của mình. Khách mua hai gói nên được nhắc bấm gói sau **ngay khi** gói trước kết thúc.',
       },
       {
         kind: 'list',
@@ -312,6 +407,20 @@ export const MODULE_DOCS: Record<string, ModuleDoc> = {
           'Quyền **xuất** dữ liệu tách khỏi quyền **đọc** — đọc được không đương nhiên xuất được.',
           'Mở khoá một CV cho công ty **trừ credit** của công ty đó; giá có thể được đặt riêng theo từng CV.',
         ],
+      },
+      {
+        kind: 'example',
+        heading: 'Ví dụ — quota theo bậc, và vì sao “còn slot” không đủ để trả lời',
+        scenario:
+          'Công ty FPT mua: **5 slot Top Job** và **10 slot Basic**. Đã dùng 5 Top Job và 2 Basic. HR gọi lên hỏi: “bên em còn 8 slot mà sao đăng tin Top Job không được?”',
+        cols: ['Bậc', 'Đã mua', 'Đã dùng', 'Còn', 'Đăng được không'],
+        rows: [
+          ['Top Job', '5', '5', '**0**', '**Không** — hết slot bậc này'],
+          ['Basic', '10', '2', '8', 'Được — nhưng là tin Basic'],
+          ['**Tổng**', '15', '7', '**8**', '← con số làm HR hiểu nhầm'],
+        ],
+        note:
+          'Con số “còn 8 slot” đúng về mặt số học và vô dụng về mặt vận hành. Quota **không dùng chéo bậc được**: 8 slot Basic không mua nổi một tin Top Job. Khi khách hỏi “còn bao nhiêu”, luôn trả lời **theo từng bậc** — và nếu họ cần thêm Top Job thì đó là một cơ hội bán, không phải một lỗi hệ thống.',
       },
       {
         kind: 'warn',

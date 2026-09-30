@@ -400,6 +400,40 @@ function DocBlockView({ b }: { b: DocBlock }) {
     )
   }
 
+  /* A worked example sits apart from the surrounding rules, because it is a
+     different kind of claim: the rules say what is true, this says what happens.
+     A reader checking their own case wants to find it without reading the rest. */
+  if (b.kind === 'example') {
+    return (
+      <section className="border border-line bg-surface p-4">
+        <p className="font-mono text-[9.5px] uppercase tracking-[0.14em] text-brand">Ví dụ</p>
+        <h2 className="mt-0.5 text-[15px] font-bold tracking-tight">{b.heading}</h2>
+        <p className="mt-2 max-w-[78ch] text-[12.5px] leading-[1.65] text-ink/75">{md(b.scenario)}</p>
+        <div className="mt-3 overflow-x-auto">
+          <table className="w-full min-w-[620px] border-collapse text-left">
+            <thead>
+              <tr>
+                {b.cols.map((c, i) => (
+                  <th key={i} className="border-b border-line py-1.5 pr-5 font-mono text-[9.5px] font-semibold uppercase tracking-wider text-faint last:pr-0">{c}</th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {b.rows.map((r, i) => (
+                <tr key={i} className="border-b border-line-soft last:border-0">
+                  {r.map((cell, j) => (
+                    <td key={j} className={cx('py-2 pr-5 align-top text-[12.5px] leading-[1.55] last:pr-0', j === 0 ? 'font-semibold text-ink' : 'text-ink/75')}>{md(cell)}</td>
+                  ))}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        {b.note && <p className="mt-3 max-w-[78ch] border-l-2 border-ink/25 pl-3 text-[12.5px] leading-[1.6] text-ink/75">{md(b.note)}</p>}
+      </section>
+    )
+  }
+
   return (
     <section>
       {b.heading && <h2 className="border-b border-ink pb-1.5 text-[15px] font-bold tracking-tight">{b.heading}</h2>}
