@@ -119,9 +119,9 @@ export const MODULE_DOCS: Record<string, ModuleDoc> = {
         rows: [
           ['Bản chất', 'Chứng từ thương mại — cam kết + yêu cầu trả tiền', 'Chứng từ thuế — bằng chứng pháp lý một giao dịch chịu thuế đã xảy ra'],
           ['Ràng buộc giữa', 'Mình và khách', 'Mình và **cơ quan thuế**'],
-          ['Đánh số', 'Dãy số của mình — PO-005864-08-2026', 'Dãy số pháp lý của nhà cung cấp — liên tục, nhà nước quản lý'],
-          ['Sửa được?', 'Không — phát hành PO mới', '**Không bao giờ** — huỷ + credit note + phát hành lại'],
-          ['Huỷ được?', 'Không — PO không dùng thì tự hết hiệu lực', 'Có — đây là chỗ một giao dịch được huỷ bỏ'],
+          ['Đánh số', 'Dãy số của mình — PO-005864-08-2026', 'Số pháp lý do **nhà cung cấp hoá đơn điện tử cấp tự động** khi phát hành — **không ai gõ tay**. Mình vẫn giữ mã nội bộ INV-… cấp từ lúc nháp'],
+          ['Sửa được?', 'Không — phát hành PO mới', '**Không bao giờ.** Và trên build hiện tại **không có nút Huỷ** — sai thì sửa trên cổng của nhà cung cấp hoá đơn điện tử'],
+          ['Huỷ được?', 'Không — PO không dùng thì tự hết hiệu lực **cuối tháng**', '**Không có trong admin.** Đính chính thực hiện ngoài hệ thống, trên cổng nhà cung cấp'],
           ['Hết hạn', 'Cuối tháng phát hành', 'Không — đã phát hành là vĩnh viễn, trừ khi huỷ'],
           ['Ai sở hữu', 'Sales', '**Chỉ kế toán**'],
           ['Tác dụng', 'Deal = thắng', 'Chỉ bản CHÍNH THỨC: khách thành **New** · **cấp quota ngay** · bắt đầu đồng hồ kích hoạt. Bản nháp không có tác dụng gì'],
@@ -227,6 +227,66 @@ export const MODULE_DOCS: Record<string, ModuleDoc> = {
         ],
       },
       {
+        kind: 'table',
+        heading: 'Năm trục trạng thái trên một công ty — không trục nào kéo trục nào',
+        note: 'Mỗi trục do **một bên khác nhau** đặt. Đây là bảng nên dùng để viết test case.',
+        cols: ['Trục', 'Giá trị', 'Ai đặt', 'Ghi chú'],
+        rows: [
+          ['**Company status**', 'Active · Archived', 'Admin / Sales lead', 'Active là mặc định, **kể cả khách đã rời**. Archive cần **lý do từ danh sách cố định**, và khôi phục được. **Không tồn tại trạng thái “Inactive”**'],
+          ['**Customer status**', 'New · Existing · Churn', '**Chỉ hệ thống**', 'New từ lúc tạo → **Existing khi hoá đơn GTGT đầu tiên phát hành** → Churn sau 12 tháng không có đơn mới. Kéo lại được khách thì về **Existing**, không về New'],
+          ['**Verification**', 'Unverified · Waiting to verify · Verified', 'Admin (nút Verify)', 'Suy ra mỗi lần đọc: có ERC mà chưa duyệt = Waiting; chưa có giấy = Unverified'],
+          ['**Pipeline**', 'Not in pipeline · Proposal · Qualified · Negotiation · PO · Invoice', 'Sales (3 chặng đầu) · Hệ thống (PO, Invoice)', '**“Lost” không phải một chặng** — deal thua giữ nguyên chặng nó chết'],
+          ['**Sales owner**', 'chưa gán (Free data) · một rep', 'Admin / duyệt claim / bàn giao', 'Mọi thay đổi ghi vào Owner history'],
+        ],
+      },
+      {
+        kind: 'table',
+        heading: 'Hạng thành viên — trục duy nhất thuần số học',
+        note: 'Tính theo giá trị đơn đã thanh toán trong năm chương trình.',
+        cols: ['Hạng', 'Từ', 'Dưới'],
+        rows: [
+          ['— (chưa có hạng)', '0 ₫', '30.000.000 ₫'],
+          ['Member', '30.000.000 ₫', '50.000.000 ₫'],
+          ['Bronze', '50.000.000 ₫', '100.000.000 ₫'],
+          ['Silver', '100.000.000 ₫', '200.000.000 ₫'],
+          ['Gold', '200.000.000 ₫', '300.000.000 ₫'],
+          ['Diamond', '300.000.000 ₫', '—'],
+        ],
+      },
+      {
+        kind: 'table',
+        heading: 'Xác minh công ty gate ĐÚNG HAI thứ — không hơn',
+        note: 'Đây là chỗ hay bị hiểu rộng ra. Chưa Verified thì khách vẫn đăng nhập, đọc, sửa thông tin, nhận báo giá và ký PO bình thường.',
+        cols: ['Hành động', 'Chưa Verified', 'Đã Verified'],
+        rows: [
+          ['Khách đăng tin (Publish **hoặc** lưu nháp)', '**Bị chặn** — trang đòi giấy ĐKKD', 'Được'],
+          ['Sales bấm **Request official invoice** trên PO', '**Bị chặn**, có tooltip giải thích (chặn cả ở server)', 'Được'],
+          ['Đăng nhập · đọc · tải ERC lên · sửa Company information · báo giá · ký PO · **admin đăng tin hộ khách**', 'Được', 'Được'],
+        ],
+      },
+      {
+        kind: 'warn',
+        text:
+          '**Admin sửa dữ liệu định danh của một công ty đã Verified (tên pháp lý, MST, địa chỉ đăng ký) sẽ đẩy nó về Waiting to verify** — lặng lẽ, chỉ đổi cái nhãn. Lúc đó khách **mất quyền đăng tin** và sales **mất nút xin hoá đơn**, cho tới khi có người bấm Verify lại.',
+      },
+      {
+        kind: 'table',
+        heading: 'Ai làm được gì',
+        cols: ['Vai trò', 'Làm được', 'KHÔNG làm được'],
+        rows: [
+          ['Sales rep', 'Xin công ty ở Free data · tạo/gửi báo giá · Issue PO · xin hoá đơn · ghi hoạt động · kéo thẻ 3 chặng đầu · đóng deal thua', '**Tạo công ty** · duyệt claim · gán owner · Verify · **phát hành hoá đơn** · sửa báo giá đã Sent hoặc bất kỳ PO nào'],
+          ['Sales lead', 'Mọi thứ rep làm được, trên sổ của team · **duyệt claim bước 2** · duyệt chiết khấu ≤ 10% · Archive công ty', 'Phát hành hoá đơn · duyệt claim bước 1'],
+          ['Sales manager', 'Duyệt chiết khấu **> 10%**', '—'],
+          ['Admin (HQ)', 'Tạo công ty · **duyệt claim bước 1** · gán/đổi owner · xử lý Sign-ups · **Verify** · Archive/Restore', 'Phát hành hoá đơn (trừ khi kiêm kế toán)'],
+          ['Kế toán', '**Phát hành hoá đơn** · gửi mail hoá đơn · xác nhận thanh toán · duyệt Company documents', '**Tạo hoặc sửa** bất kỳ chứng từ nào trong ba loại'],
+        ],
+      },
+      {
+        kind: 'warn',
+        text:
+          'Quyền phát hành hoá đơn **cố tình không giao cho sales**: người có chỉ tiêu phụ thuộc vào việc chốt deal **không được** là người bấm nút giao hàng cho khách.',
+      },
+      {
         kind: 'list',
         heading: 'Người liên hệ ≠ tài khoản đăng nhập',
         items: [
@@ -242,7 +302,7 @@ export const MODULE_DOCS: Record<string, ModuleDoc> = {
       {
         kind: 'open',
         text:
-          '**Chưa chốt — huỷ hoá đơn thì thu hồi quota thế nào,** khi khách đã tiêu một phần. Ba hướng: thu hồi phần chưa dùng · để nguyên và đối trừ trên credit note · chặn huỷ khi đã tiêu bất kỳ phần nào. Đây là tình huống sẽ xảy ra thật, vì huỷ hoá đơn tồn tại chính cho trường hợp phát hành trước khi thu tiền.',
+          '**Chưa chốt — quy trình đính chính hoá đơn.** Requirement mô tả huỷ hoá đơn kèm thu hồi quota; **build đã bỏ hẳn chức năng huỷ**, đính chính làm trên cổng nhà cung cấp. Câu hỏi thu hồi quota đã tiêu một phần vì thế **không còn hiệu lực trên dev** — nhưng cần khách xác nhận “sửa trên cổng” là quy trình chính thức.',
       },
     ],
   },
@@ -732,49 +792,120 @@ export const PAGE_DOCS: Record<string, PageDoc> = {
   /* ── Recruitment ─────────────────────────────────────────────────────────── */
   jobs: {
     logic: [
-      'Đăng tin là lúc **tiêu 1 slot** quota của đúng tier chọn.',
-      'Status suy ra từ ngày (Draft → Schedule → Open → Closed); **Exposure** là công tắc hiển thị riêng.',
-      'Tin lên khu vực nào là tự động theo tier — không gõ tay.',
+      '**Tin đăng TIÊU quota, không bao giờ TẠO ra quota.** Quota có khi CRM phát hành hoá đơn GTGT. Tin chọn đúng hoá đơn đó và một dòng đã trả tiền trên nó.',
+      '**Lưu nháp không tốn gì; Post tốn một slot.** Nháp cần 3 field; Post cần **10 field**, và thanh bên liệt kê những gì còn thiếu.',
+      '**Sản phẩm quyết định tin xuất hiện ở đâu và cao tới đâu** — thời lượng hiển thị, các khu vực, vị trí trong sắp xếp Gợi ý, quyền có ảnh thẻ. Tin **kế thừa**, và **không field nào trên tin ghi đè được**.',
+      'Vòng đời **chỉ đi tới**: Draft → Schedule → Open → Closed. **Không có mở lại** — muốn chạy tiếp là tin mới.',
+      'Không còn tab **In review** từ 09/09/2026 — tin của công ty lên thẳng, y như tin HQ đăng.',
     ],
     how: [
-      'Kiểm trước: công ty đã **Active** và **Verified**, còn slot đúng tier.',
-      '**New job** → chọn công ty → điền nội dung tin → chọn **tier**.',
-      'Để trống ngày bắt đầu = đăng ngay; đặt ngày tương lai = Schedule.',
-      'Publish. Kiểm lại slot của công ty đã giảm 1.',
-      'Gỡ tin khỏi trang jobseeker mà không kết thúc booking: tắt **Exposure**.',
+      'Kiểm công ty **Active**, có **MST**, và **đã Verified** (chưa Verified thì phía công ty còn không lưu nháp được).',
+      '**New job** → mục **Posting setup**: chọn công ty → chọn **Invoice** (chỉ hiện hoá đơn **đã phát hành** của chính công ty đó) → chọn **Main product**.',
+      'Điền **Job information** — chọn **Job category TRƯỚC**, vì job roles và specialisations bên dưới lấy theo nó.',
+      'Chọn **người nhận hồ sơ** ở mục Applications — người đầu tiên là tên ứng viên nhìn thấy.',
+      'Viết **Description** và **Requirements** (bản VI bắt buộc).',
+      'Để trống **Publish at** = đăng ngay; đặt giờ tương lai = Schedule.',
+      '**Post.** Kiểm lại slot của công ty ở **Products & billing** đã giảm đúng 1.',
     ],
     watch: [
-      'Hết slot đúng tier thì không publish được, dù tổng slot còn nhiều.',
-      'Tin Open mà Exposure Off thì không ai thấy — kiểm chỗ này đầu tiên khi khách báo tin không hiện.',
-      'Luồng duyệt tin đã gỡ bỏ từ 09/2026 — tin không còn đi qua bước chờ duyệt.',
+      '**Ba điều kiện để tin hiện công khai: Open · Exposure On · công ty Active.** Thiếu một cái là tin vô hình **mà không có lỗi nào hiện ra**. Đây là checklist cho mọi câu hỏi “sao tin không thấy”, theo đúng thứ tự đó.',
+      '**Công ty không Active thì tin còn không vào nổi Open** — thao tác bị từ chối.',
+      '**Không có nút Xoá.** Tin là bản ghi đã trả tiền và đã xuất bản; **Close là kết thúc**. Thấy nút Delete ở đâu thì **đó mới là bug**.',
+      '**Expiry date là hạn nhận hồ sơ**, không phải ngày tier ngừng hiển thị tin. Hai thứ khác nhau.',
+      'Post thất bại (hết quota, tier hết chỗ) thì **bản nháp vẫn còn**. Post báo **mọi field còn thiếu cùng lúc**, không phải mỗi lần một cái.',
     ],
     blocks: [
       {
         kind: 'table',
-        heading: 'Hai cửa đăng tin — và mỗi cửa được dùng sản phẩm nào',
-        note:
-          'Tin là **một thực thể, một vòng đời** dù đăng từ đâu. Nhưng **quyền đăng thì khác nhau**, và điều đó đến từ cấu hình của sản phẩm — không bao giờ đến từ tên sản phẩm.',
-        cols: ['Cửa', 'Được đăng từ', 'Quy tắc'],
+        heading: 'Lưu nháp và Post đòi gì',
+        cols: ['', 'Save as draft', 'Post'],
         rows: [
-          [
-            'Admin (HQ)',
-            'Bất kỳ sản phẩm nào — kể cả **bậc miễn phí chỉ Admin có**, hoặc bất kỳ dòng nào trên PO còn hiệu lực của công ty',
-            'Bậc miễn phí **không cần PO và không giới hạn**: HQ đăng cho bất kỳ công ty nào, bất kỳ lúc nào, không điều kiện gì.',
-          ],
-          [
-            'Trang công ty',
-            'Chỉ những sản phẩm công ty **đã mua** (dòng PO còn hiệu lực)',
-            'Nhà tuyển dụng **không bao giờ** đăng được tin miễn phí — bậc miễn phí không xuất hiện trên trang công ty.',
-          ],
+          ['Cần', 'Công ty · Tiêu đề (VI) · Địa điểm làm việc', 'Ba cái đó **cộng** Main product · Job category · Job role · Skill · Lương · Description (VI) · Requirements (VI) — **10 field**'],
+          ['Tốn', 'Không gì cả', '**Một slot** của Main product, trừ ngay khi tin lên Open (hoặc được hẹn lịch)'],
+          ['Thất bại thì', '—', 'Nháp được giữ. Hết quota → cấp/bán thêm rồi thử lại ngay trên màn hình đó. Tier hết chỗ → chọn tier khác'],
+        ],
+      },
+      {
+        kind: 'table',
+        heading: 'Status và Exposure — hai công tắc khác nhau',
+        cols: ['Status', 'Nghĩa', 'Trên trang jobseeker', 'Rời trạng thái khi'],
+        rows: [
+          ['Draft', 'Đã lưu, chưa từng đăng', 'Không có mặt', 'Post → Open, hoặc đặt Publish at tương lai → Schedule'],
+          ['Schedule', 'Sẽ đăng vào giờ đã chọn', 'Chưa có mặt', 'Tới giờ → **tự** thành Open'],
+          ['**Open**', 'Đã đăng và còn trong hạn', 'Đang chạy — **nếu Exposure On**', 'Qua hạn → Closed, hoặc bấm Close'],
+          ['Closed', 'Hết hạn, hoặc đóng tay', 'Chỉ còn thông báo, không ứng tuyển được', '**Điểm cuối**'],
         ],
       },
       {
         kind: 'warn',
         text:
-          '**Tin miễn phí có năm hệ quả cần biết trước khi hứa với khách:** không gắn PO nào · không tiêu quota · **bị loại khỏi báo cáo doanh thu** · **không nâng lên bậc trả phí được về sau** · và **không có vị trí hiển thị cao cấp nào** (chỉ nằm trong danh sách mặc định). Đăng miễn phí để chiều khách rồi tháng sau phải giải thích vì sao nó không lên trang chủ là tình huống hay xảy ra nhất.',
+          '**Exposure chỉ có nghĩa khi tin đang Open.** Ở Draft · Schedule · Closed thì ô đó đọc là *“Exposure applies only to open jobs”*. Tắt Exposure: tin **vẫn Open**, hồ sơ đã nhận **vẫn giữ**, nhưng nó biến khỏi **mọi** danh sách, tìm kiếm và dải hiển thị.',
+      },
+      {
+        kind: 'table',
+        heading: 'Ba cột đếm CV — và vì sao 1 / 1 bên cạnh Applied 3 là đúng',
+        note: '**Sent CV** và **Not sent CV** là hai phép đếm độc lập, **không phải chia đôi Applied**.',
+        cols: ['Cột', 'Nghĩa'],
+        rows: [
+          ['**Applied**', 'Tổng số lượt ứng tuyển'],
+          ['**Sent CV**', 'Đã chuyển tới nhà tuyển dụng'],
+          ['**Not sent CV**', 'Còn chờ HQ duyệt CV — **số khác 0 là việc tồn đọng của HQ**, tô màu cảnh báo'],
+          ['Vì sao không cộng lại bằng Applied', 'Đơn **bị thu hồi hoặc bị từ chối** không nằm trong cột nào cả'],
+        ],
+      },
+      {
+        kind: 'table',
+        heading: 'Upgrade tier — và đây cũng là cách nhanh nhất đọc quota của khách',
+        note: 'Hộp thoại ghi *“Currently published under X”* rồi liệt kê các tier cao hơn, mỗi cái ở một trong bốn trạng thái.',
+        cols: ['Trạng thái', 'Hiện chữ gì', 'Chọn được?'],
+        rows: [
+          ['Còn slot', '“N slot còn · tốn 1 slot mỗi lần đăng · từ <hoá đơn/gói>” hoặc “không giới hạn”', '**Được**'],
+          ['Hết slot', '“Không còn slot trong gói hiện tại.”', 'Không — nút bị khoá sẵn, **không phải bấm rồi mới báo lỗi**'],
+          ['Chưa mua', '“Không có trong gói hiện tại của công ty.”', 'Không'],
+          ['Hết hạn', '“Hết hạn ngày dd/mm/yyyy.”', 'Không'],
+        ],
+      },
+      {
+        kind: 'warn',
+        text:
+          '**Nâng tier tiêu một slot của tier mới và KHÔNG hoàn tác được.** Kiểm hai chỗ sau khi bấm: **Current tier** trên tin, và số slot của tier đó ở **Products & billing** phải giảm **đúng 1**. Publish, Upgrade và Close đều có chặn double-click — nếu nháy đúp mà trừ hai lần thì báo bug.',
+      },
+      {
+        kind: 'table',
+        heading: 'Trang tìm kiếm việc làm — ba khu vực, một tập kết quả, ba thứ tự',
+        note: 'Cả ba khu vực **bắt đầu từ cùng một tập**: mọi tin chứa từ khoá ở ít nhất một trong năm trường (tiêu đề · kỹ năng · ngành-vị trí-chuyên môn · công ty · mô tả+yêu cầu). Khác nhau ở **lấy tin nào** và **xếp thế nào**.',
+        cols: ['Khu vực', 'Lấy tin nào', 'Xếp theo', 'Quy tắc riêng'],
+        rows: [
+          ['**(1) Top section**', 'Tin có sản phẩm bao gồm khu vực đầu trang tìm kiếm', '**Làm mới gần nhất** (auto-refresh của sản phẩm)', 'Carousel có phân trang. **Không có tin nào đủ điều kiện thì khu vực không hiện**'],
+          ['**(2) Danh sách kết quả** (mặc định *Recommended*)', '**Mọi** tin khớp', '1 · Nhóm theo **thang bậc sản phẩm**, cao trước · 2 · Trong nhóm: **khớp ở trường nào** — tiêu đề → kỹ năng → ngành/vị trí → công ty → mô tả · 3 · Hoà thì auto-refresh mới nhất trước', '**Super star và Hot job là badge, KHÔNG đổi thứ tự**. Chọn *Date posted* / *Closing soonest* thì bỏ qua tier hoàn toàn'],
+          ['**(3) Blue zone**', 'Tin khớp mà sản phẩm nằm trong **gói Premium**', 'Xen kẽ **theo công ty** (A, B, C, A, B…) rồi mới tới làm mới gần nhất', '**Ẩn hoàn toàn nếu chưa đủ 3 tin** — không có dải nửa vời'],
+        ],
+      },
+      {
+        kind: 'warn',
+        text:
+          '**“Làm mới gần nhất” là AUTO-REFRESH của sản phẩm, không phải lần sửa cuối.** Vị trí một tin chỉ nhúc nhích khi sản phẩm của nó tự làm mới — **không bao giờ vì ai đó sửa tin**. Nếu không thì sáng nào mọi nhà tuyển dụng cũng sửa một dấu phẩy để leo hạng.',
+      },
+      {
+        kind: 'list',
+        heading: 'Vài field hay hiểu nhầm',
+        items: [
+          '**Work type** (nơi/cách làm: In office · Remote · Hybrid · Oversea) và **Contract type** (quan hệ lao động: Fulltime · Part-time · Contract · Internship · Probation · Freelance · Seasonal) là **hai câu hỏi khác nhau**. *Fulltime + Remote* là tin bình thường.',
+          '**Kỹ năng chỉ XẾP HẠNG ứng viên, không bao giờ LOẠI ai.** Tối đa 10, **chỉ chọn từ danh mục** — kỹ năng chữ tự do cũ hiện “· chưa nhận diện — thay đi”, **không bao giờ bị bỏ lặng lẽ**.',
+          '**Địa điểm làm việc lấy từ văn phòng của chính công ty**, tối đa 3; **cái chọn đầu tiên là cái hiện trên thẻ**. Văn phòng của công ty khác bị từ chối.',
+          '**Lương một phía là hợp lệ**: chỉ From → “Từ 15 triệu”, chỉ To → “Lên đến 25 triệu”. Tin bằng USD in thêm dòng quy đổi thanh toán bằng VND theo tỉ giá ngày ký.',
+          '**Phúc lợi** điền sẵn từ bộ của công ty rồi **sửa tự do cho riêng tin này**. Thứ tự ở đây là thứ tự trên trang việc làm.',
+          '**Thẻ trên card xoay theo ngày**: ngày 1–10 tag công ty · 11–20 tag công việc · 21–30 tag phúc lợi. **Chọn từ danh mục, không gõ.**',
+        ],
+      },
+      {
+        kind: 'open',
+        text:
+          '**Bốn điểm cần chốt với khách.** (1) **Khoá tiêu đề sau 72 giờ** với tin do công ty đăng (HQ miễn) — cần xác nhận đã build trên trang công ty chưa. (2) **Ngành Y tế chưa có job role nào** (nhóm “medical professionals” bị import thành nhóm lọc), nên **bệnh viện không đăng tin được** vì thiếu field bắt buộc. (3) **Tin miễn phí không nâng lên tier trả phí được** và không có vị trí cao cấp — khách có đồng ý giới hạn đó không. (4) **Duplicate tin** có trong requirement nhưng **console chưa làm** — có nằm trong đợt này không.',
       },
     ],
   },
+
   applicants: {
     logic: [
       'Một bảng cho toàn bộ lượt ứng tuyển của mọi công ty, có tab trạng thái kèm số đếm.',
@@ -1227,6 +1358,34 @@ export const PAGE_DOCS: Record<string, PageDoc> = {
     ],
     blocks: [
       {
+        kind: 'table',
+        heading: 'Bốn trạng thái báo giá',
+        note: 'Chỉ **Draft** sửa được. Từ **Sent** trở đi là bất biến.',
+        cols: ['Trạng thái', 'Nghĩa', 'Ra khỏi trạng thái này bằng'],
+        rows: [
+          ['**Draft**', 'Đang soạn — **trạng thái duy nhất sửa được**. Đã nằm trên pipeline ở chặng Proposal', 'Sales bấm **Mark as sent**'],
+          ['**Sent**', 'Đã gửi khách (qua kênh nào cũng được — sales tự khai). **Bất biến từ đây**', 'Sales bấm **Issue PO** và chọn option khách nhận'],
+          ['**Issued to PO**', 'Một option đã được nhận và PO đã tồn tại. **Điểm cuối**', '— Issue PO **chỉ dùng được một lần**; lần hai bị từ chối'],
+          ['**Expired**', 'Hết tháng mà chưa có PO', '— Hệ thống. Công ty rời pipeline. **Đây KHÔNG phải Lost**: không lý do, không quyết định, trạng thái khách không đổi. Muốn tiếp thì **Duplicate** ra bản nháp mới'],
+        ],
+      },
+      {
+        kind: 'warn',
+        text:
+          '**Hạn báo giá LUÔN là ngày cuối tháng hiện tại** — không phải 30 ngày trượt. Báo giá lập ngày 05/07 và ngày 28/07 **cùng hết hạn 31/07**. Số báo giá cấp lúc lưu, theo dãy liên tục không đứt.',
+      },
+      {
+        kind: 'list',
+        heading: 'Vài ràng buộc trên builder',
+        items: [
+          'Mỗi option phải có **ít nhất một dòng có tính tiền**. Dòng **Gift** giá 0 và **không cho đặt giá**.',
+          '**Không có tổng cộng toàn báo giá** và không được cộng các option lại — chúng thay thế nhau.',
+          'Một **chương trình chiết khấu** cho cả tài liệu. Định tuyến duyệt đọc **mức % cao nhất** trong tài liệu: ≤ 10% → Sales lead · **> 10% → thẳng Sales manager**, không qua lead. Lead tự đặt ≤ 10% thì không cần ai duyệt.',
+          'Đổi % **sau khi đã duyệt** thì **huỷ phê duyệt và định tuyến lại**.',
+          'Tên pháp lý, MST, địa chỉ xuất hoá đơn **in từ hồ sơ công ty** — sai thì sửa ở đó, không sửa trên báo giá.',
+        ],
+      },
+      {
         kind: 'example',
         heading: 'Ví dụ — vì sao option là “chọn một”, không phải “mua tất”',
         scenario:
@@ -1269,6 +1428,28 @@ export const PAGE_DOCS: Record<string, PageDoc> = {
         ],
       },
       {
+        kind: 'table',
+        heading: 'Năm trạng thái PO — một bước tiến, một lối thoát',
+        cols: ['Trạng thái', 'Đạt được bằng', 'Ai'],
+        rows: [
+          ['**Active**', 'Issue PO từ option đã nhận. **Thắng deal, nhưng cấp 0 thứ**', 'Sales'],
+          ['**Draft invoice**', 'Export draft invoice — tài liệu làm việc, **không có số pháp lý**, không cấp gì. Không bắt buộc', 'Sales'],
+          ['**Invoice requested**', 'Request official invoice — đẩy sang hàng đợi kế toán', 'Sales — **cần công ty đã Verified**'],
+          ['**Issued invoice**', 'Kế toán phát hành hoá đơn chính thức. **Sản phẩm vào tài khoản ngay lúc đó.** Điểm cuối', '**Chỉ kế toán**'],
+          ['**Expired**', 'Hết tháng mà chưa có hoá đơn chính thức — từ bất kỳ trạng thái nào ở trên. **Không ai bấm gì cả**', 'Hệ thống (quét theo giờ)'],
+        ],
+      },
+      {
+        kind: 'warn',
+        text:
+          '**Hạn là CUỐI THÁNG, không phải 30 ngày trượt** — PO lập 05/07 và 28/07 cùng hết hạn 31/07, đúng quy tắc của báo giá. Dòng có thể vẫn đọc là Active vài giờ sau cuối tháng trước khi máy quét chạy, nhưng **nút Issue đã từ chối rồi**.',
+      },
+      {
+        kind: 'warn',
+        text:
+          '**Thanh toán KHÔNG phải một trạng thái.** Nó là nhãn riêng: Unpaid · Partially paid · Paid (· Overdue +N ngày). **Việc xuất hoá đơn không bao giờ bị chặn bởi thanh toán.** Và **sửa dịch vụ chỉ được khi còn Active** — đã đẩy sang kế toán thì các con số đang nằm trên một chứng từ đang được lập.',
+      },
+      {
         kind: 'warn',
         text:
           '**PO là “đã thắng deal”, không phải “đã giao hàng”.** Nó không tạo tài khoản, không cấp quota, không bật trang công ty. Trạng thái khách hàng cũng **không đổi** ở bước này. Mọi thứ đó chờ kế toán phát hành hoá đơn.',
@@ -1290,7 +1471,7 @@ export const PAGE_DOCS: Record<string, PageDoc> = {
     watch: [
       'Danh sách hoá đơn là **chỉ đọc**; không có “tạo hoá đơn mới”.',
       'Sau khi phát hành, mở lại hồ sơ công ty để xác nhận quota có thật — đừng tin mỗi thông báo thành công.',
-      '**Hoá đơn đã phát hành thì không sửa được, không bao giờ.** Sai thì huỷ + credit note + phát hành lại — đó là quy định, không phải giới hạn của phần mềm.',
+      '**Hoá đơn đã phát hành thì không sửa được, và trong admin KHÔNG CÓ nút Huỷ.** Sai thì đính chính trên **cổng của nhà cung cấp hoá đơn điện tử**, ngoài hệ thống này. Đừng đi tìm nút huỷ — nó không tồn tại, và đó là chủ đích.',
     ],
     blocks: [
       {
@@ -1308,6 +1489,29 @@ export const PAGE_DOCS: Record<string, PageDoc> = {
           '**Bản nháp không cấp gì cả.** Việc cấp quota nghe sự kiện “phát hành **chính thức**”, không nghe bản nháp — và điều đó được đảm bảo ở tầng xử lý sự kiện, không chỉ ở giao diện. Nên một hoá đơn nháp trông đầy đủ vẫn để khách với 0 lượt đăng tin.',
       },
       {
+        kind: 'table',
+        heading: 'Bốn trạng thái hoá đơn — không cái nào được lưu',
+        note: 'Trạng thái hoá đơn **suy ra từ PO của nó mỗi lần đọc**. Không có gì trên màn hình này đặt được nó.',
+        cols: ['Hoá đơn', 'PO tương ứng', 'Nghĩa'],
+        rows: [
+          ['**Draft**', 'Draft invoice', 'Tài liệu làm việc, **không số pháp lý**. Cấp 0 thứ. Xem trước và gửi bản nháp được'],
+          ['**Invoice requested**', 'Invoice requested', 'Đang trong hàng đợi kế toán. **Vẫn chưa cấp gì**, và đồng hồ cuối tháng **vẫn chạy**'],
+          ['**Issued**', 'Issued invoice', 'Đã khai với nhà cung cấp, **có số pháp lý**, bất biến. **Sản phẩm đã cấp** · deal WON · khách New → Existing · hạn kích hoạt = ngày phát hành + 12 tháng'],
+          ['**Archived**', 'Expired', 'PO của nó hết hạn trước. **Chưa từng cấp gì nên không có gì để thu hồi**'],
+        ],
+      },
+      {
+        kind: 'list',
+        heading: 'Hộp thoại phát hành thực chất là một trình soạn email',
+        items: [
+          '**To** (liên hệ của công ty) · **CC** (liên hệ + chủ deal) · **file PDF hoá đơn** đính kèm (bản ký của nhà cung cấp sau khi phát hành) · **mã QR thanh toán luôn có** · link điều khoản.',
+          '**Số pháp lý do nhà cung cấp hoá đơn điện tử cấp** và trả về kèm mã tra cứu — **không ai gõ**.',
+          'Luôn hiện **hai số**: mã nội bộ của mình (INV-…, cấp từ lúc nháp) và **số pháp lý** (về khi phát hành). Bản nháp hết hạn **không tiêu số nào của dãy thuế**.',
+          'Bấm lại hộp thoại này trên hoá đơn đã phát hành thì **chỉ gửi lại mail**, không phát hành lần hai.',
+          '**Xác nhận chuyển khoản** ghi tiền vào đơn (đợt, số tiền, ngày, mã giao dịch). Nó lật Unpaid → Partially paid / Paid và **không bao giờ cấp thêm quota**.',
+        ],
+      },
+      {
         kind: 'open',
         text:
           '**Chưa chốt — phát hành trùng.** Sự kiện “hoá đơn đã phát hành” **có thể bắn hai lần** (nhà cung cấp hoá đơn timeout rồi thử lại là chuyện bình thường). Việc cấp quota phải khoá theo mã hoá đơn, nếu không khách **âm thầm nhận gấp đôi quota**. Đây là lỗi production dễ xảy ra nhất trong cả chuỗi.',
@@ -1315,9 +1519,47 @@ export const PAGE_DOCS: Record<string, PageDoc> = {
     ],
   },
   'company-claims': {
-    logic: ['Sales xin nhận một công ty đang nằm ở Free data. Yêu cầu đi qua **hai cấp duyệt** trước khi công ty về tay người xin.'],
-    how: ['Sales gửi yêu cầu từ công ty trong Free data.', 'Cấp duyệt thứ nhất xử lý, rồi cấp thứ hai.', 'Duyệt xong công ty mới đổi chủ.'],
+    logic: [
+      'Đây là **nhật ký của chính rep** về các yêu cầu nhận công ty từ Free data — **không có nút bấm ở đây**, có chủ đích: quyết định nằm trên hồ sơ công ty.',
+      'Free data và Customers là **một bảng ở hai mức hoàn thiện**. Dòng Free data chỉ cần tên công ty, không có chủ, **không được tính vào bất kỳ con số CRM nào**, và **không mang nổi báo giá/PO/hoá đơn**.',
+      '“Promote” một dòng **không phải là copy** — nó là **hoàn thiện hồ sơ và gán chủ**.',
+    ],
+    how: [
+      'Rep mở công ty trong **Free data** → **Ask for this company** (lý do + đầu mối liên hệ + bằng chứng).',
+      '**Admin duyệt bước 1** — đọc lý do và bằng chứng, có thể ghi chú cho rep. Bước này **chưa tạo ra gì**.',
+      '**Sales lead duyệt bước 2** — đây mới là lần ghi duy nhất: rep thành sales owner, đầu mối thành liên hệ #1, công ty rời Free data, **mọi yêu cầu đang mở khác bị từ chối**.',
+      'Theo dõi kết quả ở trang này.',
+    ],
+    watch: [
+      '**Mỗi lúc chỉ một yêu cầu mở.** Rep khác mở cùng công ty sẽ **không thấy nút Ask**.',
+      '**Từ chối không phải một trạng thái của công ty** — công ty quay về *Not claimed* và hiện “đã bị từ chối N lần”. Ai cũng xin lại được, kể cả chính rep đó.',
+      '**Cổng MST nằm ở nút TẠO RA CHỦ SỞ HỮU** — tức nút duyệt của lead và nút Assign của admin — **không nằm ở bước 1 của admin**, vì bước đó không tạo gì. Không có MST thì nút duyệt bị khoá; **Reject thì lúc nào cũng bấm được**.',
+    ],
+    blocks: [
+      {
+        kind: 'table',
+        heading: 'Trạng thái một dòng Free data — và “bị từ chối” không nằm trong đó',
+        cols: ['Dòng hiện', 'Nghĩa', 'Xin được không?'],
+        rows: [
+          ['**Not claimed**', 'Đang trống — chưa ai hỏi', '**Được**'],
+          ['**Waiting · bước 1 · Admin**', 'Một rep đã hỏi, Admin chưa quyết', 'Không — nút Ask biến mất với mọi người khác'],
+          ['**Waiting · bước 2 · Sales lead**', 'Admin đã chuyển tiếp, lead đang quyết', 'Không'],
+          ['*(bị từ chối)*', '**Không phải một trạng thái.** Yêu cầu bị Rejected, công ty về *Not claimed* kèm “Rejected N lần trước đó”', '**Được** — ai cũng xin lại được'],
+        ],
+      },
+      {
+        kind: 'warn',
+        text:
+          '**Admin có đường tắt: “Assign directly”** trên hồ sơ công ty — chọn một rep và gán luôn, **không qua chuỗi duyệt**. Nếu đang có yêu cầu mở thì nó **tự bị từ chối kèm ghi chú nêu tên người được gán**. Trên công ty đã có chủ, cùng cái thẻ đó đọc là **Change sales owner / Reassign**.',
+      },
+      {
+        kind: 'warn',
+        text:
+          '**Trả công ty về pool** trên một công ty đang có chủ sẽ nhả nó lại Free data. Lần trả đó là **một dòng trong Owner history** (chuỗi hiện *closed* — ngay lúc này không ai chịu trách nhiệm), và dòng về tới pool **mang theo lịch sử** cho người duyệt kế tiếp thấy.',
+      },
+    ],
   },
+
   'sign-ups': {
     logic: [
       'Hộp thư của người tự đăng ký trên Company site. **Nộp form không tạo ra gì cả** — không công ty, không tài khoản đăng nhập, không sản phẩm.',
@@ -1348,6 +1590,16 @@ export const PAGE_DOCS: Record<string, PageDoc> = {
         kind: 'warn',
         text:
           'Đối chiếu **MST** trước khi bấm Create — tạo mới trong khi công ty đã tồn tại là tạo ra bản ghi trùng, và sau này hoá đơn với quota sẽ nằm sai chỗ. Nếu MST đã có thì đúng lựa chọn là **Move**, không phải Create.',
+      },
+      {
+        kind: 'warn',
+        text:
+          '**Cột Match không quyết định gì cả.** Nó chỉ *báo cáo* lúc đọc: mã số thuế (hoặc tên miền email công việc, hoặc tên) đã thuộc về công ty nào chưa, và gắn nhãn Customers hay Free data. Việc duy nhất nó làm là **chọn sẵn công ty trong hộp thoại Move**. Tên miền email công cộng (@gmail.com) **không bao giờ khớp gì**.',
+      },
+      {
+        kind: 'warn',
+        text:
+          '**Dòng chưa xác thực email vẫn hiện, gắn nhãn “Awaiting”, không bị ẩn.** Nó **archive được nhưng không place được** — server từ chối Move/Create dù giao diện có mời. Hộp thoại Move còn dừng ở hai trường hợp và nói rõ lý do: *“mã số thuế này chưa tới công ty nào”* (→ tạo công ty trước) và *“công ty đó vẫn ở Free data”* (→ mở công ty và promote). **Không ai bị đặt vào một công ty không tồn tại hoặc không có chủ.**',
       },
     ],
   },
