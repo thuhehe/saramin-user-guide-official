@@ -334,10 +334,11 @@ export const MODULE_DOCS: Record<string, ModuleDoc> = {
       },
       {
         kind: 'list',
-        heading: 'Placement — kho xoay vòng không giới hạn',
+        heading: 'Placement — sức chứa CÓ bị chặn, và vòng xoay chỉ đổi thứ tự',
         items: [
-          'Placement là **khu vực hiển thị** trên trang jobseeker: kích thước, hiện bao nhiêu cái cùng lúc, bao lâu xoay một lần. Khai một lần ở đây, sản phẩm trỏ vào — không khai lại trong từng lần bán.',
-          'Trang hiển thị một số vị trí cố định nhưng phía sau xoay vòng **bao nhiêu banner cũng được**. Nên vị trí không bao giờ “đầy”, và bán thêm không hết chỗ — nó làm **mỏng tỉ lệ hiển thị** của những khách đã mua.',
+          'Placement là **khu vực hiển thị**: kích thước, sức chứa, vòng xoay. Khai một lần ở đây, sản phẩm trỏ vào — không khai lại trong từng lần bán.',
+          '**Sức chứa được hệ thống chặn thật.** Một booking chỉ đăng được nếu vùng còn chỗ **cho MỌI ngày trong dải ngày của nó**; không thì admin từ chối và nói khi nào trống: *“… is full for those dates (1 of 1 slots booked). Free from 16 Oct 2026.”*',
+          '**Sức chứa là độ phủ, không phải độc quyền.** Vùng một-ô sức chứa 6 nghĩa là sáu khách cùng chạy trong những ngày đó, nhưng người xem thấy **một cái mỗi lượt xoay**. Bán “banner duy nhất” thì vùng đó phải **không chứa gì khác** trong dải ngày ấy.',
           '“Placement” có **ba nghĩa** trong hệ thống: khu vực hiển thị (master data) · bậc mà một tin cụ thể đang chiếm · một booking banner mua đứt. Đây là nguồn nhầm lẫn số 1 — xem Từ điển.',
         ],
       },
@@ -1021,33 +1022,95 @@ export const PAGE_DOCS: Record<string, PageDoc> = {
   },
   placements: {
     logic: [
-      'Khai báo các khu vực hiển thị trên trang jobseeker: kích thước, hiện bao nhiêu cái cùng lúc, bao lâu xoay một lần.',
-      'Product trỏ vào một Placement — kích thước khai một lần ở đây, không lặp lại trong từng lần bán.',
+      'Một dòng = **một vùng hiển thị trên một trang**. Đây là **cấu hình thuần** — không đặt chỗ, không bán gì ở đây.',
+      'Chỉ dòng có **Format = Display** mới nhận được banner hoặc popup.',
+      '**Page, Key và Format là cố định.** Sửa được: kích thước ảnh, **Concurrent bookings** (= sức chứa), **Rotation period**, và ảnh tham chiếu.',
+      '**Sức chứa = số quảng cáo được phép chồng nhau trong cùng một ngày** ở vùng đó — và nó **được hệ thống chặn thật** khi đăng.',
+      '**Vòng xoay = một lượt quảng cáo kéo dài bao lâu.** Nó quyết định **ai lên trước**, không quyết định ai được chạy.',
     ],
-    how: ['Mở một vị trí → sửa trong drawer.', 'Drawer chỉ hiện đúng phần thuộc loại vị trí đó (banner hay nội dung).'],
+    how: [
+      'Mở một dòng **Display** → bấm sửa → chỉnh kích thước, sức chứa, vòng xoay, ảnh tham chiếu.',
+      'Muốn nhiều khách chia nhau một vùng: **nâng Concurrent bookings ở đây trước**, rồi mới bán.',
+    ],
     watch: [
-      '“Hiện bao nhiêu cái” là số vị trí render **cùng lúc**, không phải giới hạn số banner được đặt — kho xoay vòng là không giới hạn.',
+      '**Điền cả rộng và cao là bật kiểm tra kích thước** cho vùng đó; để trống cả hai thì nhận mọi ảnh. **Điền một nửa thì bị từ chối.**',
+      'Tắt một vùng (Inactive) thì Boosting báo “That region is switched off and no page draws it.”',
       '“Placement” có **ba nghĩa** trong hệ thống — xem bảng dưới.',
     ],
     blocks: [
       {
         kind: 'table',
-        heading: '“Placement” — ba nghĩa, ba nơi, ba vòng đời',
-        note: 'Đây là nguồn nhầm lẫn số 1 trong toàn hệ thống: ba thứ khác nhau cùng mang một cái tên.',
-        cols: ['Nghĩa', 'Là gì', 'Xem ở đâu', 'Vòng đời'],
+        heading: 'Sức chứa và vòng xoay — đọc kỹ trước khi bán',
+        note: 'Hai khái niệm hay bị gộp làm một, và gộp nhầm là hứa sai với khách.',
+        cols: ['', 'Sức chứa (Concurrent bookings)', 'Vòng xoay (Rotation period)'],
         rows: [
-          ['**Khu vực hiển thị**', 'Cấu hình thuần: kích thước, hiện bao nhiêu cái, xoay bao lâu một lần', '**Trang này**', 'Gần như không đổi'],
-          ['**Bậc một tin đang chiếm**', 'Một giao dịch: tin nào, bậc nào, từ ngày nào tới ngày nào, gắn PO nào', 'Trong chi tiết tin — **không có trang riêng**', 'Theo từng tin'],
-          ['**Booking banner**', 'Mua đứt một chỗ hiển thị trong một kỳ. **Không liên quan tin tuyển dụng**', 'Content → Displays', 'Theo từng booking'],
+          ['Trả lời', '**Bao nhiêu quảng cáo được chồng nhau trong cùng ngày**', '**Một lượt kéo dài bao lâu** trước khi đổi sang quảng cáo kế'],
+          ['Ảnh hưởng', 'Ai **được chạy** — hệ thống chặn nếu hết chỗ', 'Ai **lên trước** — không chặn ai cả'],
+          ['Vùng một-ô', 'Ví dụ sức chứa 6: sáu khách cùng chạy, nhưng người xem **thấy một cái tại một thời điểm**', 'Mỗi 60 s ô đó đổi sang quảng cáo kế; **mọi người trên site trong cùng một lượt thấy cùng một quảng cáo**'],
+          ['Vùng slider / cột / hai-cái-một-lúc', 'Mọi quảng cáo đang chạy **đều trên màn hình**', 'Chỉ đổi thứ tự xuất hiện'],
         ],
       },
       {
         kind: 'warn',
         text:
-          'Một vị trí có thể được lấp từ **hai nguồn**: **theo bậc tin** (tự động, không ai đặt) và **mua đứt** (bán rời). Vị trí nào có cả hai nguồn thì **bắt buộc phải có quy tắc ưu tiên rõ ràng**, nếu không những chỗ hữu hạn sẽ bị bán vượt — và chuyện đó chỉ lộ ra trên trang thật.',
+          '**Sức chứa là ĐỘ PHỦ, không phải ĐỘC QUYỀN.** Bán cho khách “banner duy nhất ở trang chi tiết việc làm” nghĩa là vùng đó **không được chứa gì khác** trong những ngày đó — chứ không phải cứ đặt một booking là xong. Chỉ ở vùng **sức chứa = 1** (Home Ribbon, cột phải trang tìm kiếm, trang công ty) thì một booking mới đúng là cả vùng.',
+      },
+      {
+        kind: 'table',
+        heading: 'Các vùng đang bật trên dev (30/09/2026)',
+        note: 'Cột **Tải lên** là kích thước file nên dùng — **2× ảnh tham chiếu**, sắc nét nhất mà site từng hiển thị. 3× chỉ nặng thêm chứ không đẹp hơn.',
+        cols: ['Trang', 'Vùng', 'Kích thước', 'Sức chứa', 'Vòng xoay', 'Người xem thấy gì', 'Tải lên'],
+        rows: [
+          ['Home', 'Homepage - Home Hero', '614 × 320', '2', '300 s', 'Slider — mỗi quảng cáo là một slide', '1228 × 640'],
+          ['Home', 'Homepage - Home Ribbon', '1260 × 48', '1', '60 s', 'Một dải trên header, có màu nền hai bên cho màn rộng', '2520 × 96'],
+          ['Home', 'Homepage - Home Middle', '1260 × 60', '2', '60 s', 'Một dải; các quảng cáo thay phiên', '2520 × 120'],
+          ['Home', 'Homepage - Popup', 'tuỳ ý', '1', '—', 'Một popup mỗi người xem, chọn theo đối tượng và ưu tiên', '—'],
+          ['Search', 'Trang tìm kiếm — Banner cột phải', '273 × 327', '1', '60 s', 'Một cột bên phải — mọi quảng cáo xếp chồng', '546 × 654'],
+          ['Job detail', 'Job detail - Bottom Banner', '728 × 90', '6', '60 s', 'Một ô; thay phiên theo lượt', '1456 × 180'],
+          ['My page', 'My page banner', '400 × 152', '10', '60 s', 'Hai cái một lúc, còn lại sau mũi tên', '800 × 304'],
+          ['Company page', 'Company page - Long banner', '994 × 94', '1', '300 s', 'Một dải trên hồ sơ công ty. **Công ty tự mua thì quảng cáo của họ thay quảng cáo mạng lưới**', '1988 × 188'],
+          ['Employer home', 'Home - Top strip', '894 × 64', '6', '60 s', 'Một ô, thay phiên', '1788 × 128'],
+          ['Employer home', 'Home - Mid strip', '1200 × 57', '6', '60 s', 'Một ô, thay phiên', '2400 × 114'],
+          ['Employer home', 'Home - Right rail banner', '243 × 127', '6', '60 s', 'Một ô, thay phiên', '486 × 254'],
+          ['Employer home', 'Home - Recommended talent rail', '282 × 235', '6', '60 s', 'Một ô, thay phiên', '564 × 470'],
+          ['Employer home', 'Home - Service promo card', '840 × 150', '6', '60 s', 'Một ô, thay phiên', '1680 × 300'],
+          ['Candidate mgmt (employer)', 'Candidate management - Left banner', '258 × 136', '6', '60 s', 'Một ô, thay phiên', '516 × 272'],
+        ],
+      },
+      {
+        kind: 'warn',
+        text:
+          'Các vùng **Job** (Top job, Super hot job, Distinction, Job card, Top search, Mega menu…) **không bán ở Boosting** — chúng là sản phẩm tin đăng, đi theo bậc tin.',
+      },
+      {
+        kind: 'list',
+        heading: 'Ảnh phải vừa — ba quy tắc',
+        items: [
+          'Rộng **tối thiểu bằng** ảnh tham chiếu: *“This region needs at least 994 px wide (yours is 800 px…)”*.',
+          'Đúng **tỉ lệ, sai số 2%**: *“This region needs the shape of 994×94 (yours is 1000×300 — any width is fine at that ratio)”*.',
+          'Admin **từ chối file sai** — không bao giờ tự kéo giãn hay tự cắt. Form mở khung crop theo tỉ lệ vùng để bạn chọn phần giữ lại; **để chữ tránh xa mép**.',
+          'Vùng để **tuỳ ý kích thước** (popup) không kiểm gì cả — tự thống nhất với designer.',
+        ],
+      },
+      {
+        kind: 'table',
+        heading: '“Placement” — ba nghĩa, ba nơi, ba vòng đời',
+        note: 'Đây là nguồn nhầm lẫn số 1 trong toàn hệ thống: ba thứ khác nhau cùng mang một cái tên.',
+        cols: ['Nghĩa', 'Là gì', 'Xem ở đâu'],
+        rows: [
+          ['**Vùng hiển thị**', 'Cấu hình: kích thước, sức chứa, vòng xoay', '**Trang này**'],
+          ['**Bậc một tin đang chiếm**', 'Giao dịch: tin nào, bậc nào, ngày nào, gắn PO nào', 'Trong chi tiết tin — không có trang riêng'],
+          ['**Booking banner**', 'Mua một chỗ hiển thị trong một kỳ', 'Service delivery → Boosting'],
+        ],
+      },
+      {
+        kind: 'warn',
+        text:
+          '**Lưu ý về Concurrent bookings:** theo ghi chú của team, con số này là **số slide của carousel**, và chỉ áp dụng cho banner có carousel — hiện mới chỉ **Home Hero** có. Ở các vùng còn lại nó đóng vai trò sức chứa. Nếu bạn định bán dựa trên con số này, hỏi lại team trước.',
       },
     ],
   },
+
   'quota-usage': {
     logic: ['Khách mua gói tìm CV dùng tới đâu: mua bao nhiêu lượt, đã dùng bao nhiêu, còn bao nhiêu, lần dùng gần nhất.'],
     how: ['Đọc danh sách theo công ty.', 'Chú ý dòng mua nhiều mà dùng ít — gọi khách trước khi tới hạn gia hạn.'],
@@ -1320,59 +1383,104 @@ export const PAGE_DOCS: Record<string, PageDoc> = {
   /* ── Content ─────────────────────────────────────────────────────────────── */
   boosting: {
     logic: [
-      'Banner và Popup nay là **MỘT danh sách gộp**, không còn hai tab. Nút **New** hỏi **vùng hiển thị trước** (banner và popup chung một danh sách chọn — popup chỉ là một loại vị trí khác), rồi mới mở đúng form tương ứng.',
-      'Mỗi banner có nguồn **Sold** (khách mua, gắn PO) hoặc **House** (Saramin tự chạy). Banner nội bộ vẫn chiếm chỗ xoay vòng như banner bán.',
-      'Cùng vòng đời Draft → Schedule → Open → Expired và cùng có **Exposure** riêng.',
+      'Banner và popup **gộp một danh sách duy nhất** (trước là trang Displays hai tab). Nút **New** hỏi **vùng hiển thị trước** — chọn vùng popup thì thành popup, chọn vùng khác thì thành banner.',
+      'Một banner **không bao giờ chỉ là “tải ảnh lên”**. Nó cưỡi trên một **booking** — quyền chạy một quảng cáo, ở một vùng, trong một số ngày.',
+      '**Hoá đơn GTGT phát hành mới tạo ra booking** (trạng thái *Reserved*). Chưa phát hành thì đơn đó **không hiện ra** trong Boosting để chọn.',
+      '**Ngày kết thúc không bao giờ gõ tay** với quảng cáo của khách: = ngày bắt đầu + số ngày đã mua trên dòng hàng. Bán 30 ngày là chạy đúng 30 ngày.',
+      'Quảng cáo **nội bộ** (Source = Internal — Saramin VN) **không cần booking** — nhưng **vẫn chiếm chỗ** trong vùng.',
     ],
     how: [
-      'Bấm **New** → **chọn vùng hiển thị trước** → form banner hoặc popup tự mở theo vùng đã chọn.',
-      'Banner bán: chọn công ty → PO → sản phẩm, rồi đặt ngày bắt đầu và tải ảnh.',
-      'Banner nội bộ: chọn thẳng vị trí, tự đặt **cả hai** ngày, và ghi **mục đích**.',
-      'Gỡ khỏi site mà không kết thúc booking: tắt **Exposure**.',
+      'Kiểm trước: khách **đã có PO với dòng Placement booking cho đúng vùng**, và **hoá đơn đã phát hành**.',
+      'Kiểm booking **chưa hết hạn dùng** — quá cửa sổ “Must be used within” (mặc định 12 tháng từ ngày hoá đơn) thì thành **Lapsed**, không đăng được.',
+      'Kiểm vùng **còn chỗ cho đúng dải ngày** muốn chạy — xem cột Region · Status · Starts · Ends trên chính danh sách Boosting.',
+      'Chuẩn bị ảnh **đúng tỉ lệ vùng, kích thước 2×**, và link đích.',
+      '**+ New** → chọn **Region** → đặt **Banner name** (chỉ admin thấy) và **Purpose**.',
+      '**Source = Customer** → chọn công ty → chọn **Order / PO** → chọn **dòng sản phẩm** (dòng này quyết định vùng và số ngày).',
+      'Đặt **Start date** (để trống = chạy ngay; ngày kết thúc tự điền) → bật **Visible on the site** → tải ảnh và **crop theo khung vùng** → đặt **Link target**.',
+      '**Status → Published** để lên ngay, hoặc **Draft** để lưu rồi đăng sau → **Save**.',
     ],
     watch: [
-      'Ảnh phải đúng kích thước của vị trí — sai tỉ lệ sẽ bị từ chối khi lưu, không tự cắt.',
-      'Banner Open mà Exposure Off thì không hiển thị — giống hệt cơ chế của tin tuyển dụng.',
+      '**Ẩn bằng Visible = Off KHÔNG trả lại chỗ.** Chỉ **Draft · Archive · Delete** mới giải phóng vùng.',
+      'Đã **Published** thì **vùng, đơn hàng và dòng hàng bị khoá** — muốn đổi thì phải tạo cái mới.',
+      '**Xoá một quảng cáo còn hạn sẽ trả booking về *Reserved*** — dùng lại được cho quảng cáo khác.',
+      'Admin **từ chối ảnh sai**, không bao giờ tự kéo giãn hay tự cắt. Form mở sẵn khung crop theo tỉ lệ vùng — **để chữ tránh xa mép**.',
+      'Đăng rồi mà không thấy trên site: kiểm **Visible** · ngày bắt đầu còn ở tương lai · đã hết hạn · vùng một-ô thì **chờ hết một vòng xoay** (60 s hoặc 300 s).',
     ],
     blocks: [
       {
         kind: 'table',
-        heading: 'Banner bán và banner nội bộ — khác nhau ở đâu',
-        note: 'Chỉ khác ở **phía tiền**. Phía hiển thị thì giống hệt nhau.',
-        cols: ['', 'Sold — khách mua', 'House — nội bộ'],
+        heading: 'Một chuỗi, bốn màn hình',
+        note: 'Không nhảy cóc được: chưa có vùng thì không có sản phẩm, chưa phát hành hoá đơn thì Boosting không thấy đơn nào để chọn.',
+        cols: ['Bước', 'Màn hình', 'Điều gì xảy ra'],
         rows: [
-          ['Chuỗi để đăng', 'Công ty → PO → dòng sản phẩm', 'Chọn thẳng vị trí'],
-          ['Cần hoá đơn đã thanh toán?', '**Có** — PO chưa xuất hoá đơn thì không đăng được', 'Không — không có gì để xuất hoá đơn'],
-          ['Ngày kết thúc', 'Suy ra từ thời lượng của sản phẩm', '**Gõ tay** — không sản phẩm nào định nghĩa thời lượng'],
-          ['Chiếm chỗ xoay vòng', 'Có', '**Có — y hệt banner bán**'],
-          ['Tính vào doanh thu vị trí', 'Có', 'Không'],
-          ['Field bắt buộc thêm', '—', '**Mục đích** — lý do nó đang chạy'],
+          ['1 · Quảng cáo đặt được ở đâu?', '**Placements**', 'Danh sách vùng trên site: kích thước, sức chứa, vòng xoay. **Chỉ cấu hình — không đặt chỗ ở đây.**'],
+          ['2 · Bán cái gì?', '**Products**', 'Một sản phẩm *Placement booking* = một vùng + số ngày + số lượt dùng.'],
+          ['3 · Ai mua?', '**Quotations → PO → Invoices**', 'Phát hành hoá đơn GTGT cho dòng sản phẩm đó **tạo ra booking**, trạng thái **Reserved** (đã trả tiền, chưa dùng).'],
+          ['4 · Dựng quảng cáo', '**Boosting**', 'Tạo banner/popup, chọn đơn và dòng hàng, đặt ngày bắt đầu, tải ảnh, **Publish**. Booking bắt đầu đếm ngày.'],
         ],
-      },
-      {
-        kind: 'warn',
-        text:
-          '**Banner nội bộ tiêu sức chứa y như banner bán.** Nếu loại nó ra khỏi phép đếm thì booking bán thứ N sẽ không có chỗ để render, và chuyện đó chỉ lộ ra trên trang thật. **Mục đích** là field bắt buộc chính vì không có PO: với banner bán thì đơn hàng giải thích tại sao nó tồn tại; với banner nội bộ thì **không gì giải thích cả trừ khi có người viết ra**.',
       },
       {
         kind: 'table',
-        heading: 'Đăng một banner — hai quyết định, và thứ bị khoá lại',
-        note: 'Sản phẩm đã cố định kích thước, thời lượng và vị trí từ lúc bán. Nên lúc đăng chỉ hỏi **hai** thứ: bắt đầu khi nào, và chạy ảnh nào.',
-        cols: ['Trạng thái', 'Sửa được ngày bắt đầu / ảnh?', 'Vì sao'],
+        heading: 'Hai trục trạng thái — của quảng cáo, và của booking',
+        note: 'Cột cuối là thứ quyết định vùng còn chỗ hay không.',
+        cols: ['Trạng thái booking', 'Nghĩa', 'Chiếm chỗ trong vùng?'],
         rows: [
-          ['Draft', 'Cả hai — thoải mái', 'Chưa hứa gì với ai'],
-          ['Schedule', 'Cả hai — thoải mái', 'Chưa lên màn hình, chưa phục vụ lượt nào'],
-          ['**Open**', '**Cả hai đều KHOÁ**', 'Khách trả tiền cho đúng cái ảnh đang chạy. Đổi giữa chừng thì số lượt đã đếm được quy về một tấm ảnh không ai lấy lại được'],
-          ['Expired', 'Chỉ đọc', 'Booking đã đóng là một bản ghi. Muốn chạy lại thì đăng cái mới'],
+          ['**Reserved**', 'Đã trả tiền, chưa có quảng cáo nào dựng trên nó — đây chính là thứ danh sách Order / PO đưa ra cho bạn chọn', '**Không**'],
+          ['**Scheduled**', 'Quảng cáo đã đăng với ngày bắt đầu ở tương lai', '**Có**'],
+          ['**Active**', 'Đang hiển thị', '**Có**'],
+          ['**Expired**', 'Hết số ngày — quảng cáo tự rời khỏi site', 'Không'],
+          ['**Lapsed**', 'Chưa từng dùng trước hạn “Must be used within”', 'Không'],
+        ],
+      },
+      {
+        kind: 'table',
+        heading: 'Trạng thái của chính quảng cáo',
+        cols: ['Trạng thái', 'Nghĩa'],
+        rows: [
+          ['Draft', 'Đã lưu, chưa lên site. **Vùng, đơn và dòng hàng vẫn đổi được**'],
+          ['Review', 'Lưu để người khác duyệt trước. Chưa lên site, y như Draft'],
+          ['**Published**', 'Đang chạy (trong dải ngày, Visible = On). **Vùng, đơn và dòng hàng bị khoá**'],
+          ['Archived', 'Đã xong. Rời site và **trả lại chỗ**'],
         ],
       },
       {
         kind: 'warn',
         text:
-          'Đừng bao giờ cho đổi ảnh trên banner đang Open, và **đừng mô hình hoá Exposure thành trạng thái thứ năm**. Cả hai sai lầm dẫn tới cùng một hậu quả: số lượt hiển thị và click đã phục vụ không còn truy về được tấm ảnh đã phục vụ chúng. Muốn gỡ banner xuống giữa chừng thì **tắt Exposure** — đó là cách duy nhất, vì ảnh và ngày đều đã khoá.',
+          'Hệ thống **tự** chuyển booking Scheduled → Active → Expired. **Không ai phải đi tắt quảng cáo.** Và ngược lại: tắt **Visible** chỉ giấu quảng cáo khỏi mắt người xem — **chỗ trong vùng vẫn bị giữ**, nên đơn kế tiếp vẫn bị chặn. Muốn trả chỗ thì **Draft, Archive hoặc Delete**.',
+      },
+      {
+        kind: 'table',
+        heading: 'Gặp lỗi thì đọc bảng này',
+        cols: ['Bạn thấy', 'Vì sao', 'Làm gì'],
+        rows: [
+          ['Order / PO chỉ đưa ra “— No order (free) —”', 'Công ty này **không có dòng nào chưa dùng cho vùng đó**: hoá đơn chưa phát hành, dòng mua cho vùng khác, hoặc đã dùng rồi', 'Kiểm PO và hoá đơn ở Purchase orders / Invoices'],
+          ['“… is full for those dates (x of y slots booked). Free from …”', 'Sức chứa của vùng đã kín một phần dải ngày bạn chọn', 'Bắt đầu từ ngày hệ thống báo, hoặc chọn vùng khác'],
+          ['“… already shows x of y banners over those dates”', 'Các quảng cáo đang chạy (**kể cả quảng cáo nội bộ**) đã lấp đầy vùng', 'Archive hoặc chuyển Draft một cái ở đó, hoặc dời ngày bắt đầu'],
+          ['“This region needs at least … px wide”', 'Ảnh hẹp hơn ảnh tham chiếu', 'Xuất lại ở **2×**'],
+          ['“This region needs the shape of …”', 'Sai tỉ lệ', 'Crop lại theo đúng tỉ lệ vùng'],
+          ['“That region is switched off and no page draws it.”', 'Vùng đang **Inactive** ở Placements', 'Chọn vùng đang bật'],
+          ['“A banner scoped to a company page must be booked by that same company.”', '“One company page” trỏ vào công ty khác với công ty đã trả tiền', 'Chọn đúng trang công ty đã mua, hoặc chuyển sang “Every company page”'],
+          ['Đã Published mà không thấy trên site', 'Visible = Off · chưa tới ngày bắt đầu · đã hết ngày · vùng một-ô và đang tới lượt quảng cáo khác · trên trang công ty thì công ty đó đang chạy quảng cáo riêng', 'Kiểm Visible/Starts/Ends trên dòng đó, rồi **chờ hết một vòng xoay**'],
+        ],
+      },
+      {
+        kind: 'list',
+        heading: 'Popup hỏi thêm vài field',
+        items: [
+          '**Audience** — Guests · Jobseekers · Employers (để trống = mọi người).',
+          '**Frequency** — một lần mỗi phiên · một lần mỗi ngày · mỗi lần vào.',
+          '**Priority** — **số nhỏ thắng**, vì mỗi người xem chỉ thấy **một** popup.',
+          '**CTA** — nhãn nút và link.',
+        ],
+      },
+      {
+        kind: 'open',
+        text:
+          '**Ghi nhận trên dev ngày 30/09/2026 — hai điểm chưa khớp.** (1) Field **Purpose** hiện dấu sao bắt buộc, nhưng dòng gợi ý lại ghi “Optional” — một trong hai sai. (2) **Home Hero có sức chứa 2, nhưng đang có 6 quảng cáo khách được đăng cùng ngày** (dữ liệu demo nạp thẳng vào DB). Site chỉ hiện 2 mỗi vòng — nếu muốn nhiều khách chia nhau hero thì phải **nâng Concurrent bookings ở Placements trước**.',
       },
     ],
   },
+
   collections: {
     logic: [
       'Một **collection** là bộ tin hoặc bộ công ty đã đặt tên và lưu lại, site công khai gọi theo slug.',
