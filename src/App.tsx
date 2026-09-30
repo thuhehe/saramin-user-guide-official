@@ -220,7 +220,7 @@ function Home({ onPick }: { onPick: (s: Sel) => void }) {
                           className="text-[14px] font-semibold hover:text-brand hover:underline">{g}</button>
                   <span className="font-mono text-[10.5px] text-faint">{pages.length} trang</span>
                 </div>
-                {mod && <p className="mt-0.5 max-w-[78ch] text-[12.5px] leading-[1.6] text-muted">{mod.lead}</p>}
+                {mod && <p className="mt-0.5 max-w-[78ch] text-[12.5px] leading-[1.6] text-muted">{md(mod.lead)}</p>}
               </div>
             </div>
           )
@@ -259,6 +259,7 @@ function PageView({ p, dev, onModule }: { p: Page; dev: boolean; onModule: () =>
         {d?.logic?.length ? <Bullets title="Logic phía sau" items={d.logic} /> : null}
         {d?.how?.length ? <Steps title="Hướng dẫn sử dụng" items={d.how} /> : null}
         {d?.watch?.length ? <Bullets title="Cần để ý" items={d.watch} warn /> : null}
+        {d?.blocks?.map((b, i) => <DocBlockView key={i} b={b} />)}
       </div>
 
       {p.sub.length > 0 && (
@@ -277,7 +278,7 @@ function PageView({ p, dev, onModule }: { p: Page; dev: boolean; onModule: () =>
         <button onClick={onModule}
                 className="mt-7 block w-full border-l-2 border-brand bg-brand-soft/40 py-2.5 pl-4 pr-4 text-left hover:bg-brand-soft">
           <span className="text-[12.5px] font-semibold text-ink">{mod.title} →</span>
-          <span className="mt-0.5 block max-w-[76ch] text-[12px] leading-[1.6] text-muted">{mod.lead}</span>
+          <span className="mt-0.5 block max-w-[76ch] text-[12px] leading-[1.6] text-muted">{md(mod.lead)}</span>
         </button>
       )}
     </article>
@@ -294,7 +295,7 @@ function ModuleView({ group, onPick }: { group: string; onPick: (key: string) =>
     <article>
       <p className="font-mono text-[10.5px] uppercase tracking-[0.16em] text-faint">{group}</p>
       <h1 className="mt-1 border-b-2 border-ink pb-3 text-[30px] font-bold leading-[1.1] tracking-[-0.02em]">{mod.title}</h1>
-      <p className="mt-4 max-w-[76ch] text-[14.5px] leading-[1.7] text-ink/80">{mod.lead}</p>
+      <p className="mt-4 max-w-[76ch] text-[14.5px] leading-[1.7] text-ink/80">{md(mod.lead)}</p>
 
       {/* The two or three facts that, unknown, produce a wrong outcome. They sit
           above everything because a reader who stops after this box has still got

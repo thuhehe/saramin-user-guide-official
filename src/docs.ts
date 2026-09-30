@@ -26,6 +26,10 @@ export interface PageDoc {
   logic?: string[]
   how?: string[]
   watch?: string[]
+  /* Deep blocks for a page whose logic does not fit in bullets — the same block
+     vocabulary the module pages use. Rendered after `watch`, so the short answer
+     still comes first for a reader who only needed that. */
+  blocks?: DocBlock[]
 }
 
 /** A block of module logic. Tables carry the distinctions a bullet list flattens. */
@@ -400,6 +404,41 @@ export const MODULE_DOCS: Record<string, ModuleDoc> = {
         ],
       },
       {
+        kind: 'table',
+        heading: 'Ba trục đều bị gọi là “trạng thái CV” — và chúng khác nhau',
+        note:
+          'Đây là nguồn nhầm lẫn lớn nhất ở nhóm Recruitment. Ba trục **độc lập**, do **ba bên khác nhau** sở hữu, và chặn **ba thứ khác nhau**. Một CV có thể Đạt, Bình thường, mà vẫn không ai tìm thấy — vì ứng viên để Ẩn.',
+        cols: ['Trục', 'Giá trị', 'Ai sở hữu', 'Chặn cái gì', 'Xem ở đâu'],
+        rows: [
+          [
+            '**Chất lượng CV**',
+            'Đạt · Không đọc được · Chưa đủ thông tin · Từ chối',
+            'HQ (người duyệt)',
+            '**Chặn ĐƠN ỨNG TUYỂN** — đơn nằm ở “Chưa gửi”',
+            'CV review',
+          ],
+          [
+            '**Kiểm duyệt**',
+            'Bình thường · Bị gắn cờ · Gỡ khỏi kho',
+            'HQ',
+            '**Chặn TÌM KIẾM** — không chặn ứng tuyển',
+            'Resumes',
+          ],
+          [
+            '**Hiển thị**',
+            'Cho tìm thấy · Ẩn',
+            '**Chỉ ứng viên** — HQ không bao giờ đổi được',
+            '**Chặn TÌM KIẾM**',
+            'Talent pool (đọc), ứng viên tự đổi',
+          ],
+        ],
+      },
+      {
+        kind: 'warn',
+        text:
+          '**Kiểm duyệt chỉ trừ đi được, không cộng thêm.** HQ gỡ một CV khỏi kho tìm kiếm được, nhưng **không** làm một ứng viên đang để Ẩn hiện ra được, **không** sửa nội dung CV, và **không** đổi lựa chọn hiển thị của ứng viên. “Gỡ khỏi kho” là gỡ **khả năng được tìm thấy**, không phải gỡ con người: ứng viên vẫn giữ CV và vẫn ứng tuyển bằng nó bình thường.',
+      },
+      {
         kind: 'list',
         heading: 'Hồ sơ ứng viên là dữ liệu cá nhân',
         items: [
@@ -673,24 +712,85 @@ export const PAGE_DOCS: Record<string, PageDoc> = {
       'Một dòng một ứng viên, kèm CV đang cho tìm và kết quả kiểm duyệt của CV đó.',
     ],
     how: ['Tìm/lọc ứng viên.', 'Bấm tên ứng viên để mở hộp thoại chi tiết ngay trên danh sách.'],
+    blocks: [
+      {
+        kind: 'list',
+        heading: 'Cổng vào kho — ai lọt vào trước khi bất kỳ truy vấn nào chạy',
+        items: [
+          'Ứng viên phải tự để **Cho tìm thấy**. Đây là quyền của ứng viên; HQ không bật hộ được.',
+          'CV phải qua được trục **chất lượng** — CV đang nghi ngờ hoặc bị từ chối không vào kho.',
+          'CV không bị HQ **gỡ khỏi kho** ở trục kiểm duyệt.',
+          'Ba điều kiện trên là **cổng nhị phân**, chạy **trước** mọi bộ lọc và mọi xếp hạng. Không bao giờ được gắn cổng vào một trường nghiệp vụ như lương hay số năm kinh nghiệm — mỗi trường đó đều có thể làm rỗng kết quả mà không giải thích được vì sao.',
+        ],
+      },
+      {
+        kind: 'warn',
+        text:
+          '**Dòng khoá không được để lộ danh tính.** Nhà tuyển dụng mà đoán ra được ứng viên là ai từ dòng chưa mở khoá thì họ lấy được thông tin miễn phí qua LinkedIn/Facebook, và tính năng tính tiền lặng lẽ thành miễn phí. **Che tên là không đủ**: “Điều dưỡng trưởng khoa Ngoại · BV Quốc tế Mỹ · nữ · 34” chỉ cách cái tên đúng một lần tìm kiếm, dù trên thẻ không có tên nào. Thứ phải giấu cho tới khi mở khoá: họ tên (và mọi phần của nó), **tên công ty từng làm**, **tên trường**, ảnh đại diện, mọi thông tin liên hệ và file CV. Giấu tên công ty là cái thực sự bịt lỗ hổng.',
+      },
+    ],
     watch: ['**Chức năng này chưa có API thật ở backend** tại thời điểm viết — màn hình có thể chưa chạy đầy đủ trên môi trường dev.'],
   },
   'cv-review': {
     logic: [
-      'Hàng đợi CV cần **người** xem, gồm ba nhánh: đang chờ quyết, đã duyệt, đã từ chối.',
-      'CV nào máy quét tự thấy đạt thì **không** vào đây — nó đi thẳng vào Talent pool. Đó là thứ giữ cho hàng đợi này hữu hạn.',
+      'Hàng đợi CV cần **người** xem. CV nào máy quét tự thấy đạt thì **không bao giờ** vào đây — nó đi thẳng vào Talent pool. Đó là thứ giữ cho hàng đợi này hữu hạn.',
+      'Một CV vào đây khi nó **đã từng bước vào vòng duyệt tay** — không phải khi nó “chưa được duyệt”. Mọi CV mới upload đều mang trạng thái đã duyệt sẵn, nên lọc theo “chưa duyệt” sẽ trả về cả bảng.',
+      'Ba tab: **Cần duyệt** (cũ nhất lên trước) · **Đã duyệt** · **Đã từ chối** (hai tab sau mới nhất lên trước). Giữ **toàn bộ lịch sử**, không cắt 30 ngày.',
+      'Thứ tự sắp xếp **cố định ở server**, không đổi được — vì thứ tự ở đây là một quy tắc vận hành, không phải sở thích người xem.',
     ],
     how: [
-      'Mở tab hàng chờ.',
-      'Bấm một CV để mở hộp thoại review.',
-      'Duyệt, hoặc từ chối kèm **lý do** chọn từ danh sách có sẵn.',
-      'Kiểm lại ở hai tab kết quả nếu cần xem lại quyết định cũ.',
+      'Mở tab **Cần duyệt** — đây là tab duy nhất có badge số, vì chỉ nó là việc tồn đọng.',
+      'Đọc từ trên xuống: dòng trên cùng là CV **chờ lâu nhất**.',
+      'Bấm một dòng để mở hộp thoại duyệt.',
+      'Duyệt, hoặc từ chối kèm **mã lý do** chọn từ danh sách (4 mã, có cả “Khác”).',
+      'Cần gỡ một CV đã duyệt: vào tab **Đã duyệt** và từ chối nó — thao tác từ chối vẫn dùng được ở đó.',
+    ],
+    watch: [
+      '**CV chưa được quyết thì MỌI đơn ứng tuyển gắn CV đó bị giữ ở “Chưa gửi”, vô thời hạn.** Không có cơ chế tự gửi sau 24h, không có gì tự giải phóng — **chỉ người duyệt**. Hàng đợi bỏ quên ở đây không phải backlog nội bộ, nó là sự cố mà ứng viên chịu.',
+      'Vì vậy dòng hiển thị **tuổi chờ**, không phải đếm ngược — không có hạn nào để đếm ngược tới.',
+      '**Cột liên hệ bị giấu vĩnh viễn** ở màn hình này. Đó là chủ đích, không phải thiếu dữ liệu.',
+      'Không có cột “lượt mở khoá”, vì CV đang trong hàng duyệt thì **chưa từng** vào CV search của nhà tuyển dụng nên không thể có lượt nào.',
+    ],
+    blocks: [
+      {
+        kind: 'table',
+        heading: 'Bốn trạng thái CV — và vì sao đường truyền chỉ gửi ba',
+        note: 'Trạng thái CV là **sự thật duy nhất được lưu** về chất lượng một CV. Hai trạng thái nghi ngờ là thứ ứng dụng phía ứng viên dựa vào để nói cho họ biết cần sửa gì.',
+        cols: ['Trạng thái', 'Nghĩa', 'Đơn ứng tuyển gắn CV này'],
+        rows: [
+          ['**Đạt**', 'Máy quét hoặc người duyệt xác nhận CV đọc được và đủ thông tin', 'Gửi bình thường'],
+          ['**Không đọc được**', 'File hỏng, ảnh scan mờ, không trích được chữ', '**Giữ lại ở “Chưa gửi”**'],
+          ['**Chưa đủ thông tin**', 'Đọc được nhưng thiếu dữ kiện tối thiểu', '**Giữ lại ở “Chưa gửi”**'],
+          ['**Từ chối**', 'Người duyệt từ chối, kèm mã lý do', 'Không gửi'],
+        ],
+      },
+      {
+        kind: 'warn',
+        text:
+          'Đường truyền từ server chỉ gửi **ba** giá trị (chờ · đạt · từ chối) — hai trạng thái nghi ngờ gộp chung thành “chờ”. Phần tách ra “không đọc được” hay “chưa đủ thông tin” hiện chỉ nằm trong **đoạn ghi chú chữ tự do**. Đừng đọc đoạn chữ đó để suy ra loại nghi ngờ; đây là khoảng trống đã ghi nhận và đang chờ backend bổ sung field riêng.',
+      },
+      {
+        kind: 'example',
+        heading: 'Ví dụ — một lần duyệt mở khoá bao nhiêu đơn',
+        scenario:
+          'Ứng viên Nguyễn Văn A upload CV ngày **02/03**. Máy quét không đọc được file (ảnh scan mờ) → trạng thái **Không đọc được**. Từ 02/03 tới 09/03, A nộp đơn vào **4 tin tuyển dụng** của 3 công ty khác nhau.',
+        cols: ['Ngày', 'Việc xảy ra', 'Nhà tuyển dụng thấy gì'],
+        rows: [
+          ['02/03', 'CV vào hàng đợi Cần duyệt', '—'],
+          ['03/03 – 09/03', 'A nộp 4 đơn', '**Không thấy đơn nào.** Cả 4 đơn nằm ở “Chưa gửi”'],
+          ['Suốt thời gian đó', 'Không có gì tự chạy', 'A tưởng đã nộp xong và đang chờ hồi âm'],
+          ['10/03 — người duyệt bấm Duyệt', 'CV thành **Đạt**', '**Cả 4 đơn được gửi đi cùng một lúc**, trong cùng một giao dịch'],
+        ],
+        note:
+          'Một lần bấm giải phóng **mọi** đơn đang chờ CV đó. Nghĩa là để một dòng nằm trong hàng đợi một tuần không phải là chậm một dòng — nó là bốn cơ hội việc làm của một người bị giữ lại, mà cả hai phía đều không biết. Đó là lý do tab này là chỗ duy nhất trong hệ thống mà **badge số trên menu** thực sự có nghĩa là “có việc phải làm ở đây”.',
+      },
     ],
   },
   resumes: {
     logic: [
       'Hồ sơ ứng viên do admin quản lý — khác Talent pool ở chỗ đây là bản ghi admin tạo và sửa được.',
       'Có tab hiển thị: Tất cả · Đang cho tìm · Đang ẩn.',
+      'Đây là nơi HQ dùng trục **kiểm duyệt** — trục duy nhất trong ba trục trạng thái CV mà HQ thực sự sở hữu ở màn hình này.',
       'Mở khoá một CV cho công ty sẽ **trừ credit** của công ty đó.',
     ],
     how: [
@@ -698,7 +798,27 @@ export const PAGE_DOCS: Record<string, PageDoc> = {
       'Mở một hồ sơ để xem/sửa.',
       'Mở khoá cho khách: thao tác từ chính hồ sơ đó — credit trừ vào công ty.',
     ],
-    watch: ['Giá mở khoá một CV có thể được admin đặt riêng cho từng CV, không phải luôn bằng giá chung.'],
+    watch: [
+      'Giá mở khoá một CV có thể được admin đặt riêng cho từng CV, không phải luôn bằng giá chung.',
+      'Tab “Đang ẩn” phản ánh **lựa chọn của ứng viên**, không phải hành động của HQ — thấy một ứng viên ở đó thì đó là quyền của họ, không phải việc cần sửa.',
+    ],
+    blocks: [
+      {
+        kind: 'table',
+        heading: 'Kiểm duyệt — ba giá trị, và cái thứ ba cần lý do bắt buộc',
+        cols: ['Giá trị', 'Nghĩa', 'Còn tìm thấy được?'],
+        rows: [
+          ['**Bình thường**', 'Mặc định. CV tham gia tìm kiếm, tuỳ theo lựa chọn hiển thị của chính ứng viên.', 'Có — nếu ứng viên để Cho tìm thấy'],
+          ['**Bị gắn cờ**', 'Đánh dấu để xem lại (nghi giả mạo, spam, nội dung phản cảm). **Đây là hàng đợi việc, không phải hình phạt.**', 'Có — vẫn tìm thấy được ở Phase-1'],
+          ['**Gỡ khỏi kho**', 'HQ loại khỏi CV search, **bắt buộc nhập lý do**.', 'Không'],
+        ],
+      },
+      {
+        kind: 'warn',
+        text:
+          '**Gỡ khỏi kho là gỡ khả năng được tìm thấy, không phải gỡ con người.** Ứng viên vẫn giữ CV và vẫn ứng tuyển bằng nó bình thường. Thao tác khôi phục đưa CV về Bình thường và **cũng được ghi log** như lúc gỡ.',
+      },
+    ],
   },
 
   /* ── Resume Management ───────────────────────────────────────────────────── */
