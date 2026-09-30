@@ -693,6 +693,32 @@ export const PAGE_DOCS: Record<string, PageDoc> = {
       'Tin Open mà Exposure Off thì không ai thấy — kiểm chỗ này đầu tiên khi khách báo tin không hiện.',
       'Luồng duyệt tin đã gỡ bỏ từ 09/2026 — tin không còn đi qua bước chờ duyệt.',
     ],
+    blocks: [
+      {
+        kind: 'table',
+        heading: 'Hai cửa đăng tin — và mỗi cửa được dùng sản phẩm nào',
+        note:
+          'Tin là **một thực thể, một vòng đời** dù đăng từ đâu. Nhưng **quyền đăng thì khác nhau**, và điều đó đến từ cấu hình của sản phẩm — không bao giờ đến từ tên sản phẩm.',
+        cols: ['Cửa', 'Được đăng từ', 'Quy tắc'],
+        rows: [
+          [
+            'Admin (HQ)',
+            'Bất kỳ sản phẩm nào — kể cả **bậc miễn phí chỉ Admin có**, hoặc bất kỳ dòng nào trên PO còn hiệu lực của công ty',
+            'Bậc miễn phí **không cần PO và không giới hạn**: HQ đăng cho bất kỳ công ty nào, bất kỳ lúc nào, không điều kiện gì.',
+          ],
+          [
+            'Trang công ty',
+            'Chỉ những sản phẩm công ty **đã mua** (dòng PO còn hiệu lực)',
+            'Nhà tuyển dụng **không bao giờ** đăng được tin miễn phí — bậc miễn phí không xuất hiện trên trang công ty.',
+          ],
+        ],
+      },
+      {
+        kind: 'warn',
+        text:
+          '**Tin miễn phí có năm hệ quả cần biết trước khi hứa với khách:** không gắn PO nào · không tiêu quota · **bị loại khỏi báo cáo doanh thu** · **không nâng lên bậc trả phí được về sau** · và **không có vị trí hiển thị cao cấp nào** (chỉ nằm trong danh sách mặc định). Đăng miễn phí để chiều khách rồi tháng sau phải giải thích vì sao nó không lên trang chủ là tình huống hay xảy ra nhất.',
+      },
+    ],
   },
   applicants: {
     logic: [
@@ -704,7 +730,52 @@ export const PAGE_DOCS: Record<string, PageDoc> = {
       'Mở một dòng để xem hồ sơ và xử lý.',
       'Cần chia sẻ: copy nguyên URL, không cần mô tả lại bộ lọc.',
     ],
-    watch: ['Mở hồ sơ ứng viên là chạm dữ liệu cá nhân và bị ghi log.'],
+    watch: [
+      'Mở hồ sơ ứng viên là chạm dữ liệu cá nhân và bị ghi log.',
+      'Mở một dòng là **giám sát, không phải cổng duyệt** — không có nút Duyệt/Từ chối ở đây, vì nhà tuyển dụng đã cầm CV đó rồi.',
+      '**Không có cột “sàng lọc”**, vì không tồn tại dữ kiện sàng lọc ở mức từng đơn. Thứ giữ một đơn lại là **trạng thái CV**, và dòng hiện nó dưới dạng “Chưa gửi — CV chờ duyệt” kèm link sang CV.',
+    ],
+    blocks: [
+      {
+        kind: 'table',
+        heading: 'Ba tầng trạng thái trên một đơn ứng tuyển',
+        note: 'Ba tầng, ba chủ sở hữu. HQ **không bao giờ** ghi được tầng 3 — chỉ hiện badge và ghi chú “do công ty sở hữu”.',
+        cols: ['Tầng', 'Ai sở hữu', 'Giá trị', 'HQ sửa được?'],
+        rows: [
+          ['1 · Trạng thái CV', 'HQ (CV review)', 'Đạt · Không đọc được · Chưa đủ thông tin · Từ chối', 'Có — ở CV review'],
+          ['2 · Trạng thái gửi', 'Saramin', 'Đã gửi · Chưa gửi · Thu hồi', 'Có — qua Thu hồi'],
+          ['3 · Chặng tuyển dụng', '**Công ty khách**', 'Mới · Đang xem · Vào danh sách · Phỏng vấn · Nhận · Loại', '**Không** — chỉ đọc'],
+        ],
+      },
+      {
+        kind: 'table',
+        heading: 'Tầng 2 — ba giá trị, và cái thứ ba là điểm cuối',
+        cols: ['Giá trị', 'Nghĩa', 'Đến từ đâu'],
+        rows: [
+          ['**Đã gửi**', 'Nhà tuyển dụng thấy ngay. Ghi lúc nộp, sau hai kiểm tra: người dùng chưa bị khoá, và chưa có đơn nào còn sống vào đúng tin này.', 'Hành động nộp'],
+          ['**Chưa gửi**', 'CV đang nghi ngờ, hoặc đã bị từ chối trước khi kịp giao.', '**Suy từ trạng thái CV** — không gõ tay được'],
+          ['**Thu hồi**', 'CV đã giao rồi mới bị từ chối: HQ kéo khỏi dashboard của nhà tuyển dụng và báo họ bỏ qua. **Điểm cuối** — ứng viên phải nộp lại từ đầu.', 'Hành động Thu hồi'],
+        ],
+      },
+      {
+        kind: 'warn',
+        text:
+          '**Khoá một người dùng là kiểm soát truy cập, hết.** Nó chặn họ đăng nhập — và **không** từ chối CV của họ, **không** thu hồi các đơn đã giao, **không** gỡ họ khỏi CV search. Muốn cả những thứ đó thì phải đặt trạng thái CV thành Từ chối, bằng **một thao tác riêng, có chủ đích**. Một đòn bẩy, một nghĩa: khoá trả lời “người này có vào được không”, trạng thái CV trả lời “nhà tuyển dụng có nên thấy không”. **Không đơn nào từng hiện chữ “Bị khoá”.**',
+      },
+      {
+        kind: 'list',
+        heading: 'Hai hành động cần xác nhận trước khi chạy',
+        items: [
+          '**Thu hồi** — cảnh báo thẳng rằng **email đã gửi cho nhà tuyển dụng thì không rút lại được**; thu hồi chỉ gỡ CV khỏi dashboard và báo cho họ.',
+          '**Khoá người dùng** — bắt nhập mã lý do, và nói rõ phạm vi: mọi lần nộp sau đều bị từ chối, và **mọi đơn đã gửi trên mọi tin đều bị thu hồi**.',
+        ],
+      },
+      {
+        kind: 'warn',
+        text:
+          'Cách diễn đạt “Chưa gửi — CV chờ duyệt” là **chỉ dành cho admin**. Ứng viên ở đầu kia của dòng đó thấy một chữ “Đã nộp” bình thường và **không được cho biết** có vòng duyệt nào cả.',
+      },
+    ],
   },
   'talent-pool': {
     logic: [
@@ -832,6 +903,23 @@ export const PAGE_DOCS: Record<string, PageDoc> = {
       'Từ nào **không hiểu** → thêm alias hoặc thêm kỹ năng mới ở **Master data**.',
       'Từ nào **hiểu nhưng thiếu người** → chuyển cho Sales/sourcing, không sửa danh mục.',
     ],
+    blocks: [
+      {
+        kind: 'table',
+        heading: 'Hai nguyên nhân — và chỉ một là lỗi của mình',
+        note: 'Mọi lượt tìm trả về 0 kết quả đều được phân vào **đúng một** trong hai loại, ngay lúc truy vấn chạy. Gộp chúng lại là mất luôn khả năng biết nên sửa gì.',
+        cols: ['Nguyên nhân', 'Nghĩa là', 'Ai xử lý', 'Sửa ở đâu'],
+        rows: [
+          ['**Không hiểu từ khoá**', 'Danh mục chưa có từ này, hoặc có nhưng dưới tên khác', '**Người quản trị danh mục**', 'Master data — thêm giá trị hoặc gắn alias'],
+          ['**Hiểu nhưng kho rỗng**', 'Hệ thống hiểu đúng, nhưng không có ứng viên nào khớp', '**Sales / sourcing**', 'Không sửa gì ở hệ thống — đây là việc đi tìm người'],
+        ],
+      },
+      {
+        kind: 'warn',
+        text:
+          'Sửa danh mục cho nhóm thứ hai là **sai hướng**: hệ thống đã hiểu đúng rồi, thêm alias không làm xuất hiện ứng viên nào. Ngược lại, chuyển nhóm thứ nhất cho Sales là bắt họ đi tìm người cho một từ mà hệ thống **vốn không tìm nổi**, dù kho có đủ người.',
+      },
+    ],
   },
 
   /* ── User ────────────────────────────────────────────────────────────────── */
@@ -849,16 +937,80 @@ export const PAGE_DOCS: Record<string, PageDoc> = {
     watch: [
       'Đừng mở lại một tài khoản Withdrawn như thể bị khoá nhầm — chính người dùng đã tắt nó.',
       'Lý do nhập khi khoá/xoá là ghi chú nội bộ, người dùng không thấy.',
+      'Một tài khoản **Active mà CV đang ẩn** là trạng thái **bình thường**, không phải lỗi — hai thứ đó độc lập hoàn toàn.',
+    ],
+    blocks: [
+      {
+        kind: 'table',
+        heading: 'HQ làm được gì và không làm được gì',
+        cols: ['HQ làm được', 'HQ không bao giờ làm được'],
+        rows: [
+          ['Tìm kiếm tài khoản, xem chi tiết', '**Xem hoặc đặt mật khẩu** — không bao giờ'],
+          ['Khoá / mở lại (kèm lý do)', 'Đọc bất kỳ thông tin đăng nhập nào'],
+          ['Gửi link đặt lại mật khẩu', 'Bật hiển thị CV hộ ứng viên'],
+        ],
+      },
+      {
+        kind: 'warn',
+        text:
+          'Mở CV hoặc thông tin liên hệ của ứng viên từ Admin là **thao tác chạm dữ liệu cá nhân và luôn được ghi log**. Hỗ trợ người quên mật khẩu thì **gửi link đặt lại** — không ai gõ mật khẩu hộ người khác, ở bất kỳ vai trò nào.',
+      },
     ],
   },
   'company-users': {
-    logic: ['Tài khoản đăng nhập của phía khách hàng, xem xuyên suốt mọi công ty ở một chỗ. Khác hẳn tài khoản ứng viên và tài khoản nhân viên Saramin.'],
-    how: ['Tìm theo công ty hoặc theo người.', 'Mở một dòng để xem người đó thuộc công ty nào, vai trò gì.'],
+    logic: [
+      'Tài khoản đăng nhập của phía khách hàng, xem xuyên suốt mọi công ty ở một chỗ. Khác hẳn tài khoản ứng viên và tài khoản nhân viên Saramin.',
+      'Một dòng là **một tư cách thành viên trong một công ty** — cùng một người ở hai công ty là hai dòng.',
+      '**Đây không phải danh sách công ty thứ hai.** Nó là danh sách người, xem ngang qua mọi công ty.',
+    ],
+    how: [
+      'Tìm theo công ty hoặc theo người.',
+      'Mở một dòng để xem người đó thuộc công ty nào, vai trò gì.',
+      'Nhân viên khách nghỉ việc → **Deactivate**, không xoá.',
+    ],
+    watch: [
+      'HQ thấy đúng những gì phía nhà tuyển dụng thấy — không hơn.',
+    ],
+    blocks: [
+      {
+        kind: 'table',
+        heading: 'Ai được khoá một tài khoản khách — và ai thì không',
+        note:
+          'Nhân viên khách nghỉ việc thì **Deactivate**, không phải Delete. Đây là bản tương đương của “tự rút tài khoản” bên ứng viên, với một khác biệt có chủ đích: **người dùng không tự khoá mình được**, vì chỗ ngồi đó thuộc về công ty — đúng quy tắc Google Workspace / Slack / M365 dùng.',
+        cols: ['Ai', 'Phạm vi', 'Lý do điển hình'],
+        rows: [
+          ['Company Admin', 'Chỉ người của chính công ty mình', 'Trường hợp bình thường — nhân viên nghỉ việc'],
+          ['HQ (Saramin)', 'Người của bất kỳ công ty nào', 'Hỗ trợ (Admin của khách không liên lạc được), hoặc quyết định về an toàn'],
+          ['**Chính người đó**', '**Không được phép**', 'Login của công ty là chỗ ngồi của công ty; yêu cầu xoá dữ liệu cá nhân đi qua hỗ trợ, không qua nút tự phục vụ'],
+        ],
+      },
+      {
+        kind: 'list',
+        heading: 'Deactivate làm gì',
+        items: [
+          'Chặn đăng nhập **ngay lập tức**.',
+          '**Giải phóng chỗ ngồi** để mời người thay thế.',
+          'Tin tuyển dụng, ứng viên và các CV đã mở khoá của người đó **vẫn ở lại với tài khoản công ty** — không đi theo người.',
+          'Dòng dữ liệu được giữ lại để phục vụ truy vết.',
+          '**Đảo ngược được:** Reactivate khôi phục quyền truy cập và **chiếm lại một chỗ ngồi** — bị chặn nếu công ty đã dùng hết số chỗ.',
+        ],
+      },
+    ],
   },
   'deleted-accounts': {
     logic: ['Tài khoản ứng viên đã kết thúc — tự rút hoặc bị HQ xoá. Xoá là **xoá mềm**: bản ghi vẫn còn nên luôn khôi phục được.'],
     how: ['Tìm tài khoản cần tìm lại.', 'Bấm **Restore** để đưa tài khoản trở lại.'],
-    watch: ['Sau 30 ngày hệ thống purge thật — lúc đó không khôi phục được nữa.'],
+    watch: [
+      'Sau 30 ngày hệ thống purge thật — lúc đó không khôi phục được nữa.',
+      'Trang này gộp **hai lối ra khác hẳn nhau**: ứng viên tự rút, và HQ xoá. Trước khi khôi phục, xem **ai** đã kết thúc tài khoản.',
+    ],
+    blocks: [
+      {
+        kind: 'warn',
+        text:
+          'Xoá là **xoá mềm** — bản ghi vẫn nằm trong cơ sở dữ liệu, nên trang này luôn liệt kê được và **Restore luôn có thứ để đưa về**. Đó là thiết kế, không phải việc dọn dẹp còn dở: một tài khoản đã kết thúc vẫn có các đơn ứng tuyển đã gửi, và xoá cứng sẽ để lại những đơn trỏ vào hư không ở phía nhà tuyển dụng.',
+      },
+    ],
   },
 
   /* ── Products & Packages ─────────────────────────────────────────────────── */
@@ -872,7 +1024,19 @@ export const PAGE_DOCS: Record<string, PageDoc> = {
       'Tab **Catalog** → **New product** → chọn **Type**.',
       'Điền phần fulfilment mà Type đó yêu cầu (tier và số ngày, hoặc vị trí hiển thị, hoặc số lượt giao tay).',
       'Product loại Placement thì trỏ vào một dòng ở **Placements**, không gõ lại kích thước.',
+      'Đặt **cửa sổ kích hoạt** (mặc định 12 tháng) — field quyết định quota của khách hết hạn khi nào.',
       'Lưu — Product xuất hiện trong danh sách chọn khi lập báo giá.',
+    ],
+    watch: [
+      'Chọn sai **Type** thì giao sai thứ cho khách, **âm thầm**, và chỉ lộ ra lúc xuất hoá đơn. Đây là field có tầm ảnh hưởng lớn nhất trên màn hình.',
+      'Sản phẩm đã bán rồi mà sửa cửa sổ kích hoạt thì **không** dịch chuyển hạn của quota đã bán — hạn đó đã được chụp lại lúc cấp.',
+    ],
+    blocks: [
+      {
+        kind: 'warn',
+        text:
+          '**Những gì một bậc tin cho — thời lượng, nhịp làm mới, kiểu tiêu đề, thứ hạng tìm kiếm, vị trí trang chủ, badge — đến từ CẤU HÌNH BẬC, không từ sản phẩm.** Nếu để từng sản phẩm tự khai những thứ đó thì hai sản phẩm cùng tên “Top Job” có thể cho hai thứ khác nhau, và không ai phát hiện ra cho tới khi một khách hỏi vì sao tin của họ không giống tin của khách kia.',
+      },
     ],
   },
   packages: {
@@ -887,7 +1051,25 @@ export const PAGE_DOCS: Record<string, PageDoc> = {
     how: ['Mở một vị trí → sửa trong drawer.', 'Drawer chỉ hiện đúng phần thuộc loại vị trí đó (banner hay nội dung).'],
     watch: [
       '“Hiện bao nhiêu cái” là số vị trí render **cùng lúc**, không phải giới hạn số banner được đặt — kho xoay vòng là không giới hạn.',
-      '“Placement” có ba nghĩa trong hệ thống — xem Từ điển.',
+      '“Placement” có **ba nghĩa** trong hệ thống — xem bảng dưới.',
+    ],
+    blocks: [
+      {
+        kind: 'table',
+        heading: '“Placement” — ba nghĩa, ba nơi, ba vòng đời',
+        note: 'Đây là nguồn nhầm lẫn số 1 trong toàn hệ thống: ba thứ khác nhau cùng mang một cái tên.',
+        cols: ['Nghĩa', 'Là gì', 'Xem ở đâu', 'Vòng đời'],
+        rows: [
+          ['**Khu vực hiển thị**', 'Cấu hình thuần: kích thước, hiện bao nhiêu cái, xoay bao lâu một lần', '**Trang này**', 'Gần như không đổi'],
+          ['**Bậc một tin đang chiếm**', 'Một giao dịch: tin nào, bậc nào, từ ngày nào tới ngày nào, gắn PO nào', 'Trong chi tiết tin — **không có trang riêng**', 'Theo từng tin'],
+          ['**Booking banner**', 'Mua đứt một chỗ hiển thị trong một kỳ. **Không liên quan tin tuyển dụng**', 'Content → Displays', 'Theo từng booking'],
+        ],
+      },
+      {
+        kind: 'warn',
+        text:
+          'Một vị trí có thể được lấp từ **hai nguồn**: **theo bậc tin** (tự động, không ai đặt) và **mua đứt** (bán rời). Vị trí nào có cả hai nguồn thì **bắt buộc phải có quy tắc ưu tiên rõ ràng**, nếu không những chỗ hữu hạn sẽ bị bán vượt — và chuyện đó chỉ lộ ra trên trang thật.',
+      },
     ],
   },
   'cv-search-usage': {
@@ -947,11 +1129,45 @@ export const PAGE_DOCS: Record<string, PageDoc> = {
       'MST trùng sẽ bị từ chối kèm link sang công ty đang giữ MST đó — mở công ty đó, đừng tạo bản thứ hai.',
       'Công ty chưa **Verified** thì không đăng tin được, dù đã có quota.',
     ],
+    blocks: [
+      {
+        kind: 'table',
+        heading: 'Kiểm MST — bốn kết quả, và chỉ một cái chặn lưu',
+        note:
+          'Chỉ **trùng nguyên MST đầy đủ** mới là trùng lặp và mới chặn lưu. **Trùng 10 số gốc KHÔNG phải trùng lặp** — đó là chi nhánh của cùng một pháp nhân, hoặc hai công ty tình cờ đụng nhau. Form không phán xét chuyện đó, nó liệt kê ra để rep tự quyết. Chặn ở đây là chặn nhầm một khách hàng mới hợp lệ.',
+        cols: ['Kết quả', 'Rep thấy gì', 'Chặn lưu?'],
+        rows: [
+          ['Trùng nguyên MST', 'Báo lỗi, nêu tên công ty đang tồn tại, kèm link mở nó', '**Có** — công ty này đã có rồi'],
+          ['Trùng 10 số gốc', 'Danh sách mọi công ty trên gốc đó: tên, MST đầy đủ, địa điểm, sales owner. Mỗi dòng cho liên kết theo hai chiều.', 'Không'],
+          ['Tên pháp lý gần giống, MST khác', 'Cùng danh sách đó, khớp theo tên', 'Không'],
+          ['Không trùng gì', 'Không hiện gì cả', 'Không'],
+        ],
+      },
+      {
+        kind: 'list',
+        heading: 'Liên kết công ty mẹ / công ty con',
+        items: [
+          'Hai nút trên mỗi dòng có **số lượng khác nhau có chủ đích**: “**là con của**” chỉ đặt được trên **một** dòng (chọn dòng khác thì dòng cũ nhả ra), còn “**là mẹ của**” đặt được trên **nhiều** dòng cùng lúc. Đúng như dữ liệu: một công ty chỉ có một mẹ, nhưng có bao nhiêu con cũng được.',
+          'Dùng cả hai chiều cùng lúc là hợp lệ — nghĩa là công ty mới nằm **giữa** một tập đoàn. Hệ thống kiểm cả chuỗi và **từ chối liên kết nào khiến một công ty thành tổ tiên của chính nó**.',
+          'Liên kết là **tuỳ chọn và không bao giờ chặn lưu**. Rep bỏ qua danh sách thì tạo ra một bản ghi độc lập — và đó là kết quả **đúng** khi hai công ty thật sự chỉ tình cờ trùng gốc MST.',
+          'Chi nhánh (cùng gốc 10 số, đuôi -001) và công ty con (MST khác hẳn) **lưu giống hệt nhau** — cùng một trường công ty mẹ. Nhãn hiển thị là suy ra từ việc so hai mã số thuế.',
+        ],
+      },
+      {
+        kind: 'warn',
+        text:
+          '**Liên kết không kế thừa bất cứ thứ gì, theo bất kỳ chiều nào.** Mỗi bản ghi giữ MST riêng, gói/quota riêng, báo giá riêng, hoá đơn riêng, người dùng riêng và sales owner riêng. **Một chi nhánh không bao giờ tiêu được quota của công ty mẹ.**',
+      },
+    ],
   },
   pipeline: {
     logic: ['Bảng sáu cột theo chặng bán, kéo thả để chuyển chặng. Một thẻ mở ra chính **báo giá** của nó.'],
     how: ['Kéo thẻ sang cột mới khi cơ hội chuyển chặng.', 'Bấm thẻ để mở báo giá phía sau nó.'],
-    watch: ['Không có bản ghi “deal” tách biệt để sửa — mọi nội dung nằm ở báo giá.'],
+    watch: [
+      'Không có bản ghi “deal” tách biệt để sửa — mọi nội dung nằm ở báo giá.',
+      'Kéo thẻ sang cột **Mất** **không** làm khách thành Churn; thắng một deal cũng **không** tự làm khách thành Existing. **Hoá đơn** mới đổi trục đó.',
+      'Một công ty vừa **Existing** vừa đang **Negotiation** là tài khoản khoẻ mạnh — khách cũ đang mua tiếp — không phải dữ liệu mâu thuẫn.',
+    ],
   },
   quotations: {
     logic: [
@@ -968,6 +1184,24 @@ export const PAGE_DOCS: Record<string, PageDoc> = {
     watch: [
       'Chiết khấu tổng đơn ≤ 10% do Sales Leader duyệt, trên 10% phải chuyển Sales Manager.',
       'Dựng PO từ nhầm option là sai cả số tiền lẫn quota sẽ cấp.',
+      '**Báo giá hết hiệu lực thì không dựng PO được**, dù option đã accepted. Phải gia hạn hiệu lực hoặc phát hành lại bản v2 — và điều này chặn ở server, không phải chỉ ẩn nút.',
+    ],
+    blocks: [
+      {
+        kind: 'example',
+        heading: 'Ví dụ — vì sao option là “chọn một”, không phải “mua tất”',
+        scenario:
+          'Sales gửi Vạn Phát một báo giá ba option: **A** — 5 Top Job (60tr) · **B** — 10 Basic + 2 Top Job (55tr) · **C** — gói 12 tháng (120tr). Khách trả lời “ok em chốt option B”.',
+        cols: ['Option', 'Sau khi khách chốt B', 'Nếu dựng PO nhầm từ A'],
+        rows: [
+          ['A — 5 Top Job', '**Bị loại**', 'PO ghi 60tr thay vì 55tr'],
+          ['**B — 10 Basic + 2 Top Job**', '**Accepted** — đây là thứ dựng PO', '—'],
+          ['C — gói 12 tháng', '**Bị loại**', '—'],
+          ['**Hệ quả nếu nhầm**', '—', 'Khách nhận hoá đơn **sai số tiền**, và khi phát hành thì được cấp **5 slot Top Job** thay vì **10 Basic + 2 Top Job** — sai cả tiền lẫn hàng'],
+        ],
+        note:
+          'Ba option **không cộng dồn**. Sai lầm hay gặp là đọc báo giá như một bảng giá rồi dựng PO từ dòng nào trông quen nhất. PO **chép nguyên** option đã Accepted, nên chọn đúng option ở bước này là chọn đúng cả hoá đơn lẫn quota sẽ cấp.',
+      },
     ],
   },
   'purchase-order': {
@@ -980,7 +1214,27 @@ export const PAGE_DOCS: Record<string, PageDoc> = {
       'Kiểm nội dung PO.',
       'Trên trang chi tiết PO, **phát hành hoá đơn** từ PO này — đây là nơi hoá đơn được lập.',
     ],
-    watch: ['PO đã duyệt mà khách vẫn không đăng tin được là **đúng** — quota chỉ vào khi hoá đơn Issued.'],
+    watch: [
+      'PO đã duyệt mà khách vẫn không đăng tin được là **đúng** — quota chỉ vào khi hoá đơn Issued.',
+      'Danh sách **không có nút tạo mới**, và đó là chủ đích: PO chỉ sinh ra từ một option báo giá đã được chấp nhận.',
+      'PO **không sửa được** — cần đổi thì phát hành PO mới. Cũng **không huỷ được**: PO không dùng thì tự hết hiệu lực **cuối tháng phát hành**.',
+    ],
+    blocks: [
+      {
+        kind: 'list',
+        heading: 'Ba việc làm trên trang chi tiết PO',
+        items: [
+          '**Xem lại nội dung** đã chép từ option báo giá — dòng hàng, số lượng, đơn giá, VAT, tổng, và thông tin xuất hoá đơn đọc từ hồ sơ công ty.',
+          '**Ghi số PO của chính khách** (kèm file) nếu bên mua có bộ phận mua hàng tự phát hành PO. Khách không có quy trình đó thì chỉ cần xác nhận đơn mình gửi.',
+          '**Phát hành hoá đơn GTGT từ PO này** — đây là nơi hoá đơn được lập, và là mốc duy nhất cấp quota.',
+        ],
+      },
+      {
+        kind: 'warn',
+        text:
+          '**PO là “đã thắng deal”, không phải “đã giao hàng”.** Nó không tạo tài khoản, không cấp quota, không bật trang công ty. Trạng thái khách hàng cũng **không đổi** ở bước này. Mọi thứ đó chờ kế toán phát hành hoá đơn.',
+      },
+    ],
   },
   invoice: {
     logic: [
@@ -997,6 +1251,28 @@ export const PAGE_DOCS: Record<string, PageDoc> = {
     watch: [
       'Danh sách hoá đơn là **chỉ đọc**; không có “tạo hoá đơn mới”.',
       'Sau khi phát hành, mở lại hồ sơ công ty để xác nhận quota có thật — đừng tin mỗi thông báo thành công.',
+      '**Hoá đơn đã phát hành thì không sửa được, không bao giờ.** Sai thì huỷ + credit note + phát hành lại — đó là quy định, không phải giới hạn của phần mềm.',
+    ],
+    blocks: [
+      {
+        kind: 'list',
+        heading: 'Vì sao trang này không có nút “Tạo hoá đơn”',
+        items: [
+          'Hoá đơn **không được soạn ra**, nó được **phát hành từ một PO còn hiệu lực**. Đường dẫn `/crm/invoices/new` **không tồn tại** — có nút ở đây nghĩa là mời người ta tạo một chứng từ thuế không gắn cam kết nào.',
+          'Số hoá đơn đến từ **nhà cung cấp hoá đơn điện tử**, theo dãy số pháp lý liên tục — không phải mình đánh số. Bản nháp **đã mang sẵn một số**, nên không cần thêm mã nội bộ thứ hai.',
+          'Trang này làm ba việc: **khai báo phát hành** · **tải PDF đã ký** · **gửi email cho khách**.',
+        ],
+      },
+      {
+        kind: 'warn',
+        text:
+          '**Bản nháp không cấp gì cả.** Việc cấp quota nghe sự kiện “phát hành **chính thức**”, không nghe bản nháp — và điều đó được đảm bảo ở tầng xử lý sự kiện, không chỉ ở giao diện. Nên một hoá đơn nháp trông đầy đủ vẫn để khách với 0 lượt đăng tin.',
+      },
+      {
+        kind: 'open',
+        text:
+          '**Chưa chốt — phát hành trùng.** Sự kiện “hoá đơn đã phát hành” **có thể bắn hai lần** (nhà cung cấp hoá đơn timeout rồi thử lại là chuyện bình thường). Việc cấp quota phải khoá theo mã hoá đơn, nếu không khách **âm thầm nhận gấp đôi quota**. Đây là lỗi production dễ xảy ra nhất trong cả chuỗi.',
+      },
     ],
   },
   'company-claims': {
@@ -1013,7 +1289,28 @@ export const PAGE_DOCS: Record<string, PageDoc> = {
       'Chọn một trong ba: **Move** (gắn vào công ty đã có) · **Create company & activate** (tạo công ty mới) · **Archive** (bỏ).',
       'Báo lại người đăng ký nếu bạn Archive — họ sẽ không đăng nhập được.',
     ],
-    watch: ['Chỉ **Move** và **Create** mới mở được đăng nhập cho người đó.'],
+    watch: [
+      'Chỉ **Move** và **Create** mới mở được đăng nhập cho người đó.',
+      'Đừng coi một dòng sign-up là một khách hàng. Nó là **một yêu cầu**, và tới khi admin xử lý thì nó chưa là gì trong hệ thống.',
+    ],
+    blocks: [
+      {
+        kind: 'table',
+        heading: 'Ba lựa chọn — và mỗi lựa chọn tạo ra cái gì',
+        note: 'Nộp form **không tạo ra bất cứ thứ gì**: không công ty, không tài khoản đăng nhập, không sản phẩm. Ba nút dưới đây là nơi thứ gì đó thực sự được tạo.',
+        cols: ['Lựa chọn', 'Dùng khi', 'Tạo ra gì', 'Người đăng ký đăng nhập được?'],
+        rows: [
+          ['**Move**', 'Công ty **đã có** trong hệ thống', 'Gắn người này vào công ty đó như một tài khoản đăng nhập', '**Có**'],
+          ['**Create company & activate**', 'Công ty **chưa có**', 'Tạo hồ sơ công ty **và** tài khoản đăng nhập đầu tiên', '**Có**'],
+          ['**Archive**', 'Rác, trùng, hoặc không phải khách thật', 'Không gì cả — chỉ dọn dòng khỏi hộp thư', '**Không**'],
+        ],
+      },
+      {
+        kind: 'warn',
+        text:
+          'Đối chiếu **MST** trước khi bấm Create — tạo mới trong khi công ty đã tồn tại là tạo ra bản ghi trùng, và sau này hoá đơn với quota sẽ nằm sai chỗ. Nếu MST đã có thì đúng lựa chọn là **Move**, không phải Create.',
+      },
+    ],
   },
   'company-documents': {
     logic: [
@@ -1025,7 +1322,23 @@ export const PAGE_DOCS: Record<string, PageDoc> = {
       'Duyệt xong thì công ty mới chuyển được sang **Verified**.',
       'Tab **Legal changes** xử lý tương tự — nhưng đây là đổi thông tin in lên hoá đơn nên kiểm kỹ hơn.',
     ],
-    watch: ['Duyệt nhầm Legal changes là sai thông tin hoá đơn VAT của khách — kiểm MST và tên pháp lý thật kỹ.'],
+    watch: [
+      'Duyệt nhầm Legal changes là sai thông tin hoá đơn VAT của khách — kiểm MST và tên pháp lý thật kỹ.',
+      'Hai tab sắp xếp **cũ trước** có chủ đích: giấy tờ chờ lâu nhất là thứ đang chặn một công ty không đăng tin được.',
+    ],
+    blocks: [
+      {
+        kind: 'table',
+        heading: 'Hai tab — cùng thao tác, khác hậu quả hoàn toàn',
+        cols: ['', 'Documents', 'Legal changes'],
+        rows: [
+          ['Là gì', 'Giấy tờ khách nộp để xác minh công ty', 'Yêu cầu **đổi thông tin pháp lý** mà hoá đơn được xuất từ đó'],
+          ['Duyệt xong thì', 'Công ty chuyển được sang **Verified** → đăng tin được', '**Thông tin in trên hoá đơn VAT đổi theo**'],
+          ['Duyệt nhầm thì', 'Một công ty chưa đủ giấy tờ được đăng tin', '**Hoá đơn VAT xuất sai tên hoặc sai MST** — khách không kê khai thuế được'],
+          ['Cần kiểm gì', 'Giấy tờ khớp hồ sơ công ty', '**MST và tên pháp lý**, đối chiếu giấy tờ gốc'],
+        ],
+      },
+    ],
   },
 
   /* ── Content ─────────────────────────────────────────────────────────────── */
@@ -1046,6 +1359,44 @@ export const PAGE_DOCS: Record<string, PageDoc> = {
       'Ảnh phải đúng kích thước của vị trí — sai tỉ lệ sẽ bị từ chối khi lưu, không tự cắt.',
       'Banner Open mà Exposure Off thì không hiển thị — giống hệt cơ chế của tin tuyển dụng.',
     ],
+    blocks: [
+      {
+        kind: 'table',
+        heading: 'Banner bán và banner nội bộ — khác nhau ở đâu',
+        note: 'Chỉ khác ở **phía tiền**. Phía hiển thị thì giống hệt nhau.',
+        cols: ['', 'Sold — khách mua', 'House — nội bộ'],
+        rows: [
+          ['Chuỗi để đăng', 'Công ty → PO → dòng sản phẩm', 'Chọn thẳng vị trí'],
+          ['Cần hoá đơn đã thanh toán?', '**Có** — PO chưa xuất hoá đơn thì không đăng được', 'Không — không có gì để xuất hoá đơn'],
+          ['Ngày kết thúc', 'Suy ra từ thời lượng của sản phẩm', '**Gõ tay** — không sản phẩm nào định nghĩa thời lượng'],
+          ['Chiếm chỗ xoay vòng', 'Có', '**Có — y hệt banner bán**'],
+          ['Tính vào doanh thu vị trí', 'Có', 'Không'],
+          ['Field bắt buộc thêm', '—', '**Mục đích** — lý do nó đang chạy'],
+        ],
+      },
+      {
+        kind: 'warn',
+        text:
+          '**Banner nội bộ tiêu sức chứa y như banner bán.** Nếu loại nó ra khỏi phép đếm thì booking bán thứ N sẽ không có chỗ để render, và chuyện đó chỉ lộ ra trên trang thật. **Mục đích** là field bắt buộc chính vì không có PO: với banner bán thì đơn hàng giải thích tại sao nó tồn tại; với banner nội bộ thì **không gì giải thích cả trừ khi có người viết ra**.',
+      },
+      {
+        kind: 'table',
+        heading: 'Đăng một banner — hai quyết định, và thứ bị khoá lại',
+        note: 'Sản phẩm đã cố định kích thước, thời lượng và vị trí từ lúc bán. Nên lúc đăng chỉ hỏi **hai** thứ: bắt đầu khi nào, và chạy ảnh nào.',
+        cols: ['Trạng thái', 'Sửa được ngày bắt đầu / ảnh?', 'Vì sao'],
+        rows: [
+          ['Draft', 'Cả hai — thoải mái', 'Chưa hứa gì với ai'],
+          ['Schedule', 'Cả hai — thoải mái', 'Chưa lên màn hình, chưa phục vụ lượt nào'],
+          ['**Open**', '**Cả hai đều KHOÁ**', 'Khách trả tiền cho đúng cái ảnh đang chạy. Đổi giữa chừng thì số lượt đã đếm được quy về một tấm ảnh không ai lấy lại được'],
+          ['Expired', 'Chỉ đọc', 'Booking đã đóng là một bản ghi. Muốn chạy lại thì đăng cái mới'],
+        ],
+      },
+      {
+        kind: 'warn',
+        text:
+          'Đừng bao giờ cho đổi ảnh trên banner đang Open, và **đừng mô hình hoá Exposure thành trạng thái thứ năm**. Cả hai sai lầm dẫn tới cùng một hậu quả: số lượt hiển thị và click đã phục vụ không còn truy về được tấm ảnh đã phục vụ chúng. Muốn gỡ banner xuống giữa chừng thì **tắt Exposure** — đó là cách duy nhất, vì ảnh và ngày đều đã khoá.',
+      },
+    ],
   },
   collections: {
     logic: [
@@ -1056,8 +1407,19 @@ export const PAGE_DOCS: Record<string, PageDoc> = {
     watch: ['Sửa collection thì **mọi** menu và zone đang dùng nó đổi theo.'],
   },
   zones: {
-    logic: ['Một **zone** (채용관) là trang chiến dịch có thương hiệu, có đường dẫn công khai riêng, ghép từ các collection.'],
-    how: ['**New zone** → đặt slug → chọn các collection đổ vào từng khối → sắp thứ tự khối.', 'Xem preview thứ tự khối bên cạnh rồi lưu.'],
+    logic: [
+      'Một **zone** (채용관) là trang chiến dịch có thương hiệu, có **đường dẫn công khai riêng**, ghép từ các collection.',
+      'Zone không tự chứa tin — nó **bố cục** các collection thành một trang. Nội dung vẫn do collection quyết định.',
+    ],
+    how: [
+      '**New zone** → đặt **slug** (đây chính là đường dẫn công khai).',
+      'Chọn collection đổ vào từng khối, rồi sắp thứ tự khối.',
+      'Xem preview thứ tự khối bên cạnh rồi lưu.',
+    ],
+    watch: [
+      'Một số slug bị **giữ chỗ** và không dùng được cho zone — trùng vào là lưu hỏng.',
+      'Zone trông rỗng thường **không phải lỗi của zone**: kiểm các **collection bên trong** có còn trả về tin không.',
+    ],
   },
   'site-navigation': {
     logic: ['Menu đầu trang jobseeker. Bốn tab tương ứng bốn vùng menu khác nhau; một tab là một vùng.'],
@@ -1083,7 +1445,39 @@ export const PAGE_DOCS: Record<string, PageDoc> = {
       'Menu trên dòng có: **Edit** · **Manage roles** (gán lại vai trò) · **Reset password** hoặc **Resend invite** (tuỳ trạng thái) · **Activate/Deactivate** · **Delete**.',
       'Tạo người mới: tạo tài khoản rồi gán vai trò — mời qua email, người đó tự đặt mật khẩu.',
     ],
-    watch: ['Đổi vai trò của người đang đăng nhập thì họ phải đăng xuất vào lại mới thấy quyền mới.'],
+    watch: [
+      'Đổi vai trò của người đang đăng nhập thì họ phải đăng xuất vào lại mới thấy quyền mới.',
+      '**Không ai gõ mật khẩu hộ người khác.** Người được mời bấm link và tự đặt mật khẩu của mình.',
+    ],
+    blocks: [
+      {
+        kind: 'table',
+        heading: 'Thứ tự tạo một operator — bắt buộc theo đúng trình tự',
+        note: 'Bỏ bước là kẹt ở bước sau: chưa có vai trò thì không gán được, chưa gán thì mời ra một tài khoản không làm được gì.',
+        cols: ['Bước', 'Việc'],
+        rows: [
+          ['1', 'Thêm người vào **danh bạ nhân sự** (chỉ một lần cho mỗi người)'],
+          ['2', 'Định nghĩa **vai trò** ở Roles & permissions'],
+          ['3', 'Tạo **operator** — chọn người từ danh bạ'],
+          ['4', 'Gán **vai trò đã lưu**'],
+          ['5', 'Gửi **lời mời**'],
+        ],
+      },
+      {
+        kind: 'table',
+        heading: 'Hai nhóm người dùng không bao giờ lẫn vào nhau',
+        cols: ['Nhóm', 'Là ai', 'Làm việc ở đâu'],
+        rows: [
+          ['**Operator**', 'Nhân viên Saramin (nội bộ HQ)', 'Admin console'],
+          ['**Company user**', 'Nhân sự của khách hàng', 'Trang công ty'],
+        ],
+      },
+      {
+        kind: 'warn',
+        text:
+          'Hai nhóm này **dùng chung một mẫu mời** nhưng **không bao giờ là cùng một danh sách**. Trạng thái cũng giống nhau: **Pending** (đã mời) → **Active** (đã bấm link và đặt mật khẩu).',
+      },
+    ],
   },
   roles: {
     logic: [
@@ -1097,6 +1491,23 @@ export const PAGE_DOCS: Record<string, PageDoc> = {
       'Gán vai trò cho người: làm ở **Users**, không làm ở đây.',
     ],
     watch: ['Vai trò đang có người giữ thì không xoá được — gỡ người ra trước.'],
+    blocks: [
+      {
+        kind: 'list',
+        heading: 'Vai trò do team tự quản — không có vai trò hệ thống bị khoá',
+        items: [
+          'Hệ thống có sẵn vài vai trò mặc định hợp lý, nhưng chúng là **vai trò bình thường, sửa được** — không có loại “vai trò hệ thống” nào bị khoá cứng.',
+          '**Không xoá được vai trò đang có operator giữ.** Gỡ người ra trước.',
+          '**Luôn phải còn ít nhất một vai trò giữ toàn quyền**, để không ai tự khoá mình ra khỏi hệ thống.',
+          'Gỡ = **vô hiệu hoá, không bao giờ xoá cứng**, để dấu vết truy vết còn nguyên. **Mọi** thay đổi vai trò và operator đều được ghi log.',
+        ],
+      },
+      {
+        kind: 'warn',
+        text:
+          'Quyền hiển thị ở giao diện chỉ là **trải nghiệm** — nó ẩn nút người dùng không bấm được. Chặn thật nằm ở server, trên **mọi** lời gọi, kèm cả kiểm tra phạm vi theo từng dòng. Đừng bao giờ coi việc ẩn nút là một lớp bảo mật.',
+      },
+    ],
   },
   'general-settings': {
     logic: ['Một mục menu, mỗi tab một nhóm thiết lập. Hai tab cùng đọc một bản ghi ở server nhưng lưu riêng từng nửa: trọng số gợi ý việc, và tỉ giá USD→VND.'],
@@ -1128,6 +1539,22 @@ export const PAGE_DOCS: Record<string, PageDoc> = {
       'Tab **kỹ năng còn thiếu**: xử lý từ khoá do trang Search quality đẩy sang.',
     ],
     watch: ['Thiếu quyền một tab thì chỉ tab đó trống — không phải cả trang hỏng.'],
+    blocks: [
+      {
+        kind: 'table',
+        heading: 'Trạng thái một giá trị danh mục — và vì sao không có nút Xoá',
+        cols: ['Trạng thái', 'Nghĩa', 'Quy tắc'],
+        rows: [
+          ['**Active**', 'Dùng được, hiện trong mọi ô chọn', '**Đổi tên là an toàn** — bản ghi lưu mã số, không lưu chữ hiển thị'],
+          ['**Retired**', 'Không còn được chọn mới, nhưng **vẫn đọc được** cho các bản ghi cũ', 'Giá trị đang được dùng thì **cho nghỉ hoặc gộp, không bao giờ xoá cứng**'],
+        ],
+      },
+      {
+        kind: 'warn',
+        text:
+          'Đây là lý do đổi tên một ngành nghề không làm hỏng dữ liệu cũ, còn xoá thì có. Hàng nghìn tin tuyển dụng và CV trỏ vào giá trị đó bằng **mã số**; xoá cứng biến chúng thành trỏ vào hư không, và không có cách nào dựng lại nhãn đã mất. Gộp hai giá trị trùng nghĩa thì dùng **alias**, đừng xoá cái này rồi sửa tay cái kia.',
+      },
+    ],
   },
   'audit-log': {
     logic: ['Nhật ký thao tác chạm dữ liệu nhạy cảm: mở hồ sơ ứng viên, xuất dữ liệu, phát hành hoá đơn.'],
@@ -1138,7 +1565,15 @@ export const PAGE_DOCS: Record<string, PageDoc> = {
     watch: ['Đây là nơi tra khi có khiếu nại “ai đã xem/sửa cái này”.'],
   },
   notifications: {
-    logic: ['Bốn tab: **Auto rules** (quy tắc tự gửi) · **Manual** (gửi tay) · **History** (đã gửi) · **Template** (mẫu tin).'],
+    logic: [
+      'Bốn tab: **Auto rules** (quy tắc tự gửi) · **Manual** (gửi tay) · **History** (đã gửi) · **Template** (mẫu tin).',
+      'Mẫu và quy tắc **tách nhau**: một mẫu dùng được cho nhiều quy tắc, nên sửa mẫu là sửa mọi nơi đang gửi nó.',
+      'Mẫu mở ra **trang riêng, không phải drawer**, vì cần chỗ cho trình soạn nằm cạnh phần xem trước đã dựng.',
+    ],
+    watch: [
+      'Sửa một mẫu là đổi nội dung của **mọi** quy tắc đang dùng nó — kiểm trước xem có những quy tắc nào.',
+      'Zalo ZNS **không cấu hình ở đây**: mã mẫu Zalo nằm ở trang riêng, vì mẫu đó do Zalo duyệt chứ không phải mình soạn.',
+    ],
     how: [
       'Tạo mẫu trước ở tab **Template** — mẫu mở ra trang riêng, có xem trước.',
       'Tạo quy tắc ở tab **Auto rules**: sự kiện nào thì gửi mẫu nào cho ai.',
