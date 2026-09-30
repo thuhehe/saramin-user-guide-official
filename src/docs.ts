@@ -1443,7 +1443,25 @@ export const PAGE_DOCS: Record<string, PageDoc> = {
           '**Đảo ngược được:** Reactivate khôi phục quyền truy cập và **chiếm lại một chỗ ngồi** — bị chặn nếu công ty đã dùng hết số chỗ.',
         ],
       },
-    ],
+          {
+        kind: 'p',
+        text: '**Đầu kia của tài khoản này — Company site.** Trang admin quản *tư cách thành viên*; còn đây là thứ người đó thực sự đăng nhập vào.',
+      },
+      {
+        kind: 'shot',
+        src: '/shots/co-00-landing.jpg',
+        where: 'Company site',
+        caption: 'Trang nhà tuyển dụng khi **chưa đăng nhập** (`dev.hiring.svn.topdev.asia`). Thanh menu trên cùng chính là toàn bộ những gì một nhà tuyển dụng làm được: **Tin tuyển dụng · Kho ứng viên · Quản lý ứng viên · Sản phẩm tuyển dụng · Đăng tin**.',
+        note: 'Hai banner ngang trên trang vẫn là **ảnh tiếng Hàn chưa thay** — nội dung marketing của bản KR, cần bản Việt trước khi khách nhìn thấy.',
+      },
+      {
+        kind: 'shot',
+        src: '/shots/co-01-signin.jpg',
+        where: 'Company site',
+        caption: 'Màn đăng nhập — **một lần đăng nhập cho cả hai site**, chọn tab *Ứng viên* hay *Nhà tuyển dụng*. Đăng nhập phía nhà tuyển dụng được phục vụ bởi `dev.svn.topdev.asia/auth/sign-in?tab=employer` rồi đưa ngược về trang nhà tuyển dụng.',
+        note: '**Không có ô đặt mật khẩu ở đây cho người được mời.** Đồng nghiệp vào bằng lời mời qua email và tự đặt mật khẩu — giống hệt cách nhân viên Saramin được tạo tài khoản.',
+      },
+],
   },
 
   /* ── Product settings ────────────────────────────────────────────────────── */

@@ -262,12 +262,21 @@ export function OverviewFlow() {
             </figcaption>
           </figure>
         </div>
+        <figure className="mt-6">
+          <img src="/shots/co-00-landing.jpg" alt="Trang nhà tuyển dụng, chưa đăng nhập" loading="lazy"
+               className="w-full max-w-[820px] rounded-lg border border-line bg-surface" />
+          <figcaption className="mt-2 max-w-[74ch] text-[12px] leading-[1.65] text-muted">
+            <span className="mr-2 rounded border border-line bg-surface px-1.5 py-0.5 font-mono text-[9.5px] uppercase tracking-wider text-brand">Company site</span>
+            Mặt ở giữa — nơi khách hàng tự phục vụ. Thanh menu trên cùng là toàn bộ việc một nhà tuyển
+            dụng làm được: <strong>Tin tuyển dụng · Kho ứng viên · Quản lý ứng viên · Sản phẩm tuyển dụng</strong>.
+          </figcaption>
+        </figure>
         <p className="mt-4 max-w-[74ch] border-l-2 border-amber-500/70 bg-amber-50/60 py-2 pl-4 pr-4 text-[13px] leading-[1.7] text-ink/80">
           <span className="mr-1.5 font-mono text-[9.5px] uppercase tracking-wider text-amber-700">còn thiếu</span>
-          <strong>Chưa có ảnh của Company site.</strong> Bộ ảnh hiện tại chụp từ Admin và Jobseeker site; phần
-          nhà tuyển dụng (bảng ứng viên, tìm và mở khoá CV, nạp credit) mới chỉ được mô tả bằng lời trên các trang
-          <em> Applications</em>, <em>Kho ứng viên</em> và <em>Company users</em>. Cần một lượt chụp trên{' '}
-          <span className="font-mono text-[11.5px]">dev.hiring.svn.topdev.asia</span> để bổ sung.
+          <strong>Các màn hình Company site sau khi đăng nhập chưa chụp được</strong> — bảng ứng viên, kho ứng
+          viên và folder, tìm/mở khoá CV, nạp credit, thành viên và phân quyền. Chúng cần một phiên đăng nhập
+          bằng tài khoản nhà tuyển dụng trên dev; hiện mới có hai trang công khai ở trên. Mô tả bằng lời của
+          những màn đó nằm ở <em>Applications</em>, <em>Kho ứng viên</em> và <em>Company users</em>.
         </p>
       </section>
 
