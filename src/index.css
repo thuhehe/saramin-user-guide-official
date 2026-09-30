@@ -1,19 +1,28 @@
 @import 'tailwindcss';
 
 /*
- * Design tokens — clean, neutral documentation palette (matches the reference
- * handoff look: rounded cards, muted greys, mono codes, coloured status pills).
+ * Design tokens — a TECHNICAL MANUAL, not a dashboard.
+ *
+ * Warm paper rather than cool grey, near-black ink rather than slate, and a
+ * single deep-teal accent doing all the work. The palette is deliberately not
+ * the client's reference (navy slab + amber): that was a proposal for how the
+ * document might look, and copying it also copied its weakest idea — colour used
+ * for decoration on a document whose job is to be scanned and printed.
+ *
+ * ONE accent, used only for things you can act on: a link, the active nav row,
+ * the rule beside a callout. Everything else is ink at three weights. A reference
+ * read fifty times reads better in two colours than in six.
  */
 @theme {
-  --color-canvas: #f6f7f9;
+  --color-canvas: #faf9f6;
   --color-surface: #ffffff;
-  --color-ink: #1a1d21;
-  --color-muted: #6b7280;
-  --color-faint: #9aa1ab;
-  --color-line: #e6e8ec;
-  --color-line-soft: #eef0f3;
-  --color-brand: #1f6feb;
-  --color-brand-soft: #eaf1fe;
+  --color-ink: #16181d;
+  --color-muted: #5f6570;
+  --color-faint: #9b9fa8;
+  --color-line: #e3e1db;
+  --color-line-soft: #eeece6;
+  --color-brand: #0f766e;
+  --color-brand-soft: #e6f2f0;
 }
 
 /*

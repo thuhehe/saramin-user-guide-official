@@ -2,36 +2,30 @@ import { useMemo, useState } from 'react'
 import PAGES from './pages.json'
 import { WORKFLOW, adminUrl } from './handbook'
 import type { WfBlock, WfSection } from './handbook'
+import { MODULE_DOCS, PAGE_DOCS } from './docs'
 
 /* ── Saramin Admin — cẩm nang toàn bộ hệ thống ────────────────────────────────
-   A site of its own, deliberately NOT a page on the requirement site. The two
-   answer opposite questions: the requirement says what SHOULD be built and is
-   read by a BA, this says what IS built and is read by whoever has to operate it
-   tomorrow. Sharing a site would have meant sharing a nav, and a Sales operator
-   scrolling past forty module specs to find the one screen they need is how a
-   handbook stops being opened.
+   A site of its own, not a page on the requirement site. The requirement says
+   what SHOULD be built and is read by a BA; this says what IS built and is read
+   by whoever has to operate it tomorrow.
 
-   TWO HALVES, ONE SOURCE.
-     · Toàn bộ trang — every page the console serves, generated from the build's
-       own `navigation.config.tsx` + `route-paths.ts` rather than retyped, so the
-       inventory cannot quietly disagree with the app it describes.
-     · Cẩm nang — the operating knowledge that no page inventory can carry: what
-       the words mean, which order things happen in, and the rules that cause
-       every support call when unknown.
+   THE RAIL IS THE CONSOLE'S OWN MENU. Every page the admin serves is listed, in
+   the admin's own grouping and order, and selecting one shows that page alone.
+   A single scrolling document would have meant an operator who needs one screen
+   scrolling past fifty — and the thing they came for is always a specific screen.
 
-   The Sales / Developer switch filters blocks rather than swapping documents.
-   Two documents drift, and the rule they disagree on is always the one that
-   mattered. */
+   LOGIC LIVES AT THE LEVEL IT GOVERNS. A rule about one screen sits on that
+   screen; a rule that governs five sits once, at the top of the module, as its
+   own menu entry. Repeating "hoá đơn Issued mới cấp quota" on Quotations,
+   Purchase order and Invoice would be three places to update and two chances to
+   disagree.
+
+   The inventory is generated from the build's navigation.config.tsx and
+   route-paths.ts, so it cannot quietly disagree with the console. */
 
 type Page = {
-  group: string
-  key: string
-  label: string
-  path: string
-  perm: string
-  flag: string
-  what: string
-  sub: string[]
+  group: string; key: string; label: string; path: string
+  perm: string; flag: string; what: string; sub: string[]
 }
 const ALL = PAGES as Page[]
 
@@ -41,294 +35,389 @@ const GROUP_ORDER = [
   'Products & Packages', 'Call center', 'CRM', 'Content', 'System',
 ]
 
-/** Handbook deep-dives, shown inside the admin group they belong to. */
-const DEEP_DIVES: Record<string, string[]> = {
-  Analytics: ['dashboard'],
-  Recruitment: ['jobs', 'applicants'],
-  User: ['jobseeker-users'],
-  'Products & Packages': ['products-quota'],
-  CRM: ['companies', 'bao-gia', 'claim'],
-}
+/** Handbook sections that stand on their own, before the modules. */
 const GUIDE_IDS = ['tu-dien', 'chuoi', 'quyen']
 const sec = (id: string) => WORKFLOW.sections.find((s) => s.id === id)
+
+/** A selection is either a console page, a module's shared logic, or a handbook section. */
+type Sel =
+  | { t: 'home' }
+  | { t: 'page'; key: string }
+  | { t: 'module'; group: string }
+  | { t: 'guide'; id: string }
+
+const selId = (s: Sel) =>
+  s.t === 'home' ? 'home' : s.t === 'page' ? `p:${s.key}` : s.t === 'module' ? `m:${s.group}` : `g:${s.id}`
 
 export function App() {
   const [dev, setDev] = useState(false)
   const [q, setQ] = useState('')
-  const [active, setActive] = useState('tong-quan')
+  const [sel, setSel] = useState<Sel>({ t: 'home' })
 
   const hits = useMemo(() => {
     const t = q.trim().toLowerCase()
     if (!t) return null
-    return ALL.filter((p) =>
-      [p.label, p.path, p.perm, p.what, p.group, ...p.sub].join(' ').toLowerCase().includes(t),
-    )
+    return ALL.filter((p) => {
+      const d = PAGE_DOCS[p.key]
+      const extra = d ? [...(d.logic ?? []), ...(d.how ?? []), ...(d.watch ?? [])].join(' ') : ''
+      return [p.label, p.path, p.perm, p.what, p.group, extra, ...p.sub].join(' ').toLowerCase().includes(t)
+    })
   }, [q])
 
-  const go = (id: string) => {
-    setActive(id)
-    document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' })
+  const pick = (s: Sel) => {
+    setSel(s)
+    setQ('')
+    window.scrollTo({ top: 0 })
   }
+
+  const cur = selId(sel)
 
   return (
     <div className="min-h-screen bg-canvas text-ink">
-      <div className="mx-auto flex max-w-[1500px] gap-6 px-4 py-4 print:block">
-        {/* ── rail ─────────────────────────────────────────────────────────── */}
-        <aside className="sticky top-4 hidden h-[calc(100vh-2rem)] w-[248px] shrink-0 overflow-y-auto rounded-2xl bg-[#0f2744] p-3 text-white/90 lg:block print:hidden">
-          <div className="px-2 pb-3 pt-1">
-            <p className="flex items-center gap-2 text-[14px] font-bold text-white">
-              <span className="grid h-6 w-6 place-items-center rounded bg-amber-400 text-[12px] font-black text-[#0f2744]">S</span>
-              Saramin Admin
-            </p>
-            <p className="mt-0.5 pl-8 text-[11px] text-white/55">{dev ? 'Bản Developer' : 'Bản Sales & nghiệp vụ'}</p>
-          </div>
+      <div className="mx-auto flex max-w-[1340px] gap-10 px-5 print:block">
+        {/* ── rail: the console's own menu ───────────────────────────────────── */}
+        <aside className="sticky top-0 hidden h-screen w-[262px] shrink-0 overflow-y-auto border-r border-line py-6 pr-5 lg:block print:hidden">
+          <button onClick={() => pick({ t: 'home' })} className="block text-left">
+            <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-brand">Saramin</p>
+            <p className="mt-0.5 text-[15px] font-bold leading-tight tracking-tight">Admin console</p>
+            <p className="text-[11px] text-faint">{dev ? 'bản Developer' : 'bản Sales & nghiệp vụ'}</p>
+          </button>
 
           <input
             value={q}
             onChange={(e) => setQ(e.target.value)}
-            placeholder="Tìm trang, đường dẫn, quyền…"
-            className="mb-3 w-full rounded-lg border border-white/15 bg-white/5 px-3 py-2 text-[12px] text-white placeholder:text-white/40 focus:border-white/40 focus:outline-none"
+            placeholder="Tìm trang, path, quyền…"
+            className="mt-4 w-full rounded-md border border-line bg-surface px-2.5 py-1.5 text-[12px] placeholder:text-faint focus:border-brand focus:outline-none"
           />
 
-          <RailItem label="Tổng quan" code="TQ" on={active === 'tong-quan'} onClick={() => go('tong-quan')} />
-
-          <RailGroup label="Cẩm nang" />
+          <RailGroup label="Bắt đầu" />
+          <RailItem label="Tổng quan" on={cur === 'home'} onClick={() => pick({ t: 'home' })} />
           {GUIDE_IDS.map((id) => {
             const s = sec(id)
-            return s ? <RailItem key={id} label={s.label} code={s.code} on={active === id} onClick={() => go(id)} /> : null
+            return s ? <RailItem key={id} label={s.label} on={cur === `g:${id}`} onClick={() => pick({ t: 'guide', id })} /> : null
           })}
 
-          <RailGroup label={`Toàn bộ trang · ${ALL.length}`} />
           {GROUP_ORDER.map((g) => {
-            const n = ALL.filter((p) => p.group === g).length
-            if (!n) return null
-            return <RailItem key={g} label={g} code={String(n)} on={active === `g-${g}`} onClick={() => go(`g-${g}`)} />
+            const pages = ALL.filter((p) => p.group === g)
+            if (!pages.length) return null
+            const mod = MODULE_DOCS[g]
+            return (
+              <div key={g}>
+                <RailGroup label={g} n={pages.length} />
+                {mod && (
+                  <RailItem
+                    label="Logic chung"
+                    accent
+                    on={cur === `m:${g}`}
+                    onClick={() => pick({ t: 'module', group: g })}
+                  />
+                )}
+                {pages.map((p) => (
+                  <RailItem key={p.key} label={p.label} on={cur === `p:${p.key}`} onClick={() => pick({ t: 'page', key: p.key })} />
+                ))}
+              </div>
+            )
           })}
 
-          <RailGroup label="Quản trị" />
-          <RailItem label="Điểm cần xác nhận" code="?" on={active === 'can-xac-nhan'} onClick={() => go('can-xac-nhan')} />
+          <RailGroup label="Cuối" />
+          <RailItem label="Điểm cần xác nhận" on={cur === 'g:can-xac-nhan'} onClick={() => pick({ t: 'guide', id: 'can-xac-nhan' })} />
         </aside>
 
-        {/* ── page ─────────────────────────────────────────────────────────── */}
-        <main className="min-w-0 flex-1">
-          <header id="tong-quan" className="scroll-mt-4">
-            <div className="mb-4 flex flex-wrap items-start justify-between gap-3">
-              <div className="min-w-0">
-                <p className="text-[11px] font-semibold uppercase tracking-widest text-brand">Cẩm nang hệ thống</p>
-                <h1 className="mt-1 max-w-[20ch] text-[34px] font-bold leading-[1.1] tracking-tight">
-                  Saramin Admin — toàn bộ trang và quy trình
-                </h1>
-              </div>
-              <div className="flex flex-wrap items-center gap-2 print:hidden">
-                <button
-                  onClick={() => setDev((v) => !v)}
-                  className={cx('rounded-lg px-3 py-2 text-[12.5px] font-semibold transition-opacity',
-                    dev ? 'bg-ink text-white' : 'bg-[#0f2744] text-white hover:opacity-90')}
-                >
-                  {dev ? '← Về bản Sales' : 'Xem bản Developer'}
-                </button>
-                <button onClick={() => window.print()} className="rounded-lg border border-line bg-surface px-3 py-2 text-[12.5px] font-medium text-muted hover:border-ink/40">In / Lưu PDF</button>
-              </div>
-            </div>
+        {/* ── content ────────────────────────────────────────────────────────── */}
+        <main className="min-w-0 flex-1 py-8">
+          <div className="mb-5 flex flex-wrap items-center justify-end gap-2 print:hidden">
+            <button
+              onClick={() => setDev((v) => !v)}
+              className={cx('rounded-md border px-3 py-1.5 text-[12px] font-medium transition-colors',
+                dev ? 'border-ink bg-ink text-white' : 'border-line bg-surface text-muted hover:border-ink hover:text-ink')}
+            >
+              {dev ? 'Đang xem: Developer' : 'Xem bản Developer'}
+            </button>
+            <button onClick={() => window.print()} className="rounded-md border border-line bg-surface px-3 py-1.5 text-[12px] font-medium text-muted hover:border-ink hover:text-ink">In / PDF</button>
+          </div>
 
-            <p className="mb-4 max-w-[80ch] text-[14px] leading-relaxed text-ink/75">
-              Trang này liệt kê <b>toàn bộ {ALL.length} trang</b> trong {GROUP_ORDER.length} nhóm của Admin console, kèm
-              đường dẫn thật, quyền cần có và trang đó dùng để làm gì — cộng với phần cẩm nang giải thích cách các module
-              nối vào nhau. Danh sách trang được sinh thẳng từ code của build, không gõ tay.
-            </p>
-
-            <div className="mb-4 grid gap-3 md:grid-cols-3">
-              {WORKFLOW.quick.map((c) => (
-                <div key={c.q} className="rounded-xl border border-line bg-surface p-4">
-                  <p className="text-[13.5px] font-bold text-ink">{c.q}</p>
-                  <p className="mt-1.5 text-[12.5px] leading-relaxed text-muted">{c.a}</p>
-                </div>
-              ))}
-            </div>
-
-            <div className="mb-4 rounded-xl bg-gradient-to-r from-[#0f4c8a] to-[#1466b8] px-5 py-4 text-white">
-              <p className="text-[14px] font-bold">{WORKFLOW.keyFact.heading}</p>
-              <p className="mt-1.5 max-w-[88ch] text-[13px] leading-relaxed text-white/90">{WORKFLOW.keyFact.text}</p>
-            </div>
-
-            <div className="mb-6 flex flex-wrap gap-2 print:hidden">
-              <a href={adminUrl('/')} target="_blank" rel="noreferrer" className="rounded-lg bg-brand px-3.5 py-2 text-[12.5px] font-semibold text-white hover:opacity-90">Mở Admin console ↗</a>
-              {WORKFLOW.links.map((l) => (
-                <a key={l.path} href={adminUrl(l.path)} target="_blank" rel="noreferrer" className="rounded-lg border border-line bg-surface px-3.5 py-2 text-[12.5px] font-medium text-ink/80 hover:border-brand hover:text-brand">{l.label} ↗</a>
-              ))}
-            </div>
-          </header>
-
-          {/* search short-circuits the whole document */}
           {hits ? (
-            <section>
-              <p className="mb-3 text-[13px] text-muted">
-                <b className="text-ink">{hits.length}</b> trang khớp “{q}”.
-                <button onClick={() => setQ('')} className="ml-2 text-brand hover:underline">Xoá tìm kiếm</button>
-              </p>
-              <div className="grid gap-2.5">{hits.map((p) => <PageCard key={p.key} p={p} dev={dev} />)}</div>
-            </section>
+            <SearchResults hits={hits} q={q} onClear={() => setQ('')} onPick={(k) => pick({ t: 'page', key: k })} />
+          ) : sel.t === 'home' ? (
+            <Home onPick={pick} />
+          ) : sel.t === 'guide' ? (
+            (() => { const s = sec(sel.id); return s ? <GuideView s={s} dev={dev} /> : null })()
+          ) : sel.t === 'module' ? (
+            <ModuleView group={sel.group} onPick={(k) => pick({ t: 'page', key: k })} />
           ) : (
-            <>
-              {GUIDE_IDS.map((id) => {
-                const s = sec(id)
-                return s ? <Section key={id} s={s} dev={dev} /> : null
-              })}
-
-              {GROUP_ORDER.map((g) => {
-                const pages = ALL.filter((p) => p.group === g)
-                if (!pages.length) return null
-                return (
-                  <section key={g} id={`g-${g}`} className="mb-8 scroll-mt-4">
-                    <div className="mb-3 flex flex-wrap items-baseline gap-2 border-b-2 border-line pb-2">
-                      <h2 className="text-[20px] font-bold tracking-tight text-ink">{g}</h2>
-                      <span className="text-[12px] text-faint">{pages.length} trang</span>
-                    </div>
-                    <div className="grid gap-2.5">{pages.map((p) => <PageCard key={p.key} p={p} dev={dev} />)}</div>
-                    {(DEEP_DIVES[g] ?? []).map((id) => {
-                      const s = sec(id)
-                      return s ? <div key={id} className="mt-3"><Section s={s} dev={dev} nested /></div> : null
-                    })}
-                  </section>
-                )
-              })}
-
-              {(() => { const s = sec('can-xac-nhan'); return s ? <Section s={s} dev={dev} /> : null })()}
-            </>
+            (() => {
+              const p = ALL.find((x) => x.key === sel.key)
+              return p ? <PageView p={p} dev={dev} onModule={() => pick({ t: 'module', group: p.group })} /> : null
+            })()
           )}
 
-          <p className="mt-8 border-t border-line pt-3 text-[11px] leading-relaxed text-faint">
-            Danh sách trang sinh từ <span className="font-mono">saramin-vn-admin</span> ·{' '}
-            <span className="font-mono">src/configs/navigation.config.tsx</span> +{' '}
-            <span className="font-mono">route-paths.ts</span>. Nội dung cẩm nang từ{' '}
-            <span className="font-mono">docs/business-logic.md</span> và{' '}
-            <span className="font-mono">docs/qa/tester-guide</span>. Console đang mô tả:{' '}
-            <a href={adminUrl('/')} target="_blank" rel="noreferrer" className="text-brand hover:underline">dev.admin-svn.topdev.asia</a>.
-            Build đổi thì trang này là thứ cũ đi trước.
-          </p>
+          <footer className="mt-14 border-t border-line pt-4 text-[11px] leading-[1.7] text-faint">
+            Danh sách trang sinh từ <span className="font-mono text-muted">saramin-vn-admin</span> ·{' '}
+            <span className="font-mono text-muted">configs/navigation.config.tsx</span> +{' '}
+            <span className="font-mono text-muted">route-paths.ts</span>. Phần logic viết từ{' '}
+            <span className="font-mono text-muted">docs/features/*.md</span>,{' '}
+            <span className="font-mono text-muted">business-logic.md</span> và{' '}
+            <span className="font-mono text-muted">qa/tester-guide</span>. Build đổi thì trang này là thứ cũ đi trước.
+          </footer>
         </main>
       </div>
     </div>
   )
 }
 
-/* ── inventory ──────────────────────────────────────────────────────────────── */
+/* ── home ───────────────────────────────────────────────────────────────────── */
 
-/* One page of the console. The path is a live link rather than text: a reader who
-   has found the row almost always wants the screen, and making them retype a path
-   is the difference between a reference that gets used and one that gets skimmed. */
-function PageCard({ p, dev }: { p: Page; dev: boolean }) {
+function Home({ onPick }: { onPick: (s: Sel) => void }) {
   return (
-    <div className="rounded-xl border border-line bg-surface p-3.5">
-      <div className="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1">
-        <a
-          href={adminUrl(p.path)}
-          target="_blank"
-          rel="noreferrer"
-          className="text-[14px] font-bold text-ink hover:text-brand hover:underline"
-        >
-          {p.label} <span className="text-[11px] font-normal text-faint">↗</span>
-        </a>
-        <code className="font-mono text-[11px] text-muted">{p.path}</code>
+    <div>
+      <div className="border-b-2 border-ink pb-4">
+        <p className="font-mono text-[10.5px] uppercase tracking-[0.18em] text-brand">Cẩm nang hệ thống</p>
+        <h1 className="mt-1.5 max-w-[16ch] text-[40px] font-bold leading-[1.05] tracking-[-0.02em]">
+          Admin console, toàn bộ
+        </h1>
       </div>
 
-      {p.what && <p className="mt-1 max-w-[86ch] text-[12.5px] leading-relaxed text-ink/75">{md(p.what)}</p>}
+      <dl className="mt-4 flex flex-wrap gap-x-8 gap-y-2 border-b border-line pb-4">
+        <Fact k="Trang" v={String(ALL.length)} />
+        <Fact k="Nhóm" v={String(GROUP_ORDER.length)} />
+        <Fact k="Trang con" v={String(ALL.reduce((n, p) => n + p.sub.length, 0))} />
+        <Fact k="Console" v="dev.admin-svn.topdev.asia" href={adminUrl('/')} />
+      </dl>
 
-      <div className="mt-2 flex flex-wrap items-center gap-1.5">
-        {p.perm ? (
-          <Tag title="Quyền cần có để thấy trang này">🔒 {p.perm}</Tag>
-        ) : (
-          <Tag title="Không gắn quyền riêng — ai đăng nhập cũng thấy">🔓 không gắn quyền</Tag>
-        )}
-        {dev && p.flag && <Tag title="Tắt cờ này trong modules.config.ts thì trang biến mất">flag: {p.flag}</Tag>}
-        {p.sub.length > 0 && (
-          <span className="text-[11px] text-faint">
-            + {p.sub.length} trang con:{' '}
-            {p.sub.map((s, i) => (
-              <span key={s}>
-                {i > 0 && ' · '}
-                <code className="font-mono text-[10.5px] text-muted">{s}</code>
-              </span>
-            ))}
-          </span>
-        )}
+      <p className="mt-5 max-w-[74ch] text-[14.5px] leading-[1.7] text-ink/80">
+        Cột trái là menu của Admin console — <b>toàn bộ {ALL.length} trang</b>, đúng nhóm và đúng thứ tự như trong hệ
+        thống. Chọn một trang để xem <b>logic phía sau</b> và <b>cách dùng</b>. Nhóm nào có nhiều quy tắc dùng chung
+        thì có thêm mục <b>Logic chung</b> ở đầu nhóm.
+      </p>
+
+      <div className="mt-5 border-l-2 border-brand bg-brand-soft/50 py-3 pl-4 pr-4">
+        <p className="text-[13px] font-bold">{WORKFLOW.keyFact.heading}</p>
+        <p className="mt-1 max-w-[80ch] text-[13px] leading-[1.65] text-ink/75">{WORKFLOW.keyFact.text}</p>
+      </div>
+
+      <div className="mt-5 grid gap-x-8 gap-y-3 border-t border-line pt-4 sm:grid-cols-3">
+        {WORKFLOW.quick.map((c) => (
+          <div key={c.q}>
+            <p className="text-[13px] font-bold">{c.q}</p>
+            <p className="mt-0.5 text-[12.5px] leading-[1.6] text-muted">{c.a}</p>
+          </div>
+        ))}
+      </div>
+
+      <h2 className="mt-9 border-b border-ink pb-1.5 text-[17px] font-bold tracking-tight">Các nhóm</h2>
+      <div className="mt-1">
+        {GROUP_ORDER.map((g, i) => {
+          const pages = ALL.filter((p) => p.group === g)
+          if (!pages.length) return null
+          const mod = MODULE_DOCS[g]
+          return (
+            <div key={g} className="grid grid-cols-[auto_minmax(0,1fr)] gap-x-4 border-b border-line-soft py-3">
+              <span className="pt-0.5 font-mono text-[11px] text-faint">{String(i + 1).padStart(2, '0')}</span>
+              <div className="min-w-0">
+                <div className="flex flex-wrap items-baseline gap-x-3">
+                  <button onClick={() => onPick(mod ? { t: 'module', group: g } : { t: 'page', key: pages[0].key })}
+                          className="text-[14px] font-semibold hover:text-brand hover:underline">{g}</button>
+                  <span className="font-mono text-[10.5px] text-faint">{pages.length} trang</span>
+                </div>
+                {mod && <p className="mt-0.5 max-w-[78ch] text-[12.5px] leading-[1.6] text-muted">{mod.lead}</p>}
+              </div>
+            </div>
+          )
+        })}
       </div>
     </div>
   )
 }
 
-function Tag({ children, title }: { children: React.ReactNode; title?: string }) {
+/* ── one console page ───────────────────────────────────────────────────────── */
+
+function PageView({ p, dev, onModule }: { p: Page; dev: boolean; onModule: () => void }) {
+  const d = PAGE_DOCS[p.key]
+  const mod = MODULE_DOCS[p.group]
+  const bare = !d || (!d.logic?.length && !d.how?.length && !d.watch?.length)
+
   return (
-    <span title={title} className="rounded border border-line bg-canvas px-1.5 py-0.5 font-mono text-[10.5px] text-muted">
-      {children}
-    </span>
+    <article>
+      <p className="font-mono text-[10.5px] uppercase tracking-[0.16em] text-faint">{p.group}</p>
+      <div className="mt-1 flex flex-wrap items-end justify-between gap-x-6 gap-y-2 border-b-2 border-ink pb-3">
+        <h1 className="text-[30px] font-bold leading-[1.1] tracking-[-0.02em]">{p.label}</h1>
+        <a href={adminUrl(p.path)} target="_blank" rel="noreferrer"
+           className="rounded-md border border-brand px-3 py-1.5 text-[12px] font-medium text-brand hover:bg-brand hover:text-white">
+          Mở trang này ↗
+        </a>
+      </div>
+
+      <dl className="mt-3 flex flex-wrap gap-x-8 gap-y-2 border-b border-line pb-3">
+        <Fact k="Đường dẫn" v={p.path} mono />
+        <Fact k="Quyền" v={p.perm || 'không gắn quyền'} mono />
+        {dev && p.flag && <Fact k="Module flag" v={p.flag} mono />}
+      </dl>
+
+      {p.what && <p className="mt-4 max-w-[76ch] text-[14.5px] leading-[1.7] text-ink/80">{md(p.what)}</p>}
+
+      {d?.logic?.length ? <Bullets title="Logic phía sau" items={d.logic} /> : null}
+      {d?.how?.length ? <Steps title="Cách dùng" items={d.how} /> : null}
+      {d?.watch?.length ? <Bullets title="Cần để ý" items={d.watch} warn /> : null}
+
+      {p.sub.length > 0 && (
+        <section className="mt-7">
+          <h2 className="border-b border-ink pb-1.5 text-[15px] font-bold tracking-tight">Trang con</h2>
+          <ul className="mt-2">
+            {p.sub.map((s) => (
+              <li key={s} className="border-b border-line-soft py-1.5 font-mono text-[12px] text-muted">{s}</li>
+            ))}
+          </ul>
+          <p className="mt-1.5 text-[11.5px] text-faint">Các route này không có mục riêng trên menu — mở từ chính trang trên.</p>
+        </section>
+      )}
+
+      {bare && (
+        <p className="mt-7 border-l-2 border-ink/20 py-1 pl-4 text-[12.5px] leading-[1.65] text-muted">
+          Trang này chưa có phần logic và cách dùng riêng — mới có mô tả, đường dẫn và quyền. Cần người rành nghiệp vụ
+          bổ sung.
+        </p>
+      )}
+
+      {mod && (
+        <button onClick={onModule}
+                className="mt-7 block w-full border-l-2 border-brand bg-brand-soft/40 py-2.5 pl-4 pr-4 text-left hover:bg-brand-soft">
+          <span className="text-[12.5px] font-semibold text-ink">{mod.title} →</span>
+          <span className="mt-0.5 block max-w-[76ch] text-[12px] leading-[1.6] text-muted">{mod.lead}</span>
+        </button>
+      )}
+    </article>
   )
 }
 
-/* ── handbook ───────────────────────────────────────────────────────────────── */
+/* ── a module's shared logic ────────────────────────────────────────────────── */
 
-function Section({ s, dev, nested }: { s: WfSection; dev: boolean; nested?: boolean }) {
-  const [open, setOpen] = useState(!nested)
+function ModuleView({ group, onPick }: { group: string; onPick: (key: string) => void }) {
+  const mod = MODULE_DOCS[group]
+  const pages = ALL.filter((p) => p.group === group)
+  if (!mod) return null
+  return (
+    <article>
+      <p className="font-mono text-[10.5px] uppercase tracking-[0.16em] text-faint">{group}</p>
+      <h1 className="mt-1 border-b-2 border-ink pb-3 text-[30px] font-bold leading-[1.1] tracking-[-0.02em]">{mod.title}</h1>
+      <p className="mt-4 max-w-[76ch] text-[14.5px] leading-[1.7] text-ink/80">{mod.lead}</p>
+
+      <Bullets title="Quy tắc chi phối cả nhóm" items={mod.logic} />
+      {mod.watch?.length ? <Bullets title="Cần để ý" items={mod.watch} warn /> : null}
+
+      <section className="mt-7">
+        <h2 className="border-b border-ink pb-1.5 text-[15px] font-bold tracking-tight">{pages.length} trang trong nhóm</h2>
+        <div className="mt-1">
+          {pages.map((p) => (
+            <button key={p.key} onClick={() => onPick(p.key)}
+                    className="grid w-full grid-cols-[minmax(130px,0.9fr)_minmax(0,2.2fr)] gap-x-5 border-b border-line-soft py-2.5 text-left hover:bg-brand-soft/30">
+              <span className="min-w-0">
+                <span className="block truncate text-[13.5px] font-semibold">{p.label}</span>
+                <code className="block font-mono text-[10.5px] text-faint">{p.path}</code>
+              </span>
+              <span className="min-w-0 self-center text-[12.5px] leading-[1.55] text-muted">{p.what}</span>
+            </button>
+          ))}
+        </div>
+      </section>
+    </article>
+  )
+}
+
+/* ── handbook section ───────────────────────────────────────────────────────── */
+
+function GuideView({ s, dev }: { s: WfSection; dev: boolean }) {
   const blocks = s.blocks.filter((b) => dev || !b.dev)
   return (
-    <section id={s.id} className={cx('mb-4 scroll-mt-4 overflow-hidden rounded-2xl border bg-surface', nested ? 'border-brand/25' : 'border-line')}>
-      <button onClick={() => setOpen((v) => !v)} className="flex w-full items-start gap-3 px-5 py-3.5 text-left hover:bg-canvas/40">
-        <span className="mt-0.5 grid h-6 w-7 shrink-0 place-items-center rounded bg-brand-soft text-[10px] font-bold text-brand">{s.code}</span>
-        <span className="min-w-0 flex-1">
-          <span className="block text-[16px] font-bold tracking-tight text-ink">{s.title}</span>
-          {s.where && <span className="mt-0.5 block font-mono text-[11px] text-faint">{s.where}</span>}
-        </span>
-        <span className="shrink-0 pt-1 text-[12px] text-muted">{open ? '▾' : '▸'}</span>
-      </button>
-      {open && (
-        <div className="space-y-3.5 border-t border-line-soft px-5 py-4">
-          {s.lead && <p className="max-w-[82ch] text-[13px] leading-relaxed text-ink/75">{s.lead}</p>}
-          {blocks.map((b, i) => <Block key={i} b={b} />)}
-        </div>
-      )}
+    <article>
+      <p className="font-mono text-[10.5px] uppercase tracking-[0.16em] text-faint">Cẩm nang</p>
+      <h1 className="mt-1 border-b-2 border-ink pb-3 text-[30px] font-bold leading-[1.1] tracking-[-0.02em]">{s.title}</h1>
+      {s.where && <code className="mt-2 block font-mono text-[11px] text-faint">{s.where}</code>}
+      {s.lead && <p className="mt-4 max-w-[76ch] text-[14.5px] leading-[1.7] text-ink/80">{s.lead}</p>}
+      <div className="mt-5 space-y-5">{blocks.map((b, i) => <Block key={i} b={b} />)}</div>
+    </article>
+  )
+}
+
+/* ── search ─────────────────────────────────────────────────────────────────── */
+
+function SearchResults({ hits, q, onClear, onPick }: { hits: Page[]; q: string; onClear: () => void; onPick: (k: string) => void }) {
+  return (
+    <div>
+      <p className="border-b-2 border-ink pb-3 text-[13px] text-muted">
+        <b className="text-[15px] text-ink">{hits.length}</b> trang khớp “{q}”
+        <button onClick={onClear} className="ml-3 text-brand hover:underline">Xoá</button>
+      </p>
+      <div className="mt-1">
+        {hits.map((p) => (
+          <button key={p.key} onClick={() => onPick(p.key)}
+                  className="grid w-full grid-cols-[minmax(140px,1fr)_minmax(0,2.2fr)] gap-x-5 border-b border-line-soft py-2.5 text-left hover:bg-brand-soft/30">
+            <span className="min-w-0">
+              <span className="block truncate text-[13.5px] font-semibold">{p.label}</span>
+              <code className="block font-mono text-[10.5px] text-faint">{p.path}</code>
+            </span>
+            <span className="min-w-0 self-center">
+              <span className="block text-[12.5px] leading-[1.55] text-muted">{p.what}</span>
+              <span className="font-mono text-[10.5px] text-faint">{p.group}</span>
+            </span>
+          </button>
+        ))}
+      </div>
+    </div>
+  )
+}
+
+/* ── shared bits ────────────────────────────────────────────────────────────── */
+
+function Bullets({ title, items, warn }: { title: string; items: string[]; warn?: boolean }) {
+  return (
+    <section className="mt-7">
+      <h2 className="border-b border-ink pb-1.5 text-[15px] font-bold tracking-tight">{title}</h2>
+      <ul className="mt-2.5 max-w-[78ch] space-y-2">
+        {items.map((t, i) => (
+          <li key={i} className={cx('text-[13px] leading-[1.7]', warn ? 'border-l-2 border-ink/25 pl-4 text-ink/75' : 'flex gap-3 text-ink/80')}>
+            {!warn && <span className="shrink-0 pt-[7px] text-brand"><span className="block h-1 w-1 rounded-full bg-current" /></span>}
+            <span className="min-w-0">{md(t)}</span>
+          </li>
+        ))}
+      </ul>
+    </section>
+  )
+}
+
+function Steps({ title, items }: { title: string; items: string[] }) {
+  return (
+    <section className="mt-7">
+      <h2 className="border-b border-ink pb-1.5 text-[15px] font-bold tracking-tight">{title}</h2>
+      <ol className="mt-2.5 max-w-[78ch] space-y-2">
+        {items.map((t, i) => (
+          <li key={i} className="flex gap-3 text-[13px] leading-[1.7] text-ink/80">
+            <span className="shrink-0 pt-px font-mono text-[11px] text-brand">{String(i + 1).padStart(2, '0')}</span>
+            <span className="min-w-0">{md(t)}</span>
+          </li>
+        ))}
+      </ol>
     </section>
   )
 }
 
 function Block({ b }: { b: WfBlock }) {
-  /* A dev block keeps its marker even in the Developer view — someone who has
-     just switched needs to see WHICH parts appeared, not a page that silently
-     got longer. */
-  const tag = b.dev && (
-    <span className="mb-1 inline-block rounded border border-ink/20 bg-ink/5 px-1.5 py-0.5 text-[9.5px] font-semibold uppercase tracking-wide text-ink/50">Developer</span>
-  )
+  const tag = b.dev && <span className="mr-1.5 font-mono text-[9.5px] uppercase tracking-wider text-brand">dev</span>
 
-  if (b.kind === 'p') return <div>{tag}<p className="max-w-[82ch] text-[13px] leading-relaxed text-ink/75">{md(b.text)}</p></div>
+  if (b.kind === 'p') return <p className="max-w-[78ch] text-[13px] leading-[1.7] text-ink/75">{tag}{md(b.text)}</p>
 
-  if (b.kind === 'steps') {
-    return (
-      <div>
-        {tag}
-        {b.heading && <p className="mb-1.5 text-[13px] font-bold text-ink">{b.heading}</p>}
-        <ol className="space-y-1.5">
-          {b.items.map((it, i) => (
-            <li key={i} className="flex gap-2.5 text-[13px] leading-relaxed text-ink/80">
-              <span className="mt-0.5 grid h-[18px] w-[18px] shrink-0 place-items-center rounded-full bg-brand-soft text-[10px] font-bold text-brand">{i + 1}</span>
-              <span className="min-w-0">{md(it)}</span>
-            </li>
-          ))}
-        </ol>
-      </div>
-    )
-  }
+  if (b.kind === 'steps') return <Steps title={b.heading ?? 'Các bước'} items={b.items} />
 
   if (b.kind === 'table') {
     return (
       <div>
-        {tag}
-        {b.heading && <p className="mb-1 text-[13px] font-bold text-ink">{b.heading}</p>}
-        {b.note && <p className="mb-1.5 text-[12px] text-muted">{b.note}</p>}
-        <div className="overflow-x-auto rounded-xl border border-line">
+        {b.heading && <p className="mb-1 text-[13.5px] font-bold">{tag}{b.heading}</p>}
+        {b.note && <p className="mb-2 max-w-[78ch] text-[12px] text-muted">{b.note}</p>}
+        <div className="overflow-x-auto">
           <table className="w-full min-w-[560px] border-collapse text-left">
             <thead>
-              <tr className="bg-canvas/60">
+              <tr>
                 {b.table.cols.map((c) => (
-                  <th key={c} className="border-b border-line px-3 py-2 text-[10.5px] font-semibold uppercase tracking-wide text-muted">{c}</th>
+                  <th key={c} className="border-b border-ink py-1.5 pr-5 font-mono text-[10px] font-semibold uppercase tracking-wider text-muted last:pr-0">{c}</th>
                 ))}
               </tr>
             </thead>
@@ -336,7 +425,7 @@ function Block({ b }: { b: WfBlock }) {
               {b.table.rows.map((r, i) => (
                 <tr key={i} className="border-b border-line-soft last:border-0">
                   {r.map((cell, j) => (
-                    <td key={j} className={cx('px-3 py-2 align-top text-[12.5px] leading-relaxed', j === 0 ? 'font-medium text-ink' : 'text-ink/75')}>{md(cell)}</td>
+                    <td key={j} className={cx('py-2 pr-5 align-top text-[12.5px] leading-[1.6] last:pr-0', j === 0 ? 'font-medium text-ink' : 'text-ink/75')}>{md(cell)}</td>
                   ))}
                 </tr>
               ))}
@@ -349,38 +438,54 @@ function Block({ b }: { b: WfBlock }) {
 
   if (b.kind === 'warn') {
     return (
-      <p className="flex gap-2 rounded-lg bg-amber-50 px-3.5 py-2.5 text-[12.5px] leading-relaxed text-amber-900">
-        <span className="shrink-0">⚠️</span><span>{tag}{md(b.text)}</span>
+      <p className="max-w-[78ch] border-l-2 border-ink/25 py-1 pl-4 text-[12.5px] leading-[1.65] text-ink/75">
+        <span className="mr-1.5 font-mono text-[9.5px] uppercase tracking-wider text-ink/50">lưu ý</span>{tag}{md(b.text)}
       </p>
     )
   }
 
   return (
-    <div className="flex flex-wrap gap-2">
+    <div className="flex flex-wrap gap-x-5 gap-y-1">
       {b.items.map((l) => (
-        <a key={l.path} href={adminUrl(l.path)} target="_blank" rel="noreferrer"
-           className="rounded-lg border border-line px-3 py-1.5 text-[12px] font-medium text-muted hover:border-brand hover:text-brand">
-          {l.label} <span className="font-mono text-[10.5px] text-faint">{l.path}</span> ↗
+        <a key={l.path} href={adminUrl(l.path)} target="_blank" rel="noreferrer" className="text-[12px] text-brand hover:underline">
+          {l.label} <span className="font-mono text-[10.5px] text-faint">{l.path}</span>
         </a>
       ))}
     </div>
   )
 }
 
-/* ── bits ───────────────────────────────────────────────────────────────────── */
-
-function RailGroup({ label }: { label: string }) {
-  return <p className="px-2 pb-1 pt-3 text-[10px] font-semibold uppercase tracking-widest text-white/40">{label}</p>
+function Fact({ k, v, href, mono }: { k: string; v: string; href?: string; mono?: boolean }) {
+  return (
+    <div className="min-w-0">
+      <dt className="font-mono text-[9.5px] uppercase tracking-[0.14em] text-faint">{k}</dt>
+      <dd className={cx('truncate text-[13px]', mono ? 'font-mono text-[12px] text-ink/80' : 'font-semibold')}>
+        {href ? <a href={href} target="_blank" rel="noreferrer" className="text-brand hover:underline">{v}</a> : v}
+      </dd>
+    </div>
+  )
 }
 
-function RailItem({ label, code, on, onClick }: { label: string; code: string; on: boolean; onClick: () => void }) {
+function RailGroup({ label, n }: { label: string; n?: number }) {
+  return (
+    <p className="flex items-baseline gap-2 pb-1 pt-5 font-mono text-[9.5px] uppercase tracking-[0.14em] text-faint">
+      <span className="min-w-0 truncate">{label}</span>
+      {n != null && <span className="ml-auto shrink-0">{n}</span>}
+    </p>
+  )
+}
+
+/* Active is an accent RULE, not a filled pill — a pill on every row turns the rail
+   into a stack of buttons, and only one of them is ever the answer. */
+function RailItem({ label, on, onClick, accent }: { label: string; on: boolean; onClick: () => void; accent?: boolean }) {
   return (
     <button
       onClick={onClick}
-      className={cx('flex w-full items-center gap-2.5 rounded-lg px-2 py-1.5 text-left text-[12.5px] transition-colors',
-        on ? 'bg-white/15 font-medium text-white' : 'text-white/75 hover:bg-white/10')}
+      className={cx('flex w-full items-baseline gap-2 border-l-2 py-1 pl-2.5 pr-1 text-left text-[12.5px] leading-snug transition-colors',
+        on ? 'border-brand font-semibold text-ink'
+           : accent ? 'border-transparent font-medium text-brand hover:border-brand/40'
+           : 'border-transparent text-muted hover:border-line hover:text-ink')}
     >
-      <span className="w-6 shrink-0 text-[10px] font-bold text-amber-300">{code}</span>
       <span className="min-w-0 truncate">{label}</span>
     </button>
   )
@@ -390,7 +495,7 @@ function RailItem({ label, code, on, onClick }: { label: string; code: string; o
 function md(s: string) {
   return s.split(/(\*\*[^*]+\*\*|`[^`]+`)/g).map((part, i) => {
     if (part.startsWith('**') && part.endsWith('**')) return <b key={i} className="font-semibold text-ink">{part.slice(2, -2)}</b>
-    if (part.startsWith('`') && part.endsWith('`')) return <code key={i} className="rounded bg-canvas px-1 py-0.5 font-mono text-[11.5px] text-ink/80">{part.slice(1, -1)}</code>
+    if (part.startsWith('`') && part.endsWith('`')) return <code key={i} className="font-mono text-[11.5px] text-brand">{part.slice(1, -1)}</code>
     return part
   })
 }
