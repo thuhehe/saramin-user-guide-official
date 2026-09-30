@@ -533,39 +533,54 @@ export const MODULE_DOCS: Record<string, ModuleDoc> = {
   Users: {
     title: 'Logic chung — Users',
     lead:
-      'Hai loại tài khoản hoàn toàn khác nhau nằm cạnh nhau: người tìm việc và người của công ty khách hàng. Tài khoản nhân viên Saramin **không** ở đây — nó ở System → Users.',
+      'Hai loại tài khoản hoàn toàn khác nhau nằm cạnh nhau: người tìm việc và người của công ty khách hàng. Tài khoản nhân viên Saramin **không** ở đây — nó ở Organisation → Users.',
     headline: [
-      '**Bốn trạng thái ở API hiện thành năm trạng thái trên màn hình.** Cặp hay nhầm là Withdrawn và Deactivated.',
-      '**Xoá là xoá mềm.** Bản ghi vẫn còn 30 ngày nên luôn khôi phục được trong thời gian đó.',
+      '**Ba trạng thái, không phải bốn.** Active · Deactivated · Deleted. **Không tồn tại “Unverified”** — tài khoản chỉ ra đời khi mã xác thực nhập xong, nên trạng thái đầu tiên luôn là Active.',
+      '**Deactivate là khoá cửa; Delete là cánh cửa một chiều.** Xoá thì dữ liệu cá nhân huỷ trong **72 giờ**, và chỉ khôi phục được **bên trong 72 giờ đó**.',
     ],
     blocks: [
       {
         kind: 'table',
-        heading: 'Năm trạng thái',
-        cols: ['Hiện trên UI', 'Nghĩa', 'Ai gây ra', 'Làm được gì'],
+        heading: 'Ba loại tài khoản, đừng lẫn',
+        cols: ['Loại', 'Là ai', 'Ở đâu'],
         rows: [
-          ['Active', 'Đang dùng bình thường', '—', 'Deactivate · Delete'],
-          ['Unverified', 'Đăng ký nhưng chưa xác thực', '—', 'Gửi lại xác thực · Delete'],
-          ['**Withdrawn**', 'Người dùng **tự** tắt tài khoản', 'Chính ứng viên', 'Reactivate · Delete'],
-          ['**Deactivated**', 'Bị HQ khoá', 'Admin', 'Reactivate · Delete'],
-          ['Deleted', 'Xoá mềm, purge sau 30 ngày', 'Admin hoặc ứng viên', 'Restore'],
+          ['**Jobseeker users**', 'Ứng viên', 'Nhóm Users'],
+          ['**Company users**', 'Người của khách hàng — một dòng là **một tư cách thành viên trong một công ty**', 'Nhóm Users'],
+          ['**Users**', 'Nhân viên Saramin', '**Organisation**, không ở đây'],
+        ],
+      },
+      {
+        kind: 'table',
+        heading: 'Trạng thái tài khoản ứng viên',
+        note: '**Withdrawn** và **Deactivated** là **cùng một cái khoá**, phân biệt bằng **ai là người khoá**.',
+        cols: ['Trạng thái', 'Ai gây ra', 'Mở lại được?'],
+        rows: [
+          ['**Active**', 'Hệ thống, khi đăng ký hoàn tất', '—'],
+          ['**Deactivated**', 'HQ khoá (bắt buộc lý do)', 'Có — HQ mở lại'],
+          ['**Withdrawn**', '**Chính ứng viên tự tạm dừng**', 'Có — khi ứng viên yêu cầu'],
+          ['**Deleted**', 'Ứng viên (kèm OTP), hoặc HQ theo yêu cầu pháp lý', '**Chỉ trong 72 giờ**'],
         ],
       },
       {
         kind: 'warn',
         text:
-          'Withdrawn và Deactivated là **cùng một trạng thái phía API**, phân biệt bằng **ai là người đổi**. Vì thế tab Withdrawn query cùng tập dữ liệu với tab Deactivated, và phân biệt nằm ở cột trạng thái từng dòng. Đừng “reactivate” một tài khoản Withdrawn như thể HQ khoá nhầm — chính người dùng đã tắt nó.',
+          'Đừng “reactivate” một tài khoản **Withdrawn** như thể HQ khoá nhầm — **chính người dùng đã tắt nó**. Và **khoá một người không từ chối CV của họ**: muốn gỡ CV khỏi vòng duyệt là **một quyết định riêng** ở màn hình CV review.',
       },
       {
         kind: 'list',
-        heading: 'Ba loại tài khoản, đừng lẫn',
+        heading: 'Riêng tư và giới hạn của HQ',
         items: [
-          '**Jobseeker users** — ứng viên. Ở nhóm User.',
-          '**Company users** — người của khách hàng; một dòng là một tư cách thành viên trong một công ty. Cũng ở nhóm User.',
-          '**Users** — nhân viên Saramin. Ở **System**, không ở đây.',
+          'Lý do nhập khi khoá/xoá là **ghi chú nội bộ**, người dùng không bao giờ thấy.',
+          '**HQ không bao giờ xem hoặc đặt mật khẩu** — chỉ gửi được **link đặt lại**.',
+          'HQ **không sửa CV, hồ sơ hay nguyện vọng** của ứng viên, và **không bật hiển thị CV hộ** họ.',
+          'Mở CV hoặc bỏ che thông tin liên hệ từ Admin là **thao tác chạm dữ liệu cá nhân và luôn được ghi log kèm tên người thao tác**.',
         ],
       },
-      { kind: 'list', heading: 'Riêng tư', items: ['Lý do nhập khi khoá/xoá là **ghi chú nội bộ**, người dùng không bao giờ thấy.'] },
+      {
+        kind: 'warn',
+        text:
+          'Nhân viên **khách** nghỉ việc thì **Deactivate, không xoá** — và **chính người đó không tự khoá mình được**, vì chỗ ngồi thuộc về công ty. Deactivate **giải phóng chỗ ngồi**; Reactivate **chiếm lại một chỗ** và bị chặn nếu công ty đã dùng hết.',
+      },
     ],
   },
 
@@ -1048,38 +1063,93 @@ export const PAGE_DOCS: Record<string, PageDoc> = {
   /* ── User ────────────────────────────────────────────────────────────────── */
   'jobseeker-users': {
     logic: [
-      '5 trạng thái trên màn hình: Active · Unverified · Withdrawn · Deactivated · Deleted.',
-      '**Withdrawn** là ứng viên tự tắt; **Deactivated** là HQ khoá. Cùng một trạng thái phía API, khác nhau ở người thực hiện.',
+      '**BA trạng thái, không phải bốn.** Active · Deactivated · Deleted. **Không tồn tại trạng thái “Unverified”** — ở đâu cũng vậy: tài khoản chỉ ra đời khi mã xác thực được nhập xong, nên **trạng thái đầu tiên một tài khoản từng có là Active**.',
+      '**Deactivated là KHOÁ CỬA, không phải thùng rác.** Hồ sơ còn nguyên, mở lại được, và **không đụng gì tới thứ nhà tuyển dụng đã cầm**.',
+      '**Delete là cánh cửa một chiều duy nhất.** Dữ liệu cá nhân bị huỷ **trong vòng 72 giờ**, email **không bao giờ dùng lại được**, và HQ chỉ khôi phục được **bên trong cửa sổ 72 giờ đó**.',
+      'HQ phân biệt hai loại Deactivated ngay trên màn hình: **Deactivated = HQ khoá**, **Withdrawn = chính ứng viên tự tạm dừng**. Cùng một cái khoá, khác lý do, khác nhãn.',
     ],
     how: [
-      'Lọc theo tab trạng thái.',
-      'Mở một tài khoản để xem chi tiết (thao tác này được ghi log).',
-      'Hành động theo trạng thái: Active → Deactivate/Delete · Unverified → Gửi lại xác thực/Delete · Deactivated → Reactivate/Delete · Deleted → Restore.',
-      'Hỗ trợ khách quên mật khẩu: gửi link đặt lại mật khẩu.',
+      'Lọc theo tab trạng thái, tìm theo email hoặc tên; lọc thêm theo cách đăng nhập, nguồn đăng ký, ngày đăng ký.',
+      'Mở một tài khoản để xem chi tiết — **thao tác này được ghi log kèm tên người thao tác**.',
+      'Tài khoản **Active** → **Deactivate** (bắt buộc nhập lý do) hoặc **gửi link đặt lại mật khẩu**.',
+      'Tài khoản **Deactivated** hoặc **Withdrawn** → **Reactivate** (với Withdrawn thì làm khi chính ứng viên yêu cầu).',
+      'Tài khoản **Deleted** → **Restore**, **chỉ bật khi còn trong 72 giờ**.',
     ],
     watch: [
-      'Đừng mở lại một tài khoản Withdrawn như thể bị khoá nhầm — chính người dùng đã tắt nó.',
-      'Lý do nhập khi khoá/xoá là ghi chú nội bộ, người dùng không thấy.',
-      'Một tài khoản **Active mà CV đang ẩn** là trạng thái **bình thường**, không phải lỗi — hai thứ đó độc lập hoàn toàn.',
+      'Một tài khoản **Active mà CV đang ẩn** là trạng thái **bình thường** — công tắc hiển thị CV độc lập hoàn toàn với trạng thái tài khoản.',
+      'Lý do nhập khi khoá là **ghi chú nội bộ, ứng viên không bao giờ thấy**.',
+      '**Khoá một người KHÔNG từ chối CV của họ.** Muốn gỡ CV khỏi vòng duyệt nữa thì đó là **một quyết định thứ hai, riêng biệt** ở màn hình CV review — hộp thoại khoá chỉ nhắc, nó không tự làm hộ.',
+      'Sau 72 giờ thì **không còn gì để khôi phục** — đó là thiết kế, không phải lỗi.',
     ],
     blocks: [
       {
         kind: 'table',
-        heading: 'HQ làm được gì và không làm được gì',
-        cols: ['HQ làm được', 'HQ không bao giờ làm được'],
+        heading: 'Ba trạng thái',
+        cols: ['Trạng thái', 'Nghĩa', 'Ai đặt', 'Mở lại được?', 'Nhà tuyển dụng thấy gì'],
         rows: [
-          ['Tìm kiếm tài khoản, xem chi tiết', '**Xem hoặc đặt mật khẩu** — không bao giờ'],
-          ['Khoá / mở lại (kèm lý do)', 'Đọc bất kỳ thông tin đăng nhập nào'],
-          ['Gửi link đặt lại mật khẩu', 'Bật hiển thị CV hộ ứng viên'],
+          ['**Active**', 'Dùng site bình thường — **trạng thái đầu tiên một tài khoản từng có**', 'Hệ thống, khi đăng ký hoàn tất', '—', 'Bình thường'],
+          ['**Deactivated**', 'Cửa bị khoá. Không đăng nhập được; **hồ sơ còn nguyên**', 'HQ (khoá, bắt buộc lý do) — hoặc chính ứng viên (tạm dừng)', '**Có** — HQ mở lại', '**Không đổi gì cả**'],
+          ['**Deleted**', 'Kết thúc hẳn. Dữ liệu cá nhân huỷ trong 72 giờ', 'Ứng viên (kèm OTP) — hoặc HQ theo yêu cầu pháp lý', '**Chỉ HQ, chỉ trong 72 giờ**', 'Đơn đang xử lý **bị rút**; đơn đã xong đọc là *“Ứng viên đã xóa tài khoản”*'],
+        ],
+      },
+      {
+        kind: 'table',
+        heading: 'Khoá tài khoản đổi gì và KHÔNG đổi gì',
+        note: 'Đây là hiểu nhầm phổ biến nhất của module này. Khoá chỉ trả lời **một** câu: người này còn đăng nhập được không.',
+        cols: ['', 'Đổi', 'Không đổi'],
+        rows: [
+          ['Đăng nhập', 'Bị từ chối; **mọi phiên đang mở kết thúc ngay**', '—'],
+          ['Thông báo', 'Job alert, cập nhật đơn, marketing — **dừng hết**', '—'],
+          ['CV search', '**Rời khỏi kho tìm kiếm ngay lập tức**', '—'],
+          ['Đơn đã nộp', '—', '**Ở nguyên với nhà tuyển dụng, đúng chặng cũ**'],
+          ['CV nhà tuyển dụng đã mở khoá', '—', '**Vẫn đọc được. Không hoàn tiền, không thu lại**'],
+          ['Hồ sơ', '—', 'Giữ nguyên vẹn — tên, CV, lịch sử'],
+          ['Email', '—', 'Vẫn thuộc về tài khoản này, **không mở tài khoản mới được**'],
+          ['Màn hình nhà tuyển dụng', '—', '**Không gì cả — việc khoá là vô hình với họ**'],
+        ],
+      },
+      {
+        kind: 'table',
+        heading: 'Khoá và Xoá, đặt cạnh nhau',
+        cols: ['', 'Deactivate', 'Delete'],
+        rows: [
+          ['Ai làm', 'HQ (khoá) hoặc ứng viên (tạm dừng)', 'Ứng viên, kèm mã OTP — HQ chỉ khi có yêu cầu pháp lý'],
+          ['Hồ sơ', 'Nguyên vẹn', 'Dữ liệu cá nhân **huỷ trong 72 giờ**; giữ lại dòng đã ẩn danh'],
+          ['Quay lại được?', 'Có — HQ mở lại', '**Chỉ HQ, chỉ trong 72 giờ**'],
+          ['Đơn đang xử lý', 'Ở nguyên', '**Bị rút**'],
+          ['Đơn đã xong', 'Ở nguyên', 'Giữ kết quả, tên thay bằng *“Ứng viên đã xóa tài khoản”*'],
+          ['Nhà tuyển dụng có được báo?', '**Không** — vô hình với họ', '**Có — mỗi công ty một email**'],
+          ['Email', 'Vẫn là của tài khoản này', 'Giữ lại **mã băm**; **không bao giờ đăng ký lại được**'],
+        ],
+      },
+      {
+        kind: 'list',
+        heading: 'Trong 72 giờ — cái gì bị huỷ, cái gì giữ lại',
+        items: [
+          '**Huỷ:** họ tên, email gốc, mật khẩu, số điện thoại, ngày sinh, giới tính, ảnh đại diện · toàn bộ nội dung hồ sơ và mọi file CV · ghi chú nhà tuyển dụng viết về ứng viên · việc đã lưu, thông báo, lịch sử xem.',
+          '**Giữ, đã ẩn danh:** ID nội bộ, ngày xoá, mã lý do · **mã băm của email** (để chặn đăng ký lại) · **bản ghi đã mua lượt mở CV** — giữ sự kiện mua, bỏ nội dung · số liệu tổng hợp.',
+          'Dòng dữ liệu **ở lại nhưng rỗng người**. Đó là thứ giữ cho email bị khoá và cho phép HQ chứng minh đã xoá những gì.',
+          '**Email đã xác thực bị chặn đăng ký lại vĩnh viễn — kể cả biến thể dấu chấm của Gmail.** Chăm sóc khách hàng gỡ chặn được sau khi xác minh danh tính.',
         ],
       },
       {
         kind: 'warn',
         text:
-          'Mở CV hoặc thông tin liên hệ của ứng viên từ Admin là **thao tác chạm dữ liệu cá nhân và luôn được ghi log**. Hỗ trợ người quên mật khẩu thì **gửi link đặt lại** — không ai gõ mật khẩu hộ người khác, ở bất kỳ vai trò nào.',
+          '**HQ không bao giờ xem hoặc đặt mật khẩu** — hành động duy nhất liên quan tới đăng nhập là **gửi link đặt lại**. HQ cũng **không sửa CV, hồ sơ hay nguyện vọng** của ứng viên, và **không khôi phục được tài khoản đã purge** — sau 72 giờ không còn gì để khôi phục.',
+      },
+      {
+        kind: 'open',
+        text:
+          '**Hai nguồn đang lệch nhau — cần xác nhận đang chạy bản nào trên dev.** Tài liệu Notion (24/09/2026, theo Privacy Policy 21/09) mô tả **3 trạng thái và purge 72 giờ**, và ghi rõ trạng thái “unverified” **biến mất cùng luồng đăng ký mới**. Tài liệu trong repo build thì vẫn mô tả **4 trạng thái API (có INACTIVE hiện là “Unverified”) và purge 30 ngày**. Trang này viết theo Notion vì nó mới hơn và là bản đã chốt chính sách — nhưng **nếu console bạn đang mở vẫn hiện tab “Unverified” thì build chưa theo kịp**, và con số 72 giờ cũng cần kiểm lại trước khi hứa với ai.',
+      },
+      {
+        kind: 'warn',
+        text:
+          'Trang **Deleted accounts** (`/users/deleted-accounts`) mà tài liệu Notion mô tả **đã bị rút khỏi menu** ở bản sidebar mới — đường dẫn vẫn mở được. Đó là nơi tra: ngày xoá, ai xoá, lý do, **trạng thái purge** (Pending trong 72 giờ · Purged · Failed) và **email có bị chặn đăng ký lại không**.',
       },
     ],
   },
+
   'company-users': {
     logic: [
       'Tài khoản đăng nhập của phía khách hàng, xem xuyên suốt mọi công ty ở một chỗ. Khác hẳn tài khoản ứng viên và tài khoản nhân viên Saramin.',
