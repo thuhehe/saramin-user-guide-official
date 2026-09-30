@@ -3,6 +3,7 @@ import PAGES from './pages.json'
 import { WORKFLOW, adminUrl } from './handbook'
 import type { WfBlock, WfSection } from './handbook'
 import { MODULE_DOCS, PAGE_DOCS } from './docs'
+import type { DocBlock } from './docs'
 
 /* ── Saramin Admin — cẩm nang toàn bộ hệ thống ────────────────────────────────
    A site of its own, not a page on the requirement site. The requirement says
@@ -254,9 +255,11 @@ function PageView({ p, dev, onModule }: { p: Page; dev: boolean; onModule: () =>
 
       {p.what && <p className="mt-4 max-w-[76ch] text-[14.5px] leading-[1.7] text-ink/80">{md(p.what)}</p>}
 
-      {d?.logic?.length ? <Bullets title="Logic phía sau" items={d.logic} /> : null}
-      {d?.how?.length ? <Steps title="Hướng dẫn sử dụng" items={d.how} /> : null}
-      {d?.watch?.length ? <Bullets title="Cần để ý" items={d.watch} warn /> : null}
+      <div className="mt-7 space-y-7">
+        {d?.logic?.length ? <Bullets title="Logic phía sau" items={d.logic} /> : null}
+        {d?.how?.length ? <Steps title="Hướng dẫn sử dụng" items={d.how} /> : null}
+        {d?.watch?.length ? <Bullets title="Cần để ý" items={d.watch} warn /> : null}
+      </div>
 
       {p.sub.length > 0 && (
         <section className="mt-7">
@@ -293,8 +296,21 @@ function ModuleView({ group, onPick }: { group: string; onPick: (key: string) =>
       <h1 className="mt-1 border-b-2 border-ink pb-3 text-[30px] font-bold leading-[1.1] tracking-[-0.02em]">{mod.title}</h1>
       <p className="mt-4 max-w-[76ch] text-[14.5px] leading-[1.7] text-ink/80">{mod.lead}</p>
 
-      <Bullets title="Quy tắc chi phối cả nhóm" items={mod.logic} />
-      {mod.watch?.length ? <Bullets title="Cần để ý" items={mod.watch} warn /> : null}
+      {/* The two or three facts that, unknown, produce a wrong outcome. They sit
+          above everything because a reader who stops after this box has still got
+          the part that costs money. */}
+      <div className="mt-5 border-l-2 border-brand bg-brand-soft/45 py-3 pl-4 pr-4">
+        <p className="font-mono text-[9.5px] uppercase tracking-[0.14em] text-brand">Đọc trước</p>
+        <ul className="mt-1.5 max-w-[78ch] space-y-1.5">
+          {mod.headline.map((t, i) => (
+            <li key={i} className="text-[13px] leading-[1.65] text-ink/85">{md(t)}</li>
+          ))}
+        </ul>
+      </div>
+
+      <div className="mt-7 space-y-7">
+        {mod.blocks.map((b, i) => <DocBlockView key={i} b={b} />)}
+      </div>
 
       <section className="mt-7">
         <h2 className="border-b border-ink pb-1.5 text-[15px] font-bold tracking-tight">{pages.length} trang trong nhóm</h2>
@@ -360,10 +376,62 @@ function SearchResults({ hits, q, onClear, onPick }: { hits: Page[]; q: string; 
 
 /* ── shared bits ────────────────────────────────────────────────────────────── */
 
+/* A block of module logic. Tables get the same ruled, borderless treatment as the
+   rest of the page — a boxed table in a document reads as a widget dropped in, and
+   this one is prose that happens to have columns. */
+function DocBlockView({ b }: { b: DocBlock }) {
+  if (b.kind === 'p') return <p className="max-w-[78ch] text-[13.5px] leading-[1.7] text-ink/80">{md(b.text)}</p>
+
+  if (b.kind === 'list') return <Bullets title={b.heading ?? ''} items={b.items} />
+
+  if (b.kind === 'warn') {
+    return (
+      <p className="max-w-[78ch] border-l-2 border-ink/30 py-1.5 pl-4 text-[13px] leading-[1.7] text-ink/80">
+        <span className="mr-1.5 font-mono text-[9.5px] uppercase tracking-wider text-ink/45">lưu ý</span>{md(b.text)}
+      </p>
+    )
+  }
+
+  if (b.kind === 'open') {
+    return (
+      <p className="max-w-[78ch] border-l-2 border-amber-500/70 bg-amber-50/60 py-2 pl-4 pr-4 text-[13px] leading-[1.7] text-ink/80">
+        <span className="mr-1.5 font-mono text-[9.5px] uppercase tracking-wider text-amber-700">chưa chốt</span>{md(b.text)}
+      </p>
+    )
+  }
+
+  return (
+    <section>
+      {b.heading && <h2 className="border-b border-ink pb-1.5 text-[15px] font-bold tracking-tight">{b.heading}</h2>}
+      {b.note && <p className="mt-2 max-w-[78ch] text-[12.5px] leading-[1.6] text-muted">{md(b.note)}</p>}
+      <div className="mt-2 overflow-x-auto">
+        <table className="w-full min-w-[640px] border-collapse text-left">
+          <thead>
+            <tr>
+              {b.cols.map((c, i) => (
+                <th key={i} className="border-b border-line py-1.5 pr-5 font-mono text-[9.5px] font-semibold uppercase tracking-wider text-faint last:pr-0">{c}</th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            {b.rows.map((r, i) => (
+              <tr key={i} className="border-b border-line-soft last:border-0">
+                {r.map((cell, j) => (
+                  <td key={j} className={cx('py-2.5 pr-5 align-top text-[12.5px] leading-[1.6] last:pr-0', j === 0 ? 'font-semibold text-ink' : 'text-ink/75')}>{md(cell)}</td>
+                ))}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </section>
+  )
+}
+
 function Bullets({ title, items, warn }: { title: string; items: string[]; warn?: boolean }) {
   return (
-    <section className="mt-7">
-      <h2 className="border-b border-ink pb-1.5 text-[15px] font-bold tracking-tight">{title}</h2>
+    <section>
+      {title && <h2 className="border-b border-ink pb-1.5 text-[15px] font-bold tracking-tight">{title}</h2>}
       <ul className="mt-2.5 max-w-[78ch] space-y-2">
         {items.map((t, i) => (
           <li key={i} className={cx('text-[13px] leading-[1.7]', warn ? 'border-l-2 border-ink/25 pl-4 text-ink/75' : 'flex gap-3 text-ink/80')}>
@@ -378,8 +446,8 @@ function Bullets({ title, items, warn }: { title: string; items: string[]; warn?
 
 function Steps({ title, items }: { title: string; items: string[] }) {
   return (
-    <section className="mt-7">
-      <h2 className="border-b border-ink pb-1.5 text-[15px] font-bold tracking-tight">{title}</h2>
+    <section>
+      {title && <h2 className="border-b border-ink pb-1.5 text-[15px] font-bold tracking-tight">{title}</h2>}
       <ol className="mt-2.5 max-w-[78ch] space-y-2">
         {items.map((t, i) => (
           <li key={i} className="flex gap-3 text-[13px] leading-[1.7] text-ink/80">

@@ -7,16 +7,19 @@
  * places to update and two chances to disagree — so the module carries it and the
  * pages point at it.
  *
- * `logic` answers WHY the screen behaves as it does — the part an operator cannot
- * guess and will otherwise learn by getting it wrong. `how` is the short path to
- * a finished job. `watch` is the trap: the thing that looks like a bug and is not,
- * or the mistake that is expensive to undo.
+ * WHERE THE DEPTH COMES FROM. The admin repo's docs are written for whoever is
+ * implementing a screen: terse about the commercial reasoning, precise about the
+ * code. The REQUIREMENT spec (SARAMIN_REQUIREMENT/src/data/build/*.ts, ~14,900
+ * lines) is the opposite — it is where the distinctions that cost money are
+ * actually argued out, and it is what the client's own Notion tree names as the
+ * source for its "Logic" pages. Module logic below is distilled from it; the
+ * page-level `how` stays sourced from the build, because that is what the screens
+ * actually do today.
  *
- * Written from the build's own docs (docs/features/*.md "Business rules",
- * docs/business-logic.md, docs/qa/tester-guide) — restated for someone operating
- * the console, not implementing it. Where a page has no entry yet, the UI says so
- * rather than padding it, because a confident-looking empty section is worse than
- * an admitted gap.
+ * `logic` answers WHY the screen behaves as it does. `how` is the short path to a
+ * finished job. `watch` is the trap: the thing that looks like a bug and is not,
+ * or the mistake that is expensive to undo. An `open` block is a question with no
+ * answer yet, and is never dressed up as a decision.
  */
 
 export interface PageDoc {
@@ -25,12 +28,21 @@ export interface PageDoc {
   watch?: string[]
 }
 
+/** A block of module logic. Tables carry the distinctions a bullet list flattens. */
+export type DocBlock =
+  | { kind: 'p'; text: string }
+  | { kind: 'table'; heading?: string; note?: string; cols: string[]; rows: string[][] }
+  | { kind: 'list'; heading?: string; items: string[] }
+  | { kind: 'warn'; text: string }
+  | { kind: 'open'; text: string }
+
 export interface ModuleDoc {
   /** shown as its own entry at the top of the module's menu */
   title: string
   lead: string
-  logic: string[]
-  watch?: string[]
+  /** the two or three facts that, unknown, produce a wrong outcome — read first */
+  headline: string[]
+  blocks: DocBlock[]
 }
 
 /* ── Module-level logic ─────────────────────────────────────────────────────── */
@@ -39,70 +51,312 @@ export const MODULE_DOCS: Record<string, ModuleDoc> = {
   CRM: {
     title: 'Logic chung — CRM',
     lead:
-      'CRM là luồng bán, và nó là một chuỗi chứng từ nối tiếp: Công ty → Báo giá → PO → Hoá đơn. Mỗi chứng từ chỉ dựng được từ chứng từ trước, và chỉ chứng từ cuối cùng mới đổi được quyền sử dụng của khách.',
-    logic: [
-      '**Hoá đơn Issued là mốc cấp quota — không phải PO, không phải “đã thanh toán”.** Đây là quy tắc chi phối toàn bộ hệ thống. Khách ký PO, chuyển tiền, mọi thứ xong xuôi — nhưng tới khi kế toán bấm phát hành hoá đơn thì công ty vẫn có 0 lượt đăng tin.',
-      '**Báo giá có 1–3 option, và các option thay thế nhau.** Khách chấp nhận option 2 nghĩa là option 1 và 3 bị loại, không phải mua cả ba. PO dựng từ đúng option đã Accepted — dựng nhầm option là sai cả số tiền lẫn quota.',
-      '**Mọi thứ bán được đều treo vào một công ty.** Không có báo giá trôi nổi: luôn bắt đầu từ hồ sơ công ty, vì hoá đơn và quota sau này gắn vào chính công ty đó.',
-      '**MST là khoá chống trùng công ty.** Tạo công ty với MST đã tồn tại sẽ bị từ chối, và hệ thống chỉ thẳng sang công ty đang giữ MST đó. Mở công ty đó ra, đừng tạo bản thứ hai.',
-      '**Công ty phải được xác minh trước khi đăng tin.** Ba mức: No paperwork → Waiting to verify → Verified. Sales nộp giấy tờ, Sales Admin duyệt.',
-      '**Chiết khấu có hai cấp duyệt.** Tổng đơn giảm ≤ 10% do Sales Leader duyệt; trên 10% phải chuyển Sales Manager.',
-      '**Pipeline không có bản ghi riêng.** Một thẻ trên Pipeline mở ra chính báo giá của nó — không tồn tại “deal” tách biệt để sửa.',
+      'CRM là luồng bán: một chuỗi chứng từ nối tiếp, mỗi chứng từ chỉ dựng được từ chứng từ trước nó. Công ty → Báo giá → PO → Hoá đơn GTGT. Chỉ mắt xích cuối cùng mới đổi được quyền sử dụng của khách.',
+    headline: [
+      '**Chỉ hoá đơn GTGT CHÍNH THỨC mới cấp quota.** Hoá đơn nháp không cấp gì cả. PO đã duyệt, tiền đã về — vẫn chưa có gì.',
+      '**PO và hoá đơn GTGT là hai chứng từ khác nhau, không phải hai tên của một thứ.** Gửi PO cho khách mà nói đó là hoá đơn là sai lầm đắt nhất ở đây: khách không kê khai VAT được.',
+      '**Công ty có HAI trạng thái độc lập** — trạng thái pipeline và trạng thái khách hàng. Đừng nối chúng vào nhau.',
     ],
-    watch: [
-      'Câu hỏi “khách mua rồi mà sao không đăng tin được” gần như luôn dừng ở một chỗ: mở hoá đơn của đơn đó ra xem đã Issued chưa.',
-      'Sửa công ty và sửa trang công ty công khai là hai quyền khác nhau. Mọi Sales đều sửa được hồ sơ công ty; đăng trang công khai thì không.',
-    ],
-  },
-
-  Recruitment: {
-    title: 'Logic chung — Recruitment',
-    lead:
-      'Đây là chặng tiêu quota. Tin tuyển dụng nối trực tiếp với thứ khách đã mua: đăng một tin dưới tier nào thì tiêu một slot của đúng tier đó, và tin tự lên đúng những khu vực mà tier đó mua quyền xuất hiện.',
-    logic: [
-      '**Quota đếm theo từng tier, không dùng chéo.** Mua 5 tin Top job là 5 slot Top job. Hết slot Top job thì không đăng được tin Top job, dù tổng số slot của công ty còn nhiều.',
-      '**Với loại Job posting, Product chính là Tier.** Không phải hai thứ tách rời: “Top job 30 ngày” vừa là món bán vừa là bậc tin.',
-      '**Status suy ra từ ngày, không gõ tay.** Draft → Schedule → Open → Closed. Đặt ngày bắt đầu tương lai thì tin ở Schedule và tự lên Open đúng ngày; qua ngày kết thúc thì tự Closed. Không có ai bấm tay để đổi.',
-      '**Exposure là công tắc riêng, độc lập với status.** Tin có thể Open mà vẫn không ai thấy nếu Exposure tắt. Đây là cách gỡ một tin khỏi trang jobseeker mà không kết thúc booking.',
-      '**Tin lên khu vực nào là tự động.** Không ai gõ tay “tin này thuộc banner nào” — tier quyết định, qua cấu hình ở Products và Placements.',
-      '**Địa điểm làm việc là của CÔNG TY, tin chỉ tham chiếu.** Sửa địa chỉ thì sửa ở hồ sơ công ty, không sửa trong từng tin.',
-      '**Hồ sơ ứng viên là dữ liệu cá nhân.** Mở chi tiết và xuất danh sách đều bị ghi log ở server. Chỉ mở khi có lý do công việc.',
-    ],
-    watch: [
-      'Khách báo “tin không hiện” thì kiểm Exposure TRƯỚC, rồi mới kiểm status và ngày.',
-      'Luồng duyệt tin (approval) đã được gỡ bỏ từ 09/2026 — tin không còn đi qua bước chờ duyệt nữa.',
+    blocks: [
+      {
+        kind: 'table',
+        heading: 'Chuỗi chứng từ — ai tạo, tạo ở đâu, để lại gì',
+        note: 'Mỗi bước dựng từ bước trước. Không nhảy cóc được, và cũng không nên.',
+        cols: ['Bước', 'Tạo ở đâu', 'Ai làm', 'Để lại gì'],
+        rows: [
+          ['Công ty', 'CRM → Companies → Create company', 'Sales', 'Hồ sơ có MST, chờ xác minh'],
+          ['Báo giá', 'Trong hồ sơ công ty → Create quotation', 'Sales', '1–3 option để khách chọn một'],
+          ['PO', 'Từ option khách đã Accepted', 'Sales', 'Cam kết mua + yêu cầu thanh toán. **Chưa cấp quota**'],
+          ['Hoá đơn GTGT', 'Trang chi tiết PO', 'Kế toán', 'Phát hành chính thức → **quota vào tài khoản ngay**'],
+        ],
+      },
+      {
+        kind: 'table',
+        heading: 'PO và Hoá đơn GTGT khác nhau chỗ nào',
+        note: 'PO nói “anh đã đồng ý mua, vui lòng thanh toán”. Hoá đơn nói “anh đã trả tiền, và đây là chứng từ cơ quan thuế công nhận”.',
+        cols: ['', 'PO / Đơn hàng', 'Hoá đơn GTGT'],
+        rows: [
+          ['Bản chất', 'Chứng từ thương mại — cam kết + yêu cầu trả tiền', 'Chứng từ thuế — bằng chứng pháp lý một giao dịch chịu thuế đã xảy ra'],
+          ['Ràng buộc giữa', 'Mình và khách', 'Mình và **cơ quan thuế**'],
+          ['Đánh số', 'Dãy số của mình — PO-005864-08-2026', 'Dãy số pháp lý của nhà cung cấp — liên tục, nhà nước quản lý'],
+          ['Sửa được?', 'Không — phát hành PO mới', '**Không bao giờ** — huỷ + credit note + phát hành lại'],
+          ['Huỷ được?', 'Không — PO không dùng thì tự hết hiệu lực', 'Có — đây là chỗ một giao dịch được huỷ bỏ'],
+          ['Hết hạn', 'Cuối tháng phát hành', 'Không — đã phát hành là vĩnh viễn, trừ khi huỷ'],
+          ['Ai sở hữu', 'Sales', '**Chỉ kế toán**'],
+          ['Tác dụng', 'Deal = thắng', 'Chỉ bản CHÍNH THỨC: khách thành **New** · **cấp quota ngay** · bắt đầu đồng hồ kích hoạt. Bản nháp không có tác dụng gì'],
+        ],
+      },
+      {
+        kind: 'table',
+        heading: 'Phát hành hoá đơn thì khách nhận được gì',
+        note: 'Đây là mô tả “cấp quota” thực sự nghĩa là gì, theo từng dòng trên PO.',
+        cols: ['Dòng trên PO', 'Cấp cái gì'],
+        rows: [
+          ['Dịch vụ tin đăng (Basic / Basic Plus / Premium) × N', '+N slot đăng tin ở đúng bậc đó'],
+          ['Dịch vụ tin đăng … (Tặng) × N', '+N slot y hệt — dòng tặng 0 ₫ vẫn cấp quota như thường'],
+          ['Dịch vụ tìm kiếm hồ sơ (30 / 90 ngày)', '+N lượt mở CV, kèm cửa sổ dùng 30 hoặc 90 ngày'],
+          ['Employer Branding Page', 'Bật trang công ty công khai'],
+          ['Lần mua đầu tiên', 'Tạo tài khoản · tạo login đầu tiên (HR Manager, đúng 1) · tạo trang công ty'],
+        ],
+      },
+      {
+        kind: 'list',
+        heading: 'Cấp quota ≠ kích hoạt — hai sự kiện, hai đồng hồ',
+        items: [
+          '**Cấp quota:** quota vào tài khoản đúng lúc hoá đơn chính thức phát hành. Chưa có gì chạy cả.',
+          '**Kích hoạt:** khách dùng một slot. Phải dùng trong cửa sổ khai trên chính sản phẩm đó — mặc định 12 tháng, tính **từ ngày hoá đơn**. Quá hạn thì quota chưa dùng **mất, không hoàn tiền**.',
+          '**Sử dụng:** slot đã kích hoạt thì chạy 30 ngày.',
+          'Nên khách mua 10 slot hôm nay, dùng 1 tuần sau và 1 sau tám tháng là hoàn toàn bình thường: cấp một lần cả 10, mỗi slot kích hoạt riêng và đốt cửa sổ riêng của nó.',
+        ],
+      },
+      {
+        kind: 'table',
+        heading: 'Công ty có hai trạng thái — trả lời hai câu hỏi khác nhau',
+        cols: ['Trục', 'Trả lời câu hỏi', 'Giá trị'],
+        rows: [
+          ['Trạng thái pipeline', '“Đang có cơ hội bán nào không, và đang ở đâu?”', 'Not in pipeline · Proposal · Qualified · Negotiation · PO · Invoice'],
+          ['Trạng thái khách hàng', '“Đã từng trả tiền chưa, và còn đang dùng không?”', 'New · Existing · Churn'],
+        ],
+      },
+      {
+        kind: 'warn',
+        text:
+          'Hai trục này **độc lập, không được nối vào nhau**. Mất một deal không làm đổi trạng thái khách hàng; thắng một deal cũng không tự làm khách thành Existing — **hoá đơn** mới làm điều đó. Một công ty vừa Existing vừa đang Negotiation là một tài khoản khoẻ mạnh, không phải lỗi dữ liệu.',
+      },
+      {
+        kind: 'list',
+        heading: 'Báo giá — option là phương án thay thế nhau',
+        items: [
+          'Một báo giá có **1–3 option**, khách chọn đúng **một**. Chấp nhận option 2 nghĩa là option 1 và 3 bị loại, **không phải** mua cả ba.',
+          'Mỗi dòng trong option trỏ vào một **Product** hoặc **Bundle** đã khai ở Products — không gõ tay tên sản phẩm, vì dòng báo giá là thứ sau này quyết định cấp quota gì.',
+          'Chiết khấu tổng đơn ≤ 10% do **Sales Leader** duyệt; trên 10% phải chuyển **Sales Manager**.',
+          'Báo giá và PO đều in **cửa sổ kích hoạt** ngay cạnh dòng hàng, để khách đồng ý trước khi mua — điều kiện này không bao giờ được xuất hiện lần đầu trên hoá đơn.',
+        ],
+      },
+      {
+        kind: 'list',
+        heading: 'MST — khoá chống trùng, và cái nút Verify chỉ để biết',
+        items: [
+          'MST là khoá chống trùng công ty. Tạo công ty với MST đã tồn tại sẽ bị từ chối kèm link sang công ty đang giữ MST đó.',
+          'Nút **Verify** chỉ để **biết**, không phải cổng chặn — kết quả hiện ra dưới dạng chip thông tin.',
+          '**Loại công ty** (trong nước / nước ngoài) quyết định ô MST nghĩa là gì và gate các phân loại người mua ở phần xuất hoá đơn. Công ty nước ngoài không có MST Việt Nam để kiểm.',
+          'Danh sách “trùng 10 số gốc MST” là gợi ý liên kết chi nhánh / công ty mẹ — chỉ áp dụng cho công ty trong nước.',
+        ],
+      },
+      {
+        kind: 'list',
+        heading: 'Người liên hệ ≠ tài khoản đăng nhập',
+        items: [
+          'Hai danh sách **độc lập**. Người liên hệ là người mình gọi; tài khoản đăng nhập là người dùng được hệ thống.',
+          'Một người có thể là liên hệ mà không có login, và ngược lại. Xoá liên hệ không xoá tài khoản.',
+        ],
+      },
+      {
+        kind: 'open',
+        text:
+          '**Chưa chốt — quota hết hạn thì xử lý thế nào.** Hết im lặng · cảnh báo khách ở mốc 60/30/7 ngày · hay để sales gia hạn. Để quota đã trả tiền hết hạn mà không báo trước là phương án dễ sinh tranh chấp nhất, nên tối thiểu cần một job nhắc hạn. Cũng cần chốt: hết hạn rồi có khôi phục được trong thời gian ân hạn không.',
+      },
+      {
+        kind: 'open',
+        text:
+          '**Chưa chốt — huỷ hoá đơn thì thu hồi quota thế nào,** khi khách đã tiêu một phần. Ba hướng: thu hồi phần chưa dùng · để nguyên và đối trừ trên credit note · chặn huỷ khi đã tiêu bất kỳ phần nào. Đây là tình huống sẽ xảy ra thật, vì huỷ hoá đơn tồn tại chính cho trường hợp phát hành trước khi thu tiền.',
+      },
     ],
   },
 
   'Products & Packages': {
     title: 'Logic chung — Products & Packages',
     lead:
-      'Đây là nơi khai báo bán cái gì, và mỗi thứ bán ra thì giao cái gì. Mọi dòng báo giá đều trỏ vào một Product khai ở đây — không gõ tay tên sản phẩm ở chỗ khác.',
-    logic: [
-      '**Product là món bán được; Package (bundle) là nhiều Product bán chung một giá, một dòng.**',
-      '**Field `Type` của Product quyết định “gói này giao cái gì” (fulfilment).** Job posting thì giao quota theo tier; Placement booking thì giao một chỗ hiển thị trong một khoảng thời gian; Manual service thì giao bằng tay và ghi nhật ký.',
-      '**Placement là khu vực hiển thị trên trang jobseeker** — kích thước, hiện bao nhiêu cái, bao lâu xoay một lần. Product trỏ vào Placement; đừng khai lại kích thước trong từng lần bán.',
-      '**Kho vị trí là không giới hạn.** Trang web hiển thị một số vị trí cố định nhưng phía sau xoay vòng bao nhiêu banner cũng được — nên vị trí không bao giờ “đầy”. Bán thêm không hết chỗ, mà làm mỏng tỉ lệ hiển thị của những khách đã mua.',
-      '**Danh mục (Products) khác với thứ khách đang giữ (Quota).** Products trả lời “chúng ta bán gì”; quota của một công ty xem ở hồ sơ công ty, tab Products & billing.',
+      'Phía danh mục của việc kiếm tiền: **bán cái gì, và giá bao nhiêu**. Bán nó (báo giá → PO → hoá đơn) nằm ở CRM; thứ khách giữ sau đó nằm trên tài khoản của khách.',
+    headline: [
+      '**Không có gì được cấp nếu không có đơn đã thanh toán.** Admin không bao giờ tự tay gán sản phẩm cho một tài khoản — quota xuất hiện như hệ quả của việc trả tiền.',
+      '**`Type` là field có tầm ảnh hưởng lớn nhất.** Chọn sai Type thì giao sai thứ cho khách, âm thầm, đúng lúc xuất hoá đơn.',
+      '**Có BA đồng hồ, không phải một.** Cấp quota, cửa sổ kích hoạt, và thời gian sử dụng. Lẫn lộn ba cái này là cách làm mất quota khách đã trả tiền.',
     ],
-    watch: [
-      '“Placement” có ba nghĩa khác nhau trong hệ thống — xem mục Từ điển. Đây là nguồn nhầm lẫn số 1.',
+    blocks: [
+      {
+        kind: 'table',
+        heading: 'Ba đồng hồ',
+        note: 'Đồng hồ ② là cái duy nhất có thể âm thầm huỷ quota khách đã mua.',
+        cols: ['#', 'Đồng hồ', 'Bắt đầu khi', 'Đặt ở đâu', 'Hết thì sao'],
+        rows: [
+          ['①', 'Cấp quota', 'Hoá đơn GTGT **chính thức** phát hành — bản nháp không cấp gì', '— tức thì, không có field', 'Quota nằm trên tài khoản. Khách đăng tin / mở CV được ngay'],
+          ['②', '**Cửa sổ kích hoạt**', 'Ngày hoá đơn', 'Khai trên **từng sản phẩm** (mặc định 12 tháng)', 'Quota chưa dùng **hết hiệu lực**. Không hoàn tiền, không tự gia hạn'],
+          ['③', 'Sử dụng / hiển thị', 'Tin đăng: ngày publish. **Gói CV: ngày ai đó bấm Kích hoạt** — không có gì tự chạy', 'Khai trên sản phẩm (tin 30 ngày, gói CV 30/90 ngày)', 'Riêng slot/gói đó kết thúc. Các slot chưa dùng vẫn chạy đồng hồ ②'],
+        ],
+      },
+      {
+        kind: 'list',
+        heading: 'Vì sao cửa sổ kích hoạt nằm trên sản phẩm, không nằm ở cấu hình chung',
+        items: [
+          'Mặc định **12 tháng** theo T&C của khách (điều 4). Các lựa chọn: 3 · 6 · 12 · 18 · 24 tháng.',
+          '12 tháng trên một slot Top Job 13.800.000 ₫ và 12 tháng trên một tin đăng dùng thử **không phải cùng một cam kết thương mại** — bản dùng thử để 3 tháng chính vì lý do đó: đồ tặng mà để dành được cả năm là gánh nặng, không phải động lực dùng thử.',
+          'Hạn được **chụp lại** lên gói của khách lúc cấp quota (ngày hoá đơn + số tháng). Sửa sản phẩm sau đó **không được** dịch chuyển hạn của quota đã bán.',
+          'Cửa sổ này không dừng vì bất cứ lý do gì. Cần dời hạn cho một khách thì đó là một lần gia hạn **có ghi log**, không phải sửa field này.',
+          'Sản phẩm “luôn có sẵn” không có cửa sổ nào cả — chúng không bao giờ được xuất hoá đơn nên không có ngày nào để đếm.',
+        ],
+      },
+      {
+        kind: 'list',
+        heading: 'Năm loại sản phẩm và mỗi loại cấp cái gì',
+        items: [
+          '**Posting tier** — N slot đăng tin ở một bậc. Tiêu bằng cách publish một tin. Những gì bậc đó cho (thời lượng, nhịp làm mới, kiểu tiêu đề, thứ hạng tìm kiếm, vị trí trang chủ, badge) đến từ **cấu hình bậc**, không phải từ SKU — nếu không thì hai sản phẩm Top Job có thể cho hai thứ khác nhau.',
+          '**Placement booking** — một khu vực hiển thị đã đặt tên, bán theo kỳ. Tiêu bằng việc booking chiếm chỗ đó.',
+          '**Credit pack** — một hạn mức lượt dùng có thời hạn. Ví dụ COMBO 50: 50 lượt mở CV / 30 ngày.',
+          '**Add-on (chỉ gắn kèm)** — đi kèm một bậc chính, **không bán rời được**. Sức chứa hữu hạn nên nó đặt chỗ giống placement.',
+          '**Manual service** — việc do đội ops làm tay. Trả tiền **không** cấp quota; nó mở ra một nhiệm vụ giao hàng (Yêu cầu → Lên lịch → Đã giao) cần bằng chứng đã giao thì dòng đó mới tính là hoàn thành.',
+          'Bốn trong năm loại quy về cùng một hình dạng: (sản phẩm, quota còn lại, thời hạn). **Manual service là ngoại lệ** — và chính ngoại lệ đó là lý do nó là một loại riêng chứ không phải một cờ.',
+        ],
+      },
+      {
+        kind: 'table',
+        heading: 'Bốn trạng thái của một gói CV search',
+        note: 'Trạng thái nằm trên **gói khách đã mua**, không nằm trên sản phẩm. Cùng một SKU bán cho hai khách sẽ ở hai trạng thái khác nhau.',
+        cols: ['Trạng thái', 'Nghĩa là', 'Đồng hồ đang chạy', 'Thoát khi'],
+        rows: [
+          ['Chưa kích hoạt', 'Đã thanh toán, chưa bấm. Không mở được CV nào.', 'Cửa sổ kích hoạt', 'Bấm **Kích hoạt** → Đang dùng. Hoặc quá hạn → Hết hạn kích hoạt'],
+          ['Đang dùng', 'Là gói duy nhất đang được tiêu. Mỗi lần mở CV trừ vào đây.', 'Thời hạn sử dụng', 'Hết quota, hoặc hết hạn dùng → Đã kết thúc'],
+          ['Đã kết thúc', 'Xong, vì hết quota **hoặc** hết hạn. Có lưu lý do.', '— không còn', 'Trạng thái cuối. Đây là lúc gói Chưa kích hoạt kế tiếp bấm được'],
+          ['**Hết hạn kích hoạt**', 'Chưa bao giờ được bấm và đã quá hạn. **Mất tiền, không hoàn.**', '— không còn', 'Chỉ thoát bằng một lần gia hạn có ghi log'],
+        ],
+      },
+      {
+        kind: 'warn',
+        text:
+          '**“Hết hạn kích hoạt” tách riêng là có lý do:** đó là trạng thái duy nhất khách **mất tiền mà chưa dùng gì**. Gộp nó vào “Đã kết thúc” là bỏ mất đúng con số cần cảnh báo trước hạn và cần báo lại cho sales. Và chỉ **một gói được Đang dùng tại một thời điểm** — gói sau chỉ bấm được khi gói trước đã kết thúc.',
+      },
+      {
+        kind: 'list',
+        heading: 'Cần job nhắc hạn cho cả hai đồng hồ',
+        items: [
+          'Sắp hết **cửa sổ kích hoạt**: nhắc ở 60 / 30 / 7 ngày.',
+          'Sắp hết **thời hạn sử dụng** khi vẫn còn quota chưa dùng: nhắc ở 7 ngày. Đồng hồ này gấp hơn nhiều — 90 ngày mà còn 40 CV chưa mở là **một cuộc gọi của sales**, không phải một email.',
+        ],
+      },
+      {
+        kind: 'list',
+        heading: 'Placement — kho xoay vòng không giới hạn',
+        items: [
+          'Placement là **khu vực hiển thị** trên trang jobseeker: kích thước, hiện bao nhiêu cái cùng lúc, bao lâu xoay một lần. Khai một lần ở đây, sản phẩm trỏ vào — không khai lại trong từng lần bán.',
+          'Trang hiển thị một số vị trí cố định nhưng phía sau xoay vòng **bao nhiêu banner cũng được**. Nên vị trí không bao giờ “đầy”, và bán thêm không hết chỗ — nó làm **mỏng tỉ lệ hiển thị** của những khách đã mua.',
+          '“Placement” có **ba nghĩa** trong hệ thống: khu vực hiển thị (master data) · bậc mà một tin cụ thể đang chiếm · một booking banner mua đứt. Đây là nguồn nhầm lẫn số 1 — xem Từ điển.',
+        ],
+      },
+      {
+        kind: 'list',
+        heading: 'Bundle là bao bì bán hàng, không phải entitlement',
+        items: [
+          'Gói (bundle) gộp nhiều sản phẩm thành một giá, một dòng trên báo giá. Nhưng khi cấp quota thì nó **bung ra thành từng phần riêng** — khách không giữ “một bundle”, khách giữ các sản phẩm bên trong.',
+        ],
+      },
+    ],
+  },
+
+  Recruitment: {
+    title: 'Logic chung — Recruitment',
+    lead:
+      'Đây là chặng **tiêu** quota. Tin tuyển dụng nối trực tiếp với thứ khách đã mua: đăng một tin dưới bậc nào thì tiêu một slot của đúng bậc đó, và tin tự lên đúng những khu vực mà bậc đó mua quyền xuất hiện.',
+    headline: [
+      '**Quota đếm theo từng bậc, không dùng chéo.** Mua 5 tin Top job là 5 slot Top job — hết slot bậc đó thì không đăng được bậc đó, dù tổng slot còn nhiều.',
+      '**Chỉ Open + Exposure On mới hiển thị công khai.** Hai thứ này độc lập; một tin Open mà Exposure Off thì không ai thấy.',
+      '**Tin đăng được từ HAI cửa** — Admin và trang công ty — nhưng là **một thực thể, một vòng đời**.',
+    ],
+    blocks: [
+      {
+        kind: 'table',
+        heading: 'Vòng đời tin đăng — suy ra từ ngày, không gõ tay',
+        cols: ['Trạng thái', 'Nghĩa', 'Chuyển tiếp'],
+        rows: [
+          ['Draft', 'Đã tạo, chưa đăng', 'Publish → Open (nếu để trống ngày bắt đầu) hoặc Schedule'],
+          ['Schedule', 'Trước ngày bắt đầu đã đặt', 'Tới ngày → **tự** thành Open'],
+          ['Open', 'Trong khoảng ngày chạy — là thứ ứng viên thấy', 'Qua ngày kết thúc → **tự** thành Closed'],
+          ['Closed', 'Đã hết hạn, giữ lại để báo cáo', 'Không quay lại Open được — đăng tin mới'],
+        ],
+      },
+      {
+        kind: 'warn',
+        text:
+          '**Exposure là công tắc riêng, không phải trạng thái thứ năm.** Nó tắt/bật hiển thị mà không đổi trạng thái và không kết thúc booking — tin vẫn chạy và vẫn hết hạn đúng ngày. Khi khách báo “tin không hiện”, kiểm Exposure **trước tiên**.',
+      },
+      {
+        kind: 'list',
+        heading: 'Sửa tin đang chạy',
+        items: [
+          'Sửa một tin **Open là tự do** — trừ **tiêu đề tin sau 72 giờ**, và ràng buộc đó chỉ áp cho phía công ty tự sửa.',
+          'Muốn gỡ tin khỏi trang jobseeker mà không kết thúc booking: tắt **Exposure**. Đó là cách duy nhất — không phải sửa nội dung, không phải đóng tin sớm.',
+        ],
+      },
+      {
+        kind: 'list',
+        heading: 'Những field hay bị gộp làm một',
+        items: [
+          '**Work type** (nơi làm: tại văn phòng · remote · hybrid · nước ngoài) và **Contract type** (loại hợp đồng: toàn thời gian · bán thời gian · thời vụ · thực tập…) là **hai field riêng**. Gộp lại là mất một nửa thông tin lọc của ứng viên.',
+          '**Địa điểm làm việc là một VĂN PHÒNG CÓ TÊN, lưu trên công ty** — tin chỉ tham chiếu tới nó. Sửa địa chỉ thì sửa ở hồ sơ công ty, một lần, không sửa trong từng tin.',
+          '**Phân loại tin là master data, không phải chữ tự do.** Ngành nghề, vị trí, kỹ năng đều chọn từ danh mục — vì đó là thứ bộ lọc và gợi ý việc đọc.',
+          '**Phúc lợi là một DANH SÁCH chọn, không phải đoạn văn.** Tin mới bắt đầu bằng bản sao bộ phúc lợi của công ty, rồi sửa tự do theo từng tin.',
+        ],
+      },
+      {
+        kind: 'list',
+        heading: 'Lương',
+        items: [
+          'Hai đơn vị: **VND và USD**. USD là **đơn vị hiển thị** — hệ thống vẫn quy đổi để so sánh và xếp hạng, dùng tỉ giá khai ở System → General settings.',
+          '**Dải lương một phía là hợp lệ:** “Từ 15 triệu” là một tin đăng đúng luật, không phải dữ liệu thiếu.',
+        ],
+      },
+      {
+        kind: 'list',
+        heading: 'Hồ sơ ứng viên là dữ liệu cá nhân',
+        items: [
+          'Mở chi tiết ứng viên và xuất danh sách đều **bị ghi log ở server**. Chỉ mở khi có lý do công việc.',
+          'Quyền **xuất** dữ liệu tách khỏi quyền **đọc** — đọc được không đương nhiên xuất được.',
+          'Mở khoá một CV cho công ty **trừ credit** của công ty đó; giá có thể được đặt riêng theo từng CV.',
+        ],
+      },
+      {
+        kind: 'warn',
+        text:
+          'Luồng **duyệt tin (approval) đã được gỡ bỏ từ 09/2026**. Tin không còn đi qua bước chờ duyệt — tài liệu cũ nào còn mô tả bước đó là đã lỗi thời.',
+      },
     ],
   },
 
   User: {
     title: 'Logic chung — User',
     lead:
-      'Hai loại tài khoản hoàn toàn khác nhau nằm cạnh nhau: người tìm việc (ứng viên) và người của công ty khách hàng. Tài khoản nhân viên Saramin không ở đây — nó ở System → Users.',
-    logic: [
-      '**4 trạng thái ở API hiện thành 5 trạng thái trên màn hình.** Active · Unverified · Withdrawn · Deactivated · Deleted.',
-      '**Withdrawn và Deactivated là cùng một trạng thái phía API,** phân biệt bằng AI là người đổi: chính ứng viên tự tắt thì là Withdrawn, admin khoá thì là Deactivated.',
-      '**Xoá là xoá mềm.** Tài khoản Deleted vẫn còn 30 ngày rồi mới bị purge thật; trong thời gian đó khôi phục được.',
-      '**Mở hồ sơ và xuất dữ liệu đều được audit.** Quyền xuất (`candidate:manage`) khác quyền đọc (`candidate:read`).',
+      'Hai loại tài khoản hoàn toàn khác nhau nằm cạnh nhau: người tìm việc và người của công ty khách hàng. Tài khoản nhân viên Saramin **không** ở đây — nó ở System → Users.',
+    headline: [
+      '**Bốn trạng thái ở API hiện thành năm trạng thái trên màn hình.** Cặp hay nhầm là Withdrawn và Deactivated.',
+      '**Xoá là xoá mềm.** Bản ghi vẫn còn 30 ngày nên luôn khôi phục được trong thời gian đó.',
     ],
-    watch: [
-      'Đừng “reactivate” một tài khoản Withdrawn như thể HQ khoá nhầm — người dùng tự tắt nó.',
-      'Tab Withdrawn query cùng tập dữ liệu với tab Deactivated; phân biệt nằm ở cột trạng thái từng dòng.',
+    blocks: [
+      {
+        kind: 'table',
+        heading: 'Năm trạng thái',
+        cols: ['Hiện trên UI', 'Nghĩa', 'Ai gây ra', 'Làm được gì'],
+        rows: [
+          ['Active', 'Đang dùng bình thường', '—', 'Deactivate · Delete'],
+          ['Unverified', 'Đăng ký nhưng chưa xác thực', '—', 'Gửi lại xác thực · Delete'],
+          ['**Withdrawn**', 'Người dùng **tự** tắt tài khoản', 'Chính ứng viên', 'Reactivate · Delete'],
+          ['**Deactivated**', 'Bị HQ khoá', 'Admin', 'Reactivate · Delete'],
+          ['Deleted', 'Xoá mềm, purge sau 30 ngày', 'Admin hoặc ứng viên', 'Restore'],
+        ],
+      },
+      {
+        kind: 'warn',
+        text:
+          'Withdrawn và Deactivated là **cùng một trạng thái phía API**, phân biệt bằng **ai là người đổi**. Vì thế tab Withdrawn query cùng tập dữ liệu với tab Deactivated, và phân biệt nằm ở cột trạng thái từng dòng. Đừng “reactivate” một tài khoản Withdrawn như thể HQ khoá nhầm — chính người dùng đã tắt nó.',
+      },
+      {
+        kind: 'list',
+        heading: 'Ba loại tài khoản, đừng lẫn',
+        items: [
+          '**Jobseeker users** — ứng viên. Ở nhóm User.',
+          '**Company users** — người của khách hàng; một dòng là một tư cách thành viên trong một công ty. Cũng ở nhóm User.',
+          '**Users** — nhân viên Saramin. Ở **System**, không ở đây.',
+        ],
+      },
+      { kind: 'list', heading: 'Riêng tư', items: ['Lý do nhập khi khoá/xoá là **ghi chú nội bộ**, người dùng không bao giờ thấy.'] },
     ],
   },
 
@@ -110,50 +364,132 @@ export const MODULE_DOCS: Record<string, ModuleDoc> = {
     title: 'Logic chung — Content',
     lead:
       'Mọi thứ hiển thị trên trang jobseeker mà không phải tin tuyển dụng: banner, popup, bộ sưu tập tin, trang chiến dịch, menu và chân trang.',
-    logic: [
-      '**Banner và Popup là hai tab của cùng một trang Displays,** không phải hai trang. Chúng cùng vòng đời Draft → Schedule → Open → Expired và cùng có công tắc Exposure riêng.',
-      '**Banner có hai nguồn: Sold (khách mua, gắn PO) và House (Saramin tự chạy).** Banner nội bộ vẫn chiếm chỗ xoay vòng y như banner bán — nó là thứ giữ cho vị trí không trống.',
-      '**Popup khác banner ở ba điểm:** nhắm theo nhóm người xem, có giới hạn tần suất, và chỉ một popup hiện tại một thời điểm nên cần thứ tự ưu tiên.',
-      '**Collection là bộ tin đã lưu; Zone là trang chiến dịch ghép từ collection.** Sửa collection thì mọi zone dùng nó đổi theo.',
-      '**Menu và footer của site jobseeker sửa ở đây,** mỗi tab là một vùng menu.',
+    headline: [
+      '**Banner nội bộ chiếm chỗ y như banner bán.** Nó là thứ giữ cho vị trí không trống — và cũng là thứ khiến một vị trí “đang chạy” mà không sinh doanh thu.',
+      '**Cùng vòng đời và cùng công tắc Exposure như tin tuyển dụng.** Học một lần dùng cho cả hai.',
+    ],
+    blocks: [
+      {
+        kind: 'table',
+        heading: 'Banner và Popup khác nhau chỗ nào',
+        note: 'Hai tab của cùng một trang, vì chúng là cùng một loại chứng từ thương mại.',
+        cols: ['', 'Banner', 'Popup'],
+        rows: [
+          ['Chiếm chỗ', 'Một vị trí hiển thị, xoay vòng', 'Chen ngang — không nằm trong vị trí nào'],
+          ['Nhắm đối tượng', 'Theo vị trí', 'Theo **nhóm người xem**'],
+          ['Giới hạn', '— theo tỉ lệ xoay vòng', 'Có **giới hạn tần suất** để không hiện hai lần một ngày'],
+          ['Cùng lúc', 'Nhiều cái xoay vòng', '**Chỉ một** — nên cần thứ tự ưu tiên'],
+        ],
+      },
+      {
+        kind: 'list',
+        heading: 'Hai nguồn banner',
+        items: [
+          '**Sold** — khách mua, gắn PO và sản phẩm. Ngày kết thúc suy ra từ thời lượng sản phẩm.',
+          '**House** — Saramin tự chạy. Không có khách, không có PO, nên phải **tự đặt cả hai ngày** và **ghi mục đích** — vì không có đơn hàng nào giải thích hộ tại sao nó tồn tại.',
+        ],
+      },
+      {
+        kind: 'list',
+        heading: 'Collection và Zone',
+        items: [
+          '**Collection** là bộ tin hoặc bộ công ty đã đặt tên và lưu lại, site gọi theo slug. Đây là thứ mà một mục menu như “Korea” thực chất trỏ vào.',
+          '**Zone** (채용관) là trang chiến dịch có thương hiệu, có đường dẫn công khai riêng, ghép từ các collection.',
+          'Sửa một collection thì **mọi** menu và zone đang dùng nó đổi theo — đó là điểm mạnh và cũng là cái bẫy.',
+        ],
+      },
+      {
+        kind: 'warn',
+        text:
+          'Ảnh banner phải **đúng kích thước** của vị trí. Sai tỉ lệ bị từ chối khi lưu, hệ thống **không tự cắt** — vì một banner bị cắt là một thiết kế không ai duyệt.',
+      },
     ],
   },
 
   System: {
     title: 'Logic chung — System',
-    lead:
-      'Cấu hình nền của cả hệ thống: ai được làm gì, dữ liệu danh mục dùng chung, và các thiết lập ảnh hưởng mọi module.',
-    logic: [
-      '**Quyền có dạng `resource:action` kèm phạm vi.** Ba phạm vi: `all` (không giới hạn) · `company` (chỉ công ty được giao) · `own` (chỉ dữ liệu của chính mình).',
-      '**Server mới là nơi chặn thật.** Giao diện chỉ ẩn nút bạn không dùng được; mọi kiểm tra thật nằm ở backend. Vì vậy nút bị ẩn = thiếu quyền, gần như không bao giờ là bug.',
-      '**Master data là dữ liệu nền dùng chung** — ngành nghề, kỹ năng, cấp bậc, khu vực. Mỗi tab một nhóm và mỗi nhóm có quyền riêng, nên thiếu quyền một tab thì tab đó trống chứ cả trang không lỗi.',
-      '**Users ở đây là nhân viên Saramin,** khác hẳn tài khoản ứng viên ở nhóm User.',
-      '**Audit log ghi lại thao tác chạm dữ liệu nhạy cảm** — mở hồ sơ ứng viên, xuất dữ liệu, phát hành hoá đơn.',
-      '**Mọi ngày giờ hiển thị theo giờ Việt Nam,** không theo múi giờ máy người xem.',
+    lead: 'Cấu hình nền của cả hệ thống: ai được làm gì, dữ liệu danh mục dùng chung, và các thiết lập ảnh hưởng mọi module.',
+    headline: [
+      '**Server mới là nơi chặn thật.** Giao diện chỉ ẩn nút bạn không dùng được — nên nút bị ẩn gần như luôn là thiếu quyền, không phải bug.',
+      '**Issuer identity là pháp nhân CỦA SARAMIN**, không phải hồ sơ khách. Sai ở đó là sai trên mọi hoá đơn xuất ra.',
     ],
-    watch: [
-      'Sửa vai trò của một người đang đăng nhập thì quyền mới chỉ áp sau khi phiên của họ nạp lại — bảo họ đăng xuất vào lại nếu thấy chưa đổi.',
+    blocks: [
+      {
+        kind: 'table',
+        heading: 'Quyền — `resource:action` kèm phạm vi',
+        cols: ['Phạm vi', 'Nghĩa'],
+        rows: [
+          ['`all`', 'Không giới hạn — thấy mọi dòng'],
+          ['`company`', 'Chỉ những công ty được giao'],
+          ['`own`', 'Chỉ dữ liệu của chính người đó'],
+        ],
+      },
+      {
+        kind: 'list',
+        heading: 'Dữ liệu nền',
+        items: [
+          '**Master data** là danh mục dùng chung: ngành nghề, kỹ năng, cấp bậc, khu vực. Mỗi tab một nhóm và **mỗi nhóm một quyền riêng** — thiếu quyền một tab thì chỉ tab đó trống, cả trang vẫn chạy.',
+          'Tab **kỹ năng còn thiếu** nhận đầu vào từ trang Search quality: từ khoá người dùng tìm mà danh mục chưa có.',
+          '**General settings** giữ trọng số gợi ý việc và **tỉ giá USD→VND** — tỉ giá này là thứ mà so sánh lương trong gợi ý việc đọc.',
+        ],
+      },
+      {
+        kind: 'warn',
+        text: 'Đổi vai trò của một người **đang đăng nhập** thì quyền mới chỉ áp sau khi phiên của họ nạp lại — bảo họ đăng xuất vào lại nếu thấy chưa đổi.',
+      },
+      {
+        kind: 'list',
+        heading: 'Ghi vết',
+        items: [
+          '**Audit log** ghi thao tác chạm dữ liệu nhạy cảm: mở hồ sơ ứng viên, xuất dữ liệu, phát hành hoá đơn. Đây là nơi tra khi có khiếu nại “ai đã xem/sửa cái này”.',
+          'Mọi ngày giờ trong hệ thống hiển thị theo **giờ Việt Nam**, không theo máy người xem.',
+        ],
+      },
     ],
   },
 
   Analytics: {
     title: 'Logic chung — Analytics',
     lead: 'Ba báo cáo tách theo câu hỏi cần trả lời, không tách theo phòng ban.',
-    logic: [
-      '**Sales report** — ai bán được bao nhiêu, đang ở chặng nào.',
-      '**Recruit report** — tin tuyển dụng và ứng tuyển chạy ra sao.',
-      '**Revenue report** — tiền thực thu theo kỳ. Doanh thu tính theo hoá đơn đã phát hành, nên con số ở đây đi cùng mốc Issued chứ không đi cùng PO.',
-      '**Mọi mốc thời gian theo giờ Việt Nam.** Báo cáo “hôm nay” là hôm nay ở VN.',
+    headline: ['**Doanh thu tính theo hoá đơn đã phát hành.** PO đã ký nhưng chưa phát hành hoá đơn thì chưa vào doanh thu.'],
+    blocks: [
+      {
+        kind: 'table',
+        heading: 'Ba báo cáo',
+        cols: ['Báo cáo', 'Trả lời câu hỏi', 'Đọc gì'],
+        rows: [
+          ['Sales report', 'Ai bán được bao nhiêu, đang ở chặng nào', 'Phân bố khách theo chặng pipeline + ảnh chụp doanh thu'],
+          ['Recruit report', 'Tin và ứng tuyển chạy ra sao', 'Số tin / hồ sơ / lượt ứng tuyển, phễu, top tin'],
+          ['Revenue report', 'Tiền thực thu theo kỳ', 'Theo **ngày hoá đơn**, không theo ngày PO'],
+        ],
+      },
+      {
+        kind: 'warn',
+        text:
+          'Báo cáo phải đọc **ngày hoá đơn**, không bao giờ đọc ngày dự kiến ghi trên PO — PO ghi ngày *kế hoạch*, hoá đơn ghi ngày *sự thật*, và chính ngày hoá đơn khởi động đồng hồ kích hoạt.',
+      },
     ],
   },
 
   'Call center': {
     title: 'Logic chung — Call center',
-    lead:
-      'Dữ liệu cuộc gọi đồng bộ từ tổng đài Callio. Admin không tạo cuộc gọi — nó chỉ đọc lại và xếp hạng.',
-    logic: [
-      '**Dữ liệu là bản sao từ Callio,** không phải nguồn gốc. Sai lệch thì sửa ở tổng đài, không sửa ở đây.',
-      '**Sync health là nơi kiểm khi nghi ngờ thiếu cuộc gọi** — trước khi kết luận nhân viên không gọi.',
+    lead: 'Dữ liệu cuộc gọi đồng bộ từ tổng đài Callio. Admin không tạo cuộc gọi — nó chỉ đọc lại và xếp hạng.',
+    headline: ['**Không gọi điện được từ đây.** Callio không có API quay số — đã kiểm với tài liệu và API thật của họ.'],
+    blocks: [
+      {
+        kind: 'list',
+        heading: 'Ba trang',
+        items: [
+          '**Call logs** — lịch sử cuộc gọi, kèm hàng chờ các cuộc chưa gắn được vào công ty nào.',
+          '**Ranking** — xếp hạng nhân viên theo hoạt động gọi.',
+          '**Sync health** — tình trạng đồng bộ.',
+        ],
+      },
+      {
+        kind: 'warn',
+        text:
+          'Dữ liệu ở đây là **bản sao**, không phải nguồn gốc. Sai lệch thì sửa ở tổng đài. Thấy số gọi thấp bất thường thì kiểm **Sync health** trước, đừng vội kết luận nhân viên không gọi.',
+      },
     ],
   },
 }
