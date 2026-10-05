@@ -6,6 +6,7 @@ import { MODULE_DOCS, PAGE_DOCS } from './docs'
 import type { DocBlock } from './docs'
 import { OverviewFlow } from './overview'
 import { DemoPlan } from './demo'
+import { TestPlan } from './testplan'
 import { md } from './md'
 
 /* ── Saramin Admin — cẩm nang toàn bộ hệ thống ────────────────────────────────
@@ -48,12 +49,13 @@ type Sel =
   | { t: 'home' }
   | { t: 'flow' }
   | { t: 'demo' }
+  | { t: 'test' }
   | { t: 'page'; key: string }
   | { t: 'module'; group: string }
   | { t: 'guide'; id: string }
 
 const selId = (s: Sel) =>
-  s.t === 'home' ? 'home' : s.t === 'flow' ? 'flow' : s.t === 'demo' ? 'demo' : s.t === 'page' ? `p:${s.key}` : s.t === 'module' ? `m:${s.group}` : `g:${s.id}`
+  s.t === 'home' ? 'home' : s.t === 'flow' ? 'flow' : s.t === 'demo' ? 'demo' : s.t === 'test' ? 'test' : s.t === 'page' ? `p:${s.key}` : s.t === 'module' ? `m:${s.group}` : `g:${s.id}`
 
 /* ── addressing ───────────────────────────────────────────────────────────────
    Every view has its own URL, because the commonest thing anyone does with a
@@ -72,6 +74,7 @@ function href(s: Sel): string {
   if (s.t === 'home') return '/'
   if (s.t === 'flow') return '/toan-canh'
   if (s.t === 'demo') return '/demo'
+  if (s.t === 'test') return '/test'
   if (s.t === 'guide') return `/huong-dan/${s.id}`
   if (s.t === 'module') return `/logic/${slug(s.group)}`
   return `/trang/${s.key}`
@@ -81,6 +84,7 @@ function parse(pathname: string): Sel {
   const [, kind, rest] = pathname.replace(/\/+$/, '').split('/')
   if (kind === 'toan-canh') return { t: 'flow' }
   if (kind === 'demo') return { t: 'demo' }
+  if (kind === 'test') return { t: 'test' }
   if (kind === 'trang' && rest && ALL.some((p) => p.key === rest)) return { t: 'page', key: rest }
   if (kind === 'logic' && rest && GROUP_BY_SLUG.has(rest)) return { t: 'module', group: GROUP_BY_SLUG.get(rest)! }
   if (kind === 'huong-dan' && rest && WORKFLOW.sections.some((x) => x.id === rest)) return { t: 'guide', id: rest }
@@ -141,6 +145,7 @@ export function App() {
           <RailItem label="Tổng quan" to={href({ t: 'home' })} on={cur === 'home'} onClick={() => pick({ t: 'home' })} />
           <RailItem label="Toàn cảnh hệ thống" to={href({ t: 'flow' })} accent on={cur === 'flow'} onClick={() => pick({ t: 'flow' })} />
           <RailItem label="Danh sách flow (demo)" to={href({ t: 'demo' })} accent on={cur === 'demo'} onClick={() => pick({ t: 'demo' })} />
+          <RailItem label="Bộ test case" to={href({ t: 'test' })} accent on={cur === 'test'} onClick={() => pick({ t: 'test' })} />
           {GUIDE_IDS.map((id) => {
             const s = sec(id)
             return s ? <RailItem key={id} label={s.label} to={href({ t: 'guide', id })} on={cur === `g:${id}`} onClick={() => pick({ t: 'guide', id })} /> : null
@@ -195,6 +200,8 @@ export function App() {
             <OverviewFlow />
           ) : sel.t === 'demo' ? (
             <DemoPlan onPick={(k) => pick({ t: 'page', key: k })} />
+          ) : sel.t === 'test' ? (
+            <TestPlan onPick={(k) => pick({ t: 'page', key: k })} />
           ) : sel.t === 'guide' ? (
             (() => { const s = sec(sel.id); return s ? <GuideView s={s} dev={dev} /> : null })()
           ) : sel.t === 'module' ? (
