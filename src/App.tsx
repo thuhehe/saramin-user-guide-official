@@ -5,6 +5,8 @@ import type { WfBlock, WfSection } from './handbook'
 import { MODULE_DOCS, PAGE_DOCS } from './docs'
 import type { DocBlock } from './docs'
 import { OverviewFlow } from './overview'
+import { DemoPlan } from './demo'
+import { md } from './md'
 
 /* ── Saramin Admin — cẩm nang toàn bộ hệ thống ────────────────────────────────
    A site of its own, not a page on the requirement site. The requirement says
@@ -45,12 +47,13 @@ const sec = (id: string) => WORKFLOW.sections.find((s) => s.id === id)
 type Sel =
   | { t: 'home' }
   | { t: 'flow' }
+  | { t: 'demo' }
   | { t: 'page'; key: string }
   | { t: 'module'; group: string }
   | { t: 'guide'; id: string }
 
 const selId = (s: Sel) =>
-  s.t === 'home' ? 'home' : s.t === 'flow' ? 'flow' : s.t === 'page' ? `p:${s.key}` : s.t === 'module' ? `m:${s.group}` : `g:${s.id}`
+  s.t === 'home' ? 'home' : s.t === 'flow' ? 'flow' : s.t === 'demo' ? 'demo' : s.t === 'page' ? `p:${s.key}` : s.t === 'module' ? `m:${s.group}` : `g:${s.id}`
 
 /* ── addressing ───────────────────────────────────────────────────────────────
    Every view has its own URL, because the commonest thing anyone does with a
@@ -68,6 +71,7 @@ const GROUP_BY_SLUG = new Map(GROUP_ORDER.map((g) => [slug(g), g]))
 function href(s: Sel): string {
   if (s.t === 'home') return '/'
   if (s.t === 'flow') return '/toan-canh'
+  if (s.t === 'demo') return '/demo'
   if (s.t === 'guide') return `/huong-dan/${s.id}`
   if (s.t === 'module') return `/logic/${slug(s.group)}`
   return `/trang/${s.key}`
@@ -76,6 +80,7 @@ function href(s: Sel): string {
 function parse(pathname: string): Sel {
   const [, kind, rest] = pathname.replace(/\/+$/, '').split('/')
   if (kind === 'toan-canh') return { t: 'flow' }
+  if (kind === 'demo') return { t: 'demo' }
   if (kind === 'trang' && rest && ALL.some((p) => p.key === rest)) return { t: 'page', key: rest }
   if (kind === 'logic' && rest && GROUP_BY_SLUG.has(rest)) return { t: 'module', group: GROUP_BY_SLUG.get(rest)! }
   if (kind === 'huong-dan' && rest && WORKFLOW.sections.some((x) => x.id === rest)) return { t: 'guide', id: rest }
@@ -135,6 +140,7 @@ export function App() {
           <RailGroup label="Bắt đầu" />
           <RailItem label="Tổng quan" to={href({ t: 'home' })} on={cur === 'home'} onClick={() => pick({ t: 'home' })} />
           <RailItem label="Toàn cảnh hệ thống" to={href({ t: 'flow' })} accent on={cur === 'flow'} onClick={() => pick({ t: 'flow' })} />
+          <RailItem label="Danh sách flow (demo)" to={href({ t: 'demo' })} accent on={cur === 'demo'} onClick={() => pick({ t: 'demo' })} />
           {GUIDE_IDS.map((id) => {
             const s = sec(id)
             return s ? <RailItem key={id} label={s.label} to={href({ t: 'guide', id })} on={cur === `g:${id}`} onClick={() => pick({ t: 'guide', id })} /> : null
@@ -187,6 +193,8 @@ export function App() {
             <Home onPick={pick} />
           ) : sel.t === 'flow' ? (
             <OverviewFlow />
+          ) : sel.t === 'demo' ? (
+            <DemoPlan onPick={(k) => pick({ t: 'page', key: k })} />
           ) : sel.t === 'guide' ? (
             (() => { const s = sec(sel.id); return s ? <GuideView s={s} dev={dev} /> : null })()
           ) : sel.t === 'module' ? (
@@ -721,27 +729,4 @@ function RailItem({ label, to, on, onClick, accent }: { label: string; to: strin
 }
 
 /** **bold** and `code` only — enough to mark a field name, not enough to invite prose. */
-/* Bold, italic and code. Two passes, not one alternation: `**bold**` is matched
-   first and NON-GREEDY, then its contents are re-scanned for `*italic*`. A single
-   flat regex cannot do this — `**a *b* c**` either loses the inner italic or the
-   italic branch eats the opening stars of the bold run and the rest of the line
-   prints its asterisks. Italic carries the UI's own vocabulary throughout the doc
-   (status names, button labels), so it appears inside bold constantly. */
-function mdItalic(s: string, k: number) {
-  return s.split(/(\*[^*\n]+\*)/g).map((p, j) =>
-    p.startsWith('*') && p.endsWith('*') && p.length > 2
-      ? <i key={`${k}-${j}`} className="not-italic font-medium text-ink/90">{p.slice(1, -1)}</i>
-      : p,
-  )
-}
-
-function md(s: string) {
-  return s.split(/(\*\*[\s\S]+?\*\*|`[^`]+`)/g).map((part, i) => {
-    if (part.startsWith('**') && part.endsWith('**') && part.length > 4)
-      return <b key={i} className="font-semibold text-ink">{mdItalic(part.slice(2, -2), i)}</b>
-    if (part.startsWith('`') && part.endsWith('`')) return <code key={i} className="font-mono text-[11.5px] text-brand">{part.slice(1, -1)}</code>
-    return mdItalic(part, i)
-  })
-}
-
 const cx = (...c: (string | false | undefined)[]) => c.filter(Boolean).join(' ')
