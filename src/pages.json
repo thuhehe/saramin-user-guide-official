@@ -50,7 +50,7 @@
   "sub": []
  },
  {
-  "group": "Recruitment",
+  "group": "Job management",
   "key": "jobs",
   "label": "Jobs",
   "path": "/recruitment/jobs",
@@ -64,19 +64,35 @@
   ]
  },
  {
-  "group": "Recruitment",
-  "key": "applicants",
-  "label": "Applications",
-  "path": "/recruitment/applications",
-  "perm": "job:read",
+  "group": "Resume management",
+  "key": "create-cv",
+  "label": "Create CV",
+  "path": "/my-profile/cv-resume",
+  "perm": "",
   "flag": "",
-  "what": "Danh sách ứng tuyển của mọi công ty — ai đã nộp vào tin nào, đang ở chặng nào.",
+  "site": "Jobseeker site",
+  "what": "Thư viện CV của ứng viên: soạn **Saramin CV** hoặc **tải file lên**, khai *Fresher / Experienced* cho từng CV, và bật *Show CV to employers*.",
   "sub": [
-   "/recruitment/applications/:id"
+   "/my-profile/cv/create",
+   "/my-profile/cv/upload",
+   "/my-profile/cv/:id"
   ]
  },
  {
-  "group": "Recruitment",
+  "group": "Resume management",
+  "key": "cv-review",
+  "label": "CV review",
+  "path": "/recruitment/cv-review",
+  "perm": "cv_review:read",
+  "flag": "",
+  "what": "Hàng đợi CV cần người kiểm: các CV máy quét còn nghi ngờ, cùng hai nhánh kết quả.",
+  "sub": [
+   "/recruitment/cv-review/:cvId",
+   "/recruitment/cv-review/:cvId/detail"
+  ]
+ },
+ {
+  "group": "Resume management",
   "key": "talent-pool",
   "label": "Talent pool",
   "path": "/recruitment/talent-pool",
@@ -89,16 +105,44 @@
   ]
  },
  {
-  "group": "Recruitment",
-  "key": "cv-review",
-  "label": "CV review",
-  "path": "/recruitment/cv-review",
-  "perm": "cv_review:read",
+  "group": "Resume management",
+  "key": "candidate-management",
+  "label": "Candidate management",
+  "path": "/applicants",
+  "perm": "",
   "flag": "",
-  "what": "Hàng đợi CV cần người kiểm: các CV máy quét còn nghi ngờ, cùng hai nhánh kết quả.",
+  "site": "Company site",
+  "what": "Console ứng viên của nhà tuyển dụng — tab **Jobs** (người tự nộp đơn) và tab **Talent pool** (người họ tìm ra và lưu vào folder), mỗi tin / folder một pipeline.",
   "sub": [
-   "/recruitment/cv-review/:cvId",
-   "/recruitment/cv-review/:cvId/detail"
+   "/applicants?tab=talent-pool",
+   "/search",
+   "/search/candidates/:resumeId"
+  ]
+ },
+ {
+  "group": "Application management",
+  "key": "how-to-apply",
+  "label": "How to apply",
+  "path": "/jobs/phien-dich-tieng-han-93e7247c",
+  "perm": "",
+  "flag": "",
+  "site": "Jobseeker site",
+  "what": "Ứng viên nộp đơn từ **trang chi tiết tin**: bấm **Apply**, chọn CV, đồng ý xử lý dữ liệu, **Apply job** — rồi hộp **Batch apply** gợi ý tin cùng ngành nghề để nộp tiếp tối đa 5 tin bằng cùng CV.",
+  "sub": [
+   "/jobs/:slug",
+   "/my-profile/applications"
+  ]
+ },
+ {
+  "group": "Application management",
+  "key": "applicants",
+  "label": "Applications",
+  "path": "/recruitment/applications",
+  "perm": "job:read",
+  "flag": "",
+  "what": "Mọi đơn ứng tuyển của mọi công ty — đơn đã tới nhà tuyển dụng chưa (*Not sent · Sent · Recall · Rejected*) và họ đang để ứng viên ở cột nào. HQ chỉ được *Reject* một đơn chưa gửi.",
+  "sub": [
+   "/recruitment/applications/:id"
   ]
  },
  {
@@ -118,7 +162,7 @@
   "path": "/users/company-users",
   "perm": "company_user:read",
   "flag": "companyUsers",
-  "what": "Tài khoản đăng nhập của phía khách hàng, xem xuyên suốt mọi công ty.",
+  "what": "Mọi chỗ ngồi đăng nhập của khách hàng, xem xuyên suốt mọi công ty — một dòng là một người trong một công ty.",
   "sub": []
  },
  {
@@ -173,7 +217,7 @@
   "path": "/system/image-gallery",
   "perm": "content_gallery:read",
   "flag": "",
-  "what": "Kho ảnh dùng chung cho các vị trí hiển thị có ô ảnh.",
+  "what": "Kho ảnh HQ có bản quyền để làm **ảnh thẻ tin** (ảnh hover, ảnh banner) cho các bậc có perk ảnh.",
   "sub": []
  },
  {
@@ -183,7 +227,7 @@
   "path": "/system/discount-programmes",
   "perm": "discount_programme:read",
   "flag": "",
-  "what": "Chương trình chiết khấu áp lên báo giá.",
+  "what": "Bốn chế độ giảm giá của báo giá và mức giảm của chúng — chỉ sửa được mức và ngày.",
   "sub": [
    "/system/discount-programmes/:id"
   ]
@@ -195,7 +239,7 @@
   "path": "/system/quota-usage",
   "perm": "invoice:read",
   "flag": "",
-  "what": "Khách đã được cấp những gì và dùng tới đâu. Một dòng là **một quyền lợi do một hoá đơn đã phát hành cấp ra**.",
+  "what": "Khách đã được cấp những gì và dùng tới đâu — cả bốn loại product. Một dòng là **một quyền lợi do một hoá đơn đã phát hành cấp ra**.",
   "sub": []
  },
  {
@@ -240,7 +284,7 @@
   "path": "/crm/pipeline",
   "perm": "quote:read",
   "flag": "",
-  "what": "Bảng theo dõi cơ hội bán. Một thẻ mở ra chính báo giá của nó.",
+  "what": "Bảng kanban: mỗi thẻ là một báo giá. Kéo giữa ba chặng đầu; PO và Invoice do chứng từ tự đẩy.",
   "sub": []
  },
  {
@@ -264,7 +308,7 @@
   "path": "/crm/purchase-orders",
   "perm": "purchase_order:read",
   "flag": "",
-  "what": "Đơn đã cam kết, dựng từ đúng option khách đã chấp nhận. Nơi phát hành hoá đơn.",
+  "what": "Đơn đã cam kết, dựng từ đúng option khách chọn. Nơi gửi đơn cho khách, xuất hoá đơn nháp và chuyển kế toán.",
   "sub": [
    "/crm/purchase-orders/:id"
   ]
@@ -308,7 +352,7 @@
   "path": "/crm/company-documents",
   "perm": "company_document:review",
   "flag": "",
-  "what": "Giấy tờ công ty nộp lên để xác minh, và yêu cầu đổi thông tin pháp lý trên hoá đơn.",
+  "what": "Đã gỡ khỏi console (06/10/2026). Xác minh giấy tờ giờ làm trên hồ sơ công ty — nút *Verify company*.",
   "sub": []
  },
  {
@@ -319,16 +363,6 @@
   "perm": "telephony_call:read",
   "flag": "",
   "what": "Lịch sử cuộc gọi đồng bộ từ tổng đài Callio.",
-  "sub": []
- },
- {
-  "group": "CRM",
-  "key": "call-sync-health",
-  "label": "Sync health",
-  "path": "/call-center/sync-health",
-  "perm": "telephony_call:assign",
-  "flag": "",
-  "what": "Tình trạng đồng bộ với tổng đài — dùng khi nghi ngờ thiếu dữ liệu cuộc gọi.",
   "sub": []
  },
  {
@@ -431,13 +465,55 @@
   "sub": []
  },
  {
+  "group": "Mega menu pages",
+  "key": "premium-pages",
+  "label": "Premium pages",
+  "path": "/khu-tuyen-dung/mb-bank",
+  "perm": "",
+  "flag": "",
+  "site": "Jobseeker site",
+  "what": "Trang tuyển dụng có thương hiệu cho một nhà tuyển dụng hoặc một chủ đề — banner, dải logo, một thanh tìm kiếm và **hai danh sách tin lấy từ Collection**. Admin dựng ở *Content → Zones*; ví dụ đang sống: **MB Bank** và **NIPA**.",
+  "sub": [
+   "/khu-tuyen-dung/nipa",
+   "/zones/:address",
+   "/채용관/:address"
+  ]
+ },
+ {
+  "group": "Mega menu pages",
+  "key": "jobs-pages",
+  "label": "Jobs pages",
+  "path": "/jobs/roles",
+  "perm": "",
+  "flag": "",
+  "site": "Jobseeker site",
+  "what": "Ba trang bảng tin của mega menu — **Theo khu vực**, **Theo ngành nghề**, **Theo ngành** — cùng một màn hình: thanh tìm kiếm của /search, băng *Đừng bỏ lỡ những tin này!* và băng *Tin tuyển dụng nổi bật*; tin vào băng khi product của tin có tick vùng placement *Mega menu page*.",
+  "sub": [
+   "/jobs/locations",
+   "/jobs/industries"
+  ]
+ },
+ {
+  "group": "Mega menu pages",
+  "key": "korea-global-pages",
+  "label": "Korea/Global pages",
+  "path": "/jobs/korea",
+  "perm": "",
+  "flag": "",
+  "site": "Jobseeker site",
+  "what": "Bảng tin chia đôi theo quốc gia của nhà tuyển dụng: công ty có *CRM → Company → Country* = Hàn Quốc vào **Korea**, mọi nước khác — **kể cả để trống** — vào **Global**.",
+  "sub": [
+   "/jobs/global"
+  ]
+ },
+ {
   "group": "Notifications",
   "key": "notification-rules",
   "label": "Automation rules",
   "path": "/notifications/rules",
   "perm": "notification_workflow:read",
   "flag": "",
-  "what": "Quy tắc tự gửi: sự kiện nào thì gửi mẫu nào cho ai.",
+  "what": "Quy tắc tự gửi email: sự kiện nào thì gửi nội dung nào. Mọi quy tắc seed sẵn đang tắt.",
   "sub": [
    "/notifications/rules/new",
    "/notifications/rules/:id/edit"
@@ -550,7 +626,7 @@
   "path": "/system/membership-tiers",
   "perm": "membership_programme:read",
   "flag": "",
-  "what": "Hạng thành viên của khách hàng.",
+  "what": "Bậc thang 6 hạng cố định — chỉ sửa ngưỡng doanh thu và ghi chú quyền lợi; hạng từng công ty tự tính từ hoá đơn đã phát hành trong năm.",
   "sub": []
  },
  {
@@ -558,7 +634,7 @@
   "key": "master-data",
   "label": "Master data",
   "path": "/system/master-data",
-  "perm": "taxonomy:read",
+  "perm": "region:read",
   "flag": "",
   "what": "Dữ liệu nền: ngành nghề, kỹ năng, khu vực, cấp bậc… Mỗi tab một nhóm, một quyền riêng.",
   "sub": []

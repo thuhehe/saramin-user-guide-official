@@ -5,6 +5,7 @@ import type { WfBlock, WfSection } from './handbook'
 import { MODULE_DOCS, PAGE_DOCS } from './docs'
 import type { DocBlock } from './docs'
 import { OverviewFlow } from './overview'
+import { DIAGRAMS } from './flows'
 import { DemoPlan } from './demo'
 import { TestPlan } from './testplan'
 import { md } from './md'
@@ -26,18 +27,42 @@ import { md } from './md'
    disagree.
 
    The inventory is generated from the build's navigation.config.tsx and
-   route-paths.ts, so it cannot quietly disagree with the console. */
+   route-paths.ts, so it cannot quietly disagree with the console.
+
+   ONE EXCEPTION: Resume management. The client's Notion groups a CV's whole life
+   as one module — written by the candidate, checked by HQ, found and paid for by
+   the employer — and that spans three sites. So its group borrows the console's
+   CV review and Talent pool and adds one page from each of the other two sites,
+   marked with `site`.
+
+   AND A SECOND: Mega menu pages. Premium pages, the Jobs boards and Korea/Global
+   are jobseeker-site pages that the console only feeds (Zones, Collections,
+   placements, a company's country). The client reads them as one module, so they
+   sit after Content as their own group, every page marked `site`.
+
+   AND A THIRD: Application management. The client's Notion has it as a module of
+   its own: How to apply — a jobseeker-site flow (Apply → Batch apply) — and the
+   console's Applications, moved out of the console's Recruitment group. It sits
+   right after Resume management, where the CV meets the job. The console's
+   Recruitment group, left holding only Jobs, reads as Job management here. */
 
 type Page = {
   group: string; key: string; label: string; path: string
   perm: string; flag: string; what: string; sub: string[]
+  /** absent = an Admin console page; set for the few pages that live on another site */
+  site?: 'Company site' | 'Jobseeker site'
 }
 const ALL = PAGES as Page[]
+const ADMIN_PAGES = ALL.filter((p) => !p.site)
 
-/** Admin sidebar order, as the console itself renders it. */
+/* Dev hosts of the other two sites — the same ones the docs name in prose. */
+const SITE_BASE = { 'Company site': 'https://dev.hiring.svn.topdev.asia', 'Jobseeker site': 'https://dev.svn.topdev.asia' } as const
+const pageUrl = (p: Page) => (p.site ? `${SITE_BASE[p.site]}${p.path}` : adminUrl(p.path))
+
+/** Admin sidebar order, as the console itself renders it — plus Resume management, Application management and Mega menu pages (see above). */
 const GROUP_ORDER = [
-  'Dashboards', 'Recruitment', 'Users', 'Product settings', 'Service delivery',
-  'CRM', 'Content', 'Notifications', 'Organisation', 'System',
+  'Dashboards', 'Job management', 'Resume management', 'Application management', 'Users', 'Product settings', 'Service delivery',
+  'CRM', 'Content', 'Mega menu pages', 'Notifications', 'Organisation', 'System',
 ]
 
 /** Handbook sections that stand on their own, before the modules. */
@@ -69,6 +94,9 @@ const selId = (s: Sel) =>
    copy out of the browser is only half an address. */
 const slug = (g: string) => g.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '')
 const GROUP_BY_SLUG = new Map(GROUP_ORDER.map((g) => [slug(g), g]))
+/* Groups renamed after their links were shared — the old address still lands. */
+GROUP_BY_SLUG.set('recruitment', 'Job management')
+GROUP_BY_SLUG.set('jobs-module', 'Job management')
 
 function href(s: Sel): string {
   if (s.t === 'home') return '/'
@@ -144,8 +172,7 @@ export function App() {
           <RailGroup label="Bắt đầu" />
           <RailItem label="Tổng quan" to={href({ t: 'home' })} on={cur === 'home'} onClick={() => pick({ t: 'home' })} />
           <RailItem label="Toàn cảnh hệ thống" to={href({ t: 'flow' })} accent on={cur === 'flow'} onClick={() => pick({ t: 'flow' })} />
-          <RailItem label="Danh sách flow (demo)" to={href({ t: 'demo' })} accent on={cur === 'demo'} onClick={() => pick({ t: 'demo' })} />
-          <RailItem label="Bộ test case" to={href({ t: 'test' })} accent on={cur === 'test'} onClick={() => pick({ t: 'test' })} />
+          <RailItem label="Danh sách flow" to={href({ t: 'demo' })} on={cur === 'demo'} onClick={() => pick({ t: 'demo' })} />
           {GUIDE_IDS.map((id) => {
             const s = sec(id)
             return s ? <RailItem key={id} label={s.label} to={href({ t: 'guide', id })} on={cur === `g:${id}`} onClick={() => pick({ t: 'guide', id })} /> : null
@@ -240,16 +267,20 @@ function Home({ onPick }: { onPick: (s: Sel) => void }) {
       </div>
 
       <dl className="mt-4 flex flex-wrap gap-x-8 gap-y-2 border-b border-line pb-4">
-        <Fact k="Trang" v={String(ALL.length)} />
+        <Fact k="Trang" v={String(ADMIN_PAGES.length)} />
         <Fact k="Nhóm" v={String(GROUP_ORDER.length)} />
-        <Fact k="Trang con" v={String(ALL.reduce((n, p) => n + p.sub.length, 0))} />
+        <Fact k="Trang con" v={String(ADMIN_PAGES.reduce((n, p) => n + p.sub.length, 0))} />
         <Fact k="Console" v="dev.admin-svn.topdev.asia" href={adminUrl('/')} />
       </dl>
 
       <p className="mt-5 max-w-[74ch] text-[14.5px] leading-[1.7] text-ink/80">
-        Cột trái là menu của Admin console — <b>toàn bộ {ALL.length} trang</b>, đúng nhóm và đúng thứ tự như trong hệ
+        Cột trái là menu của Admin console — <b>toàn bộ {ADMIN_PAGES.length} trang</b>, đúng nhóm và đúng thứ tự như trong hệ
         thống. Chọn một trang để xem <b>logic phía sau</b> và <b>cách dùng</b>. Nhóm nào có nhiều quy tắc dùng chung
-        thì có thêm mục <b>Logic chung</b> ở đầu nhóm.
+        thì có thêm mục <b>Logic chung</b> ở đầu nhóm. Riêng nhóm <b>Resume management</b> theo một CV đi qua cả ba
+        site — nên ngoài CV review và Talent pool của Admin, nó có thêm một trang của site ứng viên và một trang của site
+        nhà tuyển dụng. Nhóm <b>Mega menu pages</b> thì là các trang của site ứng viên mà Admin chỉ cấp dữ liệu —
+        Premium pages, các bảng Jobs và Korea/Global. Nhóm <b>Application management</b> đi theo đơn ứng tuyển — bắt
+        đầu từ <b>How to apply</b> trên site ứng viên.
       </p>
 
       <div className="mt-5 border-l-2 border-brand bg-brand-soft/50 py-3 pl-4 pr-4">
@@ -329,15 +360,16 @@ function PageView({ p, dev, onModule }: { p: Page; dev: boolean; onModule: () =>
       <p className="font-mono text-[10.5px] uppercase tracking-[0.16em] text-faint">{p.group}</p>
       <div className="mt-1 flex flex-wrap items-end justify-between gap-x-6 gap-y-2 border-b-2 border-ink pb-3">
         <h1 className="text-[30px] font-bold leading-[1.1] tracking-[-0.02em]">{p.label}</h1>
-        <a href={adminUrl(p.path)} target="_blank" rel="noreferrer"
+        <a href={pageUrl(p)} target="_blank" rel="noreferrer"
            className="rounded-md border border-brand px-3 py-1.5 text-[12px] font-medium text-brand hover:bg-brand hover:text-white">
           Mở trang này ↗
         </a>
       </div>
 
       <dl className="mt-3 flex flex-wrap gap-x-8 gap-y-2 border-b border-line pb-3">
+        <Fact k="Site" v={p.site ?? 'Admin'} />
         <Fact k="Đường dẫn" v={p.path} mono />
-        <Fact k="Quyền" v={p.perm || 'không gắn quyền'} mono />
+        {!p.site && <Fact k="Quyền" v={p.perm || 'không gắn quyền'} mono />}
         {dev && p.flag && <Fact k="Module flag" v={p.flag} mono />}
       </dl>
 
@@ -473,6 +505,15 @@ function DocBlockView({ b }: { b: DocBlock }) {
 
   if (b.kind === 'list') return <Bullets title={b.heading ?? ''} items={b.items} />
 
+  if (b.kind === 'h') {
+    return (
+      <h2 className="!mt-12 flex flex-wrap items-baseline gap-x-3 border-b-2 border-ink pb-2 text-[21px] font-bold leading-[1.2] tracking-[-0.015em]">
+        {md(b.text)}
+        {b.path && <code className="font-mono text-[11px] font-normal text-faint">{b.path}</code>}
+      </h2>
+    )
+  }
+
   if (b.kind === 'warn') {
     return (
       <p className="max-w-[78ch] border-l-2 border-ink/30 py-1.5 pl-4 text-[13px] leading-[1.7] text-ink/80">
@@ -506,6 +547,19 @@ function DocBlockView({ b }: { b: DocBlock }) {
         </figcaption>
       </figure>
     )
+  }
+
+  if (b.kind === 'diagram') {
+    const D = DIAGRAMS[b.id]
+    return D ? (
+      <section>
+        {b.heading && <h2 className="border-b border-ink pb-1.5 text-[15px] font-bold tracking-tight">{b.heading}</h2>}
+        {b.note && <p className="mt-2 max-w-[78ch] text-[12.5px] leading-[1.6] text-muted">{md(b.note)}</p>}
+        <div className="mt-3">
+          <D />
+        </div>
+      </section>
+    ) : null
   }
 
   if (b.kind === 'open') {

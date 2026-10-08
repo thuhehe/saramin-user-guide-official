@@ -306,7 +306,7 @@ const MODULE_RULES: [string, string, string][] = [
   ['Recruitment · Jobs', 'Tiêu quota để đăng tin', 'Exposure độc lập với status: tin có thể OPEN mà vẫn không ai thấy. Và tin chỉ vào được OPEN khi công ty đang ACTIVE.'],
   ['Recruitment · CV review', 'Gác cổng chất lượng CV', 'Duyệt CV, không bao giờ duyệt từng đơn. Một lần duyệt giải phóng mọi đơn đang chờ CV đó; không có gì tự thả sau N giờ.'],
   ['Recruitment · Kho ứng viên', 'Bán quyền tiếp cận ứng viên', 'Một credit mua một người, vĩnh viễn, cho cả công ty. Lưu là miễn phí; mở khoá mới mất tiền.'],
-  ['Users', 'Tài khoản ứng viên', 'Khoá một người là kiểm soát truy cập, hết — nó không từ chối CV và không thu hồi đơn đã giao.'],
+  ['Users', 'Tài khoản ứng viên', 'Khoá một người không từ chối CV — nhưng có rút các đơn đang xử lý, và mở lại không trả về. Xoá thì dữ liệu cá nhân huỷ sau 72 giờ.'],
   ['Content', 'Trang chiến dịch và menu', 'Zone không chứa tin. Cả hai danh sách của nó trỏ vào Collection — sai công ty thì sửa collection, không sửa zone.'],
   ['Organisation', 'Ai được làm gì', 'Phòng ban (ngồi đâu) × vai trò (làm gì) × phạm vi dữ liệu (trên dữ liệu nào). Làm leader không cấp thêm quyền nào.'],
   ['System', 'Dữ liệu nền', 'Master data là thứ mọi dropdown đọc. Sửa một giá trị là đổi mọi màn hình đang dùng nó.'],
