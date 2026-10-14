@@ -96,7 +96,7 @@ const FLOWS: Flow[] = [
       { what: 'Sign-up khớp một công ty **còn ở Free data**', ok: 'Bị chặn — phải đưa công ty sang Customers trước', page: 'sign-ups' },
       { what: 'Upload danh sách công ty từ file', ok: 'Vào Free data, không có owner; MST đã có thì **bỏ qua, không ghi đè**', page: 'companies' },
       { what: '**Archive** một sign-up rác', ok: 'Dòng sang *Archived*, không tạo gì', page: 'sign-ups' },
-      { what: 'Hồ sơ pháp lý công ty', ok: 'Giấy tờ đính kèm xem ở *Company documents*', page: 'company-documents' },
+      { what: 'Giấy ĐKKD công ty', ok: 'Xem ở thẻ *Company documents* trên hồ sơ; quyết định duy nhất là **Verify company** — không còn hàng đợi duyệt riêng', page: 'companies' },
     ],
     logic: { label: 'Logic chung — CRM', href: '/logic/crm' },
   },

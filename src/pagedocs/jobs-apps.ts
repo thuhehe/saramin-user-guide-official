@@ -138,10 +138,9 @@ export const JOBS_APPS_PAGE_DOCS: Record<string, PageDoc> = {
       },
       {
         kind: 'shot',
-        src: '/shots/50-jobs-list.jpg',
+        src: '/shots/rec/jobs-list.jpg',
         where: 'Admin',
-        caption: 'Danh sách tin. Tab trạng thái là **4 giá trị**: `DRAFT · SCHEDULE · OPEN · CLOSED`.',
-        note: 'Ảnh chụp 08/09/2026 — trước khi có cột *Link job*, ô checkbox và nút *Overview*. **Không còn hàng đợi duyệt tin và không còn trạng thái Archived** (svn-be V468, 09/09/2026).',
+        caption: 'Danh sách tin: bốn ô *Overview* (*Expiring 7 days · Open, no applicants · Applications 7 days · Paid and running*), tab **All · Draft · Schedule · Open · Closed**, cột *Link job* mở tin trên site công khai, cột *Job type* là *Paid* / *Free*.',
       },
 
       /* §2 New job posting */
@@ -178,23 +177,16 @@ export const JOBS_APPS_PAGE_DOCS: Record<string, PageDoc> = {
       },
       {
         kind: 'shot',
-        src: '/shots/53-job-new-posting-setup.jpg',
+        src: '/shots/rec/job-new-top.jpg',
         where: 'Admin',
-        caption: 'Form tạo tin, mục **Posting setup** — nơi tin gặp phần đã bán.',
+        caption: '**New job posting** — mục *Posting setup*: *Company*, *Publish at* (để trống = đăng ngay), *Invoice* (mặc định *— none (Free job) —*), *Main product*, hai ô add-on (khoá cho tới khi có hoá đơn và Main product), *Exposure*, *Post anonymously*.',
       },
       {
         kind: 'shot',
-        src: '/shots/54-job-po-selected.jpg',
+        src: '/shots/rec/job-new-product.jpg',
         where: 'Admin',
-        caption: 'Chọn công ty rồi chọn **Invoice**.',
-        note: 'Ảnh chụp 08/09/2026, khi ô này còn tên **PO**. Build giờ chọn **hoá đơn** (*Invoice*), và chỉ hiện hoá đơn còn quota đăng tin.',
-      },
-      {
-        kind: 'shot',
-        src: '/shots/55-job-main-product-from-po.jpg',
-        where: 'Admin',
-        caption: 'Sau khi chọn hoá đơn, **Main product chỉ còn các dòng đăng tin của hoá đơn đó mà công ty còn quota**.',
-        note: 'Không chọn hoá đơn thì danh sách chỉ còn các product **Free** — lane “HQ đăng hộ miễn phí”, không trừ quota của ai.',
+        caption: 'Chọn công ty → thẻ công ty hiện ra; chọn **Invoice** *1C26TTD/0170* → *Main product* chỉ còn **các dòng đăng tin của hoá đơn đó còn quota** (ở đây: Tiêu Điểm 30 ngày và dòng tặng 15 ngày). Bên phải: danh sách *Still missing* trước khi Post được.',
+        note: 'Băng vàng là một chốt thật: **công ty không có MST thì tin không lên Open được** — chỉ lưu nháp. Google Việt Nam là công ty nước ngoài, đã Verified và đã có hoá đơn, nhưng vẫn bị chặn ở đây.',
       },
       {
         kind: 'table',
@@ -328,10 +320,10 @@ export const JOBS_APPS_PAGE_DOCS: Record<string, PageDoc> = {
       },
       {
         kind: 'shot',
-        src: '/shots/51-job-detail.jpg',
+        src: '/shots/rec/job-detail.jpg',
         where: 'Admin',
-        caption: 'Chi tiết một tin. Dòng **Current tier** là bậc tin đang chiếm.',
-        note: 'Ảnh chụp 08/09/2026 — trước khi có dòng *Add-ons*, *End date* và nút *Add add-on*; nút *Upgrade tier* trong ảnh **đã bỏ**. **Exposure độc lập với status**: tin có thể đang `OPEN` mà vẫn không ai thấy, nếu Exposure tắt.',
+        caption: 'Chi tiết một tin đang **Open**: nút *Edit · Applications · Add add-on · Close job* — không còn *Upgrade tier*. Khung *Posting state*: Exposure, **Current tier**, Add-ons, Publish at, **End date** (sửa được bằng bút chì).',
+        note: '**Exposure độc lập với status**: tin có thể đang *Open* mà vẫn không ai thấy, nếu Exposure tắt.',
       },
 
       /* §4 Status and Exposure */
@@ -824,6 +816,22 @@ export const JOBS_APPS_PAGE_DOCS: Record<string, PageDoc> = {
         kind: 'open',
         text:
           '**Những chỗ build còn hở, cần chốt với khách.** (1) Không có cột / nhãn nào cho đơn **ứng viên đã rút** — nên thêm, hoặc ít nhất đổi chữ ở cột Stage. (2) Nút *Open in CV review* đã bỏ vì đơn không mang mã CV; **svn-be giờ đã gửi `cvId`** trên dòng và trang chi tiết (`AdminApplicationRowDto`), nên phía console nối lại được. (3) Gợi ý *“Candidate sees: …”* trong menu Reject chưa có đường tới ứng viên. (4) Bộ lọc theo *CV status* chưa có (server chưa nhận tham số này). (5) Site ứng viên luôn gửi đơn với nguồn `OWN_CV` (kể cả khi chọn Saramin CV trong thư viện), nên chip *Saramin CV* và bộ lọc *CV type = Saramin CV* **có thể không khớp đơn mới nào** — chưa xác minh trên dữ liệu thật.',
+      },
+      {
+        kind: 'p',
+        text: '**Màn hình thật** — chụp trên dev ngày 08/10/2026.',
+      },
+      {
+        kind: 'shot',
+        src: '/shots/rec/applications-list.jpg',
+        where: 'Admin',
+        caption: 'Danh sách đơn, tab **Sent**: bốn ô (*Overdue 24h · New 7 days · Waiting on employer · Avg time to rule*), tab **All · Not sent · Sent · Recall · Rejected**. Mỗi dòng ghi CV nào (tải lên hay CV Saramin, version mấy).',
+      },
+      {
+        kind: 'shot',
+        src: '/shots/rec/application-detail.jpg',
+        where: 'Admin',
+        caption: 'Chi tiết một đơn **Sent**: hồ sơ ứng viên, mong muốn công việc, bản CV đúng version đã nộp; bên phải *Contact* và khung *Application* với **CV status** (*Approved*).',
       },
     ],
   },

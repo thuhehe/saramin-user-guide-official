@@ -59,7 +59,6 @@ export const RESUME_PAGE_DOCS: Record<string, PageDoc> = {
         text:
           'Có thêm lối `/my-profile/cv/new` (*Upload a CV* / *Create a Saramin CV*) — gọi từ menu đầu trang và trang công ty, không từ My CVs. Nhánh upload ở đó có thêm bước gợi ý *Convert to Saramin template*.',
       },
-
       { kind: 'h', text: '§2 · Form Saramin CV — các mục' },
       {
         kind: 'table',
@@ -84,7 +83,6 @@ export const RESUME_PAGE_DOCS: Record<string, PageDoc> = {
           'Để trống tên CV thì hệ thống tự đặt: *{name}’s CV – {experience} of experience* (hoặc *– No experience yet*).',
         ],
       },
-
       { kind: 'h', text: '§3 · Experienced / No experience và Total experience — hai thứ khác nhau' },
       {
         kind: 'table',
@@ -102,7 +100,6 @@ export const RESUME_PAGE_DOCS: Record<string, PageDoc> = {
         text:
           'Đổi *Experienced ↔ No experience* trên một CV là hệ thống **chấm lại cả thư viện** của ứng viên ngay lúc lưu — một CV đang *Unfinished* có thể thành *Đạt* chỉ bằng cách khai *No experience*, nếu đã có học vấn.',
       },
-
       { kind: 'h', text: '§4 · Tiêu chí để một CV Đạt' },
       {
         kind: 'table',
@@ -126,21 +123,10 @@ export const RESUME_PAGE_DOCS: Record<string, PageDoc> = {
         ],
       },
       {
-        kind: 'table',
-        heading: '§4.1 – 4.2 · Đạt và chưa đạt làm được gì',
-        cols: ['', 'Đạt', 'Unfinished — Saramin CV', 'Unfinished — Upload CV', 'Bị từ chối'],
-        rows: [
-          ['**Nộp đơn (trên web)**', 'Được — đơn gửi tới nhà tuyển dụng', '**Không** — mờ trong picker', '**Không** — cũng mờ trong picker (`isCvSendable`)', '**Không** — server từ chối (`CV_NOT_APPROVED`)'],
-          ['**Show CV to employers**', 'Bật được', 'Ô chọn **ẩn** trên dòng', 'Ô chọn **ẩn** trên dòng', '**Không** — *This CV was not approved, so it cannot be shown in CV search.*'],
-          ['**Ai đưa nó về Đạt**', '—', 'Chính ứng viên: bổ sung rồi lưu', 'Ứng viên đổi khai báo / dùng CV khác; HQ duyệt ở CV review', '**Không ai** — quyết định của người duyệt là chung cuộc (xem CV review)'],
-        ],
-      },
-      {
-        kind: 'warn',
+        kind: 'p',
         text:
-          '**Sửa so với bản trước của trang này:** (1) file tải lên chưa đạt **không** còn “nộp được rồi bị giữ” trên web — server vẫn cho, nhưng picker của svn-web làm mờ mọi CV *Unfinished*; đơn bị giữ ở *Chưa gửi* giờ chỉ còn xảy ra khi CV ở trạng thái chờ duyệt mà chip chưa kịp tính (file đang parse) hoặc qua API. (2) Định dạng là **PDF / DOCX**, không phải “PDF hoặc Word” — .doc bị từ chối. (3) Ứng viên bị từ chối thấy nhãn **Can’t read** và **không có nút** sửa — các nút *Upload another CV / Update profile / Contact support* đã bị gỡ khỏi web ngày 14/09 dù HQ vẫn chọn chúng trong hộp từ chối.',
+          '**§4.1 – 4.2 · Đạt và chưa đạt làm được gì** — nộp đơn, bật hiển thị, ai đưa CV về *Đạt*, Saramin CV cạnh file tải lên: một bảng ở **Logic chung §5**, vì nó áp cho cả bốn trang. Điểm cần nhớ ở đây: trên web, CV *Unfinished* — **cả file tải lên** — mờ trong picker nộp đơn và không bật hiển thị được.',
       },
-
       { kind: 'h', text: '§5 · Show CV to employers — CV mặc định' },
       {
         kind: 'table',
@@ -157,9 +143,8 @@ export const RESUME_PAGE_DOCS: Record<string, PageDoc> = {
       {
         kind: 'warn',
         text:
-          '**Từ 29/09/2026 (SRM-777) kho tìm kiếm chỉ hỏi “có CV nào đang bật không” — không hỏi CV đó *Đạt* chưa.** Code: `PgFtsCandidateSearchAdapter` lấy `candidate_cv.searchable`, tài khoản *Active*, résumé không ẩn; `cvQualified` trong index ghi rõ *“it is NOT a gate”*. Nên một CV đang chờ duyệt — hoặc đã bị HQ từ chối mà ứng viên chưa tắt — **vẫn đưa ứng viên vào `/search`** và vẫn mở khoá được. Câu “chỉ CV Đạt mới hiện cho nhà tuyển dụng” ở bản trước là quy tắc của requirement, không còn là hành vi của build.',
+          '**Từ 29/09/2026 (SRM-777) kho tìm kiếm chỉ hỏi “có CV nào đang bật không” — không hỏi CV đó *Đạt* chưa.** Một CV đang chờ duyệt, hoặc đã bị HQ từ chối mà ứng viên chưa tắt, **vẫn đưa ứng viên vào `/search`**. Requirement nói ngược lại — so sánh hai bên ở **Logic chung §2**.',
       },
-
       { kind: 'h', text: '§6 · Danh sách My CVs — một dòng' },
       {
         kind: 'table',
@@ -180,7 +165,6 @@ export const RESUME_PAGE_DOCS: Record<string, PageDoc> = {
         text:
           '**Xoá một CV là rút các đơn đang chạy đã nộp bằng nó.** Hộp xác nhận nói rõ: đơn đang xử lý **bị rút**, công ty **được báo** và **không xem được CV nữa** (chính sách riêng tư VN 21/09). File của các đơn đã gửi bị xoá theo. Xoá CV đang hiện còn xoá luôn các mục hồ sơ đã được đọc từ nó. **Không hoàn tác.**',
       },
-
       { kind: 'h', text: '§7 · Giới hạn và version' },
       {
         kind: 'table',
@@ -249,72 +233,12 @@ export const RESUME_PAGE_DOCS: Record<string, PageDoc> = {
         text:
           '**Bật cờ không tự kéo CV cũ về hàng đợi.** CV tải lên trước đó đều đã `APPROVED` mà chưa ai đọc (dev, 03/09: 401/403 CV). Muốn giữ chúng lại phải chạy tay `scripts/hold-unscreened-cvs.sql` **cùng lúc** bật cờ — chạy khi cờ đang tắt là bỏ mọi ứng viên kẹt sau một hàng đợi không ai làm.',
       },
-
-      { kind: 'h', text: '§2 · Máy quét ghi gì' },
-      {
-        kind: 'table',
-        heading: 'Ba kết quả, không có “từ chối”',
-        note: 'Quy tắc **đúng như trong code** (`CvQualificationRule.evaluateResume`, từ 24/09/2026, không đổi tới ee1db5ea9): **≥ 1 học vấn luôn bắt buộc**; **≥ 1 kinh nghiệm** cũng bắt buộc, **trừ khi CV khai *No experience*** (Fresher). Khai báo này nằm **trên từng CV**, không trên người dùng — xem trang **Create CV**. Kỹ năng và dự án vẫn được đếm và nhập vào, nhưng **không bao giờ** quyết định. Máy đọc **các trường**, không quan tâm chúng từ đâu ra. Không có file đọc được chữ → **Không đọc được**.',
-        cols: ['Kết quả', 'Khi nào', 'Nghĩa là gì'],
-        rows: [
-          ['**Đạt**', '`học vấn ≥ 1` **và** (`kinh nghiệm ≥ 1` **hoặc** CV khai *No experience*)', '**Chung cuộc.** CV gửi được tới nhà tuyển dụng. Không ai phải xem.'],
-          ['**Chưa đủ thông tin**', 'File đọc được nhưng **không** thoả công thức trên', '**Tạm thời** — là một câu hỏi, chưa phải phán quyết. Chờ ứng viên bổ sung, hoặc chờ người duyệt quyết.'],
-          ['**Không đọc được**', 'Parse **không ra mục nào** (ảnh scan, file hỏng…) — kiểm **trước** mọi điều kiện khác, và chỉ quyết được **lúc parse**', '**Tạm thời** — hệ quả y hệt *Chưa đủ thông tin*. Chấm lại không xoá được nhãn này; chỉ một lần parse mới.'],
-        ],
-      },
-      {
-        kind: 'list',
-        heading: 'Những gì cố ý KHÔNG nằm trong quy tắc',
-        items: [
-          '**Kỹ năng không còn nằm trong quy tắc.** Quy tắc cũ đòi thêm **≥ 3 kỹ năng**; commit `fix(recruitment): the CV scan no longer requires three skills` (11/09/2026) đã bỏ hẳn. Kỹ năng giờ chỉ **xếp hạng** CV trong tìm kiếm.',
-          '**Tổng số năm kinh nghiệm không nằm trong quy tắc.** PR #783 (08/10) thêm *total experience* theo từng CV vào cột riêng (`total_exp_*`), **tách khỏi** `years_of_exp` — cột khai Fresher mà quy tắc đọc. Commit ghi rõ lý do: “0 năm 6 tháng” ghi vào cột cũ sẽ bị đọc thành Fresher.',
-          '**Quy tắc này thay hai bản trước.** Trước 23/09: *kinh nghiệm HOẶC (học vấn VÀ dự án)*; 23/09: *kinh nghiệm HOẶC học vấn*; từ **24/09/2026**: *học vấn, cộng kinh nghiệm trừ khi Fresher*. Hệ quả: một bác tài hai mươi năm nghề **không điền học vấn** rơi vào *Chưa đủ thông tin*. Trang Notion *CV review* vẫn ghi bản 23/09.',
-          'Quy tắc **thừa hưởng vùng ngôn ngữ của bộ trích xuất**. CV bằng ngôn ngữ bộ trích không xử lý được thì không ra trường nào → *Không đọc được* → chờ một người duyệt đọc được ngôn ngữ đó.',
-        ],
-      },
-
-      { kind: 'h', text: '§3 · Bốn trạng thái CV — và cái gì suy ra từ chúng' },
-      {
-        kind: 'table',
-        note: '**Chỉ đọc từ trái sang phải.** Trạng thái đơn ứng tuyển là **hình chiếu** của trạng thái CV — không màn hình nào cho đặt tay “Đã gửi”. Cột tìm kiếm CV: xem cảnh báo dưới bảng.',
-        cols: ['Trạng thái CV', 'Loại · ai ghi', 'Đơn ứng tuyển dùng CV này', 'Người duyệt làm được gì'],
-        rows: [
-          ['**Đạt** — chưa ai xem', 'Máy quét ghi, hoặc mặc định khi cờ tắt', 'Gửi tới nhà tuyển dụng', 'Từ chối (từ *Talent pool*) → *Từ chối*'],
-          ['**Đạt** — người duyệt', 'Chung cuộc — *Approve*', 'Gửi; mọi đơn đang giữ **đi cùng lúc**', '**Không gì nữa** (409)'],
-          ['**Chưa đủ thông tin**', 'Nghi ngờ — tạm thời', '**Không gửi** — giữ tới khi CV *Đạt*', 'Duyệt → *Đạt* · Từ chối → *Từ chối*'],
-          ['**Không đọc được**', 'Nghi ngờ — tạm thời', '**Không gửi** — giữ tới khi CV *Đạt*', 'Duyệt → *Đạt* · Từ chối → *Từ chối*'],
-          ['**Từ chối**', 'Chung cuộc — **chỉ** người duyệt ghi', 'Đơn đang giữ: *Không được gửi* vĩnh viễn. Đơn đã gửi bằng version này: **Thu hồi**. Lượt mở khoá NTD đã trả cho ứng viên này: **hoàn credit**', '**Không gì nữa** (409) — chỉ version mới đưa CV về chờ'],
-        ],
-      },
-      {
-        kind: 'warn',
-        text:
-          '**Cột *CV search status* và câu “Từ chối → rời kho” không còn khớp build.** Từ SRM-777 (29/09) kho tìm kiếm của nhà tuyển dụng chỉ đọc “ứng viên có CV đang bật không”, không đọc trạng thái CV, và từ chối **không tắt** cờ hiển thị. Vậy một CV nghi ngờ hoặc bị từ chối mà ứng viên vẫn đang bật thì **vẫn ra kết quả `/search`** và vẫn mở khoá được (lượt mở khoá **trước** khi từ chối thì được hoàn, lượt **sau** thì không). Nút hộp thoại *Approve → sent + showing* và dòng *Whether this CV enters employer CV search* mô tả quy tắc cũ.',
-      },
       {
         kind: 'p',
         text:
-          'Hai trạng thái nghi ngờ **chỉ khác nhau ở thứ người duyệt phải nhìn**. Với nhà tuyển dụng chúng hành xử y hệt nhau.',
+          '**Quy tắc máy quét, bốn trạng thái CV, Saramin CV so với file tải lên, version và mỗi bên nhìn thấy gì** áp cho cả bốn trang của nhóm, nên nằm một chỗ: **Logic chung — Resume management** §2–§6. Trang này chỉ giữ phần của riêng màn CV review.',
       },
-      {
-        kind: 'table',
-        heading: 'CV Saramin và CV tải lên — cùng quy tắc, khác đường đi',
-        cols: ['', 'CV Saramin (soạn trong form)', 'CV tải lên (PDF / DOCX)'],
-        rows: [
-          ['Ai chấm', 'Tính trực tiếp từ các trường — **không bao giờ vào hàng đợi** (luôn `APPROVED` ở tầng duyệt)', 'Máy quét, từ lần parse của **chính file đó**'],
-          ['Công thức KHÔNG thoả', 'Chip *Unfinished* phía ứng viên', 'Cờ bật: *Chưa đủ thông tin* / *Không đọc được* → vào *Needs review*. Cờ tắt: vẫn `APPROVED`, chỉ chip *Unfinished* phía ứng viên'],
-          ['Ứng tuyển được bằng nó?', '**Không** trên web (picker mờ)', '**Không** trên web khi chip *Unfinished*; server thì cho và giữ đơn'],
-          ['Lý do từ chối dùng được', 'Chỉ *CV but not enough information* và *Other*', 'Cả bốn'],
-          ['Ai đưa nó về *Đạt*', '**Ứng viên**, trong form — thêm phần thiếu rồi lưu', '**Người duyệt** ở đây, hoặc một version mới qua được máy quét'],
-        ],
-      },
-      {
-        kind: 'warn',
-        text:
-          '**Người duyệt duyệt CV, không bao giờ duyệt đơn ứng tuyển.** Đó là lý do trang *Applications* không có nút *Chuyển tiếp* hay *Gửi*: việc giao là **hệ quả** của phán quyết về CV. Một CV đứng sau mười đơn thì cả mười đơn đọc chung một trạng thái; duyệt một lần, cả mười *Đã gửi* trong cùng một giao dịch, và công ty được báo **đúng lúc đó**.',
-      },
-
-      { kind: 'h', text: '§4 · Hộp thoại Từ chối' },
+      { kind: 'h', text: '§2 · Hộp thoại Từ chối' },
       {
         kind: 'table',
         heading: 'Bốn lý do — và câu chúng điền sẵn',
@@ -342,8 +266,7 @@ export const RESUME_PAGE_DOCS: Record<string, PageDoc> = {
         text:
           '**Lời nhắn điền sẵn của *CV but not enough information* mô tả sai quy tắc**: nó nói “ít nhất một kinh nghiệm — hoặc học vấn nếu chưa đi làm”, trong khi quy tắc là **luôn cần học vấn**, cộng kinh nghiệm nếu không phải Fresher. Sửa câu trước khi gửi.',
       },
-
-      { kind: 'h', text: '§5 · Màn hình — từng phần' },
+      { kind: 'h', text: '§3 · Màn hình — từng phần' },
       {
         kind: 'table',
         cols: ['Phần', 'Chi tiết'],
@@ -358,35 +281,16 @@ export const RESUME_PAGE_DOCS: Record<string, PageDoc> = {
           ['**Không có**', 'Badge số trên menu · nút *Rescan held CVs* (API `POST /api/admin/cv-qualification/rescan` có, UI chưa nối) · con số cụ thể trong khối *This decision affects*.'],
         ],
       },
-
-      { kind: 'h', text: '§6 · Version — v.1, v.2 …' },
+      { kind: 'h', text: '§4 · Một quyết định, ba màn hình' },
       {
         kind: 'table',
-        note: 'CV là món trên kệ của ứng viên: danh tính, tên, lịch sử. **Version** là nội dung của nó tại một thời điểm. Thay file tạo một version mới của **cùng một CV**; CV giữ nguyên tên và lịch sử ứng tuyển. **Web ứng viên chưa có màn thay file**, nên hôm nay gần như mọi dòng là `v.1/1`.',
-        cols: ['Quy tắc', 'Nghĩa'],
+        heading: 'Ba màn hình, một quyết định',
+        cols: ['Màn hình', 'Đường dẫn', 'Một dòng là…', 'Làm gì ở đây'],
         rows: [
-          ['Version mới **luôn về chờ**', '`replacedWith` ghi `PENDING` và xoá dấu đã duyệt — **kể cả khi cờ quét tắt**. Khi cờ bật, máy quét chấm lại; khi cờ tắt, nó nằm ở *Needs review* cho tới khi có người quyết.'],
-          ['Version mới **không rửa được** một lần từ chối', 'Nó đưa CV về chờ, không bao giờ thẳng về *Đạt*; lần từ chối cũ vẫn trong lịch sử (`cv_review`).'],
-          ['Đơn ứng tuyển **chụp lại** version đã gửi', 'Đọc là **đã gửi / hiện tại**: `v.1/2` = NTD giữ v.1, CV đã sang v.2.'],
-          ['Từ chối chỉ thu hồi **đơn mang version bị từ chối**', 'v.1 đã gửi, v.2 bị từ chối → NTD **vẫn giữ v.1**.'],
-          ['Saramin CV', 'Không có version: sửa form là render lại **cùng** CV, vẫn `APPROVED`.'],
+          ['**CV review**', '`/recruitment/cv-review`', 'Một CV đang/đã cần người nhìn', '**Chỗ chính.** Duyệt, hoặc từ chối kèm lý do, lời nhắn và nút.'],
+          ['**Applications**', '`/recruitment/applications`', 'Một đơn ứng tuyển', 'Xem **vì sao** một đơn còn *Not sent* (trạng thái CV của nó), mở sang CV review. Không có *Chuyển tiếp*.'],
+          ['**Talent pool**', '`/recruitment/talent-pool`', 'Một ứng viên có CV đang bật', 'Duyệt / từ chối nhanh kèm ghi chú nội bộ — **không lý do, không lời nhắn**; nhảy sang CV review.'],
         ],
-      },
-      {
-        kind: 'example',
-        heading: 'Ví dụ — một CV tải lên, hai đơn, một lần từ chối (khi web có màn thay file và cờ quét bật)',
-        scenario:
-          'Thu hồi **chỉ xảy ra khi version đã gửi bị từ chối**. Ở kịch bản dưới, v.2 chưa từng được gửi cho FPT, nên FPT không bị đụng tới.',
-        cols: ['#', 'Việc xảy ra', 'CV', 'Đơn tới FPT', 'Đơn tới Tiki'],
-        rows: [
-          ['1', 'Tải CV lên — 3 kinh nghiệm, 1 học vấn', 'v.1 · *Đạt*', '—', '—'],
-          ['2', 'Nộp FPT; FPT chuyển sang Interview 1', 'v.1 · *Đạt*', 'Đã gửi · v.1', '—'],
-          ['3', 'Thay file bằng bản 1 trang — không kinh nghiệm, không học vấn', 'v.2 · *Chưa đủ thông tin* → *Needs review*', 'Đã gửi · v.1 (**không đổi** — là bản chụp)', '—'],
-          ['4', 'Nộp Tiki bằng CV đó qua API (web làm mờ CV *Unfinished*)', 'v.2 · *Chưa đủ thông tin*', 'Đã gửi · v.1', '**Không gửi** — đang giữ'],
-          ['5', 'Người duyệt từ chối — *CV but not enough information*', 'v.2 · *Từ chối* (chung cuộc)', 'Đã gửi · v.1 · **giữ nguyên**', '**Không được gửi**'],
-        ],
-        note:
-          'Nếu v.2 qua máy quét, được gửi cho Tiki, rồi người duyệt từ chối v.2 → đơn Tiki bị **Thu hồi**, đơn FPT (v.1) vẫn giữ nguyên.',
       },
       {
         kind: 'example',
@@ -403,32 +307,9 @@ export const RESUME_PAGE_DOCS: Record<string, PageDoc> = {
         note:
           'Một lần bấm giải phóng **mọi** đơn đang chờ CV đó. Để một dòng nằm trong hàng đợi một tuần không phải là chậm một dòng — nó là bốn cơ hội việc làm bị giữ lại mà cả hai phía đều không biết.',
       },
-
-      { kind: 'h', text: '§7 · Mỗi bên nhìn thấy gì' },
+      { kind: 'h', text: '§5 · Câu hỏi hay gặp' },
       {
         kind: 'table',
-        note: 'Theo build 08/10. Nhà tuyển dụng **không bao giờ** thấy chữ của người duyệt — chỉ một câu cố định theo lý do (bảng §4).',
-        cols: ['Trạng thái CV', 'Ứng viên — My CVs', 'Ứng viên — My applications', 'Nhà tuyển dụng'],
-        rows: [
-          ['**Đạt**', 'Không nhãn', '*Applied*, rồi các chặng của NTD', 'Một dòng bình thường ở tab *Jobs*'],
-          ['**Chờ duyệt** (tải lên)', '*Unfinished* nếu lần parse thiếu mục; không nhãn nếu parse đủ hoặc chưa xong', '*Applied* như mọi đơn — không cảnh báo', 'Không thấy đơn — nó chưa được gửi'],
-          ['**Unfinished** (Saramin CV)', '*Unfinished* + *Completion N%* + nút *Complete CV*', 'Không có đơn — không chọn được CV đó', 'Không có gì'],
-          ['**Từ chối**', 'Nhãn **Can’t read** (mọi lý do), lời nhắn khi rê chuột; trong trang sửa: *This CV wasn’t approved* + lời nhắn, **không nút**', 'Đơn đang giữ: không bao giờ tới NTD. Đơn đã gửi bằng version này: bị thu hồi', 'Dòng thành *Recalled by Saramin*, các ô CV đọc *Withheld*. Lượt mở khoá đã trả được hoàn credit'],
-        ],
-      },
-      {
-        kind: 'table',
-        heading: 'Ba màn hình, một quyết định',
-        cols: ['Màn hình', 'Đường dẫn', 'Một dòng là…', 'Làm gì ở đây'],
-        rows: [
-          ['**CV review**', '`/recruitment/cv-review`', 'Một CV đang/đã cần người nhìn', '**Chỗ chính.** Duyệt, hoặc từ chối kèm lý do, lời nhắn và nút.'],
-          ['**Applications**', '`/recruitment/applications`', 'Một đơn ứng tuyển', 'Xem **vì sao** một đơn còn *Not sent* (trạng thái CV của nó), mở sang CV review. Không có *Chuyển tiếp*.'],
-          ['**Talent pool**', '`/recruitment/talent-pool`', 'Một ứng viên có CV đang bật', 'Duyệt / từ chối nhanh kèm ghi chú nội bộ — **không lý do, không lời nhắn**; nhảy sang CV review.'],
-        ],
-      },
-      {
-        kind: 'table',
-        heading: 'Câu hỏi hay gặp',
         cols: ['Câu hỏi', 'Trả lời'],
         rows: [
           ['Vì sao *Needs review* rỗng trên dev và production?', 'Vì **cờ quét đang tắt** (§1): file mới sinh ra ở *Đạt*, máy quét không ghi gì. Bản trước của trang này đổ cho `AlwaysCleanCvScreeningAdapter` — lớp đó **không còn trong code**. Muốn thấy dữ liệu mẫu: cờ `MODULE_FLAGS.cvReviewSampleQueue` của admin (mặc định tắt) hiện dòng mẫu, nút quyết bị khoá.'],
@@ -442,7 +323,24 @@ export const RESUME_PAGE_DOCS: Record<string, PageDoc> = {
       {
         kind: 'open',
         text:
-          '**Cần chốt (kiểm 08/10/2026, admin 45954108 · svn-be ee1db5ea9).** (1) **Bật cờ quét khi nào, ai trực hàng đợi, SLA bao lâu** — ba câu DEBT D-RES-19 nêu từ 03/09, vẫn chưa có. (2) **Gỡ quyết định**: UI có nút, server cấm — chọn một. (3) **Ghi chú khi duyệt**: UI ghi *optional* (SRM-745), server bắt buộc — chọn một. (4) **Kho tìm kiếm có nên lọc CV chưa Đạt / bị từ chối không** (xem cảnh báo §3) — nếu có, cần sửa cả SRM-777 lẫn cột *CV search status*. (5) Màn thay file phía ứng viên chưa có, nên toàn bộ phần version hôm nay chưa ai dùng được.',
+          '**Cần chốt (kiểm 08/10/2026, admin 45954108 · svn-be ee1db5ea9).** (1) **Bật cờ quét khi nào, ai trực hàng đợi, SLA bao lâu** — ba câu DEBT D-RES-19 nêu từ 03/09, vẫn chưa có. (2) **Gỡ quyết định**: UI có nút, server cấm — chọn một. (3) **Ghi chú khi duyệt**: UI ghi *optional* (SRM-745), server bắt buộc — chọn một. (4) **Kho tìm kiếm có nên lọc CV chưa Đạt / bị từ chối không** (xem **Logic chung §2**) — nếu có, cần sửa cả SRM-777 lẫn cột *CV search status*. (5) Màn thay file phía ứng viên chưa có, nên toàn bộ phần version hôm nay chưa ai dùng được.',
+      },
+      {
+        kind: 'p',
+        text: '**Màn hình thật** — chụp trên dev ngày 08/10/2026.',
+      },
+      {
+        kind: 'shot',
+        src: '/shots/rec/cv-review.jpg',
+        where: 'Admin',
+        caption: '**CV review**, tab *Needs review*: bốn ô (*Overdue 24h · Decided 7 days · Rejected 7 days · Avg time to decide*), cột *CV status* (máy quét nói gì), *Used to apply* (có đơn nào đang chờ CV này không), *In talent pool*.',
+      },
+      {
+        kind: 'shot',
+        src: '/shots/rec/cv-review-dialog.jpg',
+        where: 'Admin',
+        caption: 'Bấm một dòng → hộp duyệt: file gốc bên trái (mở file là hành động PII, **có ghi log**), bên phải *What the scan said* · *The only question* · *This decision affects*. Hai nút: **Reject** và **Approve → sent + showing**.',
+        note: 'Một quyết định chuyển **mọi đơn** đang chờ CV đó cùng lúc — duyệt CV, không bao giờ duyệt từng đơn.',
       },
     ],
   },
@@ -588,6 +486,16 @@ export const RESUME_PAGE_DOCS: Record<string, PageDoc> = {
         kind: 'open',
         text:
           '**Cần chốt (svn-be ee1db5ea9 · admin 45954108 · svn-web d8a43a11).** (1) Kho tìm kiếm có lọc CV chưa *Đạt* / bị từ chối không — build hiện **không** lọc, màn HQ vẫn ghi như có lọc. (2) Thẻ kết quả để lộ tên công ty và trường. (3) Từ chối ở đây không có lý do và không lời nhắn cho ứng viên — có nên bỏ hẳn hành động này khỏi màn kho, để mọi từ chối đi qua CV review?',
+      },
+      {
+        kind: 'p',
+        text: '**Màn hình thật** — chụp trên dev ngày 08/10/2026.',
+      },
+      {
+        kind: 'shot',
+        src: '/shots/rec/talent-pool.jpg',
+        where: 'Admin',
+        caption: '**Talent pool**: bốn ô (*Searchable 38 / 128 · Needs a look · New 7 days · Untouched 90+ days*), lọc theo *Status* và *CV search status*, nút **New resume**. Cột *Unlocks* đếm số lượt CV đó đã được mở khoá.',
       },
     ],
   },
@@ -831,7 +739,6 @@ export const RESUME_MODULE_DOCS: Record<string, ModuleDoc> = {
           ['**Candidate management**', 'Company site · `/applicants`', 'Nhà tuyển dụng', 'Làm gì với người đã nộp đơn, và với người tôi đã lưu?'],
         ],
       },
-
       { kind: 'h', text: '§1 · Chuỗi một CV, từng chặng' },
       {
         kind: 'table',
@@ -846,32 +753,218 @@ export const RESUME_MODULE_DOCS: Record<string, ModuleDoc> = {
           ['7', '**Nộp đơn** bằng một CV', 'Ứng viên', 'Đơn *Sent* → tab **Jobs**, liên hệ mở sẵn — hoặc *Not sent* nếu CV đang chờ duyệt', 'Web làm mờ mọi CV *Unfinished*. Công ty mở CV lần đầu → đơn *Viewed*.'],
         ],
       },
-
-      { kind: 'h', text: '§2 · Bốn trạng thái CV — và ba cách nhìn' },
+      { kind: 'h', text: '§2 · Trạng thái CV quyết định cái gì' },
+      {
+        kind: 'diagram',
+        id: 'cv-status',
+        note: 'Theo requirement *How CV status drives Application status and CV search status*, vẽ lại **theo build** (svn-be ee1db5ea9, 08/10/2026). Khác biệt duy nhất là cột tìm kiếm — ô đứt nét.',
+      },
+      {
+        kind: 'list',
+        heading: 'Đọc sơ đồ thế nào',
+        items: [
+          '**Chỉ đọc từ trái sang phải.** Trạng thái đơn là **hình chiếu** của trạng thái CV; CV mới là bản ghi. Màn hình nào cho đặt tay *Sent* là đã tạo lại nguồn sự thật thứ hai mà mô hình này sinh ra để bỏ.',
+          '**Ô lớn là giá trị nội bộ, dòng nhỏ là thứ người ta thấy.** *Not sent*, *Recall* là thứ hệ thống lưu và **admin** đọc. Ứng viên thấy dòng nhỏ dưới mỗi trạng thái — với file tải lên đang nghi ngờ, đơn của họ vẫn đọc *Applied* như mọi đơn khác. Nhầm hai tầng này là cách đọc sai hay gặp nhất.',
+          '**Hai dòng nghi ngờ hệ quả y hệt** — có chủ đích. *Chưa đủ thông tin* và *Không đọc được* khác nhau ở thứ HQ phải **nhìn**, không bao giờ ở thứ ứng viên hay công ty trải qua.',
+          '**Recall chỉ có ở nơi CV đã được giao.** Từ chối một CV còn đang nghi ngờ thì không thu hồi gì — đơn chưa từng *Sent*, nên nó ở lại *Not sent* và không công ty nào được báo. Đọc *Recall* là việc từ chối làm với **thứ đã ra khỏi cửa**, không phải việc từ chối luôn làm.',
+          '**Cả hai cửa đóng mặc định.** Requirement đã bỏ cơ chế tự gửi sau 24h: không đơn nào, không CV nào được thả ra theo giờ — chỉ người. Cái giá chuyển sang Saramin: hàng đợi không ai làm là **chặn đơn của ứng viên**, nên người trực hàng đợi không còn là tuỳ chọn.',
+        ],
+      },
+      {
+        kind: 'warn',
+        text:
+          '**Cột tìm kiếm CV là chỗ build và requirement tách nhau.** Requirement: tìm kiếm CV cũng là hình chiếu của trạng thái CV — *Showing* chỉ khi *Đạt*, mọi trạng thái khác *Hidden*, và từ chối đưa ứng viên **rời kho**. Build từ **29/09/2026 (SRM-777)**: kho chỉ hỏi “ứng viên có CV nào đang bật *Show CV to employers* không” (`PgFtsCandidateSearchAdapter` đọc `candidate_cv.searchable`; `cvQualified` trong index ghi rõ *“it is NOT a gate”*), và từ chối **không tắt** công tắc. Nên một CV đang nghi ngờ hoặc đã bị từ chối mà ứng viên vẫn bật thì **vẫn ra ở `/search`** và vẫn mở khoá được — lượt mở khoá **trước** lúc từ chối được hoàn credit, lượt **sau** thì không. Nút *Approve → sent + showing* và dòng *Whether this CV enters employer CV search* trong hộp duyệt vẫn tả quy tắc cũ.',
+      },
       {
         kind: 'table',
-        note: 'Chi tiết — version, thu hồi, mỗi bên nhìn thấy gì — ở trang **CV review**.',
-        cols: ['Trạng thái (HQ)', 'Ai ghi', 'Ứng viên thấy', 'Nộp đơn bằng CV này', 'Tìm kiếm CV (build)'],
+        heading: 'Mỗi bên nhìn thấy gì',
+        note: 'Theo build 08/10. Nhà tuyển dụng **không bao giờ** thấy chữ của người duyệt — chỉ một câu cố định theo lý do (bảng lý do ở **CV review §2**).',
+        cols: ['Trạng thái CV', 'Ứng viên — My CVs', 'Ứng viên — My applications', 'Nhà tuyển dụng'],
         rows: [
-          ['**Đạt**', 'Máy quét, mặc định khi cờ tắt, hoặc HQ *Approve*', 'Không nhãn', 'Đơn **gửi tới** nhà tuyển dụng', 'Có mặt nếu CV đang bật'],
-          ['**Chưa đủ thông tin**', 'Máy quét', '*Unfinished*', 'Web: không chọn được. Server (API): nhận và **giữ ở Not sent**', 'Có mặt nếu CV đang bật (SRM-777)'],
-          ['**Không đọc được**', 'Máy quét — chỉ file tải lên', '*Unfinished*', 'Như trên', 'Như trên'],
-          ['**Từ chối**', '**Chỉ HQ**', '*Can’t read* (mọi lý do)', 'Không — server từ chối', 'Vẫn có mặt nếu CV đang bật; lượt mở khoá **đã trả** được **hoàn**'],
+          ['**Đạt**', 'Không nhãn', '*Applied*, rồi các chặng của NTD', 'Một dòng bình thường ở tab *Jobs*'],
+          ['**Chờ duyệt** (tải lên)', '*Unfinished* nếu lần parse thiếu mục; không nhãn nếu parse đủ hoặc chưa xong', '*Applied* như mọi đơn — không cảnh báo', 'Không thấy đơn — nó chưa được gửi'],
+          ['**Unfinished** (Saramin CV)', '*Unfinished* + *Completion N%* + nút *Complete CV*', 'Không có đơn — không chọn được CV đó', 'Không có gì'],
+          ['**Từ chối**', 'Nhãn **Can’t read** (mọi lý do), lời nhắn khi rê chuột; trong trang sửa: *This CV wasn’t approved* + lời nhắn, **không nút**', 'Đơn đang giữ: không bao giờ tới NTD. Đơn đã gửi bằng version này: bị thu hồi', 'Dòng thành *Recalled by Saramin*, các ô CV đọc *Withheld*. Lượt mở khoá đã trả được hoàn credit'],
+        ],
+      },
+      { kind: 'h', text: '§3 · Trạng thái CV — một field, bốn giá trị, hai cái tạm thời' },
+      {
+        kind: 'p',
+        text:
+          '**Hai lớp.** Lớp 1 là **máy quét** lúc lưu / parse: ghi *Đạt*, hoặc một trong hai trạng thái **nghi ngờ** — tạm thời ngay từ tên gọi, là một câu hỏi chứ chưa phải phán quyết. Lớp 2 là **HQ**, mà toàn bộ việc là đưa nghi ngờ về một trạng thái chung cuộc: *Approve* → *Đạt*, *Reject* → *Từ chối*. Việc giao đơn đọc từ trạng thái này và **không lưu riêng ở đâu cả**.',
+      },
+      {
+        kind: 'table',
+        note: '**Chỉ đọc từ trái sang phải.** Trạng thái đơn ứng tuyển là **hình chiếu** của trạng thái CV — không màn hình nào cho đặt tay “Đã gửi”. Tìm kiếm CV **không** nằm trong bảng này — xem §2.',
+        cols: ['Trạng thái CV', 'Loại · ai ghi', 'Đơn ứng tuyển dùng CV này', 'Người duyệt làm được gì'],
+        rows: [
+          ['**Đạt** — chưa ai xem', 'Máy quét ghi, hoặc mặc định khi cờ tắt', 'Gửi tới nhà tuyển dụng', 'Từ chối (từ *Talent pool*) → *Từ chối*'],
+          ['**Đạt** — người duyệt', 'Chung cuộc — *Approve*', 'Gửi; mọi đơn đang giữ **đi cùng lúc**', '**Không gì nữa** (409)'],
+          ['**Chưa đủ thông tin**', 'Nghi ngờ — tạm thời', '**Không gửi** — giữ tới khi CV *Đạt*', 'Duyệt → *Đạt* · Từ chối → *Từ chối*'],
+          ['**Không đọc được**', 'Nghi ngờ — tạm thời', '**Không gửi** — giữ tới khi CV *Đạt*', 'Duyệt → *Đạt* · Từ chối → *Từ chối*'],
+          ['**Từ chối**', 'Chung cuộc — **chỉ** người duyệt ghi', 'Đơn đang giữ: *Không được gửi* vĩnh viễn. Đơn đã gửi bằng version này: **Thu hồi**. Lượt mở khoá NTD đã trả cho ứng viên này: **hoàn credit**', '**Không gì nữa** (409) — chỉ version mới đưa CV về chờ'],
         ],
       },
       {
         kind: 'table',
-        heading: 'Cờ quét tắt hay bật — hai thế giới',
-        cols: ['', 'Hôm nay (tắt)', 'Khi bật'],
+        heading: 'Application status — requirement ba giá trị, build bốn',
+        note: 'Requirement cố ý không có *Pending*: một đơn trên CV nghi ngờ đọc là *Not sent*, vì chép sự nghi ngờ lần thứ hai vào một cột vốn đã đọc từ CV là cách hai bản của một sự thật bắt đầu lệch nhau. *Not sent* vì thế gồm cả “đang chờ duyệt” lẫn “bị từ chối trước khi giao” — **cột CV status ngay bên trái** cho biết là cái nào. Màn **Applications** của Admin dùng đúng bốn giá trị dưới đây.',
+        cols: ['Giá trị', 'Nghĩa', 'Requirement', 'Build'],
         rows: [
-          ['File mới', '*Đạt* ngay', 'Chờ tới khi máy quét chấm'],
-          ['Hàng đợi *Needs review*', 'Gần như rỗng — chỉ CV thay file (version mới luôn về chờ)', 'Mọi file thiếu mục'],
-          ['Đơn bị giữ *Not sent*', 'Hiếm', 'Mọi đơn gắn CV nghi ngờ — **vô thời hạn**, tới khi người quyết'],
-          ['Việc phải làm trước khi bật', '—', 'Chốt SLA và người trực; chạy `scripts/hold-unscreened-cvs.sql` cùng lúc để giữ lại CV cũ chưa ai đọc'],
+          ['*Sent*', 'Công ty đang có đơn', 'Có', 'Có (`FORWARDED`)'],
+          ['*Not sent*', 'Công ty chưa thấy — CV đang chờ, hoặc bị từ chối trước khi giao', 'Có', 'Có (`PENDING`)'],
+          ['*Recall*', 'Đã giao, rồi bị Saramin kéo lại vì CV mang đúng version đó bị từ chối', 'Có', 'Có (`RECALLED`)'],
+          ['*Rejected*', 'HQ từ chối **riêng đơn này**, trước khi giao', '**Không** — HQ quyết CV, không quyết đơn', 'Có — ⋯ → *Reject* trên một dòng *Not sent*'],
         ],
       },
-
-      { kind: 'h', text: '§3 · Hai cửa vào console của nhà tuyển dụng' },
+      {
+        kind: 'list',
+        heading: 'Luật của trạng thái',
+        items: [
+          '**Một CV, nhiều đơn.** Một CV có thể đứng sau ba mươi đơn, cả ba mươi đọc chung một trạng thái — nên một lần *Approve* / *Reject* giải quyết hết, và HQ quyết trên **CV**, không trên đơn.',
+          '**Nhưng từ chối chỉ thu hồi đơn mang ĐÚNG version bị từ chối.** Phép thử là một phép so sánh: version đơn này đang giữ có trùng version vừa bị từ chối không? Trùng → *Recall*. Khác → để nguyên. Lý do: ứng viên làm CV xấu đi **sau** khi gửi thì công ty không bị phạt vì một việc họ không thấy và không làm. Những ca đáng thu hồi vẫn thu hồi — CV máy quét cho qua nhầm, CV giả phát hiện sau, CV bị công ty báo — vì ở cả ba, version đã gửi **chính là** version bị từ chối. Build làm đúng luật này (khối hậu quả `/reject-impact` đếm sẵn ba nhóm).',
+          '**Máy quét được nghi ngờ; chỉ người được từ chối.** Hệ thống không bao giờ ghi *Từ chối* — một máy chấm tự động được giữ một câu hỏi mở, không được chấm dứt việc giao đơn của một ứng viên.',
+          '**Không gì được thả theo giờ.** Đơn *Not sent* trên CV nghi ngờ nằm đó tới khi version hiện tại *Đạt*. Vì vậy dòng mang **tuổi chờ** (*waiting 5h*), không phải đếm ngược — tuổi chờ là thứ duy nhất còn kêu khi hàng đợi bị bỏ quên.',
+          '***Đạt* → *Từ chối*** dành cho thứ máy quét không thấy: CV parse hoàn hảo nhưng là spam, giả, hoặc bị công ty báo. Requirement có thêm ***Từ chối* → *Đạt*** để gỡ một quyết định sai — **build cấm**: server trả 409 *This CV has already been reviewed* (xem CV review §5).',
+          '**Mọi thao tác của HQ cần một ghi chú nội bộ** — để quyết định soát lại được sau nhiều tháng. Ứng viên không bao giờ thấy nó.',
+          '**Trạng thái tìm kiếm chỉ có nghĩa với CV đang bật.** Các CV khác trên kệ vẫn có trạng thái CV (vẫn cần nó để nộp đơn), nhưng không phải ứng viên cho kho.',
+        ],
+      },
+      { kind: 'h', text: '§4 · Máy quét — quy tắc Đạt' },
+      {
+        kind: 'table',
+        heading: 'Ba kết quả, không có “từ chối”',
+        note: 'Quy tắc **đúng như trong code** (`CvQualificationRule.evaluateResume`, từ 24/09/2026, không đổi tới ee1db5ea9): **≥ 1 học vấn luôn bắt buộc**; **≥ 1 kinh nghiệm** cũng bắt buộc, **trừ khi CV khai *No experience*** (Fresher). Khai báo này nằm **trên từng CV**, không trên người dùng — xem trang **Create CV**. Kỹ năng và dự án vẫn được đếm và nhập vào, nhưng **không bao giờ** quyết định. Máy đọc **các trường**, không quan tâm chúng từ đâu ra. Không có file đọc được chữ → **Không đọc được**.',
+        cols: ['Kết quả', 'Khi nào', 'Nghĩa là gì'],
+        rows: [
+          ['**Đạt**', '`học vấn ≥ 1` **và** (`kinh nghiệm ≥ 1` **hoặc** CV khai *No experience*)', '**Chung cuộc.** CV gửi được tới nhà tuyển dụng. Không ai phải xem.'],
+          ['**Chưa đủ thông tin**', 'File đọc được nhưng **không** thoả công thức trên', '**Tạm thời** — là một câu hỏi, chưa phải phán quyết. Chờ ứng viên bổ sung, hoặc chờ người duyệt quyết.'],
+          ['**Không đọc được**', 'Parse **không ra mục nào** (ảnh scan, file hỏng…) — kiểm **trước** mọi điều kiện khác, và chỉ quyết được **lúc parse**', '**Tạm thời** — hệ quả y hệt *Chưa đủ thông tin*. Chấm lại không xoá được nhãn này; chỉ một lần parse mới.'],
+        ],
+      },
+      {
+        kind: 'list',
+        heading: 'Những gì cố ý KHÔNG nằm trong quy tắc',
+        items: [
+          '**Kỹ năng không còn nằm trong quy tắc.** Quy tắc cũ đòi thêm **≥ 3 kỹ năng**; commit `fix(recruitment): the CV scan no longer requires three skills` (11/09/2026) đã bỏ hẳn. Kỹ năng giờ chỉ **xếp hạng** CV trong tìm kiếm.',
+          '**Tổng số năm kinh nghiệm không nằm trong quy tắc.** PR #783 (08/10) thêm *total experience* theo từng CV vào cột riêng (`total_exp_*`), **tách khỏi** `years_of_exp` — cột khai Fresher mà quy tắc đọc. Commit ghi rõ lý do: “0 năm 6 tháng” ghi vào cột cũ sẽ bị đọc thành Fresher.',
+          '**Quy tắc này thay hai bản trước.** Trước 23/09: *kinh nghiệm HOẶC (học vấn VÀ dự án)*; 23/09: *kinh nghiệm HOẶC học vấn*; từ **24/09/2026**: *học vấn, cộng kinh nghiệm trừ khi Fresher*. Hệ quả: một bác tài hai mươi năm nghề **không điền học vấn** rơi vào *Chưa đủ thông tin*. Trang Notion *CV review* vẫn ghi bản 23/09.',
+          'Quy tắc **thừa hưởng vùng ngôn ngữ của bộ trích xuất**. CV bằng ngôn ngữ bộ trích không xử lý được thì không ra trường nào → *Không đọc được* → chờ một người duyệt đọc được ngôn ngữ đó.',
+        ],
+      },
+      {
+        kind: 'warn',
+        text:
+          '**Requirement chưa theo kịp quy tắc này.** Bảng *In one table* và mục *The automatic evaluation* của requirement vẫn ghi `≥ 1 kinh nghiệm HOẶC ≥ 1 học vấn` (bỏ dự án 25/09) và “không có công tắc Fresher / Experienced ở đâu trong ba repo” (kiểm 25/09). Build đã đổi từ **24/09**: học vấn luôn bắt buộc, kinh nghiệm bắt buộc trừ khi CV khai *No experience*. Trang này ghi theo build.',
+      },
+      {
+        kind: 'p',
+        text:
+          '**Cờ quét đang TẮT ở mọi môi trường** (`SVN_CV_QUALIFICATION_ENABLED=false`): file mới sinh ra ở *Đạt*, máy không ghi gì — bảng tắt / bật đầy đủ ở **CV review §1**. Cờ chỉ chặn đường **ghi**; đường **đọc** thì không, nên cổng nộp đơn bằng Saramin CV vẫn trả 409 `CV_NOT_QUALIFIED` dù cờ tắt. Tắt / bật vì thế **không phải một công tắc sạch**.',
+      },
+      { kind: 'h', text: '§5 · Saramin CV và CV tải lên — trong một bảng' },
+      {
+        kind: 'table',
+        note: 'Hai loại CV, **một** quy tắc, **một** field nó ghi. Mọi thứ phía sau — đơn có được gửi không — **đọc** từ field đó và không được quyết ở đâu khác. Cột phải ghi cả requirement khi build làm khác.',
+        cols: ['', 'Saramin CV (soạn trong form)', 'CV tải lên (PDF / DOCX)'],
+        rows: [
+          ['**Máy kiểm gì**', 'Học vấn, cộng kinh nghiệm trừ khi CV khai *No experience* — tính **trực tiếp** từ các trường, không qua máy quét', '**Cùng quy tắc**, trên các trường **parse** từ chính file đó'],
+          ['**Thoả quy tắc**', '*Đạt*', '*Đạt*'],
+          ['**Không thoả**', 'Chip *Unfinished* phía ứng viên; **không bao giờ vào hàng đợi**', 'Cờ bật: *Chưa đủ thông tin* — hoặc *Không đọc được* khi file không có chữ — → *Needs review*. Cờ tắt: vẫn *Đạt* ở tầng duyệt, chỉ có chip *Unfinished*'],
+          ['**CV Đạt thì…**', 'Nộp đơn → *Sent* · bật hiển thị được', 'Nộp đơn → *Sent* · bật hiển thị được'],
+          ['**CV chưa đạt thì…**', '**Không** nộp đơn được (picker mờ; server trả `CV_NOT_QUALIFIED`) · ô hiển thị ẩn', 'Web: **không** nộp được — picker mờ mọi CV *Unfinished* · ô hiển thị ẩn. Server / API: **nhận và giữ ở *Not sent***. Requirement: **nộp được**, đơn giữ lại; bật được nhưng *Hidden*'],
+          ['**CV bị từ chối thì…**', 'Không nộp, không bật được', 'Như bên trái — trạng thái **duy nhất** hành xử giống nhau trên hai đường. Đơn đã giao bằng version đó → *Recall*; đơn đang giữ → không bao giờ đi'],
+          ['**Lý do từ chối dùng được**', 'Chỉ *CV but not enough information* và *Other*', 'Cả bốn'],
+          ['**Ai đưa nó về *Đạt***', '**Ứng viên**, trong form — không HQ, không hàng đợi', '**HQ** duyệt ở CV review, hoặc một **version mới** qua được máy quét (web chưa có màn thay file)'],
+        ],
+      },
+      {
+        kind: 'list',
+        items: [
+          '**Sự lệch giữa hai đường là có chủ đích trong requirement**: Saramin CV nghi ngờ không nộp được (ứng viên sửa trong vài giây), file tải lên nghi ngờ thì nộp được — vì lỗi có thể nằm ở **bộ đọc của Saramin**, không ở tài liệu của họ. **Web đã xoá sự lệch này**: picker làm mờ mọi CV *Unfinished*, cả file tải lên. Cần chốt — xem cuối trang.',
+          '**Không có trạng thái “Pass / Fail” nào được lưu** — đó là kết quả của một lần quét. Thứ được lưu là một trong bốn trạng thái CV: *Pass* chính là *Đạt*, *Fail* là một trong hai trạng thái nghi ngờ. Màn hay bảng nào còn ghi Pass/Fail là đang tả lần quét, không phải bản ghi.',
+          '**Phía ứng viên là ràng buộc, không phải mục tiêu.** Việc chấm CV tồn tại để bảo vệ hai mặt công ty chạm vào — đơn họ nhận và kho họ trả tiền tìm. Ràng buộc tự đặt: không ứng viên nào bị chặn vì lỗi **của Saramin**, và mọi lần từ chối đều nêu lý do kèm cách sửa.',
+        ],
+      },
+      {
+        kind: 'warn',
+        text:
+          '**Người duyệt duyệt CV, không bao giờ duyệt đơn ứng tuyển.** Đó là lý do trang *Applications* không có nút *Chuyển tiếp* hay *Gửi*: việc giao là **hệ quả** của phán quyết về CV. Một CV đứng sau mười đơn thì cả mười đơn đọc chung một trạng thái; duyệt một lần, cả mười *Đã gửi* trong cùng một giao dịch, và công ty được báo **đúng lúc đó**.',
+      },
+      { kind: 'h', text: '§6 · Một dòng là gì — và version' },
+      {
+        kind: 'p',
+        text:
+          '**Ba danh sách, ba đơn vị khác nhau** — và phân số `v.N/M` cho biết bạn đang nhìn đơn vị nào: version **của dòng này** trên version **hiện tại** của CV. Nhầm đơn vị sinh ra một trong hai lỗi: **việc ảo** (người duyệt quyết một version không ai còn thấy) hoặc **đơn mất** (một đơn đợi một version ứng viên đã thay).',
+      },
+      {
+        kind: 'table',
+        heading: 'Mỗi màn hình, một dòng là gì',
+        cols: ['Màn hình', 'Một dòng là', 'Version nào', 'Có đọc `v.1/2` được không?'],
+        rows: [
+          ['**CV review**', 'Một **CV** cần / đã cần người nhìn. Build: một dòng một CV (`FROM candidate_cv`); thay file thì **sửa chính dòng đó**, không sinh dòng thứ hai', '*Needs review*: chỉ version **hiện tại** được chờ. *Approved* / *Rejected*: version lúc quyết', '*Needs review*: không bao giờ — luôn N/N. Hai tab đã quyết: có — `v.1/2` nghĩa là ứng viên đã đi tiếp sau quyết định đó'],
+          ['**Talent pool** (Admin)', 'Một **ứng viên** có CV đang bật, kèm đúng CV đó', 'Luôn version **hiện tại** — kho không phục vụ version nào khác', 'Không — luôn N/N'],
+          ['**Applications** (Admin) · tab **Jobs** (công ty)', 'Một **đơn ứng tuyển**', 'Đã giao: version **đã giao**, đóng băng. Đang giữ: requirement — chưa có version, đi theo CV; build — xem cảnh báo dưới', 'Đơn đã giao: có. Đơn đang giữ: không'],
+        ],
+      },
+      {
+        kind: 'table',
+        heading: 'Version — luật',
+        note: 'CV là món trên kệ của ứng viên: danh tính, tên, lịch sử. **Version** là nội dung của nó tại một thời điểm. Thay file tạo một version mới của **cùng một CV**; CV giữ nguyên tên và lịch sử ứng tuyển. **Web ứng viên chưa có màn thay file**, nên hôm nay gần như mọi dòng là `v.1/1`.',
+        cols: ['Quy tắc', 'Nghĩa'],
+        rows: [
+          ['Version mới **luôn về chờ**', '`replacedWith` ghi `PENDING` và xoá dấu đã duyệt — **kể cả khi cờ quét tắt**. Khi cờ bật, máy quét chấm lại; khi cờ tắt, nó nằm ở *Needs review* cho tới khi có người quyết.'],
+          ['Version mới **không rửa được** một lần từ chối', 'Nó đưa CV về chờ, không bao giờ thẳng về *Đạt*; lần từ chối cũ vẫn trong lịch sử (`cv_review`).'],
+          ['Đơn ứng tuyển **chụp lại** version đã gửi', 'Đọc là **đã gửi / hiện tại**: `v.1/2` = NTD giữ v.1, CV đã sang v.2.'],
+          ['Từ chối chỉ thu hồi **đơn mang version bị từ chối**', 'v.1 đã gửi, v.2 bị từ chối → NTD **vẫn giữ v.1**.'],
+          ['Saramin CV', 'Không có version: sửa form là render lại **cùng** CV, vẫn `APPROVED`.'],
+        ],
+      },
+      {
+        kind: 'list',
+        heading: 'Đơn đang giữ và version — luật của requirement',
+        items: [
+          '**Đơn đang giữ chưa có version.** Giao hàng mới là lúc chụp, nên đơn *Not sent* trôi theo CV và đi với version **hiện tại** lúc CV *Đạt* — dù HQ duyệt, hay ứng viên thay bằng một version qua được máy quét. Kết quả y như ứng viên nộp bằng version mới, đúng điều họ muốn.',
+          '**Version cũ đang nghi ngờ bị thay thế, không bị duyệt.** Khi CV sang v.2, dòng v.1 ở *Needs review* không còn gì phụ thuộc vào nó: tự rời hàng đợi, không cần ai quyết, hồ sơ ghi *superseded* (`v.1/2`). *Needs review* có tối đa **một dòng mỗi CV**.',
+          '**Version cũ bị từ chối thì ở lại hồ sơ** — quyết định của người không bao giờ tự đóng. v.2 vào *Needs review* là `v.2/2` **kể cả khi máy quét cho qua**, vì version mới không rửa được lần từ chối.',
+          '**Vì sao không gắn đơn đang giữ vào version lúc nộp:** sẽ bắt HQ duyệt một version đã bị thay chỉ vì một đơn, và duyệt nó thì giao cho công ty một file ứng viên đã bỏ. Gắn lúc giao thì không tốn gì và ra đúng kết quả mọi bên muốn.',
+        ],
+      },
+      {
+        kind: 'example',
+        heading: 'Ví dụ — tình huống khách hỏi: v.1 đang nghi ngờ, một đơn đang giữ, ứng viên cập nhật',
+        scenario: 'Ứng viên nộp một đơn bằng CV v.1 đang *Chưa đủ thông tin*. Rồi họ thay file thành v.2, và máy quét cho v.2 qua.',
+        cols: ['', 'Requirement', 'Build hôm nay (08/10)'],
+        rows: [
+          ['Đơn đang giữ', '**Giao với v.2** ngay lúc v.2 *Đạt*', '**Kẹt ở *Not sent*** — lỗi (1) và (2) dưới'],
+          ['Dòng v.1 ở *Needs review*', '**Bị thay thế**, rời hàng đợi; hồ sơ ghi `v.1/2`', 'Dòng được **sửa tại chỗ** sang v.2'],
+          ['v.2 trên CV review', '**Không xuất hiện** — máy quét đã cho qua', 'Version mới **luôn về chờ** → nằm ở *Needs review*'],
+          ['Talent pool', 'Một dòng, `v.2/2`', 'Một dòng'],
+        ],
+        note: 'Hai trường hợp kề bên thì có hai dòng thật: v.2 cũng bị nghi ngờ → *Needs review* hiện `v.2/2`, đơn tiếp tục chờ; v.1 đã bị từ chối từ trước → đơn đã *Not sent* chung cuộc, v.2 vào *Needs review* là `v.2/2` và tab *Rejected* giữ `v.1/2`.',
+      },
+      {
+        kind: 'warn',
+        text:
+          '**Build: một đơn đang giữ mà CV bị thay file thì KẸT — ba lỗi, một gốc.** Requirement ghi từ 26/09; kiểm lại svn-be `origin/dev` ngày 08/10: **chưa sửa**. Gốc: đơn lưu `applied_cv_media_key` đóng băng lúc nộp, không có `cvVersionId`, và không gì nối khoá đó qua các version. **(1)** Thả đơn tìm theo khoá của version **hiện tại** (`CandidateCvModerationService`) — đơn đóng băng trên khoá cũ không được tìm thấy: nộp lúc nghi ngờ → thay file → HQ duyệt → đơn nằm *Not sent* **mãi mãi**. **(2)** Đường tự động không giao gì — `CvQualificationService` chuyển CV sang *Đạt* nhưng không nắm kho đơn, nên ứng viên tự sửa cho qua máy quét thì đơn đang giữ **không** đi; chỉ HQ *Approve* mới thả. **(3)** Cột *Used to apply* và khối hậu quả chỉ đếm version hiện tại — CV có 3 đơn trên v.1 và 1 đơn trên v.2 đọc là **1**. Cả ba hôm nay còn **ngủ** vì web chưa có màn thay file; chúng thức dậy cùng màn đó. **Đừng sửa (1) bằng cách giao file cũ** — đơn phải đi với version hiện tại và đã *Đạt*; thứ hỏng là phép **tìm** đơn, không phải tài liệu nó mang.',
+      },
+      {
+        kind: 'example',
+        heading: 'Ví dụ — một CV tải lên, hai đơn, một lần từ chối (khi web có màn thay file và cờ quét bật)',
+        scenario:
+          'Thu hồi **chỉ xảy ra khi version đã gửi bị từ chối**. Ở kịch bản dưới, v.2 chưa từng được gửi cho FPT, nên FPT không bị đụng tới.',
+        cols: ['#', 'Việc xảy ra', 'CV', 'Đơn tới FPT', 'Đơn tới Tiki'],
+        rows: [
+          ['1', 'Tải CV lên — 3 kinh nghiệm, 1 học vấn', 'v.1 · *Đạt*', '—', '—'],
+          ['2', 'Nộp FPT; FPT chuyển sang Interview 1', 'v.1 · *Đạt*', 'Đã gửi · v.1', '—'],
+          ['3', 'Thay file bằng bản 1 trang — không kinh nghiệm, không học vấn', 'v.2 · *Chưa đủ thông tin* → *Needs review*', 'Đã gửi · v.1 (**không đổi** — là bản chụp)', '—'],
+          ['4', 'Nộp Tiki bằng CV đó qua API (web làm mờ CV *Unfinished*)', 'v.2 · *Chưa đủ thông tin*', 'Đã gửi · v.1', '**Không gửi** — đang giữ'],
+          ['5', 'Người duyệt từ chối — *CV but not enough information*', 'v.2 · *Từ chối* (chung cuộc)', 'Đã gửi · v.1 · **giữ nguyên**', '**Không được gửi**'],
+        ],
+        note:
+          'Nếu v.2 qua máy quét, được gửi cho Tiki, rồi người duyệt từ chối v.2 → đơn Tiki bị **Thu hồi**, đơn FPT (v.1) vẫn giữ nguyên.',
+      },
+      { kind: 'h', text: '§7 · Hai cửa vào console của nhà tuyển dụng' },
       {
         kind: 'table',
         cols: ['', 'Tab Jobs', 'Tab Talent pool'],
@@ -905,7 +998,6 @@ export const RESUME_MODULE_DOCS: Record<string, ModuleDoc> = {
         note:
           'Hai dòng của cùng một người ở hai tab là đúng thiết kế. Nếu ngày 06/10 HQ từ chối CV đang bật của Lan, X được **hoàn 1 credit**, nhưng Lan vẫn có mặt trong kho cho tới khi chính chị tắt CV — xem cảnh báo dưới.',
       },
-
       {
         kind: 'warn',
         text:
@@ -919,7 +1011,7 @@ export const RESUME_MODULE_DOCS: Record<string, ModuleDoc> = {
       {
         kind: 'open',
         text:
-          '**Cần chốt với khách.** (1) **Bật máy quét trên production khi nào, ai trực hàng đợi, SLA bao lâu** (DEBT D-RES-19). (2) **Kho tìm kiếm có lọc CV chưa Đạt / bị từ chối không** — requirement nói có, build từ 29/09 nói không. (3) **Tự bật hiển thị** cho file tải lên đầu tiên — có được coi là đồng ý của ứng viên không. (4) Thẻ kết quả `/search` lộ tên công ty / trường. (5) Màn **thay file** (version mới) phía ứng viên chưa có, nên toàn bộ luật version hôm nay chưa ai chạm tới. (6) *Total experience* theo từng CV: backend xong 08/10 (PR #783), web chưa nối.',
+          '**Cần chốt với khách.** (1) **Bật máy quét trên production khi nào, ai trực hàng đợi, SLA bao lâu** (DEBT D-RES-19). (2) **Kho tìm kiếm có lọc CV chưa Đạt / bị từ chối không** — requirement nói có, build từ 29/09 nói không. (3) **Tự bật hiển thị** cho file tải lên đầu tiên — có được coi là đồng ý của ứng viên không. (4) Thẻ kết quả `/search` lộ tên công ty / trường. (5) Màn **thay file** (version mới) phía ứng viên chưa có, nên toàn bộ luật version hôm nay chưa ai chạm tới. (6) *Total experience* theo từng CV: backend xong 08/10 (PR #783), web chưa nối. (7) **Nộp đơn bằng file tải lên chưa đạt** — requirement cho nộp rồi giữ đơn, web chặn ở picker: chọn một (§5). (8) **Application status** — requirement ba giá trị, build thêm *Rejected* theo từng đơn, ngược với “HQ quyết CV, không quyết đơn” (§3). (9) **Gỡ một quyết định** — requirement cho, server cấm (§3). (10) **Ba lỗi version** phải sửa **trước** khi mở màn thay file (§6).',
       },
     ],
   },

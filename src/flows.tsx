@@ -211,14 +211,15 @@ export function CrmFlow() {
         Chỉ <tspan fontWeight={700} fill={INK}>hoá đơn Issued</tspan> mới cấp quota.
       </Premise>
 
-      {/* ① company — the three doors stacked, so each arrow has its own path in */}
-      <Lane y={82} h={176} label="① CÔNG TY — ba cửa vào, một bảng Customers · chỉ Admin tạo công ty" />
+      {/* ① company — two doors, plus the sign-up drawn DASHED: it places a person into a
+          company already on Customers, it is not a third door (08/10/2026) */}
+      <Lane y={82} h={176} label="① CÔNG TY — hai cửa vào, một bảng Customers · chỉ Admin tạo công ty" />
       <Box x={30} y={110} w={300} h={42} title="A · Admin tạo: + New company" />
       <Box x={30} y={158} w={300} h={42} title="B · Sales xin từ Free data (2 cấp duyệt)" />
-      <Box x={30} y={206} w={300} h={42} title="C · NTD tự đăng ký → Sign-ups" />
+      <Box x={30} y={206} w={300} h={42} title="NTD tự đăng ký → Admin đặt người vào (Sign-ups)" tone="side" />
       <Arrow d="M 330 131 C 375 131, 375 173, 418 173" />
       <Arrow d="M 330 179 L 418 179" />
-      <Arrow d="M 330 227 C 375 227, 375 185, 418 185" />
+      <Arrow d="M 330 227 C 375 227, 375 185, 418 185" dashed />
       <Box x={420} y={140} w={280} h={78} title="Customers — có sales owner" sub="đủ MST + hồ sơ xuất hoá đơn" sub2="Free data (chưa có owner): chưa bán được" tone="brand" />
       <Arrow d="M 700 179 L 758 179" />
       <Box x={760} y={134} w={410} h={90} title="Verified?" sub="Admin bấm Verify company, đối chiếu giấy ĐKKD (ERC)" sub2="chỉ khoá 2 việc: NTD đăng tin · sales xin hoá đơn chính thức" tone="wait" />
@@ -283,48 +284,200 @@ export function CrmFlow() {
 }
 
 /* ── CRM intake — hai cửa có duyệt: Free data và Sign-ups ─────────────────────── */
+/* ── CRM — three drawings, three questions (split 08/10/2026, client feedback) ──
+   The old single drawing carried the Free data claim AND the sign-up gates in two
+   lanes, and read as one flow: the sign-up's "Free data" case looked like a third
+   way out of the pool. They are independent, so each has its own drawing:
+     crm-intake  — a COMPANY: how it is created, and Free data → Customers (Assigned)
+     crm-signup  — a PERSON: the Sign-ups row and the admin's three actions
+     crm-verify  — the company's verification STATUS once someone is inside */
 export function CrmIntakeFlow() {
   return (
-    <Frame label="Hai cửa vào có duyệt: nhận công ty từ Free data, và nhà tuyển dụng tự đăng ký" w={1200} h={600}>
-      <Premise title="HAI CỬA CÓ DUYỆT — sales xin công ty, nhà tuyển dụng tự đăng ký">
-        Free data là cùng bảng Customers nhưng <tspan fontWeight={700} fill={INK}>chưa có ai phụ trách</tspan> — không báo giá được. Người tự đăng ký đi qua <tspan fontWeight={700} fill={INK}>hai cổng</tspan>, theo đúng thứ tự.
+    <Frame label="Một công ty vào CRM: tạo ở đâu, và đi từ Free data sang Customers (Assigned) bằng đường nào" w={1200} h={424}>
+      <Premise title="MỘT BẢNG CÔNG TY, HAI TRẠNG THÁI — Free data (chưa có owner) và Customers · Assigned (có owner)">
+        Chỉ <tspan fontWeight={700} fill={INK}>Admin</tspan> tạo công ty. Sales không tạo — chỉ <tspan fontWeight={700} fill={INK}>xin</tspan> một công ty Free data, qua hai cấp duyệt. Sơ đồ này không có người đăng ký: sign-up đi luồng riêng, bên dưới.
       </Premise>
 
-      {/* Free data claim */}
-      <Lane y={82} h={226} label="CỬA B — NHẬN CÔNG TY TỪ FREE DATA · hai cấp duyệt, mỗi lúc chỉ một yêu cầu mở" />
-      <Box x={30} y={114} w={200} h={70} title="Sales: Ask for this company" sub="lý do · loại khách · bằng chứng" />
-      <Arrow d="M 230 149 L 248 149" tone="brand" />
-      <Box x={250} y={114} w={210} h={70} title="Waiting · step 1 · Admin" sub="người khác không xin được nữa" tone="wait" />
-      <Arrow d="M 460 149 L 558 149" tone="brand" label="Approve · Admin" lx={509} ly={141} />
-      <Box x={560} y={114} w={220} h={70} title="Waiting · step 2 · Sales lead" sub="cần MST mới Approve được" tone="wait" />
-      <Arrow d="M 780 149 L 838 149" tone="brand" label="Approve" lx={809} ly={141} />
-      <Box x={840} y={106} w={330} h={86} title="Customers — rep là sales owner" sub="người liên hệ trên form thành liên hệ #1" sub2="mọi yêu cầu mở khác bị từ chối" tone="money" />
-      <Arrow d="M 355 184 L 355 228" tone="stop" label="Reject" lx={375} ly={210} anchor="start" />
-      <Arrow d="M 670 184 L 670 228" tone="stop" label="Reject — dừng hẳn, không trả về Admin" lx={690} ly={210} anchor="start" />
-      <Box x={250} y={230} w={530} h={56} title="Quay về Not claimed · “Rejected N time(s) before”" sub="ai cũng xin lại được, kể cả rep cũ — bị từ chối KHÔNG phải một trạng thái" tone="stop" />
-      <Arrow d="M 1005 286 L 1005 196" dashed label="Admin: Assign directly — bỏ qua cả hai cấp" lx={995} ly={268} anchor="end" />
+      {/* creation — one form; the owner field decides which state it lands in */}
+      <Box x={30} y={84} w={360} h={64} title="Admin · Customers → + New company" sub="tên pháp lý · MST (Check) · xuất hoá đơn · liên hệ" sub2="MST trùng → bị từ chối, nêu công ty đang giữ" tone="brand" />
+      <Arrow d="M 180 148 L 180 210" label="để trống sales owner" lx={192} ly={184} anchor="start" />
+      <Arrow d="M 390 116 C 900 116, 1005 130, 1005 208" tone="brand" label="có sales owner" lx={760} ly={108} />
 
-      {/* Sign-up two gates */}
-      <Lane y={326} h={200} label="CỬA C — NHÀ TUYỂN DỤNG TỰ ĐĂNG KÝ · cổng ① mở đăng nhập, cổng ② mở đăng tin và hoá đơn" />
-      <Box x={30} y={358} w={160} h={72} title="① Đăng ký" sub="Company site: MST, ERC," sub2="tài khoản, mật khẩu" />
-      <Arrow d="M 190 394 L 208 394" />
-      <Box x={210} y={358} w={160} h={72} title="② Xác minh email" sub="dòng mới ở Sign-ups" sub2="vẫn chưa đăng nhập được" />
-      <Arrow d="M 370 394 L 388 394" />
-      <Box x={390} y={350} w={210} h={88} title="CỔNG ① · Admin xử lý" sub="Move to existing company" sub2="hoặc Create company & activate" tone="brand" />
-      <Arrow d="M 600 394 L 658 394" tone="brand" label="mở login" lx={629} ly={386} />
-      <Box x={660} y={358} w={140} h={72} title="Unverified" sub="đăng nhập được," sub2="Post job bị khoá" tone="wait" />
-      <Arrow d="M 800 394 L 858 394" label="tải ERC" lx={829} ly={386} />
-      <Box x={860} y={358} w={140} h={72} title="Waiting to verify" sub="hàng đợi của Admin" tone="wait" />
-      <Arrow d="M 1000 394 L 1018 394" />
-      <Box x={1020} y={350} w={150} h={88} title="CỔNG ② · Verified" sub="Admin bấm Verify" sub2="→ đăng tin + xin HĐ" tone="money" />
-      <Arrow d="M 1095 438 C 1095 486, 930 486, 930 432" tone="stop" label="Admin sửa tên pháp lý / MST / địa chỉ → rơi về Waiting" lx={1010} ly={500} />
-      <text x={390} y={470} fontSize={10.5} fill={MUT}>Archive = từ chối (lý do gửi qua email) — không tạo login, không tạo công ty.</text>
-      <text x={390} y={486} fontSize={10.5} fill={MUT}>Cột <tspan fontWeight={700} fill={INK}>Match</tspan> chỉ gợi ý, không quyết định gì. Email gmail không bao giờ khớp.</text>
+      {/* the two states */}
+      <Box x={30} y={212} w={300} h={96} title="FREE DATA" sub="chưa có owner · không báo giá được" sub2="Not claimed · Waiting step 1 / 2" tone="wait" />
+      <Box x={840} y={212} w={330} h={96} title="CUSTOMERS · Assigned" sub="có sales owner" sub2="báo giá → PO → hoá đơn" tone="money" />
 
-      <rect x={14} y={540} width={1172} height={50} rx={10} fill="#fffbeb" stroke={AMB} strokeWidth={1.5} />
-      <text x={32} y={561} fontSize={11.5} fontWeight={800} fill={AMB}>Không ai được đặt vào một công ty không tồn tại hoặc chưa có owner</text>
-      <text x={32} y={579} fontSize={11} fill={MUT}>
-        Move bị chặn khi MST chưa khớp công ty nào (“tạo công ty trước”) hoặc công ty còn ở Free data (“đưa sang Customers trước”). Dòng chưa xác minh email chỉ Archive được.
+      {/* Free data → Customers, two roads */}
+      <text x={400} y={206} fontSize={10.5} fontWeight={800} letterSpacing="0.04em" fill={MUT}>SANG ASSIGNED — 2 ĐƯỜNG</text>
+      <Box x={400} y={216} w={370} h={40} title="A · Sales: Ask for this company → Admin → Sales lead" />
+      <Box x={400} y={266} w={370} h={40} title="B · Admin: Assign directly (bỏ qua hai cấp duyệt)" />
+      <Arrow d="M 330 236 L 398 236" tone="brand" />
+      <Arrow d="M 330 286 L 398 286" tone="brand" />
+      <Arrow d="M 770 236 C 806 236, 806 252, 838 252" tone="brand" />
+      <Arrow d="M 770 286 C 806 286, 806 270, 838 270" tone="brand" />
+      <text x={585} y={328} fontSize={10.5} fontWeight={700} textAnchor="middle" fill={AMB}>Cả hai đường đều cần MST — thiếu MST thì nút Approve (lead) / Assign (Admin) bị khoá</text>
+      <text x={585} y={344} fontSize={10.5} textAnchor="middle" fill={MUT}>Xong thì công ty rời Free data. Bị từ chối ở bước nào cũng về Not claimed · “Rejected N time(s) before” — không phải một trạng thái.</text>
+      <text x={585} y={360} fontSize={10.5} textAnchor="middle" fill={MUT}>Return to the pool đưa một công ty Assigned về lại Free data, kèm lịch sử.</text>
+
+      <rect x={14} y={378} width={1172} height={36} rx={8} fill="#fffbeb" stroke={AMB} strokeWidth={1.2} />
+      <text x={30} y={400} fontSize={11} fill={MUT}><tspan fontWeight={800} fill={AMB}>Luật · </tspan>Công ty phải ở <tspan fontWeight={700} fill={INK}>Customers · Assigned</tspan> trước khi bất kỳ ai được đặt vào nó. Công ty không có MST không bao giờ đăng tin công khai hay xuất hoá đơn được.</text>
+    </Frame>
+  )
+}
+
+/* The PERSON's flow. A sign-up never moves a company: it places someone into a
+   company that is already Assigned. So Sign-ups has three actions and no merge —
+   a Free-data match is two steps, the first one on the Free data company itself.
+   The build says exactly this in the Move dialog ("That company is still in Free
+   data … Promote it to Customers first, then come back"). */
+export function CrmSignupFlow() {
+  return (
+    <Frame label="Nhà tuyển dụng tự đăng ký: dòng Sign-ups và ba hành động của Admin" w={1200} h={520}>
+      <Premise title="SIGN-UP — ĐẶT MỘT NGƯỜI VÀO MỘT CÔNG TY · độc lập với sơ đồ Free data / Customers">
+        Xác minh email chỉ chứng minh địa chỉ email — <tspan fontWeight={700} fill={INK}>chưa có login</tspan>. Login chỉ mở khi Admin <tspan fontWeight={700} fill={INK}>Move</tspan> hoặc <tspan fontWeight={700} fill={INK}>Create</tspan>. Archive = không cho vào.
+      </Premise>
+
+      <text x={30} y={96} fontSize={10.5} fontWeight={800} letterSpacing="0.04em" fill={MUT}>COMPANY SITE</text>
+      <text x={390} y={96} fontSize={10.5} fontWeight={800} letterSpacing="0.04em" fill={MUT}>ADMIN · CRM → SIGN-UPS</text>
+      <text x={700} y={96} fontSize={10.5} fontWeight={800} letterSpacing="0.04em" fill={MUT}>3 HÀNH ĐỘNG (menu ⋯)</text>
+      <text x={1004} y={96} fontSize={10.5} fontWeight={800} letterSpacing="0.04em" fill={MUT}>KẾT QUẢ</text>
+
+      <Box x={30} y={110} w={160} h={72} title="① Sign up" sub="MST · tên công ty · ERC" sub2="họ tên · email · mật khẩu" />
+      <Arrow d="M 190 146 L 208 146" tone="brand" />
+      <Box x={210} y={110} w={160} h={72} title="② Xác minh email" sub="chỉ xác thực email" sub2="chưa đăng nhập được" />
+      <Arrow d="M 370 146 L 388 146" tone="brand" />
+      <Box x={390} y={110} w={200} h={72} title="③ Dòng trên Sign-ups" sub="cột Match: Customers?" sub2="Free data? không có?" tone="brand" />
+      <text x={490} y={204} fontSize={10.5} textAnchor="middle" fill={MUT}>Match chỉ gợi ý, không quyết định.</text>
+      <text x={490} y={219} fontSize={10.5} textAnchor="middle" fill={MUT}>Dòng chưa xác minh email (Awaiting)</text>
+      <text x={490} y={234} fontSize={10.5} textAnchor="middle" fill={MUT}>chỉ Archive được.</text>
+
+      {/* branches */}
+      <Arrow d="M 590 128 L 698 128" tone="brand" label="khớp Customers" lx={644} ly={120} />
+      <Arrow d="M 590 152 C 640 152, 640 268, 698 268" tone="brand" label="khớp Free data" lx={646} ly={250} />
+      <Arrow d="M 576 182 C 600 300, 640 368, 698 368" tone="brand" label="công ty mới thật" lx={624} ly={330} anchor="end" />
+      <Arrow d="M 520 242 C 520 440, 620 452, 698 452" tone="stop" label="spam · test · trùng" lx={560} ly={420} anchor="end" />
+
+      <Box x={700} y={104} w={270} h={70} title="Move to existing company" sub="chọn công ty đích (Assigned) + role" sub2="không tạo công ty nào" tone="money" />
+      <Box x={700} y={232} w={270} h={74} title="Bước 1 · Đưa công ty sang Assigned" sub="trên hồ sơ Free data: Assign directly" sub2="(cần MST) — rồi quay lại Sign-ups" tone="wait" />
+      <Arrow d="M 836 232 L 836 176" tone="brand" label="Bước 2 · Move" lx={846} ly={208} anchor="start" />
+      <Box x={700} y={332} w={270} h={74} title="Create company & activate" sub="mở form New company, điền sẵn từ dòng" sub2="lưu = người đó là admin đầu tiên" tone="money" />
+      <Box x={700} y={428} w={270} h={50} title="Archive" sub="lý do gửi email · không login, không công ty" tone="stop" />
+
+      <Arrow d="M 970 139 C 1060 139, 1080 190, 1080 222" tone="brand" />
+      <Arrow d="M 970 369 C 1060 369, 1080 330, 1080 300" tone="brand" />
+      <Box x={1000} y={224} w={176} h={76} title="Login MỞ" sub="email đăng nhập" sub2="→ luồng xác minh công ty" tone="money" />
+      <Arrow d="M 970 453 L 998 453" tone="stop" />
+      <Box x={1000} y={428} w={176} h={50} title="Không vào được" sub="dòng Archived" tone="stop" />
+
+      <rect x={14} y={488} width={1172} height={26} rx={8} fill="#fffbeb" stroke={AMB} strokeWidth={1.2} />
+      <text x={30} y={505} fontSize={11} fill={MUT}><tspan fontWeight={800} fill={AMB}>Luật · </tspan>Đúng 3 hành động. Không có “gộp Free data”: hộp thoại Move dừng ở <tspan fontWeight={700} fill={INK}>“That company is still in Free data”</tspan> — đưa sang Assigned trước, rồi mới Move.</text>
+    </Frame>
+  )
+}
+
+/* The company's verification status, once someone is inside. One stored verdict;
+   Waiting is derived from a document being on file (svn-be V482), so no arrow
+   here is "set the status" — an upload, a Verify press or an admin edit moves it. */
+export function CrmVerifyFlow() {
+  const gate = (x: number, rows: [string, 'ok' | 'no' | 'admin'][]) => (
+    <g>
+      <rect x={x} y={300} width={320} height={rows.length * 22 + 14} rx={8} fill="none" stroke="var(--color-line)" strokeWidth={1} />
+      {rows.map(([t, s], i) => (
+        <g key={t}>
+          <text x={x + 14} y={320 + i * 22} fontSize={12} fontWeight={800} fill={s === 'ok' ? GRN : s === 'admin' ? AMB : '#be123c'}>{s === 'ok' ? '✓' : s === 'admin' ? '●' : '✕'}</text>
+          <text x={x + 32} y={320 + i * 22} fontSize={11} fill={INK}>{t}</text>
+        </g>
+      ))}
+    </g>
+  )
+  return (
+    <Frame label="Trạng thái xác minh công ty: Unverified, Waiting to verify, Verified" w={1200} h={470}>
+      <Premise title="XÁC MINH CÔNG TY — 3 TRẠNG THÁI · bắt đầu sau khi người đăng ký đã vào (Move / Create)">
+        Không ai “chọn” trạng thái: <tspan fontWeight={700} fill={INK}>tải giấy ĐKKD</tspan>, nút <tspan fontWeight={700} fill={INK}>Verify company</tspan> và việc Admin <tspan fontWeight={700} fill={INK}>sửa dữ liệu định danh</tspan> làm nhãn đổi theo.
+      </Premise>
+
+      <Box x={30} y={100} w={320} h={92} title="Unverified" sub="chưa có giấy ĐKKD trên hồ sơ" sub2="chờ KHÁCH tải lên" tone="side" />
+      <Arrow d="M 350 146 L 438 146" tone="brand" label="tải ERC" lx={394} ly={138} />
+      <text x={394} y={164} fontSize={10} textAnchor="middle" fill={MUT} {...HALO}>khách / admin</text>
+      <Box x={440} y={100} w={320} h={92} title="Waiting to verify" sub="đã có giấy, chưa ai xét" sub2="chờ ADMIN đối chiếu và bấm Verify" tone="wait" />
+      <Arrow d="M 760 146 L 848 146" tone="brand" label="Verify" lx={804} ly={138} />
+      <text x={804} y={164} fontSize={10} textAnchor="middle" fill={MUT} {...HALO}>Admin</text>
+      <Box x={850} y={100} w={320} h={92} title="Verified" sub="Admin đã đối chiếu giấy với hồ sơ" sub2="không chờ ai" tone="money" />
+      <Arrow d="M 1010 192 C 1010 250, 640 250, 600 196" tone="stop" dashed />
+      <text x={800} y={246} fontSize={10.5} fontWeight={600} textAnchor="middle" fill="#be123c" {...HALO}>Admin sửa tên pháp lý / MST / địa chỉ đăng ký + Save → về Waiting to verify</text>
+      <text x={190} y={214} fontSize={10.5} textAnchor="middle" fill={MUT}>Bấm Verify ở đây → “There is no paperwork</text>
+      <text x={190} y={229} fontSize={10.5} textAnchor="middle" fill={MUT}>to rule on yet” → Company documents</text>
+
+      <text x={30} y={290} fontSize={10.5} fontWeight={800} letterSpacing="0.04em" fill={MUT}>MỖI TRẠNG THÁI CHO LÀM GÌ</text>
+      {gate(30, [['Đăng nhập · đọc · tải giấy', 'ok'], ['Sửa Company information', 'ok'], ['Đăng tin — kể cả lưu nháp', 'no'], ['Sales: Request official invoice', 'no']])}
+      {gate(440, [['Đăng nhập · đọc · tải thêm giấy', 'ok'], ['Sửa Company information', 'ok'], ['Đăng tin — kể cả lưu nháp', 'no'], ['Sales: Request official invoice', 'no'], ['Admin: Verify company bấm được', 'admin']])}
+      {gate(850, [['Đăng nhập · đọc · tải thêm giấy', 'ok'], ['Company information: chỉ đọc', 'no'], ['Đăng tin', 'ok'], ['Sales: Request official invoice', 'ok']])}
+
+      <rect x={14} y={432} width={1172} height={30} rx={8} fill="#fffbeb" stroke={AMB} strokeWidth={1.2} />
+      <text x={30} y={451} fontSize={11} fill={MUT}><tspan fontWeight={800} fill={AMB}>Luật · </tspan>Verified gate <tspan fontWeight={700} fill={INK}>đúng hai việc</tspan>: khách đăng tin · sales xin hoá đơn chính. Không có “Rejected” — không Verify được thì giữ nguyên; dừng hẳn thì Archive công ty.</text>
+    </Frame>
+  )
+}
+
+/* ── Resume management — trạng thái CV quyết định cái gì ───────────────────────
+   The requirement's "How CV status drives Application status and CV search
+   status", drawn AS BUILT. Rows are the four CV statuses, read left to right
+   only. The search column no longer hangs off the status column: since SRM-777
+   (29/09) presence in /search reads the candidate's own switch, so the drawing
+   shows that switch feeding it and keeps the requirement's gate as one dashed
+   box — a difference a tester has to see, not discover. */
+export function CvStatusFlow() {
+  const rows = [106, 190, 274, 358]
+  const mid = (i: number) => rows[i] + 34
+  const status: { title: string; sub: string; sub2: string; tone: Tone }[] = [
+    { title: 'Đạt', sub: 'máy quét · mặc định khi cờ tắt · HQ Approve', sub2: 'ứng viên thấy: không nhãn', tone: 'money' },
+    { title: 'Chưa đủ thông tin', sub: 'máy quét — tạm thời, là câu hỏi', sub2: 'ứng viên thấy: Unfinished', tone: 'wait' },
+    { title: 'Không đọc được', sub: 'máy quét, chỉ file tải lên — tạm thời', sub2: 'ứng viên thấy: Unfinished', tone: 'wait' },
+    { title: 'Từ chối', sub: 'chỉ HQ — chung cuộc', sub2: 'ứng viên thấy: Can’t read + lời nhắn', tone: 'stop' },
+  ]
+  const app: { title: string; sub: string; sub2?: string; tone: Tone }[] = [
+    { title: 'Sent', sub: 'tới tab Jobs của công ty ngay', sub2: 'liên hệ mở sẵn, không tốn credit', tone: 'money' },
+    { title: 'Not sent', sub: 'giữ lại — không gì tự gửi theo giờ', sub2: 'chỉ HQ Approve thả ra', tone: 'wait' },
+    { title: 'Not sent', sub: 'giữ lại — y hệt dòng trên', sub2: 'khác nhau chỉ ở thứ HQ phải nhìn', tone: 'wait' },
+    { title: 'Not sent · Recall', sub: 'đang giữ: không bao giờ gửi', sub2: 'đã gửi đúng version này: kéo lại', tone: 'stop' },
+  ]
+  return (
+    <Frame label="Trạng thái CV quyết định đơn ứng tuyển; công tắc Show CV quyết định tìm kiếm CV" w={1200} h={560}>
+      <Premise title="MỘT TRẠNG THÁI, MỘT CÔNG TẮC — trạng thái CV quyết định đơn; công tắc của ứng viên quyết định tìm kiếm">
+        Đọc <tspan fontWeight={700} fill={INK}>từ trái sang phải</tspan>. Không mũi tên nào quay lại — bên phải không có gì để đặt tay.
+        Ô đứt nét là <tspan fontWeight={700} fill={INK}>requirement</tspan>, build đã bỏ từ 29/09 (SRM-777).
+      </Premise>
+
+      <text x={30} y={94} fontSize={10.5} fontWeight={800} letterSpacing="0.04em" fill={MUT}>TRẠNG THÁI CV · thứ duy nhất được lưu</text>
+      <text x={470} y={94} fontSize={10.5} fontWeight={800} letterSpacing="0.04em" fill={MUT}>ĐƠN ỨNG TUYỂN · suy ra, theo từng đơn</text>
+      <text x={850} y={94} fontSize={10.5} fontWeight={800} letterSpacing="0.04em" fill={MUT}>TÌM KIẾM CV CỦA CÔNG TY · /search</text>
+
+      {status.map((s, i) => (
+        <g key={i}>
+          <Box x={30} y={rows[i]} w={300} h={68} title={s.title} sub={s.sub} sub2={s.sub2} tone={s.tone} />
+          <Arrow d={`M 330 ${mid(i)} L 468 ${mid(i)}`} tone={i === 0 ? 'brand' : i === 3 ? 'stop' : 'plain'} />
+          <Box x={470} y={rows[i]} w={300} h={68} title={app[i].title} sub={app[i].sub} sub2={app[i].sub2} tone={app[i].tone} />
+        </g>
+      ))}
+
+      {/* the build's search: the candidate's switch, nothing else */}
+      <Box x={850} y={106} w={320} h={68} title="Show CV to employers" sub="ứng viên bật · một CV một lúc" sub2="hoặc hệ thống, cho file tải lên đầu tiên" tone="brand" />
+      <Arrow d="M 1010 174 L 1010 228" tone="brand" label="bật" lx={1022} ly={205} anchor="start" />
+      <Box x={850} y={230} w={320} h={86} title="Có mặt trong kho" sub="tên + liên hệ che tới khi công ty mở khoá" sub2="KHÔNG đọc trạng thái CV" tone="brand" />
+      <Box x={850} y={350} w={320} h={76} title="Requirement: chỉ Đạt mới Showing" sub="nghi ngờ / từ chối → Hidden, rời kho" sub2="build bỏ cổng này từ 29/09" tone="side" />
+      <Arrow d="M 180 426 L 180 446 L 1010 446 L 1010 428" dashed label="requirement: trạng thái CV cũng quyết định tìm kiếm" lx={600} ly={442} />
+
+      <rect x={14} y={470} width={1172} height={80} rx={10} fill="#fffbeb" stroke={AMB} strokeWidth={1.5} />
+      <text x={32} y={491} fontSize={11.5} fontWeight={800} fill={AMB}>Bốn điều luôn đúng</text>
+      <text x={32} y={509} fontSize={11} fill={MUT}>
+        ① HQ quyết <tspan fontWeight={700} fill={INK}>CV</tspan>, không bao giờ quyết đơn — một lần Approve thả mọi đơn đang giữ.
+        ② Máy quét chỉ được <tspan fontWeight={700} fill={INK}>nghi ngờ</tspan>; Từ chối chỉ do người ghi.
+      </text>
+      <text x={32} y={527} fontSize={11} fill={MUT}>
+        ③ <tspan fontWeight={700} fill={INK}>Recall</tspan> chỉ có khi đơn đã được GỬI rồi CV mới bị từ chối — từ chối một CV còn nghi ngờ thì đơn chỉ ở lại Not sent.
+      </text>
+      <text x={32} y={543} fontSize={11} fill={MUT}>
+        ④ Không gì được thả theo giờ — hàng đợi không ai làm là ứng viên bị chặn, không phải việc tồn nội bộ.
       </text>
     </Frame>
   )
@@ -334,4 +487,7 @@ export const DIAGRAMS: Record<string, () => JSX.Element> = {
   'product-chain': ProductFlow,
   'crm-chain': CrmFlow,
   'crm-intake': CrmIntakeFlow,
+  'crm-signup': CrmSignupFlow,
+  'crm-verify': CrmVerifyFlow,
+  'cv-status': CvStatusFlow,
 }

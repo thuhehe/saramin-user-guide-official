@@ -131,9 +131,9 @@ export const CRM_OPS_PAGE_DOCS: Record<string, PageDoc> = {
       { kind: 'p', text: '**Màn hình thật.** Ảnh chụp trước khi trang có thẻ *Overview* và bộ lọc trạng thái dạng chọn; cột và nút *Mine / All* vẫn như ảnh.' },
       {
         kind: 'shot',
-        src: '/shots/42-claim-requests.jpg',
+        src: '/shots/crm/claims.jpg',
         where: 'Admin',
-        caption: 'Nhật ký yêu cầu nhận công ty từ Free data — chỉ đọc, quyết định nằm trên hồ sơ công ty.',
+        caption: '**Claim requests** — nhật ký của rep: bốn ô (*Awaiting decision · Overdue 24h · Approved 7 days · Rejected 7 days*), lý do và bằng chứng nguyên văn, phân loại khách, trạng thái kèm ai quyết và lúc nào. Không có nút duyệt ở đây.',
       },
     ],
   },
@@ -275,9 +275,9 @@ export const CRM_OPS_PAGE_DOCS: Record<string, PageDoc> = {
       { kind: 'p', text: '**Màn hình thật.** Ảnh chụp trước khi trang có thẻ *Overview*, bộ sắp xếp và các cột *Company type*, *ERC* — phần còn lại như ảnh.' },
       {
         kind: 'shot',
-        src: '/shots/41-signups.jpg',
+        src: '/shots/crm/signups.jpg',
         where: 'Admin',
-        caption: 'Hàng đợi đăng ký mới từ site nhà tuyển dụng.',
+        caption: '**Sign-ups**: bốn ô (*Waiting · Overdue 24h · Arrived 7 days · Resolved 7 days*), lọc theo trạng thái và xác minh; mỗi dòng có MST, ERC (nếu khách đính kèm), công ty khớp; hành động nằm ở menu ⋯ cuối dòng.',
       },
     ],
   },

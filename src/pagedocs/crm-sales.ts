@@ -226,23 +226,47 @@ export const CRM_SALES_PAGE_DOCS: Record<string, PageDoc> = {
       },
       {
         kind: 'shot',
-        src: '/shots/30-companies-list.jpg',
+        src: '/shots/crm/customers-assigned.jpg',
         where: 'Admin',
-        caption: 'Danh sách khách hàng.',
+        caption: '**Companies**: bốn ô đếm (*My customers · New · Churn risk · Unassigned*), ba tab **Assigned · Free data · Archived**, phạm vi *Mine / My team’s / All*. Cột *Status* là trạng thái khách (*Existing* / *New*), cột *Verified* là xác minh — hai trục khác nhau.',
       },
       {
         kind: 'shot',
-        src: '/shots/31-company-detail.jpg',
+        src: '/shots/crm/customers-freedata.jpg',
         where: 'Admin',
-        caption: 'Hồ sơ một công ty.',
-        note: 'Công ty **phải ACTIVE** thì tin của họ mới vào được trạng thái OPEN — đây là chốt chặn hay bị quên nhất.',
+        caption: 'Tab **Free data**: công ty chưa có owner. MST tô vàng vì **chưa xác minh** (lấy từ danh bạ công khai, kiểm lại khi có người nhận).',
       },
       {
         kind: 'shot',
-        src: '/shots/32-company-products-billing.jpg',
+        src: '/shots/crm/company-new.jpg',
         where: 'Admin',
-        caption: 'Tab **Products & billing** — nơi kiểm “khách đang thực sự giữ những gì”: từng product, số slot còn lại, hạn dùng.',
+        caption: '**New company** — loại công ty quyết định MST nghĩa là gì; nút **Check** tra MST và điền địa chỉ đăng ký. Bên dưới: liên hệ chính, thông tin xuất hoá đơn.',
+      },
+      {
+        kind: 'shot',
+        src: '/shots/crm/company-overview.jpg',
+        where: 'Admin',
+        caption: 'Hồ sơ một công ty: nhãn *Existing* · *Verified* · hạng *Member*, hàng số liệu (hạng 2026, khách từ năm nào, tin đang mở, quota tin, lượt mở CV, sales owner), các tab, và bảng **Activity** bên phải. Nút tạo duy nhất: **Create quotation**.',
+      },
+      {
+        kind: 'shot',
+        src: '/shots/crm/freedata-claim-tab.jpg',
+        where: 'Admin',
+        caption: 'Một công ty **Free data**: nhãn *Not claimed* · *Unverified*, nút **Ask for this company** trên băng vàng, và tab *Claim requests* có thẻ **Assign directly · Admin** — gán thẳng, không cần duyệt.',
+      },
+      {
+        kind: 'shot',
+        src: '/shots/crm/company-billing.jpg',
+        where: 'Admin',
+        caption: 'Tab **Products & billing**: bảng trên — *What this company holds, by product* (tổng · đã dùng · còn · hết hạn); bảng dưới — *Purchases, by invoice*.',
         note: 'Sau khi phát hành hoá đơn, đây là màn hình để xác nhận quota đã về thật, chứ không chỉ tin vào toast báo thành công.',
+      },
+      {
+        kind: 'shot',
+        src: '/shots/crm/company-billing-invoices.jpg',
+        where: 'Admin',
+        caption: '*Purchases, by invoice*: mỗi hoá đơn một khối — số pháp lý **1C26TTD/0170**, mã nội bộ **INV-003522-10-2026**, ngày phát hành, rồi từng dòng với thanh *đã dùng / tổng*. Dòng tặng có nhãn *Gift*.',
+        note: '**Lỗi hiển thị trên dev (08/10):** dòng *Banner Hero trang chủ 14 ngày* (Placement booking) đang ghi “1 CV unlocks” — đúng ra là một khung ngày banner.',
       },
     ],
   },
@@ -341,9 +365,9 @@ export const CRM_SALES_PAGE_DOCS: Record<string, PageDoc> = {
       },
       {
         kind: 'shot',
-        src: '/shots/33-pipeline.jpg',
+        src: '/shots/crm/pipeline.jpg',
         where: 'Admin',
-        caption: 'Bảng pipeline bán hàng.',
+        caption: '**Pipeline**: mỗi thẻ là một báo giá (số `QUO-…`, công ty, ngành, giá trị một option, ngày). Đầu cột ghi số thẻ và tổng giá trị. Cột *Lost* nằm ngoài khung bên phải — cuộn ngang để thấy.',
       },
     ],
   },
@@ -558,22 +582,21 @@ export const CRM_SALES_PAGE_DOCS: Record<string, PageDoc> = {
       },
       {
         kind: 'shot',
-        src: '/shots/37-quotation-new.jpg',
+        src: '/shots/crm/quotation-new.jpg',
         where: 'Admin',
-        caption: 'Lập báo giá: mỗi option là một **phương án thay thế nhau**, không cộng dồn — khách chọn đúng một.',
+        caption: '**New quotation**: phần đầu tự điền — số báo giá *“Assigned on save”*, hạn **31/10/2026 (cuối tháng)**, người lập. Chọn công ty xong mới hiện phần option.',
       },
       {
         kind: 'shot',
-        src: '/shots/38-quotation-detail.jpg',
+        src: '/shots/crm/quotation-detail.jpg',
         where: 'Admin',
-        caption: 'Báo giá đã được chấp nhận và đã **Issue ra PO**.',
+        caption: 'Báo giá đã **Issued to PO**, pipeline *Invoice*: băng xanh nói số liệu đã khoá vì hoá đơn dựng từ đó. Option 1 có nhãn *Recommended* · *Accepted*; dòng tặng 0 ₫; giảm 5 %, VAT 8 %, tổng bằng chữ.',
       },
       {
         kind: 'shot',
-        src: '/shots/34-quotations-list.jpg',
+        src: '/shots/crm/quotations-list.jpg',
         where: 'Admin',
-        caption: 'Danh sách báo giá.',
-        note: 'Trên dev danh sách này có lúc lỗi “Something went wrong” vì vài quotation seed có option không có dòng nào — đi vòng qua **CRM → Companies → công ty → Create quotation**.',
+        caption: 'Danh sách báo giá: bốn ô (*Awaiting customer · Expiring 7 days · Value awaiting · Won 30 days*), nút *Waiting on me* cho người duyệt.',
       },
     ],
   },
@@ -706,15 +729,16 @@ export const CRM_SALES_PAGE_DOCS: Record<string, PageDoc> = {
       },
       {
         kind: 'shot',
-        src: '/shots/39-purchase-order-detail.jpg',
+        src: '/shots/crm/po-detail.jpg',
         where: 'Admin',
-        caption: 'Chi tiết một PO. Trạng thái **ACTIVE** mới chỉ đóng băng “sẽ cấp gì” — **nó chưa cấp gì cả**.',
+        caption: 'PO đã có hoá đơn: nhãn *Issued invoice* · *Draft exported* · *Unpaid* — ba trục riêng. Hai bên có MST, link về báo giá và option, ngày phát hành và hạn (*cuối tháng*).',
+        note: 'Khối bên bán là dữ liệu của *System → Issuer identity* — trên dev đang là tên test “…LIMITED_TEEST”.',
       },
       {
         kind: 'shot',
-        src: '/shots/35-purchase-orders-list.jpg',
+        src: '/shots/crm/po-list.jpg',
         where: 'Admin',
-        caption: 'Danh sách purchase order.',
+        caption: 'Danh sách PO: bốn ô (*Not invoiced · Expiring 7 days · Value not invoiced · Invoiced 30 days*); cột *Status* là trạng thái PO, cột cuối là thanh toán.',
       },
     ],
   },
@@ -845,16 +869,15 @@ export const CRM_SALES_PAGE_DOCS: Record<string, PageDoc> = {
       },
       {
         kind: 'shot',
-        src: '/shots/40-invoice-detail.jpg',
+        src: '/shots/crm/invoice-detail.jpg',
         where: 'Admin',
-        caption: 'Chi tiết hoá đơn đã phát hành: số pháp lý, ngày phát hành, *Activate by*, PO nguồn, nhãn thanh toán.',
-        note: 'Ảnh chụp 26/08/2026: nút **biểu tượng thư** cạnh *Preview PDF* **đã bị gỡ** (29/09/2026) — email gửi khách giờ nằm ở trang PO. Phần còn lại vẫn đúng.',
+        caption: 'Hoá đơn **Issued** cạnh **Unpaid** — hai việc khác nhau. Số pháp lý *1C26TTD/0170* do nhà cung cấp cấp, *Activate by* = ngày phát hành + 12 tháng, ghi chú *“Immutable — and there is no cancel”*.',
       },
       {
         kind: 'shot',
-        src: '/shots/36-invoices-list.jpg',
+        src: '/shots/crm/invoices-list.jpg',
         where: 'Admin',
-        caption: 'Danh sách hoá đơn.',
+        caption: 'Danh sách hoá đơn: cột đầu ghi mã nội bộ `INV-…` kèm số pháp lý bên dưới; ô *Stuck 7+ days* đếm hoá đơn chờ kế toán quá lâu.',
       },
     ],
   },
@@ -869,7 +892,7 @@ export const CRM_SALES_MODULE_DOCS: Record<string, ModuleDoc> = {
       'CRM là luồng bán: một công ty có người phụ trách, rồi một chuỗi ba chứng từ nối tiếp — **Báo giá → PO → Hoá đơn GTGT** — mỗi chứng từ chỉ dựng được từ chứng từ trước nó. Chỉ mắt xích cuối cùng mới đổi được quyền sử dụng của khách.',
     headline: [
       '**Chỉ hoá đơn GTGT ở trạng thái Issued mới cấp quota.** Không phải PO (đó là lúc deal “thắng”, nhưng không cấp gì), không phải hoá đơn nháp, không phải lúc tiền về. Kế toán bấm Issue là sản phẩm vào tài khoản khách ngay giây đó.',
-      '**Một bảng công ty, ba cửa vào, chỉ Admin tạo công ty.** Sales không bao giờ tạo công ty — chỉ có thể xin một công ty từ Free data (hai cấp duyệt) hoặc được Admin gán. Người tự đăng ký đi qua hai cổng: Admin xử lý mới **đăng nhập** được, Admin Verify mới **đăng tin và xin hoá đơn** được.',
+      '**Một bảng công ty, chỉ Admin tạo công ty.** Sales không bao giờ tạo công ty — chỉ có thể xin một công ty từ Free data (hai cấp duyệt) hoặc được Admin gán. **Sign-up là luồng riêng, của một NGƯỜI**: Admin đặt người đó vào một công ty đã ở Assigned (*Move*) hoặc tạo công ty mới cho họ (*Create*) — lúc đó mới **đăng nhập** được; Admin Verify mới **đăng tin và xin hoá đơn** được.',
       '**Các trạng thái nằm trên những trục riêng, không trục nào kéo trục nào.** Trạng thái công ty, trạng thái khách hàng, xác minh, chặng pipeline, trạng thái từng chứng từ và thanh toán — mỗi cái trả lời một câu hỏi khác. Mất deal không đổi trạng thái khách; hoá đơn chưa trả tiền vẫn là hoá đơn đã phát hành.',
     ],
     blocks: [
@@ -888,7 +911,6 @@ export const CRM_SALES_MODULE_DOCS: Record<string, ModuleDoc> = {
           ['**Hồ sơ công ty**', '/crm/companies/:id', 'Mọi thứ về một công ty: liên hệ, tài khoản đăng nhập, quota, claim, lịch sử owner, nút **Verify company**, nút **+ Create quotation**'],
           ['**Sign-ups**', '/crm/sign-ups', 'Nhà tuyển dụng tự đăng ký trên Company site, chờ Admin xử lý'],
           ['**Claim requests**', '/crm/company-claims', 'Nhật ký của chính rep: các lần xin công ty Free data và kết quả'],
-          ['**Company documents**', '/crm/company-documents', 'Hàng đợi của kế toán: giấy ĐKKD (ERC) khách nộp, yêu cầu đổi thông tin pháp lý'],
           ['**Pipeline**', '/crm/pipeline', 'Bảng deal — sáu cột'],
           ['**Quotations**', '/crm/quotations', 'Báo giá: 1–3 option có giá'],
           ['**Purchase orders**', '/crm/purchase-orders', 'Đơn đã cam kết, dựng từ option khách chấp nhận'],
@@ -899,19 +921,19 @@ export const CRM_SALES_MODULE_DOCS: Record<string, ModuleDoc> = {
       /* ── companies ── */
       {
         kind: 'table',
-        heading: 'Một công ty vào hệ thống bằng ba cửa',
+        heading: 'Một công ty vào hệ thống bằng hai cửa — cả hai đều có Admin',
+        note: 'Sign-up **không** phải cửa thứ ba: nó chỉ đặt một người vào một công ty đã ở Customers · Assigned. Xem phần **Sign-ups** bên dưới — có sơ đồ riêng.',
         cols: ['Cửa', 'Ai làm', 'Cần gì', 'Vào đâu'],
         rows: [
           ['**A · Customers → + New company**', 'Admin', 'Tên pháp lý · **MST** (nút *Check* tra cổng đăng ký kinh doanh quốc gia và điền sẵn địa chỉ) · thông tin xuất hoá đơn · liên hệ chính · sales owner. **Để trống owner thì công ty vào Free data**', 'Assigned (hoặc Free data)'],
           ['**B · Free data → Ask for this company**', 'Sales xin; Admin rồi Sales lead duyệt', 'Lý do, loại khách, bằng chứng (link hoặc file). Công ty phải có MST thì Sales lead mới duyệt được', 'Assigned — rep thành sales owner'],
-          ['**C · Company site → Sign up**', 'Nhà tuyển dụng đăng ký; Admin xử lý', 'Khách: MST, tên công ty, ERC (không bắt buộc), họ tên, email, điện thoại, mật khẩu. Admin: **Create company & activate** hoặc **Move to existing company**', 'Công ty ở trạng thái *Unverified*; người đăng ký là admin đầu tiên của công ty'],
         ],
       },
       {
         kind: 'diagram',
         id: 'crm-intake',
-        heading: 'Hai cửa có duyệt — chi tiết',
-        note: 'Cửa B là việc nội bộ của đội sales; cửa C bắt đầu ở Company site và đi qua hai cổng, theo đúng thứ tự.',
+        heading: 'Công ty: tạo ở đâu, và từ Free data sang Customers · Assigned',
+        note: 'Sơ đồ này **chỉ vẽ công ty**. Người tự đăng ký và trạng thái xác minh có sơ đồ riêng ở phần Sign-ups bên dưới — ba sơ đồ, ba câu hỏi, không chồng lên nhau.',
       },
       {
         kind: 'list',
@@ -980,6 +1002,12 @@ export const CRM_SALES_MODULE_DOCS: Record<string, ModuleDoc> = {
           'Quota chỉ đổi vì **ba lý do**: hoá đơn Issued cấp nó · đăng tin tiêu nó · mở CV trừ credit. **Không có cấp tay** — số quota đổi vì lý do nào khác là bug.',
         ],
       },
+      {
+        kind: 'shot',
+        src: '/shots/crm/company-billing.jpg',
+        where: 'Admin',
+        caption: 'Tab **Products & billing** trên dev: thứ khách đang giữ theo từng product, rồi từng hoá đơn đã Issued và các dòng nó cấp.',
+      },
 
       {
         kind: 'warn',
@@ -1012,14 +1040,33 @@ export const CRM_SALES_MODULE_DOCS: Record<string, ModuleDoc> = {
         ],
       },
       {
+        kind: 'shot',
+        src: '/shots/crm/freedata-claim-tab.jpg',
+        where: 'Admin',
+        caption: 'Một công ty Free data: *Not claimed* · *Unverified*, nút **Ask for this company**, và thẻ **Assign directly · Admin**.',
+      },
+      {
         kind: 'table',
         heading: 'Sign-ups — ba hành động, dòng nào cũng phải được xử lý',
+        note: 'Luồng này **độc lập** với sơ đồ Free data / Customers ở trên: nó đặt một **người** vào một công ty, không chuyển công ty nào.',
         cols: ['Hành động (menu ⋯)', 'Khi nào', 'Làm gì'],
         rows: [
-          ['**Move to existing company**', 'Cột *Match* chỉ ra một công ty ở Customers', 'Chọn công ty đích (chọn sẵn theo MST, đổi được) + vai trò (để trống = Company Admin) → *Place sign-up*. Tạo login **bên trong công ty đó**, gửi mail đăng nhập. Không tạo công ty mới'],
+          ['**Move to existing company**', 'Cột *Match* chỉ ra một công ty ở Customers · Assigned — **hoặc** một công ty Free data **sau khi** đã đưa nó sang Assigned (xem dưới)', 'Chọn công ty đích (chọn sẵn theo MST, đổi được) + vai trò (để trống = Company Admin) → *Place sign-up*. Tạo login **bên trong công ty đó**, gửi mail đăng nhập. Không tạo công ty mới'],
           ['**Create company & activate**', 'Công ty thật sự mới', 'Mở form **New company** điền sẵn từ dòng sign-up; lưu là đồng thời kích hoạt người đó làm admin đầu tiên. Công ty vào ở *Unverified*'],
           ['**Archive**', 'Spam, test, trùng', 'Từ chối, kèm lý do (gửi email cho người đăng ký). Không login, không công ty'],
         ],
+      },
+      {
+        kind: 'diagram',
+        id: 'crm-signup',
+        heading: 'Sign-up — từ lúc đăng ký tới lúc đăng nhập được',
+        note: 'Công ty khách nêu **còn ở Free data** thì là **hai bước**, không phải hành động thứ tư: ① trên hồ sơ công ty Free data, Admin **Assign directly** (cần MST) để đưa nó sang Assigned; ② quay lại Sign-ups → **Move to existing company**. Đúng như hộp thoại Move nói: *“That company is still in Free data … Promote it to Customers first, then come back.”*',
+      },
+      {
+        kind: 'shot',
+        src: '/shots/crm/signups.jpg',
+        where: 'Admin',
+        caption: 'Màn **Sign-ups** trên dev — hành động nằm ở menu ⋯ cuối mỗi dòng.',
       },
       {
         kind: 'list',
@@ -1028,6 +1075,22 @@ export const CRM_SALES_MODULE_DOCS: Record<string, ModuleDoc> = {
           '**Cột Match không quyết định gì.** Nó chỉ báo, lúc đọc, MST (hoặc tên miền email, hoặc tên) đã thuộc công ty nào — gắn nhãn *Customers* hay *Free data* — và chọn sẵn công ty đó trong Move. Email miễn phí (@gmail.com) **không bao giờ** khớp.',
           'Dòng **chưa xác minh email** vẫn hiện, ghi *Awaiting*. Archive được, nhưng **không Move / Create được** — server từ chối dù màn hình có cho bấm.',
           'Hộp thoại Move dừng ở hai trường hợp và nói rõ vì sao: *“This tax code reaches no company yet”* (tạo công ty trước) và *“That company is still in Free data”* (đưa sang Customers trước).',
+        ],
+      },
+      {
+        kind: 'diagram',
+        id: 'crm-verify',
+        heading: 'Trạng thái xác minh công ty — Unverified → Waiting to verify → Verified',
+        note: 'Bắt đầu **sau khi** người đăng ký đã được Move / Create. Ba nhãn này giống hệt nhau ở danh sách Customers (cột và bộ lọc), trên hồ sơ công ty, và cạnh tên công ty trên Company site.',
+      },
+      {
+        kind: 'table',
+        heading: 'Ba trạng thái xác minh',
+        cols: ['Trạng thái', 'Nghĩa', 'Vào trạng thái này khi', 'Ai phải làm tiếp'],
+        rows: [
+          ['**Unverified**', 'Chưa Verify, **chưa có giấy ĐKKD** trên hồ sơ', 'Công ty vừa được tạo (Create, hoặc + New company) mà chưa có giấy', '**Khách** — tải giấy ở Company information (hoặc Admin tải hộ ở thẻ Company documents trên hồ sơ)'],
+          ['**Waiting to verify**', 'Chưa Verify, nhưng **đã có giấy** để xét', 'Tự động khi file giấy đầu tiên được tải lên — không ai bấm gì · hoặc Admin sửa dữ liệu định danh của công ty đã Verified', '**Admin** — đối chiếu giấy với tên pháp lý, MST, địa chỉ rồi bấm **Verify company**'],
+          ['**Verified**', 'Admin đã bấm Verify', 'Admin bấm **Verify company** trên hồ sơ (chỉ chạy khi đang Waiting)', 'Không ai — cho tới khi Admin sửa dữ liệu định danh'],
         ],
       },
       {
@@ -1047,13 +1110,9 @@ export const CRM_SALES_MODULE_DOCS: Record<string, ModuleDoc> = {
           '**Admin sửa dữ liệu định danh của công ty đã Verified (tên pháp lý, MST, địa chỉ đăng ký) sẽ đẩy nó về Waiting to verify** — lặng lẽ, chỉ đổi cái nhãn. Lúc đó khách **mất quyền đăng tin** và sales **mất nút xin hoá đơn**, cho tới khi có người bấm Verify lại. Sau khi Verified, Company information phía khách chỉ còn **đọc** (vẫn tải giấy lên được).',
       },
       {
-        kind: 'table',
-        heading: 'Company documents khác với nút Verify',
-        cols: ['Đường đi', 'File tới đâu', 'Sinh ra ở trạng thái', 'Vào hàng đợi duyệt?'],
-        rows: [
-          ['Nhân viên đính kèm file trên hồ sơ công ty', 'Thẻ *Company documents* trên hồ sơ', 'Approved', 'Không — người đính kèm là người quyết'],
-          ['Khách nộp từ Company site', '*Company information* phía khách', 'Pending', 'Có — **Approve / Refuse** (lý do ≥ 10 ký tự, gửi nguyên văn cho khách)'],
-        ],
+        kind: 'warn',
+        text:
+          '**Trang Company documents đã bị gỡ ngày 06/10/2026.** Hàng đợi duyệt từng file (Approve / Refuse) và hàng đợi *Legal changes* đi cùng nó, **không có gì thay thế**. Giấy ĐKKD giờ chỉ xem ở **thẻ Company documents trên hồ sơ công ty**, và quyết định duy nhất là nút **Verify company**. Hệ quả: một file khách nộp sai **không từ chối được** trong console — công ty vẫn hiện *Waiting to verify*.',
       },
 
       /* ── documents ── */
@@ -1151,6 +1210,12 @@ export const CRM_SALES_MODULE_DOCS: Record<string, ModuleDoc> = {
         ],
       },
       {
+        kind: 'shot',
+        src: '/shots/crm/invoice-detail.jpg',
+        where: 'Admin',
+        caption: 'Một hoá đơn **Issued** và **Unpaid** cùng lúc — số pháp lý từ nhà cung cấp, *Activate by* = ngày phát hành + 12 tháng, không có nút huỷ.',
+      },
+      {
         kind: 'warn',
         text:
           '**Đính chính:** từ 29/09/2026 email gửi khách **chuyển sang trang PO**; hộp thoại phát hành hoá đơn không còn là trình soạn email và phát hành không gửi gì.',
@@ -1224,6 +1289,12 @@ export const CRM_SALES_MODULE_DOCS: Record<string, ModuleDoc> = {
           '**Không có job nào tự đóng deal.** Đóng thua là việc của một người, kèm lý do.',
         ],
       },
+      {
+        kind: 'shot',
+        src: '/shots/crm/pipeline.jpg',
+        where: 'Admin',
+        caption: 'Bảng **Pipeline** trên dev — mỗi thẻ là một báo giá.',
+      },
 
       {
         kind: 'warn',
@@ -1253,7 +1324,7 @@ export const CRM_SALES_MODULE_DOCS: Record<string, ModuleDoc> = {
           ['Sales lead', 'Mọi thứ rep làm được, trên sổ của team · **duyệt claim bước 2** · duyệt chiết khấu dưới ngưỡng của chương trình · Archive công ty', 'Phát hành hoá đơn · duyệt claim bước 1'],
           ['Sales manager', 'Duyệt chiết khấu **từ ngưỡng trở lên**', '—'],
           ['Admin (HQ)', 'Tạo công ty · **duyệt claim bước 1** · Assign directly / đổi owner · xử lý Sign-ups · **Verify** · Archive', 'Phát hành hoá đơn (trừ khi kiêm kế toán)'],
-          ['Kế toán', '**Phát hành hoá đơn** · xác nhận thanh toán · duyệt Company documents', '**Tạo hoặc sửa** bất kỳ chứng từ nào trong ba loại'],
+          ['Kế toán', '**Phát hành hoá đơn** · xác nhận thanh toán', '**Tạo hoặc sửa** bất kỳ chứng từ nào trong ba loại'],
           ['Nhà tuyển dụng (Company site)', 'Đăng ký · tải ERC · sửa Company information tới khi Verified · đăng tin khi đã Verified', 'Đăng nhập trước khi được xử lý · đăng tin trước khi Verified · thấy bất cứ thứ gì của CRM'],
         ],
       },
@@ -1287,7 +1358,7 @@ export const CRM_SALES_MODULE_DOCS: Record<string, ModuleDoc> = {
       {
         kind: 'open',
         text:
-          '**Company documents và nút Verify.** Hàng đợi duyệt từng file (Approve / Refuse) tồn tại song song với Verify company. Một file bị *Refuse* có còn được tính là “đã có giấy” cho nhãn *Waiting to verify* không?',
+          '**Từ chối giấy tờ sai.** Từ khi trang Company documents bị gỡ (06/10), không còn cách nào từ chối một file khách nộp sai trong console. Thêm *Reject* vào thẻ giấy tờ trên hồ sơ, hay xử lý ngoài hệ thống?',
       },
       {
         kind: 'open',
