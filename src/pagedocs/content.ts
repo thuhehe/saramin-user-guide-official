@@ -767,7 +767,7 @@ export const CONTENT_PAGE_DOCS: Record<string, PageDoc> = {
         cols: ['Trang', 'Đường dẫn (VI · EN/KO)', 'Tiêu đề h1', 'Trục nhóm của hai băng', 'Ô bắt buộc khi bấm tìm'],
         rows: [
           ['**Theo khu vực**', '`/viec-lam/dia-diem` · `/jobs/locations`', 'Theo khu vực / Jobs by locations', '**Tỉnh/TP** có nhiều tin hiển thị nhất lên trước', 'Khu vực (panel khu vực mở sẵn)'],
-          ['**Theo ngành nghề**', '`/viec-lam/nganh-nghe` · `/jobs/roles`', 'Theo ngành nghề / Jobs by job roles', '**Nhóm ngành nghề (job category)** nhiều tin nhất lên trước', 'Ngành nghề (panel ngành nghề mở sẵn; ô ngành nghề đứng trước ô khu vực)'],
+          ['**Theo ngành nghề**', '`/viec-lam/nganh-nghe` · `/jobs/roles`', 'Theo ngành nghề / Jobs by job roles', '**Category** (cấp 1 của *Job taxonomy*) nhiều tin nhất lên trước', 'Ngành nghề (panel ngành nghề mở sẵn; ô ngành nghề đứng trước ô khu vực)'],
           ['**Theo ngành**', '`/viec-lam/nganh` · `/jobs/industries`', 'Theo ngành / Jobs by industries', '**Ngành cấp cao nhất** của công ty nhiều tin nhất lên trước', 'Ngành (ô nghề được thay bằng cây ngành 3 cấp)'],
         ],
         note: 'Bấm tìm khi thiếu ô bắt buộc thì hiện thông báo thay vì chạy. Một lần tìm mang tối đa **15** khu vực / ngành. Mục cha **Việc làm** trên menu dẫn tới *Theo khu vực*. Mục con thứ tư — **Công ty hàng đầu** (`/viec-lam/cong-ty-hang-dau`) — là trang khác, không thuộc màn hình này.',
@@ -787,7 +787,7 @@ export const CONTENT_PAGE_DOCS: Record<string, PageDoc> = {
         heading: 'Thứ tự bên trong một băng',
         cols: ['#', 'Khoá sắp xếp', 'Nghĩa'],
         rows: [
-          ['1', '**Nhóm đông tin nhất**', 'Theo trục của trang (tỉnh / nhóm ngành nghề / ngành gốc), **đếm trên tin đang hiển thị**'],
+          ['1', '**Nhóm đông tin nhất**', 'Theo trục của trang (tỉnh / Category của Job taxonomy / ngành gốc), **đếm trên tin đang hiển thị**'],
           ['2', '**Bậc tin**', '`display_order` của product cao nhất đang chạy — thứ tự kéo ở *Posting ladder*'],
           ['3', '**Trải đều nhà tuyển dụng**', 'Mỗi công ty một tin mới nhất, rồi vòng hai… (luật “≤ 10 %”)'],
           ['4', '**Lần auto-refresh gần nhất**', '`refreshed_at` — **không phải** lần sửa tin gần nhất'],
@@ -808,7 +808,7 @@ export const CONTENT_PAGE_DOCS: Record<string, PageDoc> = {
           ['Khớp bộ lọc trên URL (nếu khách đã lọc)', 'Thanh tìm kiếm', 'Bị lọc ra'],
           ['Đủ chỗ trong `Items shown`', '*Product settings → Placements*', 'Rơi khỏi băng (không có trang 2)'],
         ],
-        note: 'Trục nhóm cần dữ liệu: tỉnh của tin (master data *Regions*), ngành nghề của tin (*Job categories / roles*), ngành của **công ty** (*Industries*, cây 3 cấp — đếm theo gốc). **Tin ẩn danh không được đếm vào nhóm ngành** (công ty bị giấu).',
+        note: 'Trục nhóm cần dữ liệu: tỉnh của tin (master data *Locations*), ngành nghề của tin (*Job taxonomy*, cây 3 cấp Category → Group → Role — đếm theo Category), ngành của **công ty** (*Industries*, cây 3 cấp — đếm theo gốc). **Tin ẩn danh không được đếm vào nhóm ngành** (công ty bị giấu).',
       },
       {
         kind: 'table',
@@ -819,7 +819,7 @@ export const CONTENT_PAGE_DOCS: Record<string, PageDoc> = {
           ['Băng hiện bao nhiêu thẻ', '*Product settings → Placements → Items shown*', 'Đổi kích thước băng trên cả ba trang (và Korea/Global)'],
           ['Bậc nào đứng trước', '*Product settings → Posting ladder*', 'Khoá sắp xếp 2'],
           ['Tin được đẩy lên bao lâu một lần', 'Product → *Auto-refresh*', 'Khoá sắp xếp 4'],
-          ['Danh sách tỉnh / ngành nghề / ngành', '*System → Master data*', 'Bộ chọn của thanh tìm kiếm và trục nhóm. svn-web cache master data tới 1 giờ; svn-be gọi xoá cache sau khi lưu cho các danh mục có trong danh sách cho phép (chưa xác minh từng danh mục)'],
+          ['Danh sách tỉnh / ngành nghề / ngành', '*System → Master data* — tab *Locations* / *Job taxonomy* / *Industries*', 'Bộ chọn của thanh tìm kiếm và trục nhóm. svn-web cache master data tới 1 giờ; svn-be gọi xoá cache sau khi lưu cho các danh mục có trong danh sách cho phép (chưa xác minh từng danh mục)'],
           ['Mục menu dẫn tới trang', '*Content → Site navigation → Mega menu*', 'Ẩn / sắp / badge (tên và đường dẫn do site giữ)'],
         ],
       },
@@ -1046,7 +1046,7 @@ export const CONTENT_MODULE_DOCS: Record<string, ModuleDoc> = {
         rows: [
           ['**Mega menu** (đầu trang)', '— (mọi trang)', '*Content → Site navigation* — ẩn/sắp/badge mục Built-in; thêm mục trỏ collection / zone / link'],
           ['**Premium pages** (zone)', '`/khu-tuyen-dung/<address>`', '*Content → Zones* (khung trang) + *Content → Collections* (hai danh sách tin)'],
-          ['**Theo khu vực / ngành nghề / ngành**', '`/viec-lam/dia-diem` · `/viec-lam/nganh-nghe` · `/viec-lam/nganh`', '*Products → Placement slots* (bậc nào lên băng) · *Placements → Items shown* (số thẻ) · *Posting ladder* (thứ tự bậc) · *Recruitment → Jobs* và *CRM* (tin, công ty) · *Master data* (tỉnh, ngành nghề, ngành)'],
+          ['**Theo khu vực / ngành nghề / ngành**', '`/viec-lam/dia-diem` · `/viec-lam/nganh-nghe` · `/viec-lam/nganh`', '*Products → Placement slots* (bậc nào lên băng) · *Placements → Items shown* (số thẻ) · *Posting ladder* (thứ tự bậc) · *Recruitment → Jobs* và *CRM* (tin, công ty) · *Master data* (*Locations*, *Job taxonomy*, *Industries*)'],
           ['**Hàn Quốc / Toàn cầu**', '`/viec-lam/han-quoc` · `/viec-lam/nuoc-ngoai`', 'Như ba trang trên + *CRM → Customers → Country*'],
           ['**Collection đứng riêng**', '`/bo-suu-tap/<address>`', '*Content → Collections*'],
         ],

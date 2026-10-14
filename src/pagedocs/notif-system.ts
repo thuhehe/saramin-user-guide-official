@@ -1,4 +1,4 @@
-import type { PageDoc, ModuleDoc } from '../docs'
+import type { PageDoc, ModuleDoc, DocBlock } from '../docs'
 
 /*
  * Notifications (5 pages) + System (7 pages) — page docs and the two module docs.
@@ -15,6 +15,18 @@ import type { PageDoc, ModuleDoc } from '../docs'
  */
 
 const CHECKED = '`saramin-vn-admin` `origin/dev` 45954108 · `svn-be` ee1db5ea9 · `svn-web` d8a43a11 (08/10/2026)'
+
+/* Master data: one card per tab, the same rows in the same order, so a reader can
+   compare two tabs line by line instead of hunting through prose. */
+const MD_VI_EN = 'VI và EN (đều bắt buộc)'
+const MD_VI_EN_KO = 'VI và EN (đều bắt buộc) · KO'
+const MD_DRAG = 'Kéo thả để xếp thứ tự trong ô chọn'
+const MD_LIST_IMPORT = 'File .xlsx dạng danh sách (`code`, `name_vi`, `name_en`, `name_ko`, `parent_code`, `action`) — chỉ dòng ghi `delete` mới bị xóa'
+const mdTab = (rows: [string, string][]): DocBlock => ({
+  kind: 'table',
+  cols: ['Mục', 'Logic'],
+  rows: rows.map(([k, v]) => [`**${k}**`, v]),
+})
 
 export const NOTIF_SYSTEM_PAGE_DOCS: Record<string, PageDoc> = {
   /* ── Notifications ───────────────────────────────────────────────────────── */
@@ -531,56 +543,460 @@ export const NOTIF_SYSTEM_PAGE_DOCS: Record<string, PageDoc> = {
 
   'master-data': {
     logic: [
-      'Dữ liệu danh mục dùng chung toàn hệ thống — các danh sách mà ô chọn ở **form tin đăng, hồ sơ công ty, đăng ký / hồ sơ ứng viên và bộ lọc tìm CV** đọc từ. Mọi module khác **chỉ đọc**; sửa thì ở đây.',
-      'Mỗi tab một nhóm và **mỗi nhóm có quyền riêng** (`job_category`, `skill`, `region`… mỗi cái `read` / `create` / `update` / `delete`). Thiếu quyền đọc nhóm nào thì **tab đó không hiện**.',
-      'Mọi giá trị có **code** (duy nhất) và **tên VI / EN** (Skills, Business forms, Education levels, Years of experience, Nationalities có thêm tên **KO**). **Chỉ tên VI là bắt buộc.** Code sửa được, trùng thì 409 — trừ *Business forms*, code bị **khoá** sau khi tạo.',
-      'Hầu hết danh mục **kéo thả để xếp thứ tự** hiển thị trong ô chọn (trừ *Job levels* — thứ tự đó dùng để chấm điểm khớp nên do svn-be giữ). Hai người cùng xếp: người sau nhận *“This list changed while you were reordering…”* và danh sách tải lại.',
-      '**Import / Export** theo từng danh mục: tải file .xlsx đã điền sẵn dữ liệu hiện tại (cột `code, name_vi, name_en, name_ko, parent_code, action`) → sửa → tải lên → **xem trước** số dòng thêm / sửa / xoá / giữ nguyên → *Apply*. Chỉ dòng ghi `delete` ở cột action mới bị xoá; dòng vắng mặt trong file được giữ nguyên.',
-      'Tab **Missing skills** (ngay sau Skills): những kỹ năng **xuất hiện trong CV thật** mà danh mục chưa có, kèm số CV và số CV **đang bị giữ** vì thiếu điều kiện. *Approve* thì hoặc thêm thành **alias** của một kỹ năng có sẵn, hoặc tạo **kỹ năng mới** — và svn-be **gắn lại kỹ năng cho các CV đó và sàng lại chúng** trong cùng một lần.',
+      'Master data là các **danh mục dùng chung toàn hệ thống**: ngành nghề, kỹ năng, khu vực, cấp bậc, loại hợp đồng… Các ô chọn ở **form tin đăng, hồ sơ công ty (CRM), đăng ký / hồ sơ ứng viên và bộ lọc tìm CV** đều đọc từ đây. **Mọi module khác chỉ đọc** — muốn sửa danh mục thì sửa ở Master data.',
+      'Mỗi tab là một danh mục, và **mỗi danh mục có quyền riêng** (`job_category`, `skill`, `region`…, mỗi quyền gồm `read` / `create` / `update` / `delete`). Thiếu quyền đọc danh mục nào thì **chỉ tab đó bị ẩn**, các tab khác vẫn hiện.',
+      'Mọi giá trị có **Code** — **tự điền từ tên EN** theo quy tắc riêng của hệ thống, chỉ gồm chữ thường, số và dấu gạch ngang — ký hiệu như `+`, `#` được **viết thành chữ** (vd *C++* → `c-plus-plus`), nên code không bao giờ chứa ký hiệu; duy nhất, sửa được, trùng thì 409 — và **tên VI, tên EN** (cả hai **bắt buộc**, ở mọi danh mục). Tên **KO** chỉ có ở Skills, Business forms, Education levels, Years of experience, Nationalities. Riêng **Business forms**: Code **bị khóa** sau khi tạo. Với tab dạng cây (Job taxonomy, Industries), Code duy nhất **trong cùng cấp cha**.',
+      'Hầu hết danh mục **kéo thả** để xếp thứ tự hiển thị trong ô chọn. Ngoại lệ: **Job levels** — thứ tự đó dùng để **chấm điểm khớp** ứng viên với tin, do svn-be giữ.',
+      '**Đổi tên luôn an toàn** với danh mục mà bản ghi lưu **mã**. **Xóa** thì mọi danh mục đều có nút, và hệ thống **không kiểm tra giá trị đang được dùng** — trừ Business forms và Job tags (409). Kết quả xóa phụ thuộc bản ghi lưu **mã** hay lưu **chữ** (§1, bảng *Đổi tên và xóa*).',
+      'Không có trạng thái Active / Retired chung. Chỉ **Business forms** có công tắc **Active**.',
     ],
     how: [
-      'Chọn tab của nhóm cần sửa → tìm theo code hoặc tên → *New …* hoặc sửa một dòng.',
-      'Kỹ năng bị CV viết khác chính tả: mở dòng trên tab **Skills** → thêm **alias** (chỉ Skills có alias — việc đọc CV khớp chữ tự do với danh sách này).',
-      'Tab **Missing skills**: đọc gợi ý (*What to add*) → **Approve** → sửa danh sách cách viết đề xuất → *Add and back-fill* → toast báo số alias thêm, số hồ sơ cập nhật, số CV được nhả.',
-      'Sửa hàng loạt: **Import / Export** → tải template → sửa → tải lên → đọc bản xem trước → *Apply*.',
+      'Chọn tab của danh mục cần sửa → tìm theo Code hoặc tên → *New …* hoặc sửa một dòng. Tab cây (Job taxonomy, Industries) thêm cấp con ngay trên dòng cha.',
+      'Kỹ năng bị CV viết khác chính tả: mở dòng trên tab **Skills** → thêm **alias** (chỉ Skills có alias). Gộp 2 kỹ năng trùng nghĩa cũng dùng alias, **không xóa cái này rồi sửa tay cái kia**.',
+      'Tab **Missing skills**: đọc gợi ý → **Approve** → chọn *thêm alias* hoặc *tạo kỹ năng mới* → *Add and back-fill* → thông báo số alias thêm, số hồ sơ cập nhật, số CV được nhả.',
+      'Sửa hàng loạt: **Import / Export** → tải file → sửa → tải lên → đọc bản **xem trước** (số dòng thêm / sửa / xóa / giữ nguyên) → *Apply*.',
     ],
     watch: [
-      'Thiếu quyền một tab thì chỉ tab đó vắng — không phải cả trang hỏng. Mục menu hiện theo quyền `region:read`.',
-      'Ô tìm kiếm bị xoá khi chuyển tab (một chữ “react” mang từ Skills sang Industries sẽ cho bảng trống).',
+      'Mục menu Master data hiện theo quyền `region:read`. Thiếu quyền một tab thì chỉ tab đó vắng — không phải cả trang hỏng.',
+      'Ô tìm kiếm bị **xóa khi chuyển tab** — chữ “react” tìm ở Skills không mang sang Industries, nên bảng không bị trống vì lọc nhầm.',
+      'Hai người cùng xếp thứ tự một lúc: người lưu sau nhận *“This list changed while you were reordering…”* và danh sách tự tải lại.',
       'Sửa đơn lẻ một dòng **không ghi Audit log**; Import (`master_data.import`) và duyệt Missing skills (`skill_gap.adopt`) thì có.',
+      'Import: **chỉ dòng ghi `delete` ở cột `action` mới bị xóa**. Dòng vắng mặt trong file được giữ nguyên.',
     ],
     blocks: [
-      { kind: 'p', text: `Đối chiếu với build: ${CHECKED}.` },
+      { kind: 'p', text: 'Theo tài liệu *Master data* phiên bản 14/10/2026 (Ngô Thái Nguyên, BA/QA). Mỗi tab: **Logic** trước, **Flow** đi kèm khi tab đó chạm tới nhiều module khác.' },
+
+      /* ── §1 Logic chung ─────────────────────────────────────────────────── */
+      { kind: 'h', text: '§1 · Logic chung' },
+      {
+        kind: 'diagram',
+        id: 'md-overview',
+        heading: 'Flow tổng quan — một nơi ghi, mọi module chỉ đọc',
+      },
       {
         kind: 'table',
-        heading: 'Các tab và nơi chúng được đọc',
-        note: 'Thứ tự theo chủ đề: phân loại công việc → điều kiện một tin → mô tả ứng viên → mô tả công ty → vị trí. Hai cặp cha–con gộp thành **một tab cây** sửa được cả hai cấp.',
-        cols: ['Tab', 'Gồm', 'Đọc ở đâu', 'Xoá một giá trị đang dùng'],
+        heading: 'Trường dữ liệu',
+        cols: ['Trường', 'Logic'],
         rows: [
-          ['**Job categories / roles** (cây)', 'Nhóm ngành nghề → vai trò', 'Form tin đăng, tìm việc, hồ sơ ứng viên', 'Đi được — tin đang dùng **mất giá trị** (*“Jobs using it will show no value.”*)'],
-          ['**Specialisation groups / Specialisations** (cây)', 'Nhóm chuyên môn → chuyên môn (gắn với nhóm ngành)', 'Ô chọn chuyên môn trên form tin và phía ứng viên', 'Đi được — tin mất giá trị'],
-          ['**Industries**', 'Cây 3 cấp ngành công nghiệp', 'Tin đăng **và** công ty', 'Đi được — chỉ mất gợi ý'],
-          ['**Job levels**', 'Cấp bậc', 'Form tin, chấm điểm khớp', 'Đi được — tin mất giá trị. **Không kéo thả**'],
-          ['**Job types**', 'Hình thức làm việc', 'Form tin', 'Đi được — tin mất giá trị'],
-          ['**Contract types**', 'Loại hợp đồng', 'Form tin', 'Đi được — tin mất giá trị'],
-          ['**Benefits**', 'Phúc lợi của một tin', 'Form tin', 'Đi được — chữ đã lưu trên tin giữ nguyên, chỉ mất gợi ý'],
-          ['**Skills** + **Missing skills**', 'Kỹ năng (có KO, có alias)', 'Form tin, CV, đọc CV, sàng CV', 'Đi được — chỉ mất gợi ý'],
-          ['**Company tags**', 'Thẻ công ty', 'Form *New company* của CRM', 'Đi được — chỉ mất gợi ý'],
-          ['**Company highlights**', '76 chip trong 12 nhóm, có ưu tiên', 'Dải so sánh trên trang công ty', 'Đi được'],
-          ['**Countries**', 'Quốc gia', 'Ô quốc tịch / Country trên form công ty của CRM', 'Đi được'],
-          ['**Business forms**', 'Loại hình doanh nghiệp; có *Active*', 'Ô *Business form* trên trang công ty', '**Bị từ chối (409)** khi còn công ty dùng — chuyển công ty sang loại khác, hoặc tắt *Active*'],
-          ['**Job tags**', 'Thẻ góc dưới trái của thẻ tin trả tiền; 9 nhóm + 68 thẻ', 'Ô *Card tag* trên form tin', '**Bị từ chối (409)** khi tin đã đăng còn dùng — đổi thẻ hoặc gỡ tin trước'],
-          ['**Education levels** · **Years of experience** · **Nationalities**', 'Thuộc tính ứng viên', 'Đăng ký / hồ sơ ứng viên, bộ lọc tìm CV', 'Đi được'],
-          ['**Locations**', 'Cây khu vực (~3.300 dòng), lọc theo cấp', 'Mọi ô chọn địa điểm', 'Đi được — **các vùng con bị tách khỏi cha**'],
+          ['**Code**', '**Tự điền từ tên EN** theo quy tắc riêng: chữ thường, số và dấu gạch ngang; khoảng trắng thành dấu gạch ngang, và **ký hiệu như `+`, `#` được viết thành chữ** thay vì bị bỏ — nên hai tên chỉ khác nhau ở ký hiệu vẫn ra hai code khác nhau. Ví dụ: *Hotels, Travel and Airlines* → `hotels-travel-and-airlines` · *C++* → `c-plus-plus`. **Duy nhất.** Sửa được; trùng code thì bị từ chối (409). Riêng **Business forms**: code bị khóa sau khi tạo. Với tab dạng cây (Job taxonomy, Industries), code duy nhất trong cùng cấp cha'],
+          ['**Tên VI**', '**Bắt buộc**'],
+          ['**Tên EN**', '**Bắt buộc**'],
+          ['**Tên KO**', 'Chỉ có ở Skills, Business forms, Education levels, Years of experience, Nationalities'],
         ],
       },
       {
-        kind: 'warn',
-        text: '**Sửa so với bản cũ của trang này:** build **có nút Xoá** trên mọi danh mục, và **không có trạng thái Active / Retired** chung — chỉ *Business forms* có công tắc *Active*. Với hầu hết danh mục svn-be **không kiểm tra đang dùng**: xoá một nhóm ngành, cấp bậc, hình thức hay loại hợp đồng làm các tin trỏ vào nó **hiện trống**, không khôi phục được. Đổi tên thì an toàn (tin lưu mã, không lưu chữ). Gộp hai giá trị trùng nghĩa ở Skills thì dùng **alias**, đừng xoá cái này rồi sửa tay cái kia. Tab *kỹ năng còn thiếu* lấy dữ liệu từ **CV đã đọc**, không phải từ trang Search quality như bản cũ ghi.',
+        kind: 'table',
+        heading: 'Đổi tên và xóa — theo cách bản ghi lưu giá trị',
+        note: 'Hệ thống **không kiểm tra giá trị đang được dùng** khi xóa, trừ 2 danh mục (Business forms, Job tags).',
+        cols: ['Cách bản ghi lưu giá trị', 'Danh mục', 'Khi xóa', 'Khi đổi tên'],
+        rows: [
+          ['Lưu **mã**', 'Job taxonomy, Job levels, Job types, Contract types, Education levels, Years of experience, Nationalities, Countries, Company highlights', 'Bản ghi đang dùng **hiện trống**, không khôi phục được', 'Bản ghi hiện tên mới'],
+          ['Lưu **chữ** (danh mục chỉ là gợi ý)', 'Industries, Benefits, Skills, Company tags', 'Chữ đã lưu trên bản ghi **giữ nguyên**, chỉ mất gợi ý trong ô chọn', 'Bản ghi cũ giữ chữ cũ'],
+          ['**Chặn xóa** khi đang dùng (409)', 'Business forms, Job tags', 'Bị từ chối nếu còn công ty / tin đang dùng', 'Bản ghi hiện tên mới'],
+          ['Cây khu vực', 'Locations', 'Các vùng con bị **tách khỏi cha**', 'Bản ghi hiện tên mới'],
+        ],
       },
       {
-        kind: 'open',
-        text: 'svn-be còn ~14 danh mục khác có đủ CRUD (`company-sizes`, `languages`, `genders`, `occupation-skills`…) mà admin chưa hiện vì chưa màn hình nào đọc. `pages.json` của guide vẫn ghi quyền `taxonomy:read` — quyền đó **đã bị svn-be xoá** (V61); mục menu dùng `region:read`.',
+        kind: 'diagram',
+        id: 'md-delete',
+        heading: 'Khi xóa một giá trị',
+      },
+      {
+        kind: 'list',
+        heading: 'Import / Export',
+        items: [
+          'Import / Export **theo từng danh mục**.',
+          '**Danh mục dạng danh sách:** file .xlsx có sẵn dữ liệu hiện tại, gồm các cột `code`, `name_vi`, `name_en`, `name_ko`, `parent_code`, `action`.',
+          '**Job taxonomy và Industries** dùng template dạng nhánh 9 cột (§3, §4).',
+          'Trước khi lưu, hệ thống **xem trước** số dòng thêm / sửa / xóa / giữ nguyên, rồi mới **Apply**.',
+          '**Chỉ dòng ghi `delete` ở cột `action` mới bị xóa.** Dòng vắng mặt trong file được giữ nguyên.',
+        ],
+      },
+      {
+        kind: 'table',
+        heading: 'Lịch sử thay đổi (Audit log)',
+        cols: ['Thao tác', 'Ghi Audit log'],
+        rows: [
+          ['Sửa đơn lẻ một dòng trên màn hình', '**Không**'],
+          ['Import (`master_data.import`)', 'Có'],
+          ['Duyệt Missing skills (`skill_gap.adopt`)', 'Có'],
+        ],
+      },
+
+      /* ── §2 Danh sách tab ───────────────────────────────────────────────── */
+      { kind: 'h', text: '§2 · Danh sách tab' },
+      {
+        kind: 'table',
+        heading: '17 tab và nơi chúng được đọc',
+        note: 'Thứ tự tab theo chủ đề: phân loại công việc → điều kiện một tin → mô tả ứng viên → mô tả công ty → vị trí.',
+        cols: ['#', 'Tab', 'Gồm', 'Đọc ở đâu', 'Xóa giá trị đang dùng'],
+        rows: [
+          ['1', '**Job taxonomy** (§3)', 'Cây 3 cấp: Category → Group → Role / Specialization', 'Form tin đăng, tìm việc, hồ sơ ứng viên', 'Tin đang dùng mất giá trị'],
+          ['2', '**Industries** (§4)', 'Cây 3 cấp: Industry → Group → Item', 'Tin đăng, công ty', 'Chỉ mất gợi ý'],
+          ['3', '**Job levels** (§5)', 'Cấp bậc', 'Form tin, chấm điểm khớp', 'Tin mất giá trị. **Không kéo thả**'],
+          ['4', '**Job types** (§6)', 'Hình thức làm việc', 'Form tin', 'Tin mất giá trị'],
+          ['5', '**Contract types** (§7)', 'Loại hợp đồng', 'Form tin', 'Tin mất giá trị'],
+          ['6', '**Benefits** (§8)', 'Phúc lợi của một tin', 'Form tin', 'Chữ đã lưu giữ nguyên, chỉ mất gợi ý'],
+          ['7', '**Skills** (§9)', 'Kỹ năng, có tên KO và alias', 'Form tin, CV, đọc CV, sàng CV', 'Chỉ mất gợi ý'],
+          ['8', '**Missing skills** (§10)', 'Kỹ năng có trong CV thật nhưng danh mục chưa có', 'Duyệt để thêm vào Skills', '—'],
+          ['9', '**Company tags** (§11)', 'Thẻ công ty', 'Form *New company* của CRM', 'Chỉ mất gợi ý'],
+          ['10', '**Company highlights** (§12)', '76 chip trong 12 nhóm, có ưu tiên', 'Dải so sánh trên trang công ty', 'Xóa được'],
+          ['11', '**Countries** (§13)', 'Quốc gia', 'Ô quốc tịch / Country trên form công ty của CRM', 'Xóa được'],
+          ['12', '**Business forms** (§14)', 'Loại hình doanh nghiệp, có công tắc *Active*', 'Ô *Business form* trên trang công ty', '**Bị từ chối (409)** khi còn công ty dùng'],
+          ['13', '**Job tags** (§15)', 'Thẻ góc dưới trái của thẻ tin trả phí: 9 nhóm, 68 thẻ', 'Ô *Card tag* trên form tin', '**Bị từ chối (409)** khi tin đã đăng còn dùng'],
+          ['14', '**Education levels** (§16)', 'Trình độ học vấn', 'Đăng ký / hồ sơ ứng viên, bộ lọc tìm CV, form tin', 'Xóa được'],
+          ['15', '**Years of experience** (§17)', 'Số năm kinh nghiệm', 'Đăng ký / hồ sơ ứng viên, bộ lọc tìm CV, form tin', 'Xóa được'],
+          ['16', '**Nationalities** (§18)', 'Quốc tịch', 'Đăng ký / hồ sơ ứng viên, bộ lọc tìm CV', 'Xóa được'],
+          ['17', '**Locations** (§19)', 'Cây khu vực (~3.300 dòng), lọc theo cấp', 'Mọi ô chọn địa điểm', 'Vùng con bị tách khỏi cha'],
+        ],
+      },
+
+      /* ── §3 Job taxonomy ────────────────────────────────────────────────── */
+      { kind: 'h', text: '§3 · Job taxonomy' },
+      {
+        kind: 'table',
+        heading: 'Cấu trúc 3 cấp',
+        note: 'Nghề và chuyên môn là **2 Group ngang hàng** dưới cùng 1 Category, không phải Nghề → Chuyên môn. Dữ liệu hiện tại: khoảng **1.075 nhánh**, **21 Category**, **56 tổ hợp Category + Group** nhưng chỉ **13 tên Group khác nhau** — tên Group và Role lặp lại giữa các Category là bình thường.',
+        cols: ['Cấp', 'Tên', 'Ví dụ'],
+        rows: [
+          ['1', 'Category (Ngành nghề)', 'Kế toán, Thuế & Tài chính / Accounting, Taxation, and Finance'],
+          ['2', 'Group (Nhóm)', 'Nghề · Vị trí / Jobs / Occupations, Chuyên môn hóa / Specialization, Workplace…'],
+          ['3', 'Role / Specialization', 'Nghề hoặc chuyên môn cụ thể, ví dụ Freight forwarder'],
+        ],
+      },
+      {
+        kind: 'list',
+        heading: 'Quy tắc cấp',
+        items: [
+          'Category không có cha. Group luôn thuộc 1 Category. Role luôn thuộc 1 Group.',
+          'Role **không được làm cha** của mục khác. Không có cấp 4.',
+          'Ô Parent hiện **đường dẫn đầy đủ** (ví dụ “Kế toán, Thuế & Tài chính › Nghề · Vị trí”), vì tên Group lặp lại giữa nhiều Category.',
+          'Code cấp 2, cấp 3 có thể trùng giữa các nhánh (ví dụ `jobs-occupations`), nên một code chỉ xác định đúng 1 mục khi **đi kèm code của cấp cha**.',
+        ],
+      },
+      {
+        kind: 'table',
+        heading: 'Thao tác theo cấp',
+        cols: ['Dòng', 'Thao tác'],
+        rows: [
+          ['**Category**', 'Sửa · Thêm Group · Xóa'],
+          ['**Group**', 'Sửa · Thêm Role · Xóa'],
+          ['**Role**', 'Sửa · Xóa'],
+        ],
+      },
+      {
+        kind: 'table',
+        heading: 'Liên quan tới module khác',
+        cols: ['Module', 'Dùng thế nào'],
+        rows: [
+          ['**Form tin đăng** (NTD và Admin)', 'Chọn Category trước, rồi Nghề · Vị trí và Chuyên môn thuộc Category đó'],
+          ['**Tìm việc phía ứng viên** (“Chọn ngành nghề”)', 'Lọc job theo Category, Group, Role'],
+          ['**Hồ sơ ứng viên / Work preference**', 'Ứng viên chọn ngành nghề mong muốn'],
+        ],
+      },
+      {
+        kind: 'diagram',
+        id: 'md-taxonomy',
+        heading: 'Cây dữ liệu và ảnh hưởng của thay đổi tới tin đăng',
+        note: 'Tin lưu **mã**, nên đổi tên an toàn. Xóa thì tin đang dùng **mất giá trị** (*“Jobs using it will show no value.”*), không khôi phục được.',
+      },
+      {
+        kind: 'list',
+        heading: 'Import / Export — template dạng nhánh',
+        items: [
+          'File **9 cột**: 3 cột Code (không bắt buộc) và 6 cột tên (EN + VI cho 3 cấp). Mỗi dòng là **một nhánh** Category → Group → Role.',
+          'Dòng chỉ có Category = Category chưa có Group. Dòng có Group mà không có Role = Group chưa có Role.',
+          'Category, Group lặp lại trên nhiều dòng phải có tên EN và VI **giống hệt** nhau.',
+          '**Thứ tự dòng trong file = thứ tự hiển thị.**',
+          'Xem trước: báo lỗi theo số dòng, chưa lưu gì. Apply: dòng hợp lệ được lưu, dòng lỗi bị bỏ qua.',
+        ],
+      },
+      {
+        kind: 'table',
+        heading: 'Cách hệ thống đọc từng dòng',
+        cols: ['Trường hợp', 'Kết quả'],
+        rows: [
+          ['Có Code', 'Tìm mục theo Code (kèm Code cấp cha), cập nhật tên và thứ tự'],
+          ['Code trống', 'Tìm mục cùng tên EN hoặc VI trong cùng cấp cha. Có thì dùng lại, không có thì tạo mới và tự sinh Code từ tên EN'],
+          ['Code không tồn tại', 'Báo lỗi dòng, không lưu'],
+          ['Code của một mục khác', 'Dòng **ghi đè** lên mục mang Code đó'],
+          ['Đổi Code cấp 1 / cấp 2 của một dòng', 'Mục được **chuyển** sang nhánh mới'],
+          ['Có Code cấp 3 nhưng thiếu Code cấp 2 / cấp 1; có Code cấp 2 nhưng thiếu Code cấp 1', 'Báo lỗi dòng'],
+          ['Mục có trong hệ thống nhưng không có trong file', '**Không bị xóa**, bị đẩy xuống cuối cấp cha'],
+        ],
+      },
+      {
+        kind: 'diagram',
+        id: 'md-taxonomy-import',
+        heading: 'Import theo nhánh',
+        note: 'Industries dùng đúng logic này, với Industry → Group → Item.',
+      },
+
+      /* ── §4 Industries ──────────────────────────────────────────────────── */
+      { kind: 'h', text: '§4 · Industries' },
+      {
+        kind: 'table',
+        heading: 'Cấu trúc 3 cấp',
+        note: 'Dữ liệu hiện tại: **10 Industry → 67 Group → 664 Item** (khoảng 740 mục).',
+        cols: ['Cấp', 'Tên', 'Ví dụ'],
+        rows: [
+          ['1', 'Industry (Ngành)', 'Ngành dịch vụ / Service (`service`)'],
+          ['2', 'Group (Nhóm)', 'Khách sạn, Du lịch và Hãng hàng không (`hotels-travel-and-airlines`)'],
+          ['3', 'Item (Mục)', 'khách sạn / hotel (`hotels-travel-and-airlines-hotel`)'],
+        ],
+      },
+      {
+        kind: 'list',
+        heading: 'Quy tắc',
+        items: [
+          '**Item không được làm cha.** Ô Parent chỉ cho chọn Industry hoặc Group, mục cấp 3 hiện mờ. Không có cấp 4.',
+          'Ô Parent hiện **đường dẫn đầy đủ**, ví dụ “Ngành dịch vụ › Khách sạn, Du lịch và Hãng hàng không”.',
+          'Thêm mới qua nút **New ▾**: *New industry*, *New group*, *New item*. **New item** chọn Industry trước, rồi mới chọn Group.',
+          'Industries là **gợi ý**: tên VI của mục được lưu thành **chữ** trên tin đăng và công ty. Xóa: chữ đã lưu giữ nguyên, chỉ mất gợi ý. Đổi tên: bản ghi mới dùng tên mới, bản ghi cũ giữ chữ cũ.',
+          '**Import / Export:** template dạng nhánh 9 cột, cùng logic với Job taxonomy (§3): Industry → Group → Item.',
+        ],
+      },
+      {
+        kind: 'diagram',
+        id: 'md-industries',
+        heading: 'Industries lưu chữ, không lưu mã',
+      },
+      {
+        kind: 'table',
+        heading: 'Chất lượng dữ liệu hiện tại',
+        cols: ['Hiện trạng', 'Số lượng'],
+        rows: [
+          ['Item chưa có tên tiếng Anh (dữ liệu có sẵn — cần bổ sung, vì tên EN là bắt buộc)', '109'],
+          ['Cặp Item trùng tên trong cùng 1 Group', '6 cặp'],
+          ['Mục chưa có trên cây (ví dụ casino)', '—'],
+        ],
+      },
+
+      /* ── §5–§19 · một mục cho mỗi tab, theo đúng thứ tự tab ─────────────────
+         Mỗi mục dùng cùng một bảng (mdTab) để so các tab với nhau theo cùng các dòng. */
+      { kind: 'h', text: '§5 · Job levels' },
+      mdTab([
+        ['Gồm', 'Cấp bậc'],
+        ['Đọc ở đâu', 'Form tin (NTD và Admin) · **chấm điểm khớp** ứng viên với tin'],
+        ['Bản ghi lưu', '**Mã**'],
+        ['Tên', MD_VI_EN],
+        ['Thứ tự', '**Không kéo thả được** — thứ tự cấp bậc là dữ liệu cho việc chấm điểm, do svn-be giữ'],
+        ['Xóa', 'Tin đang dùng **mất giá trị**, không khôi phục được'],
+        ['Đổi tên', 'Tin tự hiện tên mới'],
+        ['Import / Export', MD_LIST_IMPORT],
+      ]),
+
+      { kind: 'h', text: '§6 · Job types' },
+      mdTab([
+        ['Gồm', 'Hình thức làm việc'],
+        ['Đọc ở đâu', 'Form tin (NTD và Admin)'],
+        ['Bản ghi lưu', '**Mã**'],
+        ['Tên', MD_VI_EN],
+        ['Thứ tự', MD_DRAG],
+        ['Xóa', 'Tin đang dùng **mất giá trị**, không khôi phục được'],
+        ['Đổi tên', 'Tin tự hiện tên mới'],
+        ['Import / Export', MD_LIST_IMPORT],
+      ]),
+
+      { kind: 'h', text: '§7 · Contract types' },
+      mdTab([
+        ['Gồm', 'Loại hợp đồng'],
+        ['Đọc ở đâu', 'Form tin (NTD và Admin)'],
+        ['Bản ghi lưu', '**Mã**'],
+        ['Tên', MD_VI_EN],
+        ['Thứ tự', MD_DRAG],
+        ['Xóa', 'Tin đang dùng **mất giá trị**, không khôi phục được'],
+        ['Đổi tên', 'Tin tự hiện tên mới'],
+        ['Import / Export', MD_LIST_IMPORT],
+      ]),
+
+      { kind: 'h', text: '§8 · Benefits' },
+      mdTab([
+        ['Gồm', 'Phúc lợi của một tin'],
+        ['Đọc ở đâu', 'Form tin (NTD và Admin)'],
+        ['Bản ghi lưu', '**Chữ** — danh mục chỉ là gợi ý'],
+        ['Tên', MD_VI_EN],
+        ['Thứ tự', MD_DRAG],
+        ['Xóa', 'Chữ đã lưu trên tin **giữ nguyên**, chỉ mất gợi ý trong ô chọn'],
+        ['Đổi tên', 'Tin mới dùng tên mới · tin cũ giữ chữ cũ'],
+        ['Import / Export', MD_LIST_IMPORT],
+      ]),
+      {
+        kind: 'warn',
+        text: 'Đây là *Benefits* của **tin tuyển dụng** — khác với *Benefits by tier* ở Membership programme (ghi chú quyền lợi theo hạng khách hàng).',
+      },
+
+      { kind: 'h', text: '§9 · Skills' },
+      mdTab([
+        ['Gồm', 'Kỹ năng, kèm **alias** (các cách viết khác của cùng một kỹ năng). Chỉ Skills có alias'],
+        ['Đọc ở đâu', 'Form tin · CV · **đọc CV / sàng CV**: khi đọc CV, hệ thống so chữ tự do trong CV với danh sách kỹ năng và alias'],
+        ['Bản ghi lưu', '**Chữ** — danh mục chỉ là gợi ý'],
+        ['Tên', MD_VI_EN_KO],
+        ['Thứ tự', MD_DRAG],
+        ['Xóa', 'Chỉ mất gợi ý, chữ đã lưu giữ nguyên'],
+        ['Đổi tên', 'Bản ghi cũ giữ chữ cũ'],
+        ['Import / Export', MD_LIST_IMPORT],
+      ]),
+      {
+        kind: 'list',
+        heading: 'Khi nào dùng alias',
+        items: [
+          'Kỹ năng bị CV viết khác chính tả: **thêm alias** vào kỹ năng đó, không tạo kỹ năng mới.',
+          '**Gộp 2 kỹ năng trùng nghĩa:** chuyển một cái thành alias của cái kia, không xóa cái này rồi sửa tay cái kia.',
+          'Kỹ năng CV có mà danh mục chưa có: không cần tự dò — chúng hiện ở tab **Missing skills** (§10).',
+        ],
+      },
+
+      { kind: 'h', text: '§10 · Missing skills' },
+      {
+        kind: 'table',
+        cols: ['Mục', 'Logic'],
+        rows: [
+          ['**Gồm**', 'Kỹ năng **xuất hiện trong CV thật** (lấy từ CV đã đọc) mà danh mục Skills **chưa có**'],
+          ['**Mỗi dòng**', '**Số CV** có kỹ năng đó và **số CV đang bị giữ vì thiếu điều kiện**'],
+          ['**Approve**', '2 lựa chọn: thêm thành **alias** của một kỹ năng đã có, hoặc tạo **kỹ năng mới**'],
+          ['**Add and back-fill**', 'Trong **cùng một lần**: gắn lại kỹ năng cho các CV liên quan, **sàng lại** các CV đó, nhả các CV đang bị giữ nếu nay đã đủ điều kiện'],
+          ['**Thông báo**', 'Số alias thêm · số hồ sơ cập nhật · số CV được nhả'],
+          ['**Audit log**', 'Có — `skill_gap.adopt`'],
+          ['**Không có**', 'Thêm tay, kéo thả, Import / Export — tab này chỉ để duyệt'],
+        ],
+      },
+      {
+        kind: 'diagram',
+        id: 'md-missing-skills',
+        heading: 'Từ CV được đọc tới CV được nhả',
+      },
+
+      { kind: 'h', text: '§11 · Company tags' },
+      mdTab([
+        ['Gồm', 'Thẻ công ty'],
+        ['Đọc ở đâu', 'Form *New company* của CRM'],
+        ['Bản ghi lưu', '**Chữ** — danh mục chỉ là gợi ý'],
+        ['Tên', MD_VI_EN],
+        ['Thứ tự', MD_DRAG],
+        ['Xóa', 'Chữ đã lưu trên công ty **giữ nguyên**, chỉ mất gợi ý'],
+        ['Đổi tên', 'Công ty cũ giữ chữ cũ'],
+        ['Import / Export', MD_LIST_IMPORT],
+      ]),
+
+      { kind: 'h', text: '§12 · Company highlights' },
+      mdTab([
+        ['Gồm', '**76 chip trong 12 nhóm**, có thứ tự ưu tiên'],
+        ['Đọc ở đâu', 'Dải so sánh trên trang công ty'],
+        ['Bản ghi lưu', '**Mã**'],
+        ['Tên', MD_VI_EN],
+        ['Thứ tự', MD_DRAG + ' — đây là thứ tự ưu tiên của chip'],
+        ['Xóa', 'Xóa được; công ty đang dùng chip đó **hiện trống**, không khôi phục được'],
+        ['Đổi tên', 'Trang công ty hiện tên mới'],
+        ['Import / Export', MD_LIST_IMPORT],
+      ]),
+
+      { kind: 'h', text: '§13 · Countries' },
+      mdTab([
+        ['Gồm', 'Quốc gia'],
+        ['Đọc ở đâu', 'Ô quốc tịch / *Country* trên form công ty của CRM'],
+        ['Bản ghi lưu', '**Mã**'],
+        ['Tên', MD_VI_EN],
+        ['Thứ tự', MD_DRAG],
+        ['Xóa', 'Xóa được; công ty đang dùng **hiện trống**, không khôi phục được'],
+        ['Đổi tên', 'Công ty hiện tên mới'],
+        ['Import / Export', MD_LIST_IMPORT],
+      ]),
+      {
+        kind: 'warn',
+        text: '*Countries* (quốc gia của **công ty**) và *Nationalities* (quốc tịch của **ứng viên**, §18) là **hai danh mục riêng** — sửa cái này không đổi cái kia.',
+      },
+
+      { kind: 'h', text: '§14 · Business forms' },
+      mdTab([
+        ['Gồm', 'Loại hình doanh nghiệp'],
+        ['Đọc ở đâu', 'Ô *Business form* trên trang công ty'],
+        ['Bản ghi lưu', '**Mã**'],
+        ['Tên', MD_VI_EN_KO],
+        ['Code', '**Bị khóa sau khi tạo** — danh mục duy nhất như vậy'],
+        ['Active', 'Có công tắc **Active** — danh mục duy nhất có. Tắt thì không chọn mới được nữa'],
+        ['Thứ tự', MD_DRAG],
+        ['Xóa', '**Bị từ chối (409)** khi còn công ty dùng'],
+        ['Đổi tên', 'Công ty hiện tên mới'],
+        ['Import / Export', MD_LIST_IMPORT],
+      ]),
+      {
+        kind: 'list',
+        heading: 'Muốn bỏ một loại hình đang có công ty dùng',
+        items: [
+          '**Chuyển các công ty đó sang loại khác**, rồi mới xóa; hoặc',
+          '**Tắt Active** để loại hình không còn trong ô chọn — không cần xóa.',
+        ],
+      },
+
+      { kind: 'h', text: '§15 · Job tags' },
+      mdTab([
+        ['Gồm', 'Thẻ ở góc dưới trái của **thẻ tin trả phí**: **9 nhóm, 68 thẻ**'],
+        ['Đọc ở đâu', 'Ô *Card tag* trên form tin'],
+        ['Bản ghi lưu', '**Mã**'],
+        ['Tên', MD_VI_EN],
+        ['Thứ tự', MD_DRAG],
+        ['Xóa', '**Bị từ chối (409)** khi tin đã đăng còn dùng — đổi thẻ hoặc gỡ tin trước'],
+        ['Đổi tên', 'Thẻ trên tin hiện tên mới'],
+        ['Import / Export', MD_LIST_IMPORT],
+      ]),
+
+      { kind: 'h', text: '§16 · Education levels' },
+      mdTab([
+        ['Gồm', 'Trình độ học vấn'],
+        ['Đọc ở đâu', 'Đăng ký / hồ sơ ứng viên · bộ lọc tìm CV của NTD · ô *Minimum education level* trên form tin'],
+        ['Bản ghi lưu', '**Mã**'],
+        ['Tên', MD_VI_EN_KO],
+        ['Thứ tự', MD_DRAG],
+        ['Xóa', 'Hồ sơ / tin đang dùng **mất giá trị**, không khôi phục được'],
+        ['Đổi tên', 'Bản ghi hiện tên mới'],
+        ['Import / Export', MD_LIST_IMPORT],
+      ]),
+
+      { kind: 'h', text: '§17 · Years of experience' },
+      mdTab([
+        ['Gồm', 'Các mốc số năm kinh nghiệm (*No experience, Less than 1 year*, từng năm, *Over 20 years*)'],
+        ['Đọc ở đâu', 'Đăng ký / hồ sơ ứng viên · bộ lọc tìm CV của NTD · ô *Years of experience (min – max)* trên form tin'],
+        ['Bản ghi lưu', '**Mã**'],
+        ['Tên', MD_VI_EN_KO],
+        ['Thứ tự', MD_DRAG],
+        ['Xóa', 'Hồ sơ / tin đang dùng **mất giá trị**, không khôi phục được'],
+        ['Đổi tên', 'Bản ghi hiện tên mới'],
+        ['Import / Export', MD_LIST_IMPORT],
+      ]),
+
+      { kind: 'h', text: '§18 · Nationalities' },
+      mdTab([
+        ['Gồm', 'Quốc tịch'],
+        ['Đọc ở đâu', 'Đăng ký / hồ sơ ứng viên · bộ lọc tìm CV của NTD'],
+        ['Bản ghi lưu', '**Mã**'],
+        ['Tên', MD_VI_EN_KO],
+        ['Thứ tự', MD_DRAG],
+        ['Xóa', 'Hồ sơ đang dùng **mất giá trị**, không khôi phục được'],
+        ['Đổi tên', 'Bản ghi hiện tên mới'],
+        ['Import / Export', MD_LIST_IMPORT],
+      ]),
+      {
+        kind: 'diagram',
+        id: 'md-candidate',
+        heading: 'Ba danh mục của ứng viên — một giá trị, hai phía dùng',
+      },
+
+      { kind: 'h', text: '§19 · Locations' },
+      mdTab([
+        ['Gồm', 'Cây khu vực khoảng **3.300 dòng**, lọc theo cấp'],
+        ['Đọc ở đâu', '**Mọi ô chọn địa điểm** (tin đăng, công ty, ứng viên) · trục *Tỉnh/TP* của trang *Việc làm theo khu vực*'],
+        ['Bản ghi lưu', '**Mã**'],
+        ['Tên', MD_VI_EN],
+        ['Thứ tự', MD_DRAG],
+        ['Xóa', 'Các vùng con **bị tách khỏi cha** — vẫn còn trong danh mục, không bị xóa theo'],
+        ['Đổi tên', 'Bản ghi hiện tên mới'],
+        ['Import / Export', MD_LIST_IMPORT],
+      ]),
+      {
+        kind: 'diagram',
+        id: 'md-locations',
+        heading: 'Xóa một khu vực cha',
       },
     ],
   },
