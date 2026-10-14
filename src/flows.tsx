@@ -735,6 +735,226 @@ export function MdLocationsFlow() {
   )
 }
 
+/* ── Candidate management — luồng trạng thái ứng tuyển (tài liệu 14/10/2026) ────
+   Seven drawings, one per Flow in the client document: the whole chain across
+   three sites; the five legal (CV · Application) pairs; the CV check; an Admin
+   decision fanned out by CV version; the Kanban; how the candidate's label is
+   computed; and who gets told. Statuses keep their English names exactly as the
+   screens print them. */
+export function CmOverviewFlow() {
+  return (
+    <Frame label="Trạng thái ứng tuyển: từ lúc ứng viên nộp tới Kanban của nhà tuyển dụng" w={1200} h={762}>
+      <Premise title="MỘT HỒ SƠ ỨNG TUYỂN — chỉ tới nhà tuyển dụng khi CV Status = Qualified">
+        Mọi CV phải qua bước kiểm tra ở Admin. CV không đạt bị giữ ở <tspan fontWeight={700} fill={INK}>Not Sent</tspan> và ẩn hoàn toàn khỏi NTD cho tới khi Operator duyệt tay.
+      </Premise>
+
+      <Lane y={82} h={100} label="① ỨNG VIÊN" />
+      <Box x={30} y={112} w={260} h={56} title="Saramin CV" sub="form, đủ trường bắt buộc" />
+      <Box x={330} y={112} w={220} h={56} title="File upload" sub="PDF / Word" />
+
+      <Lane y={198} h={380} label="② ADMIN — kiểm tra CV, Operator, Admin / CS" />
+      <path d="M 160 168 L 160 186 L 1045 186 L 1045 292" fill="none" stroke={BR} strokeWidth={1.8} markerEnd="url(#pf-b)" />
+      <text x={760} y={181} fontSize={10} fontWeight={600} textAnchor="middle" fill={BR} {...HALO}>Saramin CV: luôn Qualified · Sent</text>
+      <Arrow d="M 440 168 L 440 226" />
+      <Box x={330} y={228} w={220} h={52} title="Bóc tách 10 trường" sub="khoảng 3 phút" />
+      <Arrow d="M 440 280 L 440 298" />
+      <Box x={330} y={300} w={220} h={60} title="Đọc được?" sub="mở được, không mật khẩu" tone="wait" />
+      <Arrow d="M 550 324 L 608 324" tone="brand" label="Có" lx={579} ly={316} />
+      <Box x={610} y={294} w={250} h={72} title="Đủ trường bắt buộc?" sub="Experienced: Edu + Work" sub2="No experience: Edu" tone="wait" />
+      <Arrow d="M 860 320 L 918 320" tone="brand" label="Có" lx={889} ly={312} />
+      <Box x={920} y={294} w={250} h={72} title="Qualified · Sent" sub="tự tạo thẻ bên NTD" tone="money" />
+      <Arrow d="M 440 360 L 440 390" label="Không" lx={450} ly={380} anchor="start" />
+      <Box x={330} y={392} w={220} h={56} title="Cannot Read" sub="Application: Not Sent" tone="wait" />
+      <Arrow d="M 735 366 L 735 390" label="Không" lx={745} ly={382} anchor="start" />
+      <Box x={610} y={392} w={250} h={56} title="Not Enough Information" sub="Application: Not Sent" tone="wait" />
+      <Arrow d="M 1045 366 L 1045 390" tone="stop" dashed label="thu hồi sau khi đã gửi" lx={1055} ly={382} anchor="start" />
+      <Box x={920} y={392} w={250} h={56} title="Admin / CS Recall" sub="Rejected · Recall — kết thúc" tone="stop" />
+      <Arrow d="M 440 448 C 440 514, 440 514, 468 514" />
+      <Arrow d="M 735 448 C 735 470, 690 470, 690 484" />
+      <Box x={470} y={486} w={250} h={56} title="Operator xem tay" sub="hàng đợi Not Sent" tone="wait" />
+      <path d="M 720 514 L 890 514 L 890 356 L 918 356" fill="none" stroke={BR} strokeWidth={1.8} markerEnd="url(#pf-b)" />
+      <text x={805} y={508} fontSize={10} fontWeight={600} textAnchor="middle" fill={BR} {...HALO}>Approve</text>
+      <Arrow d="M 470 514 L 292 514" tone="stop" label="Reject" lx={380} ly={506} />
+      <Box x={30} y={486} w={260} h={56} title="Rejected · Not Sent" sub="kết thúc — NTD không bao giờ thấy" tone="stop" />
+
+      <path d="M 1170 330 L 1182 330 L 1182 586 L 230 586 L 230 624" fill="none" stroke={BR} strokeWidth={1.8} markerEnd="url(#pf-b)" />
+      <text x={700} y={582} fontSize={10} fontWeight={600} textAnchor="middle" fill={BR} {...HALO}>tạo thẻ ở cột đầu</text>
+      <Lane y={594} h={110} label="③ EMPLOYER DASHBOARD" />
+      <Box x={30} y={626} w={260} h={56} title="Application Received" sub="cột đầu cố định" tone="brand" />
+      <Arrow d="M 290 654 L 328 654" />
+      <Box x={330} y={626} w={260} h={56} title="Các cột giữa" sub="do NTD tạo — In Process" />
+      <Arrow d="M 590 646 L 628 646" />
+      <Box x={630} y={626} w={250} h={56} title="Passed" sub="cột cuối cố định" tone="money" />
+      <path d="M 460 682 L 460 696 L 1045 696 L 1045 684" fill="none" stroke="#b9b6ae" strokeWidth={1.8} markerEnd="url(#pf-p)" />
+      <Box x={920} y={626} w={250} h={56} title="Not This Time" sub="cột cuối cố định" tone="side" />
+
+      <rect x={14} y={716} width={1172} height={36} rx={8} fill="#fffbeb" stroke={AMB} strokeWidth={1.2} />
+      <text x={30} y={738} fontSize={11} fill={MUT}><tspan fontWeight={800} fill={AMB}>Luật · </tspan>Approve / Reject / Recall áp cho <tspan fontWeight={700} fill={INK}>mọi hồ sơ dùng cùng phiên bản CV</tspan>, ở mọi công ty. Ứng viên không tự thu hồi được hồ sơ — chỉ Admin / CS.</text>
+    </Frame>
+  )
+}
+
+export function CmStatesFlow() {
+  return (
+    <Frame label="Năm tổ hợp hợp lệ của CV Status và Application Status" w={1200} h={392}>
+      <Premise title="CV STATUS · APPLICATION STATUS — chỉ 5 tổ hợp hợp lệ">
+        Mỗi hồ sơ lưu trạng thái <tspan fontWeight={700} fill={INK}>một lần</tspan>; Admin, NTD và ứng viên chỉ là các góc nhìn khác nhau của cùng dữ liệu đó.
+      </Premise>
+      <Box x={30} y={176} w={180} h={60} title="Nộp hồ sơ" />
+      <Arrow d="M 210 196 C 270 196, 270 130, 328 130" tone="brand" />
+      <Arrow d="M 210 216 C 270 216, 270 285, 328 285" />
+      <Box x={330} y={100} w={260} h={60} title="Qualified · Sent" sub="đã đạt và đã gửi" tone="money" />
+      <Box x={330} y={250} w={260} h={70} title="Cannot Read / Not Enough Info" sub="· Not Sent" sub2="chờ Operator xử lý" tone="wait" />
+      <Arrow d="M 460 250 L 460 162" tone="brand" label="Approve" lx={470} ly={210} anchor="start" />
+      <Arrow d="M 590 130 L 798 130" tone="stop" label="Recall · hoặc cùng bản CV bị Reject" lx={694} ly={122} />
+      <Box x={800} y={100} w={370} h={60} title="Rejected · Recall" sub="đã gửi rồi bị thu hồi — kết thúc" tone="stop" />
+      <Arrow d="M 590 285 L 798 285" tone="stop" label="Reject" lx={694} ly={277} />
+      <Box x={800} y={255} w={370} h={60} title="Rejected · Not Sent" sub="bị từ chối trước khi gửi — kết thúc" tone="stop" />
+      <rect x={14} y={340} width={1172} height={36} rx={8} fill="#fffbeb" stroke={AMB} strokeWidth={1.2} />
+      <text x={30} y={362} fontSize={11} fill={MUT}><tspan fontWeight={800} fill={AMB}>Luật · </tspan>Không có tổ hợp nào khác: Qualified · Not Sent, Rejected · Sent hay Qualified · Recall đều là <tspan fontWeight={700} fill={INK}>dữ liệu sai</tspan>. “Rejected” là CV Status, không phải Application Status.</text>
+    </Frame>
+  )
+}
+
+export function CmReviewFlow() {
+  return (
+    <Frame label="Kiểm tra CV upload: đọc được, rồi đủ trường bắt buộc" w={1200} h={400}>
+      <Premise title="KIỂM TRA CV — file upload qua 2 bước theo thứ tự; Saramin CV không qua bước này">
+        Saramin CV luôn <tspan fontWeight={700} fill={INK}>Qualified · Sent</tspan>: nút Lưu / Nộp bị khóa cho tới khi điền đủ trường bắt buộc.
+      </Premise>
+      <Box x={30} y={100} w={150} h={60} title="Upload file" sub="PDF / Word" />
+      <Arrow d="M 180 130 L 208 130" />
+      <Box x={210} y={100} w={160} h={60} title="Bóc tách" sub="10 trường · ~3 phút" />
+      <Arrow d="M 370 130 L 398 130" />
+      <Box x={400} y={100} w={190} h={60} title="Mở được?" sub="không hỏng, không mật khẩu" tone="wait" />
+      <Arrow d="M 590 130 L 618 130" tone="brand" label="Có" lx={604} ly={122} />
+      <Arrow d="M 495 160 L 495 208" label="Không" lx={505} ly={188} anchor="start" />
+      <Box x={400} y={210} w={190} h={60} title="Cannot Read" sub="Not Sent · hàng đợi Operator" tone="wait" />
+      <Box x={620} y={100} w={150} h={60} title="Experienced?" sub="theo lựa chọn của ứng viên" tone="wait" />
+      <Arrow d="M 770 118 L 798 94" label="Có" lx={784} ly={98} />
+      <Arrow d="M 770 142 L 798 192" label="Không" lx={780} ly={178} anchor="end" />
+      <Box x={800} y={60} w={170} h={56} title="Có Edu và Work?" tone="wait" />
+      <Box x={800} y={172} w={170} h={56} title="Có Edu?" tone="wait" />
+      <Arrow d="M 970 96 L 998 130" tone="brand" label="Có" lx={986} ly={106} anchor="end" />
+      <Arrow d="M 970 192 L 998 158" tone="brand" label="Có" lx={986} ly={190} anchor="end" />
+      <Box x={1000} y={116} w={170} h={56} title="Qualified · Sent" sub="tạo thẻ bên NTD" tone="money" />
+      <Arrow d="M 885 228 L 885 268" label="Không" lx={895} ly={252} anchor="start" />
+      <path d="M 970 70 L 1186 70 L 1186 298 L 1172 298" fill="none" stroke="#b9b6ae" strokeWidth={1.8} markerEnd="url(#pf-p)" />
+      <text x={1178} y={250} fontSize={10} fontWeight={600} textAnchor="end" fill={MUT} {...HALO}>Không</text>
+      <Box x={800} y={270} w={370} h={56} title="Not Enough Information · Not Sent" sub="vào hàng đợi Operator" tone="wait" />
+      <rect x={14} y={348} width={1172} height={36} rx={8} fill="#fffbeb" stroke={AMB} strokeWidth={1.2} />
+      <text x={30} y={370} fontSize={11} fill={MUT}><tspan fontWeight={800} fill={AMB}>Luật · </tspan>Không đạt bước 1 thì dừng, không chạy bước 2. Not Sent: <tspan fontWeight={700} fill={INK}>không tạo thẻ</tspan> bên NTD, hồ sơ vào hàng đợi của Operator.</text>
+    </Frame>
+  )
+}
+
+export function CmDecisionFlow() {
+  return (
+    <Frame label="Approve, Reject, Recall áp cho mọi hồ sơ dùng cùng phiên bản CV" w={1200} h={486}>
+      <Premise title="APPROVE · REJECT · RECALL — quyết trên PHIÊN BẢN CV, không trên một hồ sơ">
+        Mỗi hồ sơ lưu phiên bản CV lúc nộp. Application Status và Pipeline Status vẫn lưu <tspan fontWeight={700} fill={INK}>theo từng hồ sơ</tspan> — mỗi công ty xử lý độc lập.
+      </Premise>
+      <Box x={30} y={176} w={200} h={80} title="Operator / Admin" sub="thao tác trên 1 hồ sơ" tone="wait" />
+      <Arrow d="M 230 200 C 260 200, 260 126, 288 126" tone="brand" label="Approve" lx={252} ly={150} anchor="end" />
+      <Arrow d="M 230 232 C 260 232, 260 294, 288 294" tone="stop" label="Reject / Recall" lx={256} ly={280} anchor="end" />
+      <Box x={290} y={96} w={230} h={60} title="Tìm mọi hồ sơ" sub="dùng cùng phiên bản CV" tone="brand" />
+      <Arrow d="M 520 126 L 568 126" />
+      <Box x={570} y={96} w={200} h={60} title="Đang chờ xử lý?" sub="Cannot Read / NEI · Not Sent" tone="wait" />
+      <Arrow d="M 770 116 L 828 95" tone="brand" label="Có" lx={800} ly={98} />
+      <Arrow d="M 770 136 L 828 152" label="Không" lx={800} ly={158} />
+      <Box x={830} y={70} w={340} h={50} title="Qualified · Sent" sub="thẻ ở Application Received của từng công ty" tone="money" />
+      <Box x={830} y={132} w={340} h={40} title="Không đổi" sub="đã Rejected, hoặc đã Sent" />
+      <Box x={290} y={264} w={230} h={60} title="Tìm mọi hồ sơ" sub="dùng cùng phiên bản CV" tone="stop" />
+      <Arrow d="M 520 294 L 568 294" />
+      <Box x={570} y={264} w={200} h={60} title="Đã gửi?" tone="wait" />
+      <Arrow d="M 770 284 L 828 265" label="Chưa" lx={800} ly={268} />
+      <Arrow d="M 770 304 L 828 327" tone="stop" label="Đã gửi" lx={800} ly={330} />
+      <Box x={830} y={240} w={340} h={50} title="Rejected · Not Sent" sub="ứng viên: Invalid Application" tone="stop" />
+      <Box x={830} y={302} w={340} h={50} title="Rejected · Recall" sub="ứng viên: Application Withdrawn" tone="stop" />
+      <Box x={290} y={376} w={880} h={44} title="Phiên bản CV khác (kể cả của cùng CV) và CV khác của cùng ứng viên: không đổi" tone="side" />
+      <rect x={14} y={436} width={1172} height={36} rx={8} fill="#fffbeb" stroke={AMB} strokeWidth={1.2} />
+      <text x={30} y={458} fontSize={11} fill={MUT}><tspan fontWeight={800} fill={AMB}>Luật · </tspan>Hộp thoại hiện <tspan fontWeight={700} fill={INK}>số hồ sơ và số công ty</tspan> bị ảnh hưởng trước khi xác nhận. 2 Operator cùng xử lý 1 CV: người sau nhận “CV đã được xử lý”.</text>
+    </Frame>
+  )
+}
+
+export function CmKanbanFlow() {
+  return (
+    <Frame label="Kanban của nhà tuyển dụng: cột đầu cố định, cột giữa linh hoạt, hai cột cuối cố định" w={1200} h={370}>
+      <Premise title="KANBAN — 1 cột đầu cố định · các cột giữa do NTD tạo · 2 cột cuối cố định">
+        Mỗi lần kéo thẻ cập nhật <tspan fontWeight={700} fill={INK}>Pipeline Status</tspan>; với cột giữa, hệ thống lưu thêm id cột.
+      </Premise>
+      <Box x={30} y={150} w={160} h={60} title="Hồ sơ Sent" />
+      <Arrow d="M 190 180 L 238 180" tone="brand" />
+      <Box x={240} y={140} w={240} h={80} title="Application Received" sub="cột đầu cố định" sub2="không xóa, không đổi tên" tone="brand" />
+      <Arrow d="M 480 180 L 538 180" />
+      <Box x={540} y={140} w={260} h={80} title="Các cột giữa" sub="NTD thêm / xóa / đổi tên" sub2="Pipeline: In Process" />
+      <Arrow d="M 800 166 L 878 124" />
+      <Arrow d="M 800 194 L 878 236" />
+      <Arrow d="M 360 140 C 360 76, 700 76, 878 112" dashed />
+      <Arrow d="M 360 220 C 360 290, 700 290, 878 250" dashed />
+      <Box x={880} y={90} w={290} h={60} title="Passed" sub="cột cuối cố định" tone="money" />
+      <Box x={880} y={210} w={290} h={60} title="Not This Time" sub="cột cuối cố định" tone="side" />
+      <rect x={14} y={318} width={1172} height={36} rx={8} fill="#fffbeb" stroke={AMB} strokeWidth={1.2} />
+      <text x={30} y={340} fontSize={11} fill={MUT}><tspan fontWeight={800} fill={AMB}>Luật · </tspan>Hồ sơ Not Sent <tspan fontWeight={700} fill={INK}>không bao giờ</tspan> lên Kanban (đếm, tìm, lọc, Download All) — chặn ở API. Cột giữa mới chèn trước Passed. Thẻ kéo vào / ra Passed, Not This Time được.</text>
+    </Frame>
+  )
+}
+
+export function CmCandidateStatusFlow() {
+  const rows: [string, string, Tone, string][] = [
+    ['Application Status = Recall?', 'Application Withdrawn', 'stop', 'kiểm trước Rejected — hồ sơ bị thu hồi luôn hiện Withdrawn'],
+    ['CV Status = Rejected?', 'Invalid Application', 'stop', 'CV chưa gửi bị từ chối — kết thúc'],
+    ['Application Status = Not Sent?', 'In Review', 'wait', 'chờ Operator — NTD chưa thấy'],
+    ['Thẻ đã rời cột Application Received?', 'In Process / Passed / Not This Time', 'brand', 'pipeline luôn đè lên — xem / tải lại CV không đổi gì'],
+    ['Có downloaded_at?', 'Application Saved', 'money', 'Saved > Viewed: xem lại không làm tụt về Viewed'],
+    ['Có viewed_at?', 'Application Viewed', 'money', ''],
+    ['Còn lại', 'Application Received', 'money', ''],
+  ]
+  const y = (i: number) => 86 + i * 60
+  return (
+    <Frame label="Cách tính trạng thái ứng viên nhìn thấy, kiểm từ trên xuống" w={1200} h={552}>
+      <Premise title="TRẠNG THÁI ỨNG VIÊN THẤY — kiểm từ trên xuống, gặp điều kiện đúng đầu tiên thì dừng">
+        Giá trị do hệ thống tính; màn <tspan fontWeight={700} fill={INK}>Việc đã ứng tuyển</tspan> chỉ hiển thị. Flag chỉ đổi trạng thái khi thẻ còn ở cột Application Received.
+      </Premise>
+      {rows.map(([q, out, tone, note], i) => (
+        <g key={q}>
+          <Box x={30} y={y(i)} w={330} h={44} title={q} tone={i === rows.length - 1 ? 'plain' : 'wait'} />
+          {i < rows.length - 1 && <Arrow d={`M 195 ${y(i) + 44} L 195 ${y(i + 1) - 2}`} label="Không" lx={205} ly={y(i) + 56} anchor="start" />}
+          <Arrow d={`M 360 ${y(i) + 22} L 418 ${y(i) + 22}`} tone={tone === 'stop' ? 'stop' : 'brand'} label={i === rows.length - 1 ? undefined : 'Có'} lx={389} ly={y(i) + 14} />
+          <Box x={420} y={y(i)} w={320} h={44} title={out} tone={tone} />
+          {note && <text x={770} y={y(i) + 26} fontSize={11} fill={MUT}>{note}</text>}
+        </g>
+      ))}
+      <rect x={14} y={506} width={1172} height={36} rx={8} fill="#fffbeb" stroke={AMB} strokeWidth={1.2} />
+      <text x={30} y={528} fontSize={11} fill={MUT}><tspan fontWeight={800} fill={AMB}>Luật · </tspan>Flag lưu <tspan fontWeight={700} fill={INK}>lần đầu</tspan>, theo từng hồ sơ, không ghi đè, không reset. Chỉ hành động của NTD mới bật flag — Operator / Admin mở hay tải CV thì không.</text>
+    </Frame>
+  )
+}
+
+export function CmNotifyFlow() {
+  return (
+    <Frame label="Ai được báo khi hồ sơ đổi trạng thái" w={1200} h={372}>
+      <Premise title="THÔNG BÁO — ứng viên xem ngay trên màn hình; NTD chỉ được email khi hồ sơ sang Sent">
+        Không gửi email lẻ cho ứng viên mỗi lần đổi trạng thái; thay vào đó <tspan fontWeight={700} fill={INK}>1 email tổng hợp cuối tuần</tspan>.
+      </Premise>
+      <Box x={30} y={150} w={220} h={64} title="Hồ sơ đổi trạng thái" tone="brand" />
+      <Arrow d="M 250 170 C 290 170, 290 105, 328 105" />
+      <Arrow d="M 250 182 L 328 182" />
+      <Arrow d="M 250 196 C 290 196, 290 262, 328 262" />
+      <Box x={330} y={80} w={340} h={50} title="Ứng viên: cập nhật ngay" sub="trên “Việc đã ứng tuyển”, không tải lại trang" />
+      <Box x={330} y={157} w={340} h={50} title="Ứng viên: gom vào email cuối tuần" sub="theo nhóm trạng thái" />
+      <Box x={330} y={237} w={340} h={50} title="Chuyển sang Sent?" sub="lúc nộp, hoặc Operator Approve" tone="wait" />
+      <Arrow d="M 670 252 L 748 228" tone="brand" label="Có" lx={709} ly={232} />
+      <Arrow d="M 670 272 L 748 290" label="Không" lx={709} ly={296} />
+      <Box x={750} y={204} w={420} h={44} title="NTD: email có đơn ứng tuyển mới" tone="money" />
+      <Box x={750} y={266} w={420} h={44} title="Không gửi email cho NTD" sub="hồ sơ Not Sent" tone="side" />
+      <rect x={14} y={322} width={1172} height={36} rx={8} fill="#fffbeb" stroke={AMB} strokeWidth={1.2} />
+      <text x={30} y={344} fontSize={11} fill={MUT}><tspan fontWeight={800} fill={AMB}>Chưa chốt · </tspan>Thông báo cho NTD khi hồ sơ bị thu hồi — kênh và cách hiển thị chờ xác nhận.</text>
+    </Frame>
+  )
+}
+
 export const DIAGRAMS: Record<string, () => JSX.Element> = {
   'product-chain': ProductFlow,
   'crm-chain': CrmFlow,
@@ -750,4 +970,11 @@ export const DIAGRAMS: Record<string, () => JSX.Element> = {
   'md-missing-skills': MdMissingSkillsFlow,
   'md-candidate': MdCandidateFlow,
   'md-locations': MdLocationsFlow,
+  'cm-overview': CmOverviewFlow,
+  'cm-states': CmStatesFlow,
+  'cm-review': CmReviewFlow,
+  'cm-decision': CmDecisionFlow,
+  'cm-kanban': CmKanbanFlow,
+  'cm-candidate-status': CmCandidateStatusFlow,
+  'cm-notify': CmNotifyFlow,
 }
