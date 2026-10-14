@@ -461,21 +461,8 @@ export const RESUME_PAGE_DOCS: Record<string, PageDoc> = {
         rows: [
           ['**OR**', 'Có **ít nhất 1** từ khóa', 'Mở rộng kết quả. Đây là ô tìm kiếm chính.'],
           ['**AND**', 'Phải có **tất cả** từ khóa', 'Thu hẹp kết quả'],
-          ['**NOT**', '**Không được có** từ khóa nào', 'Loại trừ. **Phạm vi đọc khác nhau theo môi trường**, xem *lưu ý* bên dưới.'],
+          ['**NOT**', '**Không được có** từ khóa nào', 'Loại trừ.'],
         ],
-      },
-      {
-        kind: 'list',
-        heading: 'Từ khoá đọc ở đâu — trọng số (Elasticsearch)',
-        items: [
-          '**Headline ×8** — chức danh ứng viên tự đặt, dòng dưới tên (vd. “Product Designer”) · **kỹ năng ×6** · **chức danh từng làm ×5** · **vị trí mong muốn ×4** · **công ty từng làm ×3** · **học vấn ×2.5** · **chứng chỉ, dự án, giải thưởng ×2** · **giới thiệu ×1.5** · **mô tả công việc ×1**.',
-          'Thông tin cơ bản (ngày sinh, giới tính, quốc tịch…) **không** tìm bằng từ khoá — dùng bộ lọc.',
-        ],
-      },
-      {
-        kind: 'warn',
-        text:
-          '**Hai bộ máy tìm kiếm cho kết quả khác nhau — và mỗi môi trường chạy một bộ.** dev (`dev-hiring.saramin.vn`) dùng **Postgres** (`SVN_ES_SERVING=false`), staging dùng **Elasticsearch** (`true`). (1) **NOT** trên Postgres đọc **toàn bộ CV**, trên Elasticsearch chỉ đọc **headline và chức danh từng làm** — nên NOT `thực tập` trên dev loại cả người viết “hướng dẫn thực tập sinh”. (2) Postgres còn khớp **một phần headline** cho ô OR (`market` ra “Marketing”), nhưng lấy **cả ô OR làm một chuỗi** nên chỉ có tác dụng khi OR có một từ khoá. (3) Giới hạn **16 từ khoá chỉ có trên Elasticsearch**. **Đừng so số kết quả giữa dev và staging** cho tới khi hai bên được thống nhất.',
       },
       {
         kind: 'table',
