@@ -483,6 +483,258 @@ export function CvStatusFlow() {
   )
 }
 
+/* ── Master data — sáu sơ đồ theo tài liệu Master data 14/10/2026 ───────────────
+   Each drawing answers one question the page's tables cannot show at a glance:
+   who writes and who reads; what a delete does, by how a record stores the value;
+   the taxonomy tree and what a change does to a job; how a taxonomy import reads a
+   row; why Industries is text, not a code; and how Missing skills feeds CVs back. */
+export function MdOverviewFlow() {
+  const left: [string, string][] = [
+    ['Thêm / sửa / xóa từng dòng', 'không ghi Audit log'],
+    ['Import / Export', 'xem trước → Apply · ghi master_data.import'],
+    ['Duyệt Missing skills', 'Approve + back-fill · ghi skill_gap.adopt'],
+  ]
+  const right: [string, string][] = [
+    ['Form tin đăng', 'ngành nghề, cấp bậc, hợp đồng, kỹ năng, Job tags'],
+    ['Trang công ty / CRM', 'Industries, Company tags, Countries, Business forms'],
+    ['Đăng ký / hồ sơ ứng viên', 'học vấn, kinh nghiệm, quốc tịch, ngành mong muốn'],
+    ['Bộ lọc tìm CV', 'của nhà tuyển dụng'],
+    ['Đọc và sàng CV', 'so chữ tự do trong CV với Skills + alias'],
+    ['Chấm điểm khớp', 'đọc thứ tự Job levels'],
+  ]
+  const ly = (i: number) => 100 + i * 100
+  const ry = (i: number) => 88 + i * 58
+  return (
+    <Frame label="Master data: ai ghi, ai đọc" w={1200} h={486}>
+      <Premise title="MASTER DATA — một nơi ghi, mọi module chỉ đọc">
+        Mọi ô chọn trên hệ thống đọc từ đây. Muốn sửa danh mục thì sửa ở <tspan fontWeight={700} fill={INK}>System › Master data</tspan>, không sửa ở module dùng nó.
+      </Premise>
+      <text x={30} y={90} fontSize={10.5} fontWeight={800} letterSpacing="0.04em" fill={MUT}>ADMIN › MASTER DATA</text>
+      <text x={840} y={80} fontSize={10.5} fontWeight={800} letterSpacing="0.04em" fill={MUT}>CÁC MODULE CHỈ ĐỌC</text>
+      {left.map(([t, s], i) => (
+        <g key={t}>
+          <Box x={30} y={ly(i)} w={300} h={70} title={t} sub={s} />
+          <Arrow d={`M 330 ${ly(i) + 35} C 400 ${ly(i) + 35}, 400 236, 468 236`} tone="brand" />
+        </g>
+      ))}
+      <Box x={470} y={186} w={260} h={100} title="Danh mục dùng chung" sub="17 tab · mỗi tab một quyền riêng" sub2="bản ghi lưu MÃ hoặc lưu CHỮ" tone="brand" />
+      {right.map(([t, s], i) => (
+        <g key={t}>
+          <Arrow d={`M 730 236 C 785 236, 785 ${ry(i) + 24}, 838 ${ry(i) + 24}`} />
+          <Box x={840} y={ry(i)} w={330} h={48} title={t} sub={s} />
+        </g>
+      ))}
+      <rect x={14} y={444} width={1172} height={32} rx={8} fill="#fffbeb" stroke={AMB} strokeWidth={1.2} />
+      <text x={30} y={464} fontSize={11} fill={MUT}><tspan fontWeight={800} fill={AMB}>Luật · </tspan>Thiếu quyền đọc một danh mục thì <tspan fontWeight={700} fill={INK}>chỉ tab đó bị ẩn</tspan>. Mục menu hiện theo <tspan fontWeight={700} fill={INK}>region:read</tspan>. Ô tìm kiếm bị xóa khi chuyển tab.</text>
+    </Frame>
+  )
+}
+
+export function MdDeleteFlow() {
+  const rows: { cat: string; s1: string; s2?: string; out: string; o1: string; o2?: string; tone: Tone }[] = [
+    { cat: 'Business forms · Job tags', s1: 'chặn xóa khi đang được dùng', out: 'Còn bản ghi dùng → từ chối 409', o1: 'đổi giá trị trên bản ghi trước (Business forms: hoặc tắt Active)', o2: 'không còn ai dùng → xóa được', tone: 'stop' },
+    { cat: 'Danh mục lưu MÃ', s1: 'Job taxonomy · Job levels · Job types · Contract types', s2: 'Education · Years of exp. · Nationalities · Countries · Highlights', out: 'Xóa ngay — bản ghi đang dùng hiện trống', o1: 'không khôi phục được', o2: 'đổi tên thì an toàn: bản ghi hiện tên mới', tone: 'stop' },
+    { cat: 'Danh mục lưu CHỮ (chỉ là gợi ý)', s1: 'Industries · Benefits · Skills · Company tags', out: 'Xóa ngay — chữ trên bản ghi giữ nguyên', o1: 'chỉ mất gợi ý trong ô chọn', o2: 'đổi tên: bản ghi cũ giữ chữ cũ', tone: 'money' },
+    { cat: 'Locations', s1: 'cây khu vực ~3.300 dòng', out: 'Xóa ngay — vùng con bị tách khỏi cha', o1: 'vùng con vẫn còn trong danh mục', tone: 'wait' },
+  ]
+  const y = (i: number) => 90 + i * 96
+  return (
+    <Frame label="Xóa một giá trị master data: kết quả theo cách bản ghi lưu giá trị" w={1200} h={530}>
+      <Premise title="XÓA MỘT GIÁ TRỊ — kết quả phụ thuộc cách bản ghi lưu giá trị">
+        Mọi danh mục đều có nút Xóa. Hệ thống <tspan fontWeight={700} fill={INK}>không kiểm tra giá trị đang được dùng</tspan>, trừ Business forms và Job tags.
+      </Premise>
+      <Box x={30} y={243} w={180} h={70} title="Xóa một giá trị" sub="ở bất kỳ tab nào" />
+      {rows.map((r, i) => (
+        <g key={r.cat}>
+          <Arrow d={`M 210 278 C 240 278, 240 ${y(i) + 38}, 268 ${y(i) + 38}`} />
+          <Box x={270} y={y(i)} w={400} h={76} title={r.cat} sub={r.s1} sub2={r.s2} />
+          <Arrow d={`M 670 ${y(i) + 38} L 738 ${y(i) + 38}`} tone={r.tone === 'stop' ? 'stop' : 'plain'} />
+          <Box x={740} y={y(i)} w={430} h={76} title={r.out} sub={r.o1} sub2={r.o2} tone={r.tone} />
+        </g>
+      ))}
+      <rect x={14} y={486} width={1172} height={32} rx={8} fill="#fffbeb" stroke={AMB} strokeWidth={1.2} />
+      <text x={30} y={506} fontSize={11} fill={MUT}><tspan fontWeight={800} fill={AMB}>Luật · </tspan>Không có Active / Retired chung — chỉ Business forms có công tắc Active. Gộp 2 kỹ năng trùng nghĩa: dùng <tspan fontWeight={700} fill={INK}>alias</tspan>, không xóa rồi sửa tay.</text>
+    </Frame>
+  )
+}
+
+export function MdTaxonomyFlow() {
+  const rows: [string, string, string, Tone][] = [
+    ['Đổi tên', 'Tin tự hiện tên mới', 'vì tin lưu mã', 'money'],
+    ['Đổi thứ tự', 'Form tin và bộ lọc tìm việc đổi theo', 'thứ tự dòng trong file Import = thứ tự hiển thị', 'plain'],
+    ['Chuyển cấp cha', 'Mục hiện ở nhánh mới', 'tin vẫn giữ liên kết', 'brand'],
+    ['Xóa', 'Tin đang dùng mất giá trị', '“Jobs using it will show no value.” · không khôi phục', 'stop'],
+  ]
+  const y = (i: number) => 172 + i * 66
+  return (
+    <Frame label="Job taxonomy: cây 3 cấp và ảnh hưởng của thay đổi tới tin đăng" w={1200} h={486}>
+      <Premise title="JOB TAXONOMY — cây 3 cấp, tin đăng lưu MÃ">
+        Nghề và chuyên môn là <tspan fontWeight={700} fill={INK}>2 Group ngang hàng</tspan> dưới cùng một Category, không phải Nghề → Chuyên môn. Role không làm cha; không có cấp 4.
+      </Premise>
+      <text x={30} y={90} fontSize={10.5} fontWeight={800} letterSpacing="0.04em" fill={MUT}>CÂY DỮ LIỆU (VÍ DỤ)</text>
+      <Box x={150} y={100} w={290} h={62} title="Category" sub="Kế toán, Thuế & Tài chính" tone="brand" />
+      <Arrow d="M 250 162 C 250 180, 155 180, 155 204" />
+      <Arrow d="M 340 162 C 340 180, 435 180, 435 204" />
+      <Box x={30} y={206} w={250} h={62} title="Group · Nghề · Vị trí" sub="jobs-occupations" />
+      <Box x={310} y={206} w={250} h={62} title="Group · Chuyên môn hóa" sub="specialization" />
+      <Arrow d="M 110 268 L 90 314" />
+      <Arrow d="M 200 268 L 220 314" />
+      <Arrow d="M 435 268 L 435 314" />
+      <Box x={30} y={316} w={120} h={58} title="Role" sub="nghề cụ thể" />
+      <Box x={160} y={316} w={120} h={58} title="Role" sub="nghề cụ thể" />
+      <Box x={310} y={316} w={250} h={58} title="Specialization" sub="chuyên môn cụ thể" />
+      <text x={30} y={400} fontSize={10.5} fill={MUT}>~1.075 nhánh · 21 Category · 56 tổ hợp Category + Group · 13 tên Group khác nhau</text>
+
+      <text x={640} y={90} fontSize={10.5} fontWeight={800} letterSpacing="0.04em" fill={MUT}>ẢNH HƯỞNG TỚI TIN ĐĂNG</text>
+      <Box x={640} y={100} w={530} h={50} title="Admin thay đổi một mục" tone="wait" />
+      <path d={`M 656 150 L 656 ${y(3) + 25}`} fill="none" stroke="#b9b6ae" strokeWidth={1.8} />
+      {rows.map(([c, t, s, tone], i) => (
+        <g key={c}>
+          <Arrow d={`M 656 ${y(i) + 25} L 678 ${y(i) + 25}`} />
+          <Box x={680} y={y(i)} w={130} h={50} title={c} />
+          <Arrow d={`M 810 ${y(i) + 25} L 838 ${y(i) + 25}`} tone={tone === 'stop' ? 'stop' : 'plain'} />
+          <Box x={840} y={y(i)} w={330} h={50} title={t} sub={s} tone={tone} />
+        </g>
+      ))}
+      <rect x={14} y={442} width={1172} height={32} rx={8} fill="#fffbeb" stroke={AMB} strokeWidth={1.2} />
+      <text x={30} y={462} fontSize={11} fill={MUT}><tspan fontWeight={800} fill={AMB}>Luật · </tspan>Code cấp 2, cấp 3 trùng được giữa các nhánh (vd jobs-occupations) — một code chỉ xác định đúng 1 mục khi <tspan fontWeight={700} fill={INK}>đi kèm code cấp cha</tspan>.</text>
+    </Frame>
+  )
+}
+
+export function MdTaxonomyImportFlow() {
+  return (
+    <Frame label="Import Job taxonomy / Industries theo nhánh: hệ thống đọc từng dòng thế nào" w={1200} h={590}>
+      <Premise title="IMPORT THEO NHÁNH — mỗi dòng là một nhánh Category → Group → Role (Industries: Industry → Group → Item)">
+        File 9 cột: 3 cột Code (không bắt buộc) + tên EN và VI cho 3 cấp. <tspan fontWeight={700} fill={INK}>Thứ tự dòng trong file = thứ tự hiển thị.</tspan>
+      </Premise>
+      <Box x={30} y={204} w={170} h={70} title="Upload file" sub="template nhánh 9 cột" />
+      <Arrow d="M 200 239 L 238 239" />
+      <Box x={240} y={204} w={170} h={70} title="Xem trước" sub="báo lỗi theo số dòng" sub2="chưa lưu gì" />
+      <Arrow d="M 410 239 L 448 239" />
+      <Box x={450} y={204} w={170} h={70} title="Dòng có Code?" tone="wait" />
+      <Arrow d="M 535 204 C 535 135, 600 135, 658 135" tone="brand" label="Có" lx={560} ly={150} />
+      <Arrow d="M 535 274 C 535 335, 600 335, 658 335" label="Không" lx={560} ly={322} />
+      <Box x={660} y={100} w={220} h={70} title="Code tồn tại?" sub="tìm kèm Code cấp cha" tone="wait" />
+      <Arrow d="M 880 125 L 918 111" tone="brand" label="Có" lx={898} ly={106} />
+      <Arrow d="M 880 145 L 918 159" tone="stop" label="Không" lx={898} ly={168} />
+      <Box x={920} y={86} w={250} h={50} title="Cập nhật mục đó" sub="tên và thứ tự" tone="brand" />
+      <Box x={920} y={146} w={250} h={50} title="Báo lỗi dòng" sub="không lưu dòng này" tone="stop" />
+      <Box x={660} y={300} w={220} h={70} title="Trùng tên trong cấp cha?" sub="so tên EN hoặc VI" tone="wait" />
+      <Arrow d="M 880 325 L 918 311" tone="brand" label="Có" lx={898} ly={306} />
+      <Arrow d="M 880 345 L 918 359" label="Không" lx={898} ly={368} />
+      <Box x={920} y={286} w={250} h={50} title="Dùng lại mục đã có" tone="brand" />
+      <Box x={920} y={346} w={250} h={50} title="Tạo mục mới" sub="Code tự sinh từ tên EN" tone="money" />
+
+      <Lane y={412} h={118} label="APPLY — sau khi đọc bản xem trước" />
+      <Box x={30} y={444} w={200} h={64} title="Apply" tone="brand" />
+      <Arrow d="M 230 476 L 278 476" tone="brand" />
+      <Box x={280} y={444} w={270} h={64} title="Dòng hợp lệ: lưu" tone="money" />
+      <Box x={580} y={444} w={270} h={64} title="Dòng lỗi: bỏ qua" tone="stop" />
+      <Box x={880} y={444} w={290} h={64} title="Mục vắng trong file" sub="KHÔNG bị xóa" sub2="bị đẩy xuống cuối cấp cha" tone="side" />
+      <path d="M 130 508 L 130 520 L 1025 520 L 1025 508" fill="none" stroke="#b9b6ae" strokeWidth={1.4} />
+      <path d="M 715 520 L 715 508" fill="none" stroke="#b9b6ae" strokeWidth={1.4} />
+
+      <rect x={14} y={544} width={1172} height={36} rx={8} fill="#fffbeb" stroke={AMB} strokeWidth={1.2} />
+      <text x={30} y={566} fontSize={11} fill={MUT}><tspan fontWeight={800} fill={AMB}>Luật · </tspan>Code của mục khác → <tspan fontWeight={700} fill={INK}>ghi đè</tspan> lên mục đó. Đổi Code cấp 1 / 2 → mục được <tspan fontWeight={700} fill={INK}>chuyển</tspan> nhánh. Có Code cấp dưới mà thiếu Code cấp trên → lỗi dòng.</text>
+    </Frame>
+  )
+}
+
+export function MdIndustriesFlow() {
+  return (
+    <Frame label="Industries: tin và công ty lưu chữ, không lưu mã" w={1200} h={400}>
+      <Premise title="INDUSTRIES — chỉ là gợi ý: tin và công ty lưu CHỮ (tên VI), không lưu mã">
+        Cây 3 cấp Industry → Group → Item: <tspan fontWeight={700} fill={INK}>10 → 67 → 664</tspan> (~740 mục).
+      </Premise>
+      <Box x={30} y={92} w={300} h={78} title="Item trong Industries" sub="tên VI: khách sạn" sub2="hotels-travel-and-airlines-hotel" tone="brand" />
+      <Arrow d="M 330 131 L 428 131" tone="brand" />
+      <Box x={430} y={96} w={300} h={70} title="NTD / CRM chọn lĩnh vực" sub="trên form tin / công ty" />
+      <Arrow d="M 730 131 L 828 131" tone="brand" />
+      <Box x={830} y={96} w={340} h={70} title="Tin / công ty lưu CHỮ" sub="“khách sạn” — không lưu mã" tone="brand" />
+      <Arrow d="M 180 170 L 180 218" />
+      <Box x={30} y={220} w={300} h={70} title="Admin thay đổi Item" tone="wait" />
+      <Arrow d="M 330 245 C 380 245, 380 232, 428 232" label="Đổi tên" lx={380} ly={226} />
+      <Arrow d="M 330 265 C 380 265, 380 298, 428 298" label="Xóa" lx={380} ly={300} />
+      <Box x={430} y={206} w={740} h={52} title="Bản ghi mới dùng tên mới · bản ghi cũ giữ chữ cũ" />
+      <Box x={430} y={272} w={740} h={52} title="Chữ trên bản ghi giữ nguyên · chỉ mất gợi ý trong ô chọn" tone="money" />
+      <rect x={14} y={346} width={1172} height={36} rx={8} fill="#fffbeb" stroke={AMB} strokeWidth={1.2} />
+      <text x={30} y={368} fontSize={11} fill={MUT}><tspan fontWeight={800} fill={AMB}>Luật · </tspan>Item không làm cha: ô Parent chỉ cho chọn Industry hoặc Group. <tspan fontWeight={700} fill={INK}>New item</tspan> chọn Industry trước, rồi mới chọn Group.</text>
+    </Frame>
+  )
+}
+
+export function MdMissingSkillsFlow() {
+  return (
+    <Frame label="Skills và Missing skills: từ CV được đọc tới CV được nhả" w={1200} h={486}>
+      <Premise title="SKILLS + MISSING SKILLS — kỹ năng trong CV thật mà danh mục chưa có">
+        Khi đọc CV, hệ thống so chữ tự do trong CV với danh sách kỹ năng và <tspan fontWeight={700} fill={INK}>alias</tspan>. Cái không khớp được đưa vào tab Missing skills để Admin duyệt.
+      </Premise>
+      <Box x={30} y={92} w={220} h={64} title="CV được đọc" />
+      <Arrow d="M 250 124 L 308 124" />
+      <Box x={310} y={92} w={260} h={64} title="Khớp Skills hoặc alias?" tone="wait" />
+      <Arrow d="M 570 124 L 638 124" tone="brand" label="Có" lx={604} ly={116} />
+      <Box x={640} y={92} w={530} h={64} title="Gắn kỹ năng vào CV" tone="money" />
+      <Arrow d="M 440 156 L 440 208" label="Không" lx={452} ly={186} anchor="start" />
+      <Box x={310} y={210} w={260} h={80} title="Missing skills" sub="kèm số CV có kỹ năng đó" sub2="và số CV đang bị giữ" />
+      <Arrow d="M 570 250 L 638 250" />
+      <Box x={640} y={215} w={220} h={70} title="Admin Approve" sub="sửa danh sách cách viết" tone="wait" />
+      <Arrow d="M 860 240 L 918 220" tone="brand" />
+      <Arrow d="M 860 260 L 918 272" tone="brand" />
+      <Box x={920} y={198} w={250} h={44} title="Thêm alias" sub="của kỹ năng có sẵn" />
+      <Box x={920} y={250} w={250} h={44} title="Tạo kỹ năng mới" />
+      <path d="M 1170 220 L 1180 220 L 1180 310 L 1045 310" fill="none" stroke={BR} strokeWidth={1.8} />
+      <Arrow d="M 1045 294 L 1045 334" tone="brand" />
+      <Box x={310} y={336} w={860} h={80} title="Add and back-fill — trong cùng một lần" sub="gắn lại kỹ năng cho các CV liên quan · sàng lại các CV đó · nhả CV đang bị giữ nếu nay đã đủ điều kiện" sub2="thông báo: số alias thêm · số hồ sơ cập nhật · số CV được nhả" tone="brand" />
+      <Arrow d="M 310 376 L 252 376" tone="brand" />
+      <Box x={30} y={336} w={220} h={80} title="CV đủ điều kiện" sub="được nhả" tone="money" />
+      <rect x={14} y={436} width={1172} height={36} rx={8} fill="#fffbeb" stroke={AMB} strokeWidth={1.2} />
+      <text x={30} y={458} fontSize={11} fill={MUT}><tspan fontWeight={800} fill={AMB}>Luật · </tspan>Chỉ Skills có alias. CV viết khác chính tả → thêm alias, <tspan fontWeight={700} fill={INK}>không tạo kỹ năng mới</tspan>. Duyệt có ghi Audit log (skill_gap.adopt).</text>
+    </Frame>
+  )
+}
+
+export function MdCandidateFlow() {
+  return (
+    <Frame label="Education levels, Years of experience, Nationalities: ứng viên chọn, nhà tuyển dụng lọc" w={1200} h={300}>
+      <Premise title="DANH MỤC CỦA ỨNG VIÊN — cùng một giá trị, hai phía dùng">
+        Ứng viên chọn giá trị khi đăng ký / sửa hồ sơ; nhà tuyển dụng lọc CV bằng <tspan fontWeight={700} fill={INK}>chính các giá trị đó</tspan>. Hồ sơ lưu mã.
+      </Premise>
+      <Box x={30} y={110} w={320} h={90} title="Education levels" sub="Years of experience" sub2="Nationalities · tên VI / EN / KO" tone="brand" />
+      <Arrow d="M 350 130 C 400 130, 400 112, 448 112" tone="brand" />
+      <Arrow d="M 350 180 C 400 180, 400 208, 838 208" />
+      <Box x={450} y={84} w={320} h={60} title="Ứng viên chọn" sub="khi đăng ký / sửa hồ sơ" />
+      <Arrow d="M 770 114 C 805 114, 805 160, 838 160" tone="brand" />
+      <Box x={840} y={130} w={330} h={90} title="NTD lọc khi tìm CV" sub="hồ sơ khớp giá trị đã chọn" sub2="mới ra trong kết quả" />
+      <rect x={14} y={248} width={1172} height={36} rx={8} fill="#fffbeb" stroke={AMB} strokeWidth={1.2} />
+      <text x={30} y={270} fontSize={11} fill={MUT}><tspan fontWeight={800} fill={AMB}>Luật · </tspan>Xóa một giá trị: hồ sơ đang dùng <tspan fontWeight={700} fill={INK}>mất giá trị</tspan>, không khôi phục được. Đổi tên: hồ sơ hiện tên mới.</text>
+    </Frame>
+  )
+}
+
+export function MdLocationsFlow() {
+  return (
+    <Frame label="Locations: xóa khu vực cha thì vùng con bị tách khỏi cha" w={1200} h={300}>
+      <Premise title="LOCATIONS — xóa khu vực cha không xóa vùng con">
+        Cây khoảng <tspan fontWeight={700} fill={INK}>3.300 dòng</tspan>, lọc theo cấp, dùng ở mọi ô chọn địa điểm.
+      </Premise>
+      <text x={30} y={92} fontSize={10.5} fontWeight={800} letterSpacing="0.04em" fill={MUT}>TRƯỚC KHI XÓA</text>
+      <Box x={150} y={100} w={240} h={50} title="Khu vực cha" tone="brand" />
+      <Arrow d="M 230 150 L 150 186" />
+      <Arrow d="M 310 150 L 390 186" />
+      <Box x={30} y={188} w={220} h={46} title="Vùng con" />
+      <Box x={290} y={188} w={220} h={46} title="Vùng con" />
+      <Arrow d="M 540 168 L 638 168" tone="stop" label="Xóa khu vực cha" lx={589} ly={160} />
+      <text x={660} y={92} fontSize={10.5} fontWeight={800} letterSpacing="0.04em" fill={MUT}>SAU KHI XÓA</text>
+      <Box x={780} y={100} w={240} h={50} title="Khu vực cha — đã xóa" tone="side" />
+      <Box x={660} y={188} w={220} h={46} title="Vùng con" sub="không còn cha" tone="wait" />
+      <Box x={920} y={188} w={220} h={46} title="Vùng con" sub="không còn cha" tone="wait" />
+      <rect x={14} y={248} width={1172} height={36} rx={8} fill="#fffbeb" stroke={AMB} strokeWidth={1.2} />
+      <text x={30} y={270} fontSize={11} fill={MUT}><tspan fontWeight={800} fill={AMB}>Luật · </tspan>Vùng con <tspan fontWeight={700} fill={INK}>vẫn còn trong danh mục</tspan>, chỉ bị tách khỏi cha — không bị xóa theo.</text>
+    </Frame>
+  )
+}
+
 export const DIAGRAMS: Record<string, () => JSX.Element> = {
   'product-chain': ProductFlow,
   'crm-chain': CrmFlow,
@@ -490,4 +742,12 @@ export const DIAGRAMS: Record<string, () => JSX.Element> = {
   'crm-signup': CrmSignupFlow,
   'crm-verify': CrmVerifyFlow,
   'cv-status': CvStatusFlow,
+  'md-overview': MdOverviewFlow,
+  'md-delete': MdDeleteFlow,
+  'md-taxonomy': MdTaxonomyFlow,
+  'md-taxonomy-import': MdTaxonomyImportFlow,
+  'md-industries': MdIndustriesFlow,
+  'md-missing-skills': MdMissingSkillsFlow,
+  'md-candidate': MdCandidateFlow,
+  'md-locations': MdLocationsFlow,
 }
