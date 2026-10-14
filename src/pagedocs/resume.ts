@@ -415,7 +415,7 @@ export const RESUME_PAGE_DOCS: Record<string, PageDoc> = {
         heading: 'Từng bước (trang Notion *Talent pool*)',
         items: [
           'Vào **site công ty** → **Kho ứng viên / Talent pool** trên thanh đầu trang (`/search`; Notion ghi `/talent-pool`). Cần quyền *Search resumes* — **không cần gói** để tìm.',
-          'Tìm bằng ba ô từ khoá (**OR / AND / NOT**, cách nhau bằng dấu phẩy) và bộ lọc. Trên kết quả chỉ có **Save candidate** (và *Dislike* để ẩn người đó khỏi tìm kiếm của công ty — quản lý ở `/search/hidden`).',
+          'Tìm bằng ba ô từ khoá (**OR / AND / NOT**, cách nhau bằng dấu phẩy — luật chi tiết ở bảng *Ba ô từ khoá* bên dưới) và bộ lọc. Trên kết quả chỉ có **Save candidate** (và *Dislike* để ẩn người đó khỏi tìm kiếm của công ty — quản lý ở `/search/hidden`).',
           'Mở chi tiết CV (`/search/candidates/:resumeId`) → **Unlock** để xem **tên, số điện thoại, email** và file gốc.',
           'Phần còn lại — folder, cột *Saved*, lần di chuyển tốn credit — ở trang **Candidate management**.',
         ],
@@ -433,6 +433,37 @@ export const RESUME_PAGE_DOCS: Record<string, PageDoc> = {
           ['**Thẻ kết quả**', 'Tên che (`maskedName`, hoặc *Ứng viên #{alias}*), giới tính · tuổi · kinh nghiệm, công việc gần nhất (công ty · chức danh · thời gian · mô tả), tối đa 2 việc cũ, trường, tối đa 5 kỹ năng, *Updated {date}*. Không ảnh. **Không còn nút Unlock trên thẻ** — chỉ trên trang CV.'],
           ['**Tìm kiếm đã lưu**', 'Lưu bộ lọc vào một folder; có tab tìm “từ một tin tuyển dụng của tôi”.'],
         ],
+      },
+      {
+        kind: 'table',
+        heading: 'Ba ô từ khoá OR · AND · NOT — luật khớp',
+        note: 'Đọc từ build ngày 14/10/2026 (svn-be `KeywordQuery` / `TsQuery`, `EsCandidateQueryBuilder`, `PgFtsCandidateSearchAdapter`). Ba ô ghép thành **(OR₁ hoặc OR₂ …) VÀ AND₁ VÀ AND₂ … VÀ KHÔNG (NOT₁ hoặc NOT₂ …)**.',
+        cols: ['Ô / Luật', 'Hoạt động', 'Ví dụ'],
+        rows: [
+          ['**OR** — mở rộng', 'CV chỉ cần có **ít nhất một** từ khoá. Đây là ô tìm chính.', '`điều dưỡng, y tá` → CV có “điều dưỡng” **hoặc** “y tá”'],
+          ['**AND** — thu hẹp', 'CV phải có **tất cả** từ khoá trong ô, cộng với điều kiện OR.', 'thêm AND `JCI` → chỉ còn người có cả “JCI”'],
+          ['**NOT** — loại trừ', 'CV có **bất kỳ** từ khoá nào trong ô thì bị loại. Phạm vi đọc khác nhau theo môi trường — xem *lưu ý* bên dưới.', 'thêm NOT `thực tập` → bỏ người có “thực tập”'],
+          ['**Tách từ khoá**', 'Bằng **dấu phẩy** hoặc **xuống dòng**. **Dấu cách không tách** — nó nằm trong từ khoá.', '`Data Mining` = 1 từ khoá · `data, mining` = 2'],
+          ['**Nhiều chữ = một cụm**', 'Các chữ phải đứng liền nhau đúng thứ tự, không rải rác khắp CV.', '`điều dưỡng` không khớp CV có “điều trị” ở câu này và “dưỡng lão” ở câu khác'],
+          ['**Dấu, hoa / thường**', 'Bỏ qua cả hai.', '`dieu duong` = `Điều Dưỡng`'],
+          ['**Ký tự đặc biệt**', 'Bị bỏ (`& | ! ( ) " \'` …) — không gõ được toán tử.', '`a & b` được hiểu là cụm “a b”'],
+          ['**Trùng / trống**', 'Từ khoá lặp tính một lần; mảnh trống giữa hai dấu phẩy bị bỏ. Ô chỉ có ký tự đặc biệt coi như **trống** (không lọc gì — không phải “0 kết quả”).', '`y tá, y tá` → 1 · `a, , b` → a, b'],
+          ['**Giới hạn**', 'Tối đa **16 từ khoá mỗi ô** — phần thừa bị bỏ, **không báo**.', '—'],
+          ['**Sắp xếp**', 'Có từ khoá ở **bất kỳ** ô nào → *Recommended* xếp theo độ khớp.', '—'],
+        ],
+      },
+      {
+        kind: 'list',
+        heading: 'Từ khoá đọc ở đâu — trọng số (Elasticsearch)',
+        items: [
+          '**Headline ×8** — chức danh ứng viên tự đặt, dòng dưới tên (vd. “Product Designer”) · **kỹ năng ×6** · **chức danh từng làm ×5** · **vị trí mong muốn ×4** · **công ty từng làm ×3** · **học vấn ×2.5** · **chứng chỉ, dự án, giải thưởng ×2** · **giới thiệu ×1.5** · **mô tả công việc ×1**.',
+          'Thông tin cơ bản (ngày sinh, giới tính, quốc tịch…) **không** tìm bằng từ khoá — dùng bộ lọc.',
+        ],
+      },
+      {
+        kind: 'warn',
+        text:
+          '**Hai bộ máy tìm kiếm cho kết quả khác nhau — và mỗi môi trường chạy một bộ.** dev (`dev-hiring.saramin.vn`) dùng **Postgres** (`SVN_ES_SERVING=false`), staging dùng **Elasticsearch** (`true`). (1) **NOT** trên Postgres đọc **toàn bộ CV**, trên Elasticsearch chỉ đọc **headline và chức danh từng làm** — nên NOT `thực tập` trên dev loại cả người viết “hướng dẫn thực tập sinh”. (2) Postgres còn khớp **một phần headline** cho ô OR (`market` ra “Marketing”), nhưng lấy **cả ô OR làm một chuỗi** nên chỉ có tác dụng khi OR có một từ khoá. (3) Giới hạn **16 từ khoá chỉ có trên Elasticsearch**. **Đừng so số kết quả giữa dev và staging** cho tới khi hai bên được thống nhất.',
       },
       {
         kind: 'table',
