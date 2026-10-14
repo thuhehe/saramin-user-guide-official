@@ -140,7 +140,7 @@
   "path": "/recruitment/applications",
   "perm": "job:read",
   "flag": "",
-  "what": "Mọi đơn ứng tuyển của mọi công ty — đơn đã tới nhà tuyển dụng chưa (*Not sent · Sent · Recall · Rejected*) và họ đang để ứng viên ở cột nào. HQ chỉ được *Reject* một đơn chưa gửi.",
+  "what": "Mọi hồ sơ ứng tuyển của mọi công ty — CV Status, đã tới nhà tuyển dụng chưa (*Not Sent · Sent · Recall*), thẻ đang ở cột nào, NTD đã xem / tải chưa. Operator *Approve* / *Reject*, Admin / CS *Recall* — theo phiên bản CV.",
   "sub": [
    "/recruitment/applications/:id"
   ]
