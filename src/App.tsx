@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 import PAGES from './pages.json'
+import UPDATED from './updated.json'
 import { WORKFLOW, adminUrl } from './handbook'
 import type { WfBlock, WfSection } from './handbook'
 import { MODULE_DOCS, PAGE_DOCS } from './docs'
@@ -369,16 +370,26 @@ function Home({ onPick }: { onPick: (s: Sel) => void }) {
 function PageView({ p, dev, onModule }: { p: Page; dev: boolean; onModule: () => void }) {
   const d = PAGE_DOCS[p.key]
   const mod = MODULE_DOCS[p.group]
+  const iso = (UPDATED as Record<string, string>)[p.key]
+  const updated = iso && iso.split('-').reverse().join('/')
 
   return (
     <article>
       <p className="font-mono text-[10.5px] uppercase tracking-[0.16em] text-faint">{p.group}</p>
       <div className="mt-1 flex flex-wrap items-end justify-between gap-x-6 gap-y-2 border-b-2 border-ink pb-3">
         <h1 className="text-[30px] font-bold leading-[1.1] tracking-[-0.02em]">{p.label}</h1>
-        <a href={pageUrl(p)} target="_blank" rel="noreferrer"
-           className="rounded-md border border-brand px-3 py-1.5 text-[12px] font-medium text-brand hover:bg-brand hover:text-white">
-          Mở trang này ↗
-        </a>
+        <div className="flex items-center gap-x-4">
+          {/* The last day this page's doc entry changed — from git blame, see scripts/gen-updated.mjs */}
+          {updated && (
+            <span className="font-mono text-[11px] text-faint">
+              Updated <span className="text-ink/70">{updated}</span>
+            </span>
+          )}
+          <a href={pageUrl(p)} target="_blank" rel="noreferrer"
+             className="rounded-md border border-brand px-3 py-1.5 text-[12px] font-medium text-brand hover:bg-brand hover:text-white">
+            Mở trang này ↗
+          </a>
+        </div>
       </div>
 
       <dl className="mt-3 flex flex-wrap gap-x-8 gap-y-2 border-b border-line pb-3">
