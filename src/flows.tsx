@@ -445,7 +445,7 @@ export function CvStatusFlow() {
     <Frame label="Trạng thái CV quyết định đơn ứng tuyển; công tắc Show CV quyết định tìm kiếm CV" w={1200} h={560}>
       <Premise title="MỘT TRẠNG THÁI, MỘT CÔNG TẮC — trạng thái CV quyết định đơn; công tắc của ứng viên quyết định tìm kiếm">
         Đọc <tspan fontWeight={700} fill={INK}>từ trái sang phải</tspan>. Không mũi tên nào quay lại — bên phải không có gì để đặt tay.
-        Ô đứt nét là <tspan fontWeight={700} fill={INK}>requirement</tspan>, build đã bỏ từ 29/09 (SRM-777).
+        Tìm kiếm cần <tspan fontWeight={700} fill={INK}>cả hai</tspan>: công tắc bật, và CV <tspan fontWeight={700} fill={INK}>Qualified</tspan> (tài liệu Talent pool 16/10).
       </Premise>
 
       <text x={30} y={94} fontSize={10.5} fontWeight={800} letterSpacing="0.04em" fill={MUT}>TRẠNG THÁI CV · thứ duy nhất được lưu</text>
@@ -463,9 +463,9 @@ export function CvStatusFlow() {
       {/* the build's search: the candidate's switch, nothing else */}
       <Box x={850} y={106} w={320} h={68} title="Show CV to employers" sub="ứng viên bật · một CV một lúc" sub2="hoặc hệ thống, cho file tải lên đầu tiên" tone="brand" />
       <Arrow d="M 1010 174 L 1010 228" tone="brand" label="bật" lx={1022} ly={205} anchor="start" />
-      <Box x={850} y={230} w={320} h={86} title="Có mặt trong kho" sub="tên + liên hệ che tới khi công ty mở khoá" sub2="KHÔNG đọc trạng thái CV" tone="brand" />
-      <Box x={850} y={350} w={320} h={76} title="Requirement: chỉ Đạt mới Showing" sub="nghi ngờ / từ chối → Hidden, rời kho" sub2="build bỏ cổng này từ 29/09" tone="side" />
-      <Arrow d="M 180 426 L 180 446 L 1010 446 L 1010 428" dashed label="requirement: trạng thái CV cũng quyết định tìm kiếm" lx={600} ly={442} />
+      <Box x={850} y={230} w={320} h={86} title="Có mặt trong kho" sub="tên + liên hệ che tới khi công ty mở khoá" sub2="vào kho Admin" tone="brand" />
+      <Box x={850} y={350} w={320} h={76} title="Chỉ Qualified mới Showing" sub="NTD chỉ tìm thấy ứng viên Showing" sub2="nghi ngờ / từ chối → Hidden" tone="money" />
+      <Arrow d="M 180 426 L 180 446 L 1010 446 L 1010 428" label="trạng thái CV cũng quyết định tìm kiếm" lx={600} ly={442} />
 
       <rect x={14} y={470} width={1172} height={80} rx={10} fill="#fffbeb" stroke={AMB} strokeWidth={1.5} />
       <text x={32} y={491} fontSize={11.5} fontWeight={800} fill={AMB}>Bốn điều luôn đúng</text>
@@ -950,7 +950,143 @@ export function CmNotifyFlow() {
       <Box x={750} y={204} w={420} h={44} title="NTD: email có đơn ứng tuyển mới" tone="money" />
       <Box x={750} y={266} w={420} h={44} title="Không gửi email cho NTD" sub="hồ sơ Not Sent" tone="side" />
       <rect x={14} y={322} width={1172} height={36} rx={8} fill="#fffbeb" stroke={AMB} strokeWidth={1.2} />
-      <text x={30} y={344} fontSize={11} fill={MUT}><tspan fontWeight={800} fill={AMB}>Chưa chốt · </tspan>Thông báo cho NTD khi hồ sơ bị thu hồi — kênh và cách hiển thị chờ xác nhận.</text>
+      <text x={30} y={344} fontSize={11} fill={MUT}><tspan fontWeight={800} fill={AMB}>Luật · </tspan>Hồ sơ bị thu hồi: NTD <tspan fontWeight={700} fill={INK}>nhận email</tspan>, thẻ mang nhãn thu hồi và thông tin CV bị khoá.</text>
+    </Frame>
+  )
+}
+
+/* ── Create CV — hai cửa vào, một thư viện (tài liệu 15/10/2026) ───────────────
+   The client's overview flow. The loop goes back to Save, not straight to the
+   check: an Unfinished CV only becomes Đạt when the candidate saves again. */
+export function CvCreateFlow() {
+  return (
+    <Frame label="Tạo CV: Saramin CV hoặc Upload, lưu vào thư viện, chấm Đạt" w={1200} h={490}>
+      <Premise title="CREATE CV — hai cửa vào, một thư viện; mỗi lần lưu là một lần chấm Đạt">
+        Mỗi CV tự khai <tspan fontWeight={700} fill={INK}>Experienced / No experience</tspan> — khai báo đó quyết định CV cần mục nào để Đạt.
+      </Premise>
+      <Box x={30} y={150} w={220} h={70} title="My CVs" sub="Want to create your CV?" />
+      <Arrow d="M 250 172 C 285 172, 285 115, 318 115" tone="brand" label="Create Saramin CV" lx={286} ly={132} anchor="middle" />
+      <Arrow d="M 250 198 C 285 198, 285 255, 318 255" label="Upload file" lx={286} ly={244} />
+      <Box x={320} y={80} w={280} h={70} title="Form Saramin CV" sub="chọn Experienced / No experience" sub2="điền các mục" />
+      <Box x={320} y={220} w={280} h={70} title="Trang Upload" sub="chọn Experienced / No experience" sub2="tải file PDF / Word ≤ 10 MB" />
+      <Arrow d="M 600 115 C 635 115, 635 172, 668 172" />
+      <Arrow d="M 600 255 C 635 255, 635 198, 668 198" />
+      <Box x={670} y={150} w={220} h={70} title="Save" sub="đặt tên CV" sub2="chọn có hiển thị cho NTD" tone="brand" />
+      <Arrow d="M 890 185 L 958 185" />
+      <Box x={960} y={150} w={210} h={70} title="Thư viện My CVs" sub="không giới hạn số CV" />
+      <Arrow d="M 1065 220 L 1065 258" />
+      <Box x={960} y={260} w={210} h={56} title="CV Đạt?" sub="Education (+ Work nếu Experienced)" tone="wait" />
+      <Arrow d="M 1065 316 L 1065 358" tone="brand" label="Đạt" lx={1075} ly={342} anchor="start" />
+      <Box x={960} y={360} w={210} h={60} title="Nộp đơn được" sub="bật hiển thị cho NTD được" tone="money" />
+      <Arrow d="M 960 288 L 892 288" label="Chưa đạt" lx={926} ly={280} />
+      <Box x={640} y={260} w={250} h={56} title="Nhãn Unfinished" sub="bổ sung rồi lưu lại" tone="wait" />
+      <Arrow d="M 765 260 L 765 222" dashed label="lưu lại" lx={775} ly={246} anchor="start" />
+      <rect x={14} y={440} width={1172} height={36} rx={8} fill="#fffbeb" stroke={AMB} strokeWidth={1.2} />
+      <text x={30} y={462} fontSize={11} fill={MUT}><tspan fontWeight={800} fill={AMB}>Luật · </tspan>Chỉ <tspan fontWeight={700} fill={INK}>một CV</tspan> hiển thị cho NTD tại một thời điểm. CV chưa đạt không nộp đơn được và không bật hiển thị được.</text>
+    </Frame>
+  )
+}
+
+/* ── CV review — bốn thao tác, hai trạng thái (tài liệu 15/10/2026) ─────────────
+   Withdraw application is drawn dashed throughout: agreed, not yet on screen. */
+export function CvReviewFlow() {
+  return (
+    <Frame label="CV review: Approve, Reject, Recall và Withdraw application" w={1200} h={530}>
+      <Premise title="CV REVIEW — duyệt CV, không duyệt từng đơn; mọi quyết định không hoàn tác">
+        Mỗi quyết định áp cho <tspan fontWeight={700} fill={INK}>mọi hồ sơ dùng cùng phiên bản CV</tspan>. Riêng Withdraw application (đứt nét, đang triển khai) chỉ rút đúng một hồ sơ.
+      </Premise>
+      <Box x={30} y={170} w={180} h={60} title="Ứng viên nộp đơn" />
+      <Arrow d="M 210 200 L 258 200" />
+      <Box x={260} y={170} w={170} h={60} title="CV đạt?" tone="wait" />
+      <Arrow d="M 430 190 C 465 190, 465 125, 498 125" tone="brand" label="Đạt" lx={470} ly={150} anchor="start" />
+      <Arrow d="M 430 210 C 465 210, 465 295, 498 295" label="Không đọc được / thiếu" lx={448} ly={262} anchor="start" />
+      <Box x={500} y={90} w={300} h={70} title="Qualified · Sent" sub="NTD nhận hồ sơ" tone="money" />
+      <Box x={500} y={260} w={260} h={70} title="Cannot Read / NEI · Not Sent" sub="chờ người duyệt" tone="wait" />
+      <Arrow d="M 630 260 L 630 162" tone="brand" label="Approve CV" lx={640} ly={215} anchor="start" />
+      <Arrow d="M 800 125 L 878 125" tone="stop" label="Recall CV" lx={839} ly={117} />
+      <Box x={880} y={90} w={290} h={70} title="Rejected · Recall" sub="kết thúc" tone="stop" />
+      <Arrow d="M 760 295 L 878 295" tone="stop" label="Reject CV" lx={819} ly={287} />
+      <Box x={880} y={260} w={290} h={70} title="Rejected · Not Sent" sub="kết thúc" tone="stop" />
+      <Arrow d="M 785 160 L 785 398" dashed />
+      <Arrow d="M 630 330 L 630 398" dashed />
+      <text x={795} y={372} fontSize={10} fontWeight={600} fill={MUT} {...HALO}>Withdraw application</text>
+      <Box x={500} y={400} w={670} h={56} title="CV: giữ nguyên · Application: Withdrawn — kết thúc" sub="ĐANG TRIỂN KHAI — chưa có trên màn hình" tone="side" />
+      <rect x={14} y={476} width={1172} height={40} rx={8} fill="#fffbeb" stroke={AMB} strokeWidth={1.2} />
+      <text x={30} y={500} fontSize={11} fill={MUT}><tspan fontWeight={800} fill={AMB}>Luật · </tspan>Đơn gắn CV đang chờ bị giữ ở <tspan fontWeight={700} fill={INK}>Not Sent vô thời hạn</tspan> — không gì tự gửi theo giờ. Hệ thống không bao giờ tự từ chối.</text>
+    </Frame>
+  )
+}
+
+/* ── Talent pool — từ công tắc của ứng viên tới lượt mở khoá (tài liệu 16/10/2026) */
+export function TalentPoolFlow() {
+  return (
+    <Frame label="Talent pool: ứng viên bật CV, NTD tìm, đọc, mở khoá" w={1200} h={300}>
+      <Premise title="TALENT POOL — tìm là miễn phí; đọc cần gói hoặc lượt xem; thấy tên và liên hệ thì phải Unlock">
+        Mở khoá <tspan fontWeight={700} fill={INK}>một lần, dùng vĩnh viễn</tspan>, cho cả công ty — kể cả khi ứng viên đã nộp đơn vào chính công ty đó.
+      </Premise>
+      <Box x={30} y={110} w={210} h={76} title="Ứng viên bật" sub="Show CV to employers" />
+      <Arrow d="M 240 148 L 268 148" />
+      <Box x={270} y={110} w={200} h={76} title="Có mặt trong kho" sub="NTD thấy khi CV Qualified" sub2="(CV search status: Showing)" tone="brand" />
+      <Arrow d="M 470 148 L 498 148" />
+      <Box x={500} y={110} w={210} h={76} title="NTD tìm trên /search" sub="tên và liên hệ bị che" />
+      <Arrow d="M 710 148 L 748 148" label="Mở trang CV" lx={729} ly={140} />
+      <Box x={750} y={110} w={190} h={76} title="Đọc nội dung CV" sub="cần gói hoặc" sub2="lượt xem miễn phí (10)" tone="wait" />
+      <Arrow d="M 940 148 L 978 148" tone="brand" label="Unlock" lx={959} ly={140} />
+      <Box x={980} y={110} w={190} h={76} title="Thấy tên, liên hệ, file" sub="trừ 1 credit" sub2="cột Unlocks trên Admin +1" tone="money" />
+      <rect x={14} y={212} width={1172} height={60} rx={8} fill="#fffbeb" stroke={AMB} strokeWidth={1.2} />
+      <text x={30} y={236} fontSize={11} fill={MUT}><tspan fontWeight={800} fill={AMB}>Luật · </tspan>Mỗi ứng viên chỉ bật <tspan fontWeight={700} fill={INK}>1 CV</tspan>. Đơn ứng viên tự nộp thì NTD xem miễn phí ở Candidate management — Talent pool là đường riêng.</text>
+      <text x={30} y={256} fontSize={11} fill={MUT}>Reject CV hoàn credit cho mọi công ty đã mở khoá ứng viên đó.</text>
+    </Frame>
+  )
+}
+
+/* ── Talent pool folder (phía NTD, 16/10/2026) — the only paid move is out of Saved */
+export function TalentPoolFolderFlow() {
+  return (
+    <Frame label="Folder Talent pool: kéo thẻ ra khỏi Saved là mở khoá và trừ credit" w={1200} h={360}>
+      <Premise title="FOLDER TALENT POOL — lưu miễn phí; lần kéo đầu tiên ra khỏi Saved là lần trả tiền">
+        Thẻ trong folder <tspan fontWeight={700} fill={INK}>không phải đơn ứng tuyển</tspan> — kéo thẻ không đổi gì phía ứng viên.
+      </Premise>
+      <Box x={30} y={130} w={190} h={70} title="Tìm kiếm" sub="Save candidate" />
+      <Arrow d="M 220 165 L 258 165" />
+      <Box x={260} y={130} w={200} h={70} title="Folder: cột Saved" sub="tên bị che" />
+      <Arrow d="M 460 165 L 518 165" label="kéo sang cột khác" lx={489} ly={157} />
+      <text x={489} y={182} fontSize={10} textAnchor="middle" fill={MUT} {...HALO}>(chưa mở khoá)</text>
+      <Box x={520} y={130} w={200} h={70} title="Xác nhận trừ credit?" sub="Moving this card spends a credit" tone="wait" />
+      <Arrow d="M 720 165 L 778 165" tone="brand" label="Spend credits and move" lx={749} ly={150} />
+      <Box x={780} y={124} w={200} h={82} title="Mở khoá" sub="thẻ chuyển cột" sub2="thấy tên, liên hệ, file CV" tone="money" />
+      <Arrow d="M 620 200 C 620 250, 360 250, 360 202" label="Don’t move — ở lại Saved, không trừ" lx={490} ly={252} />
+      <Arrow d="M 980 165 L 1008 165" />
+      <Box x={1010} y={90} w={160} h={44} title="Interview 1, 2…" />
+      <Box x={1010} y={146} w={160} h={44} title="Passed" tone="money" />
+      <Box x={1010} y={202} w={160} h={44} title="Not This Time" tone="side" />
+      <rect x={14} y={284} width={1172} height={60} rx={8} fill="#fffbeb" stroke={AMB} strokeWidth={1.2} />
+      <text x={30} y={308} fontSize={11} fill={MUT}><tspan fontWeight={800} fill={AMB}>Luật · </tspan>Thẻ đã mở khoá, hoặc kéo giữa các cột không phải từ Saved: <tspan fontWeight={700} fill={INK}>không trừ credit</tspan>.</text>
+      <text x={30} y={328} fontSize={11} fill={MUT}>Mở khoá một lần dùng vĩnh viễn cho cả công ty — folder khác không trừ lại.</text>
+    </Frame>
+  )
+}
+
+/* ── Talent pool search (phía NTD, 16/10/2026) — two roads to the same unlock */
+export function TalentPoolSearchFlow() {
+  return (
+    <Frame label="Tìm kiếm Talent pool: lưu miễn phí, mở khoá từ trang CV hoặc từ folder" w={1200} h={380}>
+      <Premise title="TÌM · LƯU · MỞ KHOÁ — hai đường tới cùng một lần trả tiền">
+        Tìm, lọc, lưu đều <tspan fontWeight={700} fill={INK}>miễn phí</tspan>. Trả credit khi bấm Unlock trên trang CV, hoặc khi kéo thẻ chưa mở khoá ra khỏi Saved.
+      </Premise>
+      <Box x={30} y={150} w={200} h={70} title="Tìm kiếm" sub="từ khoá + bộ lọc" />
+      <Arrow d="M 230 185 L 278 185" />
+      <Box x={280} y={150} w={200} h={70} title="Kết quả" sub="tên bị che" />
+      <Arrow d="M 480 172 C 520 172, 520 116, 558 116" label="Mở trang CV" lx={520} ly={132} anchor="middle" />
+      <Arrow d="M 480 198 C 520 198, 520 266, 558 266" label="Save candidate (miễn phí)" lx={520} ly={252} anchor="middle" />
+      <Box x={560} y={84} w={240} h={64} title="Trang CV" sub="liên hệ bị che" tone="wait" />
+      <Box x={560} y={234} w={240} h={64} title="Folder: cột Saved" sub="tên bị che" />
+      <Arrow d="M 680 148 L 680 232" label="Save candidate" lx={690} ly={194} anchor="start" />
+      <Arrow d="M 800 116 C 850 116, 850 185, 898 185" tone="brand" label="Unlock: 1 credit" lx={858} ly={140} anchor="start" />
+      <Arrow d="M 800 266 C 850 266, 850 195, 898 195" tone="brand" label="kéo ra khỏi Saved (chưa mở khoá)" lx={858} ly={262} anchor="start" />
+      <Box x={900} y={150} w={270} h={70} title="Thấy tên, liên hệ, file CV" sub="một lần, vĩnh viễn, cho cả công ty" tone="money" />
+      <rect x={14} y={318} width={1172} height={48} rx={8} fill="#fffbeb" stroke={AMB} strokeWidth={1.2} />
+      <text x={30} y={340} fontSize={11} fill={MUT}><tspan fontWeight={800} fill={AMB}>Luật · </tspan>Ứng viên đã nộp đơn vào công ty thì xem miễn phí ở <tspan fontWeight={700} fill={INK}>Candidate management › Jobs</tspan>; tìm thấy họ trong Talent pool thì vẫn cần mở khoá.</text>
     </Frame>
   )
 }
@@ -977,4 +1113,9 @@ export const DIAGRAMS: Record<string, () => JSX.Element> = {
   'cm-kanban': CmKanbanFlow,
   'cm-candidate-status': CmCandidateStatusFlow,
   'cm-notify': CmNotifyFlow,
+  'cv-create': CvCreateFlow,
+  'cvr-overview': CvReviewFlow,
+  'tp-overview': TalentPoolFlow,
+  'tpe-flow': TalentPoolFolderFlow,
+  'tpe-search': TalentPoolSearchFlow,
 }

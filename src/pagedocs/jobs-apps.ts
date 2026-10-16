@@ -581,7 +581,7 @@ export const JOBS_APPS_PAGE_DOCS: Record<string, PageDoc> = {
     watch: [
       '**“Rejected” là CV Status, không phải Application Status.** Cột *Application Status* chỉ in *Not Sent · Sent · Recall*, không bao giờ in *Rejected*.',
       '**Operator hoặc Admin mở / tải CV ở đây KHÔNG bật flag** Viewed / Downloaded — hai cột này chỉ phản ánh hành động của NTD.',
-      '**Recall không hoàn tác được** — ứng viên phải nộp hồ sơ mới. Recall chỉ làm được từ hồ sơ *Sent*, và chỉ Admin / CS.',
+      '**Recall không hoàn tác được** — ứng viên không nộp lại được vào job đó (*CV review §6*). Recall chỉ làm được từ hồ sơ *Sent*, và chỉ Admin / CS.',
       'Hai Operator cùng xử lý 1 CV: thao tác đầu tiên được lưu, người sau nhận *“CV đã được xử lý”*.',
       'Mở hồ sơ ứng viên là chạm dữ liệu cá nhân và **bị ghi log** — cả lần mở danh sách (kèm số dòng) lẫn lần mở từng hồ sơ (`application.read`).',
       'Cách diễn đạt *Not Sent* / *Cannot Read* / *Not Enough Information* là **chỉ dành cho Admin**. Ứng viên ở đầu kia của dòng đó thấy **In Review**.',
@@ -601,7 +601,7 @@ export const JOBS_APPS_PAGE_DOCS: Record<string, PageDoc> = {
         cols: ['Cột', 'Ai làm thay đổi', 'Giá trị'],
         rows: [
           ['**CV Status**', 'Hệ thống (tự động), Operator (Approve / Reject), Admin / CS (Recall)', 'Qualified · Cannot Read · Not Enough Information · Rejected'],
-          ['**Application Status**', 'Hệ thống (Sent khi Qualified), Admin / CS (Recall)', 'Not Sent · Sent · Recall — **chỉ 3 giá trị**'],
+          ['**Application Status**', 'Hệ thống (Sent khi Qualified), Admin / CS (Recall)', 'Not Sent · Sent · Recall — **3 giá trị**; thêm *Withdrawn* khi *Withdraw application* triển khai xong'],
           ['**Stage · Employer**', '**NTD** (kéo thẻ) — Admin chỉ đọc', 'Application Received · In Process (gom mọi cột giữa) · Passed · Not This Time. “—” khi Not Sent'],
           ['**Viewed**', 'NTD mở chi tiết CV (lần đầu)', '✓ kèm ngày. “—” nếu chưa hoặc Not Sent'],
           ['**Downloaded**', 'NTD tải CV, từng file hoặc Download All (lần đầu)', '✓ kèm ngày. “—” nếu chưa hoặc Not Sent'],
@@ -653,6 +653,7 @@ export const JOBS_APPS_PAGE_DOCS: Record<string, PageDoc> = {
           ['**Not sent**', 'Application Status = Not Sent (gồm Cannot Read, Not Enough Information, Rejected)'],
           ['**Sent**', 'Application Status = Sent'],
           ['**Recall**', 'Application Status = Recall'],
+          ['**Withdrawn** — *đang triển khai*', 'Application Status = Withdrawn (ứng viên xin rút đơn, CS thực hiện — **CV review §7**)'],
         ],
       },
       {
@@ -779,7 +780,7 @@ export const JOBS_APPS_PAGE_DOCS: Record<string, PageDoc> = {
           ['**Chỉ hồ sơ Sent lên Kanban**', 'Hồ sơ Not Sent **không bao giờ** xuất hiện — kể cả ô đếm, tìm kiếm, filter, Download All. Chặn ở tầng API.'],
           ['**Liên hệ mở sẵn**', 'Nộp đơn **chính là sự đồng ý của ứng viên**, nên liên hệ trên bảng ứng viên mở sẵn, không tốn credit.'],
           ['**Passed / Not This Time không phải điểm khoá**', 'NTD vẫn kéo thẻ **vào và ra** hai cột cuối được.'],
-          ['**Hồ sơ đã Recall**', 'NTD **không thao tác được**. Cách hiển thị (gỡ thẻ + thông báo, hay thẻ xám khoá thao tác) **chờ xác nhận**.'],
+          ['**Hồ sơ đã Recall**', 'Nhãn thu hồi, toàn bộ thông tin CV **bị khoá** (không xem, không tải, không kéo thẻ), nhận email.'],
           ['**Ứng viên được cập nhật ngay**', 'Mỗi lần kéo thẻ đổi trạng thái ứng viên thấy trên *Việc đã ứng tuyển* ngay, không email lẻ; cuối tuần có 1 email tổng hợp.'],
         ],
       },
@@ -796,7 +797,7 @@ export const JOBS_APPS_PAGE_DOCS: Record<string, PageDoc> = {
           ['3 · X mở CV, rồi tải CV', 'Đơn X: *Application Viewed* → *Application Saved*', 'Đơn X: ✓ Viewed, ✓ Downloaded', '—'],
           ['4 · X kéo Lan sang *Interview 1*', 'Đơn X: *In Process*', 'Đơn X: Stage *In Process*', 'X: thẻ ở *Interview 1*'],
           ['5 · Y kéo Lan sang *Not This Time*', 'Đơn Y: *Not This Time*', 'Đơn Y: Stage *Not This Time*', '—'],
-          ['6 · CS **Recall** đơn Z (lý do *Not a CV*)', 'Cả 3 đơn: *Application Withdrawn*', 'Cả 3 dòng: Rejected · **Recall**; Stage giữ vị trí lúc thu hồi', 'X, Y, Z: không thao tác được nữa (cách hiển thị chờ xác nhận)'],
+          ['6 · CS **Recall** đơn Z (lý do *Not a CV*)', 'Cả 3 đơn: *Application Withdrawn*', 'Cả 3 dòng: Rejected · **Recall**; Stage giữ vị trí lúc thu hồi', 'X, Y, Z: nhãn thu hồi, thông tin CV bị khoá, mỗi công ty nhận email'],
         ],
         note: 'Bước 6 là chỗ dễ quên nhất: Recall một hồ sơ thu hồi **mọi** hồ sơ dùng cùng bản CV 1.1 — kể cả đơn X đang ở *Interview 1*. Nếu Lan đã nộp X bằng một **bản CV khác**, đơn X không bị đụng tới.',
       },
@@ -804,7 +805,7 @@ export const JOBS_APPS_PAGE_DOCS: Record<string, PageDoc> = {
       {
         kind: 'open',
         text:
-          '**Còn cần chốt.** (1) Cách NTD thấy một hồ sơ đã Recall, và thông báo cho NTD khi bị thu hồi. (2) Hồ sơ nộp trong lúc CV đang bóc tách (~3 phút): chặn nút tạo CV, hay giữ Not Sent rồi tự xử lý. (3) Hồ sơ bị rút do khoá / xoá tài khoản (§6). (4) Hiện tên từng vòng ở cột Stage (*In Process · Interview 1*) là **giai đoạn 2**.',
+          '**Còn cần chốt.** (1) Nộp lại vào job sau Recall — tài liệu và chữ trên hộp Recall nói khác nhau (**CV review §6**). (2) Hồ sơ nộp trong lúc CV đang bóc tách (~3 phút): chặn nút tạo CV, hay giữ Not Sent rồi tự xử lý. (3) Hồ sơ bị rút do khoá / xoá tài khoản (§6). (4) Hiện tên từng vòng ở cột Stage (*In Process · Interview 1*) là **giai đoạn 2**.',
       },
       {
         kind: 'p',
@@ -878,13 +879,29 @@ export const JOBS_APPS_PAGE_DOCS: Record<string, PageDoc> = {
         ],
       },
       {
+        kind: 'shot',
+        src: '/shots/cv/apply-cv-picker.png',
+        where: 'Jobseeker site',
+        caption: '**Change CV** mở danh sách mọi CV của ứng viên (*Select the resume you wish to apply for.*), mỗi CV có *Edit* và *Preview*; **Upload CV** ở cuối danh sách.',
+        note: 'Ảnh chụp trên dev ngày 15/10/2026.',
+      },
+      {
+        kind: 'list',
+        items: [
+          '**Change CV** mở danh sách **mọi** CV của ứng viên, kể cả CV không hiển thị cho NTD.',
+          'CV **Unfinished** bị làm mờ, không chọn được.',
+          '**Upload CV** ở cuối danh sách: chuyển sang trang Upload, tải xong quay lại job.',
+          'Mỗi ứng viên **chỉ nộp được 1 lần vào mỗi job**. Bấm Apply ở job đã nộp sẽ hiện *You’ve applied for this job* kèm nút **Go to My applications**. Trạng thái sau khi nộp: **Candidate management**.',
+        ],
+      },
+      {
         kind: 'table',
         heading: 'Server kiểm gì khi nhận một lần nộp — theo đúng thứ tự',
         note: 'Mọi kiểm tra chạy **trong một giao dịch**: hỏng ở bước nào thì không có gì được ghi (không đơn nửa vời, không bộ đếm nhảy). Batch apply chạy đúng chuỗi này cho **từng** tin.',
         cols: ['#', 'Kiểm', 'Không đạt thì'],
         rows: [
           ['1', '**Tin còn nhận đơn**: *Open* · Exposure On · công ty Active **và có MST** · chưa qua hạn hiển thị', '*This job posting is no longer available.* — cùng một câu cho tin không tồn tại, bị ẩn hay đã hết hạn; **kể cả người từng nộp tin đó**'],
-          ['2', '**Chưa có đơn đang chạy** vào tin này', '*You have already applied to this job.* Đơn cũ đã bị **Recall** (*Application Withdrawn*) thì ứng viên **phải nộp hồ sơ mới** — nộp lại được. Các trạng thái kết thúc khác: xem khung *chưa chốt* ở §3'],
+          ['2', '**Chưa có đơn đang chạy** vào tin này', '*You have already applied to this job.* Mỗi ứng viên **chỉ nộp 1 lần vào mỗi job** — kể cả khi hồ sơ cũ đã bị Recall (*CV review §6*, còn chưa chốt)'],
           ['3', '**Đồng ý đúng phiên bản hiện hành** của văn bản xử lý dữ liệu', 'Bị từ chối — phiên bản cũ (mở panel từ trước khi văn bản đổi) không được ghi nhận'],
           ['4', '**CV thuộc đúng ứng viên** và **chưa bị HQ từ chối**', '*That CV can’t be sent yet. Pick another one.* — panel vẫn mở để chọn CV khác'],
           ['5', 'Tạo đơn, **chụp lại** file + nội dung CV theo đơn, ghi nguồn (UTM / referrer lần chạm đầu)', '—'],
@@ -896,7 +913,7 @@ export const JOBS_APPS_PAGE_DOCS: Record<string, PageDoc> = {
         heading: 'Khi nộp không được',
         cols: ['Tình huống', 'Ứng viên thấy'],
         rows: [
-          ['Đã có đơn **đang chạy** vào tin này', '*You have already applied to this job.* Đơn đã bị Recall (*Application Withdrawn*) thì **nộp hồ sơ mới** được.'],
+          ['Đã có đơn **đang chạy** vào tin này', '*You have already applied to this job.* Mỗi job chỉ nộp 1 lần, kể cả sau Recall.'],
           ['Tin vừa đóng / hết hạn / bị ẩn trong lúc đang mở panel', '*This job posting is no longer available.*'],
           ['CV không gửi được', '*That CV can’t be sent yet. Pick another one.* — panel vẫn mở để chọn CV khác.'],
           ['Nộp quá **20 lần / phút** (tính theo tài khoản)', '*Too many requests. Please try again in a moment.* Ngoài giới hạn này **không có trần** số đơn.'],
@@ -996,7 +1013,7 @@ export const JOBS_APPS_PAGE_DOCS: Record<string, PageDoc> = {
       {
         kind: 'open',
         text:
-          '**Nộp lại cùng một tin.** Tài liệu 14/10 chỉ nói hồ sơ *Application Withdrawn* thì ứng viên **phải nộp hồ sơ mới**. Chưa chốt: hồ sơ *Invalid Application*, *Passed*, *Not This Time* có chặn nộp lại tin đó không; và hồ sơ bị rút do khoá / xoá tài khoản hay xoá CV hiện trạng thái gì (không có trong 9 trạng thái).',
+          '**Nộp lại cùng một tin.** Tài liệu *Create CV* và *CV review* (15/10): mỗi ứng viên **chỉ nộp 1 lần vào mỗi job**, kể cả sau Recall / Withdraw. Nhưng hộp Recall ghi *“the candidate must apply again”* và tài liệu *Candidate management* (14/10) ghi “phải nộp hồ sơ mới” — chưa thống nhất (**CV review §6**). Cũng chưa chốt: hồ sơ bị rút do khoá / xoá tài khoản hay xoá CV hiện trạng thái gì.',
       },
       {
         kind: 'open',
@@ -1019,7 +1036,7 @@ export const JOBS_APPS_MODULE_DOCS: Record<string, ModuleDoc> = {
     headline: [
       '**Một nguồn dữ liệu, ba góc nhìn.** Mỗi hồ sơ lưu **CV Status** (*Qualified · Cannot Read · Not Enough Information · Rejected*), **Application Status** (*Not Sent · Sent · Recall* — chỉ 3 giá trị), **Pipeline Status** (vị trí thẻ) và **2 flag** (Viewed, Downloaded). Admin, NTD và ứng viên chỉ đọc chúng theo cách khác nhau.',
       '**Hồ sơ chỉ tới NTD khi CV Status = Qualified** — ngay lúc nộp, hoặc lúc Operator **Approve**. Approve, Reject và Recall áp cho **mọi hồ sơ dùng cùng phiên bản CV**, ở mọi công ty.',
-      '**Ứng viên không tự thu hồi được hồ sơ.** Chỉ Admin / CS **Recall** một hồ sơ đã gửi — không hoàn tác; ứng viên phải nộp hồ sơ mới.',
+      '**Ứng viên không tự thu hồi được hồ sơ.** Chỉ Admin / CS **Recall** một hồ sơ đã gửi — không hoàn tác; ứng viên không nộp lại được vào job đó (*CV review §6*). Ứng viên muốn rút đơn thì liên hệ CS (*Withdraw application* — **đang triển khai**).',
     ],
     blocks: [
       { kind: 'h', text: '§0 · Ba site, năm màn hình' },
@@ -1079,7 +1096,7 @@ export const JOBS_APPS_MODULE_DOCS: Record<string, ModuleDoc> = {
           ['NTD mở CV (thẻ ở cột đầu)', 'Giữ nguyên', 'Giữ nguyên; lưu `viewed_at`', 'Application Viewed', '—'],
           ['NTD tải CV (thẻ ở cột đầu)', 'Giữ nguyên', 'Giữ nguyên; lưu `downloaded_at`', 'Application Saved', '—'],
           ['NTD kéo thẻ sang cột giữa / Passed / Not This Time', 'Giữ Qualified · Sent', 'Cột mới', 'In Process / Passed / Not This Time', 'Thẻ ở cột mới'],
-          ['Recall, hoặc cùng phiên bản CV bị Reject ở hồ sơ khác — hồ sơ đã gửi', 'Rejected · Recall', 'Giữ vị trí lúc thu hồi', 'Application Withdrawn', 'Không thao tác được (cách hiển thị chờ xác nhận)'],
+          ['Recall, hoặc cùng phiên bản CV bị Reject ở hồ sơ khác — hồ sơ đã gửi', 'Rejected · Recall', 'Giữ vị trí lúc thu hồi', 'Application Withdrawn', 'Nhãn thu hồi, toàn bộ thông tin CV **bị khoá** (không xem, không tải, không kéo thẻ), nhận email'],
           ['Phiên bản CV khác bị Reject / Recall', 'Không đổi', 'Không đổi', 'Không đổi', 'Không đổi'],
         ],
       },
@@ -1108,7 +1125,7 @@ export const JOBS_APPS_MODULE_DOCS: Record<string, ModuleDoc> = {
           ['**Ứng viên**', 'Mỗi khi trạng thái hiển thị thay đổi', 'Cập nhật ngay trên *Việc đã ứng tuyển*. **Không** gửi email lẻ'],
           ['**Ứng viên**', 'Hàng tuần', '1 email tổng hợp cuối tuần, gom theo nhóm trạng thái'],
           ['**NTD**', 'Hồ sơ chuyển sang **Sent** (CV đạt lúc nộp, hoặc Operator Approve)', 'Email báo có đơn ứng tuyển mới. Hồ sơ Not Sent không gửi email'],
-          ['**NTD**', 'Hồ sơ bị thu hồi', '**Chờ xác nhận** kênh và cách hiển thị'],
+          ['**NTD**', 'Hồ sơ bị thu hồi', '**Email** thông báo; thẻ mang nhãn thu hồi, thông tin CV bị khoá'],
           ['**NTD**', 'Ứng viên khoá / xoá tài khoản, xoá CV (build 08/10)', 'Email + chuông *ngừng sử dụng dữ liệu* — chỉ công ty đang giữ hồ sơ đã gửi'],
         ],
       },
@@ -1142,7 +1159,7 @@ export const JOBS_APPS_MODULE_DOCS: Record<string, ModuleDoc> = {
       {
         kind: 'open',
         text:
-          '**Những điểm cần chốt.** (1) NTD thấy gì và được báo thế nào khi hồ sơ bị **Recall**. (2) **CV Search Status** — đề xuất chỉ CV Qualified mới *Showing*. (3) Hồ sơ nộp trong lúc CV đang **bóc tách** (~3 phút). (4) Hồ sơ bị rút do **khoá / xoá tài khoản, xoá CV** chưa có trong 9 trạng thái. (5) **Thư xin việc** chưa được lưu lên hồ sơ (xem *How to apply*). (6) Hiện tên từng vòng ở cột Stage là **giai đoạn 2**.',
+          '**Những điểm cần chốt.** (1) Nộp lại vào job sau **Recall** — tài liệu và chữ trên hộp Recall nói khác nhau (**CV review §6**). (2) **CV Search Status** — đề xuất chỉ CV Qualified mới *Showing*. (3) Hồ sơ nộp trong lúc CV đang **bóc tách** (~3 phút). (4) Hồ sơ bị rút do **khoá / xoá tài khoản, xoá CV** chưa có trong 9 trạng thái. (5) **Thư xin việc** chưa được lưu lên hồ sơ (xem *How to apply*). (6) Hiện tên từng vòng ở cột Stage là **giai đoạn 2**.',
       },
     ],
   },

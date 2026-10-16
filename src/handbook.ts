@@ -200,7 +200,7 @@ export const WORKFLOW: Workflow = {
                 '3. Show CV to employers',
                 'Công tắc trên từng CV ở *My CVs*',
                 'Ứng viên vào **kho ứng viên**. **Mỗi người chỉ một CV** được bật; bật CV khác là tắt CV cũ.',
-                'Bật ở đâu khác không tính — từ SRM-777 kho chỉ hỏi **“đã bật một CV chưa”**. CV đã bị *Từ chối* thì không bật được.',
+                'NTD chỉ tìm thấy khi CV đang bật là **Qualified** (*CV search status: Showing*); CV chưa đạt hay bị từ chối thì *Hidden*. CV đã bị *Từ chối* thì không bật được.',
               ],
               [
                 '4. Máy quét CV / CV review',
@@ -218,7 +218,7 @@ export const WORKFLOW: Workflow = {
                 '6. Tìm việc & nộp đơn',
                 'Jobseeker site: trang chi tiết tin → **Apply**; nộp xong có hộp **Batch apply**',
                 'Một **đơn ứng tuyển** = một CV gửi tới một tin. Đơn **chụp lại** nội dung đã gửi: file CV tại đúng version lúc nộp và các mục của hồ sơ — ứng viên sửa CV sau đó không đổi thứ NTD đã nhận. Batch apply gửi **cùng CV đó**, **không kèm cover letter**, tối đa **5 tin** một lần.',
-                'Không nộp được → tin đã đóng / quá hạn / công ty không Active (*no longer available*), hoặc đã có một đơn **đang chạy** vào tin đó. Đơn đã bị Recall (*Application Withdrawn*) thì ứng viên **nộp hồ sơ mới** được.',
+                'Không nộp được → tin đã đóng / quá hạn / công ty không Active (*no longer available*), hoặc đã có một đơn **đang chạy** vào tin đó. Mỗi job chỉ nộp **1 lần**, kể cả khi đơn cũ đã bị Recall.',
               ],
               [
                 '7. Đơn tới nhà tuyển dụng',
