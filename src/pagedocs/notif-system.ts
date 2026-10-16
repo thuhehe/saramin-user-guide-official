@@ -554,7 +554,7 @@ export const NOTIF_SYSTEM_PAGE_DOCS: Record<string, PageDoc> = {
       'Chọn tab của danh mục cần sửa → tìm theo Code hoặc tên → *New …* hoặc sửa một dòng. Tab cây (Job taxonomy, Industries) thêm cấp con ngay trên dòng cha.',
       'Kỹ năng bị CV viết khác chính tả: mở dòng trên tab **Skills** → thêm **alias** (chỉ Skills có alias). Gộp 2 kỹ năng trùng nghĩa cũng dùng alias, **không xóa cái này rồi sửa tay cái kia**.',
       'Tab **Missing skills**: đọc gợi ý → **Approve** → chọn *thêm alias* hoặc *tạo kỹ năng mới* → *Add and back-fill* → thông báo số alias thêm, số hồ sơ cập nhật, số CV được nhả.',
-      'Sửa hàng loạt: **Import / Export** → tải file → sửa → tải lên → đọc bản **xem trước** (số dòng thêm / sửa / xóa / giữ nguyên) → *Apply*.',
+      'Sửa hàng loạt: **Import / Export** → tải file → sửa → tải lên → đọc bản **xem trước** (số dòng thêm / sửa / xóa / giữ nguyên) → *Apply*. File Excel tải về có sẵn một sheet **Hướng dẫn** ghi cách điền và cách Import / Export — đọc sheet đó trước khi sửa file.',
     ],
     watch: [
       'Mục menu Master data hiện theo quyền `region:read`. Thiếu quyền một tab thì chỉ tab đó vắng — không phải cả trang hỏng.',
