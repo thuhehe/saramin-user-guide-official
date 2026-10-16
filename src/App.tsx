@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 import PAGES from './pages.json'
+import UPDATED from './updated.json'
 import { WORKFLOW, adminUrl } from './handbook'
 import type { WfBlock, WfSection } from './handbook'
 import { MODULE_DOCS, PAGE_DOCS } from './docs'
@@ -130,6 +131,21 @@ export function App() {
     window.addEventListener('popstate', onPop)
     return () => window.removeEventListener('popstate', onPop)
   }, [])
+
+  /* A section link (/trang/talent-pool#muc-3-…) lands on its section, on first
+     load and after back / forward. Tried twice because screenshots above the
+     section load lazily and push it down after the first scroll. */
+  useEffect(() => {
+    const id = decodeURIComponent(window.location.hash.slice(1))
+    if (!id) return
+    const go = () => document.getElementById(id)?.scrollIntoView({ block: 'start' })
+    const raf = requestAnimationFrame(go)
+    const t = setTimeout(go, 450)
+    return () => {
+      cancelAnimationFrame(raf)
+      clearTimeout(t)
+    }
+  }, [sel])
 
   const hits = useMemo(() => {
     const t = q.trim().toLowerCase()
@@ -354,16 +370,26 @@ function Home({ onPick }: { onPick: (s: Sel) => void }) {
 function PageView({ p, dev, onModule }: { p: Page; dev: boolean; onModule: () => void }) {
   const d = PAGE_DOCS[p.key]
   const mod = MODULE_DOCS[p.group]
+  const iso = (UPDATED as Record<string, string>)[p.key]
+  const updated = iso && iso.split('-').reverse().join('/')
 
   return (
     <article>
       <p className="font-mono text-[10.5px] uppercase tracking-[0.16em] text-faint">{p.group}</p>
       <div className="mt-1 flex flex-wrap items-end justify-between gap-x-6 gap-y-2 border-b-2 border-ink pb-3">
         <h1 className="text-[30px] font-bold leading-[1.1] tracking-[-0.02em]">{p.label}</h1>
-        <a href={pageUrl(p)} target="_blank" rel="noreferrer"
-           className="rounded-md border border-brand px-3 py-1.5 text-[12px] font-medium text-brand hover:bg-brand hover:text-white">
-          Mở trang này ↗
-        </a>
+        <div className="flex items-center gap-x-4">
+          {/* The last day this page's doc entry changed — from git blame, see scripts/gen-updated.mjs */}
+          {updated && (
+            <span className="font-mono text-[11px] text-faint">
+              Updated <span className="text-ink/70">{updated}</span>
+            </span>
+          )}
+          <a href={pageUrl(p)} target="_blank" rel="noreferrer"
+             className="rounded-md border border-brand px-3 py-1.5 text-[12px] font-medium text-brand hover:bg-brand hover:text-white">
+            Mở trang này ↗
+          </a>
+        </div>
       </div>
 
       <dl className="mt-3 flex flex-wrap gap-x-8 gap-y-2 border-b border-line pb-3">
@@ -374,6 +400,15 @@ function PageView({ p, dev, onModule }: { p: Page; dev: boolean; onModule: () =>
       </dl>
 
       {p.what && <p className="mt-4 max-w-[76ch] text-[14.5px] leading-[1.7] text-ink/80">{md(p.what)}</p>}
+
+      <SectionIndex
+        titles={[
+          ...(d?.logic?.length ? ['Logic phía sau'] : []),
+          ...(d?.how?.length ? ['Hướng dẫn sử dụng'] : []),
+          ...(d?.watch?.length ? ['Cần để ý'] : []),
+          ...(d?.blocks ?? []).flatMap((b) => (b.kind === 'h' ? [b.text] : [])),
+        ]}
+      />
 
       <div className="mt-7 space-y-7">
         {d?.logic?.length ? <Bullets title="Logic phía sau" items={d.logic} /> : null}
@@ -506,10 +541,12 @@ function DocBlockView({ b }: { b: DocBlock }) {
   if (b.kind === 'list') return <Bullets title={b.heading ?? ''} items={b.items} />
 
   if (b.kind === 'h') {
+    const id = anchorId(b.text)
     return (
-      <h2 className="!mt-12 flex flex-wrap items-baseline gap-x-3 border-b-2 border-ink pb-2 text-[21px] font-bold leading-[1.2] tracking-[-0.015em]">
+      <h2 id={id} className="group !mt-12 flex scroll-mt-6 flex-wrap items-baseline gap-x-3 border-b-2 border-ink pb-2 text-[21px] font-bold leading-[1.2] tracking-[-0.015em]">
         {md(b.text)}
         {b.path && <code className="font-mono text-[11px] font-normal text-faint">{b.path}</code>}
+        <SectionLink id={id} />
       </h2>
     )
   }
@@ -553,7 +590,7 @@ function DocBlockView({ b }: { b: DocBlock }) {
     const D = DIAGRAMS[b.id]
     return D ? (
       <section>
-        {b.heading && <h2 className="border-b border-ink pb-1.5 text-[15px] font-bold tracking-tight">{b.heading}</h2>}
+        {b.heading && <SubHeading text={b.heading} />}
         {b.note && <p className="mt-2 max-w-[78ch] text-[12.5px] leading-[1.6] text-muted">{md(b.note)}</p>}
         <div className="mt-3">
           <D />
@@ -577,7 +614,10 @@ function DocBlockView({ b }: { b: DocBlock }) {
     return (
       <section className="border border-line bg-surface p-4">
         <p className="font-mono text-[9.5px] uppercase tracking-[0.14em] text-brand">Ví dụ</p>
-        <h2 className="mt-0.5 text-[15px] font-bold tracking-tight">{b.heading}</h2>
+        <h2 id={anchorId(b.heading)} className="group mt-0.5 flex scroll-mt-6 flex-wrap items-baseline gap-x-3 text-[15px] font-bold tracking-tight">
+          {b.heading}
+          <SectionLink id={anchorId(b.heading)} />
+        </h2>
         <p className="mt-2 max-w-[78ch] text-[12.5px] leading-[1.65] text-ink/75">{md(b.scenario)}</p>
         <div className="mt-3 overflow-x-auto">
           <table className="w-full min-w-[620px] border-collapse text-left">
@@ -606,7 +646,7 @@ function DocBlockView({ b }: { b: DocBlock }) {
 
   return (
     <section>
-      {b.heading && <h2 className="border-b border-ink pb-1.5 text-[15px] font-bold tracking-tight">{b.heading}</h2>}
+      {b.heading && <SubHeading text={b.heading} />}
       {b.note && <p className="mt-2 max-w-[78ch] text-[12.5px] leading-[1.6] text-muted">{md(b.note)}</p>}
       <div className="mt-2 overflow-x-auto">
         <table className="w-full min-w-[640px] border-collapse text-left">
@@ -635,7 +675,7 @@ function DocBlockView({ b }: { b: DocBlock }) {
 function Bullets({ title, items, warn }: { title: string; items: string[]; warn?: boolean }) {
   return (
     <section>
-      {title && <h2 className="border-b border-ink pb-1.5 text-[15px] font-bold tracking-tight">{title}</h2>}
+      {title && <SubHeading text={title} />}
       <ul className="mt-2.5 max-w-[78ch] space-y-2">
         {items.map((t, i) => (
           <li key={i} className={cx('text-[13px] leading-[1.7]', warn ? 'border-l-2 border-ink/25 pl-4 text-ink/75' : 'flex gap-3 text-ink/80')}>
@@ -651,7 +691,7 @@ function Bullets({ title, items, warn }: { title: string; items: string[]; warn?
 function Steps({ title, items }: { title: string; items: string[] }) {
   return (
     <section>
-      {title && <h2 className="border-b border-ink pb-1.5 text-[15px] font-bold tracking-tight">{title}</h2>}
+      {title && <SubHeading text={title} />}
       <ol className="mt-2.5 max-w-[78ch] space-y-2">
         {items.map((t, i) => (
           <li key={i} className="flex gap-3 text-[13px] leading-[1.7] text-ink/80">
@@ -791,3 +831,87 @@ function RailItem({ label, to, on, onClick, accent }: { label: string; to: strin
 
 /** **bold** and `code` only — enough to mark a field name, not enough to invite prose. */
 const cx = (...c: (string | false | undefined)[]) => c.filter(Boolean).join(' ')
+
+/* ── section addresses ────────────────────────────────────────────────────────
+   Every heading on a page has its own address — /trang/talent-pool#muc-3-phia-
+   nha-tuyen-dung-search — so one rule can be sent to a client on its own, rather
+   than "open Talent pool and scroll to §3". The id is the heading's own words,
+   de-accented, so the link reads as what it points at; a heading starting with
+   its section number gets "muc-" in front, since an id cannot start with a digit.
+   Renaming a heading changes its id: send the new link after a rename. */
+function anchorId(text: string): string {
+  const s = text
+    .replace(/[*`§]/g, '')
+    .normalize('NFD')
+    .replace(/[̀-ͯ]/g, '')
+    .replace(/đ/g, 'd')
+    .replace(/Đ/g, 'D')
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '')
+    .slice(0, 64)
+    .replace(/-+$/, '')
+  return /^\d/.test(s) ? `muc-${s}` : s
+}
+
+/* The heading's own share button. A real <a href="#id">, so ⌘-click and "copy
+   link address" still work; a plain click copies the full URL and puts the hash
+   in the address bar, which is what someone sharing from a phone needs. Faint
+   until the heading is hovered, so a page of headings does not read as a page
+   of buttons. */
+function SectionLink({ id }: { id: string }) {
+  const [done, setDone] = useState(false)
+  return (
+    <a
+      href={`#${id}`}
+      onClick={async (e) => {
+        if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || e.button !== 0) return
+        e.preventDefault()
+        window.history.replaceState(null, '', `#${id}`)
+        try {
+          await navigator.clipboard.writeText(`${window.location.origin}${window.location.pathname}#${id}`)
+          setDone(true)
+          setTimeout(() => setDone(false), 1600)
+        } catch {
+          /* clipboard blocked — the hash is already in the address bar */
+        }
+      }}
+      title="Chép link tới mục này"
+      className={cx(
+        'whitespace-nowrap font-mono text-[10.5px] font-normal tracking-normal no-underline transition-opacity print:hidden',
+        done ? 'text-brand opacity-100' : 'text-faint opacity-40 hover:text-brand group-hover:opacity-100 focus:opacity-100',
+      )}
+    >
+      {done ? '✓ đã chép link' : '# chép link'}
+    </a>
+  )
+}
+
+/* The smaller heading used above a list, a table or a diagram — addressable too. */
+function SubHeading({ text }: { text: string }) {
+  const id = anchorId(text)
+  return (
+    <h2 id={id} className="group flex scroll-mt-6 flex-wrap items-baseline gap-x-3 border-b border-ink pb-1.5 text-[15px] font-bold tracking-tight">
+      {text}
+      <SectionLink id={id} />
+    </h2>
+  )
+}
+
+/* "Trên trang này" — the page's sections as links, so a reader can see what
+   can be sent before scrolling, and jump. Shown only when there is more than one. */
+function SectionIndex({ titles }: { titles: string[] }) {
+  if (titles.length < 2) return null
+  return (
+    <nav className="mt-5 border-l-2 border-line pl-4 print:hidden" aria-label="Các mục trên trang">
+      <p className="font-mono text-[9.5px] uppercase tracking-[0.14em] text-faint">Trên trang này</p>
+      <ul className="mt-1.5 flex flex-wrap gap-x-5 gap-y-1">
+        {titles.map((t) => (
+          <li key={t}>
+            <a href={`#${anchorId(t)}`} className="text-[12.5px] text-brand no-underline hover:underline">{md(t)}</a>
+          </li>
+        ))}
+      </ul>
+    </nav>
+  )
+}

@@ -4,7 +4,9 @@
   "version": "0.1.0",
   "type": "module",
   "scripts": {
+    "predev": "node scripts/gen-updated.mjs",
     "dev": "vite --strictPort",
+    "prebuild": "node scripts/gen-updated.mjs",
     "build": "tsc -b && vite build",
     "preview": "vite preview"
   },
