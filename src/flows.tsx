@@ -1129,6 +1129,52 @@ export function BoostRotationFlow() {
   )
 }
 
+/* The other kind of region, run for fifteen minutes: a SLIDER, where every live
+   banner is a slide and the period only decides which slide comes first. Drawn
+   because "10 banners, 4 slides → 1–4, then 5–8" is the model people bring to it,
+   and the Home Hero has no pages at all (svn-web `side-banner.tsx`: every ad is a
+   slide, autoplay 3000 ms; svn-be `PeriodicRotation`: one step per period). Only
+   My page pages, by pairs — the comparison table says so, not this drawing. */
+export function BoostSliderFlow() {
+  const xs = [40, 430, 820]
+  const times = ['10:00 – 10:05', '10:05 – 10:10', '10:10 – 10:15']
+  const order = (start: number) => Array.from({ length: 10 }, (_, i) => ((start + i) % 10) + 1)
+  return (
+    <Frame label="Ví dụ vùng có slide: Home Hero, 10 banner, Rotation period 300 giây, trong mười lăm phút" w={1200} h={400}>
+      <Premise title="VÍ DỤ A — banner CÓ SLIDE: Home Hero, 10 banner đang chạy, Rotation period = 300 giây (5 phút)">
+        Slider luôn có <tspan fontWeight={700} fill={INK}>đủ 10 slide</tspan> và tự trượt mỗi 3 giây. Mỗi 5 phút, slide đứng đầu chuyển xuống cuối —
+        chỉ đổi slide người xem thấy <tspan fontWeight={700} fill={INK}>đầu tiên</tspan>.
+      </Premise>
+      {xs.map((x, c) => {
+        const o = order(c)
+        return (
+          <g key={x}>
+            <text x={x + 170} y={98} fontSize={12} fontWeight={800} textAnchor="middle" fill={INK}>{times[c]}</text>
+            <rect x={x} y={110} width={340} height={92} rx={12} fill="var(--color-brand-soft)" stroke={BR} strokeWidth={1.5} />
+            <text x={x + 170} y={142} fontSize={11} textAnchor="middle" fill={MUT}>Mở trang lúc này, slide đầu tiên là</text>
+            <text x={x + 170} y={166} fontSize={16} fontWeight={800} textAnchor="middle" fill={BR}>{`Banner ${o[0]}`}</text>
+            {o.map((_, i) => (
+              <circle key={i} cx={x + 107 + i * 14} cy={186} r={4} fill={i === 0 ? BR : 'var(--color-line)'} />
+            ))}
+            {o.map((n, i) => (
+              <Chip key={n} x={x + i * 34} y={216} w={30} label={String(n)} tone={i === 0 ? 'brand' : 'plain'} />
+            ))}
+            <text x={x + 170} y={264} fontSize={10.5} textAnchor="middle" fill={MUT}>
+              {`Tự trượt mỗi 3 giây: ${o[0]} → ${o[1]} → … → ${o[9]} → ${o[0]} (một vòng 30 giây)`}
+            </text>
+            {c < 2 && <Arrow d={`M ${x + 344} 156 L ${x + 386} 156`} label="+5 phút" lx={x + 365} ly={148} />}
+          </g>
+        )
+      })}
+      <rect x={14} y={290} width={1172} height={96} rx={8} fill="#fffbeb" stroke={AMB} strokeWidth={1.2} />
+      <text x={30} y={313} fontSize={11} fill={MUT}><tspan fontWeight={800} fill={AMB}>Không chia trang · </tspan>10 banner = 10 slide = 10 chấm dưới slider. Không có kiểu “4 slide: 1–4 → 5–8 → 9, 10, 1, 2”.</text>
+      <text x={30} y={334} fontSize={11} fill={MUT}>Qua 10 chu kỳ (<tspan fontWeight={700} fill={INK}>50 phút</tspan>), mỗi banner đứng đầu đúng một lần. Đang xem thì slider <tspan fontWeight={700} fill={INK}>tự trượt</tspan>, không cần tải lại.</text>
+      <text x={30} y={355} fontSize={11} fill={MUT}>Có banner bắt đầu hoặc hết hạn thì số banner đổi — thứ tự <tspan fontWeight={700} fill={INK}>tính lại</tspan>. Chu kỳ nào banner nào đứng đầu là do hệ thống tính; mỗi vùng có điểm xuất phát riêng.</text>
+      <text x={30} y={376} fontSize={11} fill={MUT}>Ví dụ cần <tspan fontWeight={700} fill={INK}>Number of slides ≥ 10</tspan> cho vùng Home Hero — code đặt sẵn 10, dev hiện để <tspan fontWeight={700} fill={INK}>2</tspan> (trang Placements).</text>
+    </Frame>
+  )
+}
+
 export const DIAGRAMS: Record<string, () => JSX.Element> = {
   'product-chain': ProductFlow,
   'crm-chain': CrmFlow,
@@ -1157,4 +1203,5 @@ export const DIAGRAMS: Record<string, () => JSX.Element> = {
   'tpe-flow': TalentPoolFolderFlow,
   'tpe-search': TalentPoolSearchFlow,
   'boost-rotation': BoostRotationFlow,
+  'boost-slider': BoostSliderFlow,
 }

@@ -967,9 +967,45 @@ export const PRODUCT_SERVICE_PAGE_DOCS: Record<string, PageDoc> = {
     blocks: [
       { kind: 'h', text: 'Phần 1 · Banner booking hoạt động thế nào' },
       {
+        kind: 'table',
+        heading: 'Hai loại banner — có slide và không có slide',
+        note: 'Cùng một luật xoay vòng, nhưng người xem thấy rất khác nhau. Hỏi trước: vùng này **có slide** hay **chỉ có một ô**?',
+        cols: ['', 'Banner CÓ slide (slider)', 'Banner KHÔNG có slide (1 ô)'],
+        rows: [
+          ['Vùng', '**[JS] Homepage - Home Hero** · **[JS] My page - My page banner**', '**[JS] Homepage - Home Ribbon** · **[JS] Homepage - Home Middle** · **[JS] Job detail - Bottom Banner** · **Company page - Long banner**'],
+          ['Trên màn hình', '**Mọi** banner đang chạy đều nằm trong slider. Home Hero: **một** banner mỗi lần, số chấm dưới slider = số banner. My page: **hai** banner mỗi lần, lật theo cặp (1–2 → 3–4 → …)', '**Một** banner — cái đứng đầu danh sách'],
+          ['Banner đổi khi nào', 'Slider **tự trượt**: Home Hero mỗi **3 giây**; My page mỗi (Rotation period ÷ số banner) giây, tối thiểu 2 giây', 'Khi sang **chu kỳ Rotation period** mới — và người xem phải **tải lại trang**'],
+          ['Rotation period làm gì', 'Chỉ đổi **slide nào đứng đầu** — slide người xem thấy đầu tiên khi mở trang', 'Đổi **banner nào được hiện**'],
+          ['Đang xem có tự đổi không?', '**Có**', '**Không**'],
+          ['Mỗi banner được thấy', 'Mỗi vòng slider — Home Hero 10 banner × 3 giây = **30 giây** một vòng', '**Một chu kỳ** trong mỗi N chu kỳ (N = số banner đang chạy)'],
+        ],
+      },
+      {
+        kind: 'diagram',
+        id: 'boost-slider',
+        heading: 'Ví dụ A — banner có slide: Home Hero, 10 banner, Rotation period 300 giây',
+      },
+      {
+        kind: 'example',
+        heading: 'Ví dụ A — thứ tự slider của Home Hero theo từng chu kỳ 5 phút',
+        scenario:
+          'Vùng **[JS] Homepage - Home Hero** có **10 banner** đang chạy, Rotation period = **300 giây**. Thứ tự gốc 1 → 10; giả sử chu kỳ 10:00–10:05 bắt đầu từ banner 1 (thực tế mỗi vùng có điểm xuất phát riêng). Slider luôn có đủ 10 slide và tự trượt mỗi 3 giây — mỗi 5 phút chỉ đổi **slide đứng đầu**.',
+        cols: ['Thời gian', 'Thứ tự slider', 'Người mở trang lúc này thấy'],
+        rows: [
+          ['10:00 – 10:05', '**1**, 2, 3, 4, 5, 6, 7, 8, 9, 10', 'Banner **1** trước, rồi 2, 3… mỗi 3 giây; hết 10 lại về 1'],
+          ['10:05 – 10:10', '**2**, 3, 4, 5, 6, 7, 8, 9, 10, 1', 'Banner **2** trước'],
+          ['10:10 – 10:15', '**3**, 4, 5, 6, 7, 8, 9, 10, 1, 2', 'Banner **3** trước'],
+          ['…', '…', '…'],
+          ['10:45 – 10:50', '**10**, 1, 2, 3, 4, 5, 6, 7, 8, 9', 'Banner **10** trước'],
+          ['10:50 – 10:55', '**1**, 2, 3, 4, 5, 6, 7, 8, 9, 10', 'Như lúc 10:00 — **mỗi banner đứng đầu một lần mỗi 50 phút**'],
+        ],
+        note:
+          'Slider **không chia trang**: không có kiểu “10 banner, 4 slide → 1–4, rồi 5–8, rồi 9, 10, 1, 2”. Mọi banner đang chạy đều là một slide, nên **số chấm dưới slider = số banner đang chạy**. Có banner bắt đầu hoặc hết hạn thì số banner đổi và thứ tự **tính lại**. *Number of slides* trên trang Placements là số banner **tối đa được chạy cùng lúc** trong vùng, không phải số slide mỗi trang — ví dụ này cần ≥ 10 (code đặt sẵn 10; dev hiện để **2**).',
+      },
+      {
         kind: 'diagram',
         id: 'boost-rotation',
-        heading: 'Ví dụ — một vùng 1 ô, Rotation period 60 giây',
+        heading: 'Ví dụ B — banner không có slide: một vùng 1 ô, Rotation period 60 giây',
       },
       {
         kind: 'table',
