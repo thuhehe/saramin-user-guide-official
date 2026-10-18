@@ -12,7 +12,7 @@
 import { chromium } from 'playwright-core'
 import http from 'node:http'
 
-const BASE = process.env.ADMIN_BASE ?? 'https://dev.admin-svn.topdev.asia'
+const BASE = process.env.ADMIN_BASE ?? 'https://dev-admin.saramin.vn'
 const ctx = await chromium.launchPersistentContext(new URL('../.pw-profile', import.meta.url).pathname, {
   headless: false,
   viewport: { width: 1408, height: 880 },

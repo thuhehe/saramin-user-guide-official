@@ -1091,50 +1091,10 @@ export function TalentPoolSearchFlow() {
   )
 }
 
-/* ── Boosting — banner nào hiện, theo thứ tự nào ───────────────────────────────
+/* ── Boosting — the rotation rule, run for four minutes on one box ───────────────
    Checked against svn-be `BannerService.listVisible` + `PeriodicRotation` and
-   svn-web `banner.service.ts` / `banner-deck.tsx` on 16/10/2026. Lane ① is the
-   server and is the same for every visitor; lane ② is what each region's page
-   does with that list, which is where the regions stop being alike. */
-export function BoostOrderFlow() {
-  const xs = [30, 262, 494, 726, 958]
-  return (
-    <Frame label="Hệ thống xếp danh sách banner của một vùng rồi site vẽ theo kiểu từng vùng" w={1200} h={490}>
-      <Premise title="BANNER NÀO HIỆN, THEO THỨ TỰ NÀO — tính lại mỗi chu kỳ Rotation period">
-        Chu kỳ tính theo <tspan fontWeight={700} fill={INK}>đồng hồ</tspan> (60 s = mỗi phút tròn, 300 s = 10:00–10:05…), không tính từ lúc đăng banner.
-        Trong cùng một chu kỳ, <tspan fontWeight={700} fill={INK}>mọi người xem nhận cùng một thứ tự</tspan>.
-      </Premise>
-
-      <Lane y={82} h={130} label="① HỆ THỐNG XẾP DANH SÁCH — giống nhau cho mọi người xem" />
-      <Box x={30} y={116} w={260} h={80} title="Banner đủ điều kiện" sub="Published · đang trong ngày chạy" sub2="Visible = On" />
-      <Arrow d="M 290 156 L 318 156" />
-      <Box x={320} y={116} w={260} h={80} title="Thứ tự gốc" sub="Starts mới nhất đứng đầu" sub2="KHÔNG theo ngày tạo banner" />
-      <Arrow d="M 580 156 L 608 156" />
-      <Box x={610} y={116} w={260} h={80} title="Xoay vòng mỗi chu kỳ" sub="banner đầu chuyển xuống cuối" sub2="A, B, C → B, C, A → C, A, B" tone="brand" />
-      <Arrow d="M 870 156 L 898 156" />
-      <Box x={900} y={116} w={260} h={80} title="Cắt theo Number of slides" sub="rồi gửi cho site" sub2="site giữ bản này tối đa 60 s" />
-
-      <Lane y={228} h={150} label="② SITE VẼ THEO KIỂU CỦA TỪNG VÙNG" />
-      <path d={`M 1030 196 L 1030 250 M ${xs[0] + 107} 250 L 1030 250`} fill="none" stroke="#b9b6ae" strokeWidth={1.8} />
-      {xs.map((x) => (
-        <path key={x} d={`M ${x + 107} 250 L ${x + 107} 266`} fill="none" stroke="#b9b6ae" strokeWidth={1.8} markerEnd="url(#pf-p)" />
-      ))}
-      <Box x={xs[0]} y={270} w={214} h={86} title="Vùng 1 ô" sub="hiện banner ĐỨNG ĐẦU" sub2="tải lại trang mới đổi" />
-      <Box x={xs[1]} y={270} w={214} h={86} title="Home Hero" sub="mọi banner là một slide" sub2="tự trượt mỗi 3 giây" />
-      <Box x={xs[2]} y={270} w={214} h={86} title="My page" sub="2 banner một lúc" sub2="tự lật: chu kỳ ÷ số banner" />
-      <Box x={xs[3]} y={270} w={214} h={86} title="Cột phải trang Search" sub="hiện TẤT CẢ, xếp chồng" sub2="chu kỳ đổi ai nằm trên" />
-      <Box x={xs[4]} y={270} w={214} h={86} title="Site nhà tuyển dụng [CO]" sub="chọn NGẪU NHIÊN mỗi lần tải" sub2="Rotation period không tác dụng" tone="wait" />
-
-      <rect x={14} y={394} width={1172} height={82} rx={8} fill="#fffbeb" stroke={AMB} strokeWidth={1.2} />
-      <text x={30} y={416} fontSize={11} fill={MUT}><tspan fontWeight={800} fill={AMB}>Luôn đúng · </tspan>Qua N chu kỳ, mỗi banner trong N banner đứng đầu <tspan fontWeight={700} fill={INK}>đúng một lần</tspan> — công bằng cho khách, và trả lời được “14:32 tới lượt ai”.</text>
-      <text x={30} y={437} fontSize={11} fill={MUT}>Rotation period <tspan fontWeight={700} fill={INK}>để trống</tspan> = không bao giờ xoay: banner có Starts mới nhất luôn đứng đầu. · Visible = Off: không hiện, nhưng <tspan fontWeight={700} fill={INK}>vẫn giữ chỗ</tspan> trong vùng.</text>
-      <text x={30} y={458} fontSize={11} fill={MUT}><tspan fontWeight={700} fill={INK}>Popup không xoay</tspan>: Priority nhỏ nhất thắng, hoà thì Starts sớm hơn thắng. · Trang công ty: công ty tự mua thì quảng cáo của họ <tspan fontWeight={700} fill={INK}>thay</tspan> quảng cáo mạng lưới.</text>
-    </Frame>
-  )
-}
-
-/* The rule above, run for four minutes on one box — the picture a client asks
-   for when they hear "it rotates every 60 seconds". */
+   svn-web `banner.service.ts` / `banner-deck.tsx` on 16/10/2026. The picture a
+   client asks for when they hear "it rotates every 60 seconds". */
 export function BoostRotationFlow() {
   const xs = [40, 330, 620, 910]
   const orders = [['A', 'B', 'C'], ['B', 'C', 'A'], ['C', 'A', 'B'], ['A', 'B', 'C']]
@@ -1196,6 +1156,5 @@ export const DIAGRAMS: Record<string, () => JSX.Element> = {
   'tp-overview': TalentPoolFlow,
   'tpe-flow': TalentPoolFolderFlow,
   'tpe-search': TalentPoolSearchFlow,
-  'boost-order': BoostOrderFlow,
   'boost-rotation': BoostRotationFlow,
 }
