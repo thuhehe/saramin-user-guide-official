@@ -976,7 +976,6 @@ export const PRODUCT_SERVICE_PAGE_DOCS: Record<string, PageDoc> = {
         rows: [
           ['**Banner đứng đầu bao lâu** = Rotation period', '**Admin** đặt, riêng cho từng vùng', '**Product settings → Placements** → bút chì → **Edit placement** → ô **Rotation period (s)** → **Save**. Để trống = không bao giờ xoay. Popup không có ô này. Cần quyền `placement:update` (mặc định chỉ hq_admin)'],
           ['Home Hero chuyển sang slide kế', '**Cố định 3 giây** trong code site', '**Không đổi được** trong admin'],
-          ['My page lật sang cặp kế', '**Tự tính** = Rotation period ÷ số banner, tối thiểu 2 giây', 'Đổi **Rotation period** của vùng My page'],
           ['Chu kỳ bắt đầu lúc nào', '**Theo đồng hồ**: 60 s = mỗi phút tròn; 300 s = 10:00, 10:05, 10:10…', 'Không đổi được — **không** tính từ lúc đăng banner'],
           ['Site nhận thứ tự mới', 'Site giữ danh sách **tối đa 60 giây**', 'Không đổi được — có thể **trễ tới ~1 phút**'],
         ],
@@ -990,7 +989,7 @@ export const PRODUCT_SERVICE_PAGE_DOCS: Record<string, PageDoc> = {
       {
         kind: 'table',
         heading: 'Hai loại banner — có slide và không có slide',
-        note: 'Cùng một luật xoay vòng, nhưng người xem thấy rất khác nhau. **Chỉ Home Hero có slide** — mọi vùng còn lại không có. Vài vùng có cách hiện riêng (My page, Search, [CO], Popup): xem bảng **Từng vùng dùng danh sách đó thế nào** ở cuối phần này.',
+        note: 'Cùng một luật xoay vòng, nhưng người xem thấy rất khác nhau. **Chỉ Home Hero có slide** — mọi vùng còn lại không có. Vài vùng có cách hiện riêng (Search, [CO], Popup): xem bảng **Từng vùng dùng danh sách đó thế nào** ở cuối phần này.',
         cols: ['', 'Banner CÓ slide (slider)', 'Banner KHÔNG có slide'],
         rows: [
           ['Vùng', '**[JS] Homepage - Home Hero**', '**Tất cả các banner còn lại**'],
@@ -1019,7 +1018,6 @@ export const PRODUCT_SERVICE_PAGE_DOCS: Record<string, PageDoc> = {
         rows: [
           ['Home Ribbon · Home Middle · Job detail bottom · Company page long banner', '**1** — banner đứng đầu', 'Mỗi chu kỳ Rotation period', '**Không** — tải lại trang mới thấy banner kế'],
           ['Home Hero', '**Tất cả**, mỗi cái một slide', 'Slider tự trượt **mỗi 3 giây**; chu kỳ chỉ đổi slide nào đứng đầu', '**Có**'],
-          ['My page', '**2** một lúc, còn lại sau mũi tên', 'Tự lật mỗi (Rotation period ÷ số banner) giây, tối thiểu 2 giây', '**Có**'],
           ['Search — cột phải', '**Tất cả**, xếp chồng', 'Chu kỳ đổi banner nào nằm trên cùng', '**Không**'],
           ['5 vùng **[CO] Home** trên site nhà tuyển dụng', '**1**', '**Chọn ngẫu nhiên mỗi lần tải trang** — Rotation period không có tác dụng; hai người tải cùng lúc có thể thấy khác nhau', '**Không**'],
           ['Popup', '**1** mỗi người xem', '**Không xoay**: Priority nhỏ nhất thắng, hoà thì Starts sớm hơn thắng; lọc theo Audience và Frequency', '—'],

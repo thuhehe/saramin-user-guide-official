@@ -1133,8 +1133,9 @@ export function BoostRotationFlow() {
    banner is a slide and the period only decides which slide comes first. Drawn
    because "10 banners, 4 slides → 1–4, then 5–8" is the model people bring to it,
    and the Home Hero has no pages at all (svn-web `side-banner.tsx`: every ad is a
-   slide, autoplay 3000 ms; svn-be `PeriodicRotation`: one step per period). Only
-   My page pages, by pairs — the region table says so, not this drawing. */
+   slide, autoplay 3000 ms; svn-be `PeriodicRotation`: one step per period). My
+   page's pair deck (`dashboard-banners.tsx`) is left off the page by review,
+   19/10/2026. */
 export function BoostSliderFlow() {
   const xs = [40, 430, 820]
   const times = ['10:00 – 10:05', '10:05 – 10:10', '10:10 – 10:15']
