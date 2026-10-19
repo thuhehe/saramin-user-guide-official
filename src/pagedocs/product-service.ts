@@ -403,7 +403,7 @@ export const PRODUCT_SERVICE_PAGE_DOCS: Record<string, PageDoc> = {
           ['Trả lời', '**Bao nhiêu quảng cáo được chồng nhau trong cùng ngày**', '**Một lượt kéo dài bao lâu** trước khi đổi sang quảng cáo kế'],
           ['Ảnh hưởng', 'Ai **được chạy** — hệ thống chặn nếu hết chỗ', 'Ai **lên trước** — không chặn ai cả'],
           ['Vùng một-ô', 'Ví dụ sức chứa 6: sáu khách cùng chạy, nhưng người xem **thấy một cái tại một thời điểm**', 'Mỗi 60 s ô đó đổi sang quảng cáo kế; **mọi người trên site trong cùng một lượt thấy cùng một quảng cáo**'],
-          ['Vùng slider / cột / hai-cái-một-lúc', 'Mọi quảng cáo đang chạy **đều trên màn hình**', 'Chỉ đổi thứ tự xuất hiện'],
+          ['Vùng slider / cột', 'Mọi quảng cáo đang chạy **đều trên màn hình**', 'Chỉ đổi thứ tự xuất hiện'],
         ],
       },
       {
@@ -423,7 +423,6 @@ export const PRODUCT_SERVICE_PAGE_DOCS: Record<string, PageDoc> = {
           ['Home', 'Homepage - Popup', 'tuỳ ý', '1', '—', 'Một popup mỗi người xem, chọn theo đối tượng và ưu tiên', '—'],
           ['Search', 'Trang tìm kiếm — Banner cột phải', '273 × 327', '1', '60 s', 'Một cột bên phải — mọi quảng cáo xếp chồng', '546 × 654'],
           ['Job detail', 'Job detail - Bottom Banner', '728 × 90', '6', '60 s', 'Một ô; hiện banner **đứng đầu**, đổi theo chu kỳ', '1456 × 180'],
-          ['My page', 'My page banner', '400 × 152', '10', '60 s', 'Hai cái một lúc, còn lại sau mũi tên; **tự lật**', '800 × 304'],
           ['Company page', 'Company page - Long banner', '994 × 94', '1', '300 s', 'Một dải trên hồ sơ công ty. **Công ty tự mua thì quảng cáo của họ thay quảng cáo mạng lưới**', '1988 × 188'],
           ['Employer home', 'Home - Top strip', '894 × 64', '6', '60 s', 'Một ô; **chọn ngẫu nhiên mỗi lần tải trang** — Rotation period không tác dụng', '1788 × 128'],
           ['Employer home', 'Home - Mid strip', '1200 × 57', '6', '60 s', 'Một ô; **chọn ngẫu nhiên mỗi lần tải trang** — Rotation period không tác dụng', '2400 × 114'],
