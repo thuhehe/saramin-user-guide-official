@@ -968,6 +968,25 @@ export const PRODUCT_SERVICE_PAGE_DOCS: Record<string, PageDoc> = {
       { kind: 'h', text: 'Phần 1 · Banner booking hoạt động thế nào' },
       {
         kind: 'table',
+        heading: 'Rotation period là gì — và đặt ở đâu',
+        note: '**Rotation period = thời gian một banner đứng đầu vùng**, tính bằng giây. Hết mỗi chu kỳ, banner đứng đầu xuống cuối: A, B, C → B, C, A → C, A, B. Trong các mốc thời gian dưới đây, **chỉ Rotation period là admin đặt** — thời gian chuyển slide thì không.',
+        cols: ['Thời gian', 'Ai quyết định', 'Đổi ở đâu'],
+        rows: [
+          ['**Banner đứng đầu bao lâu** = Rotation period', '**Admin** đặt, riêng cho từng vùng', '**Product settings → Placements** → bút chì → **Edit placement** → ô **Rotation period (s)** → **Save**. Để trống = không bao giờ xoay. Popup không có ô này. Cần quyền `placement:update` (mặc định chỉ hq_admin)'],
+          ['Home Hero chuyển sang slide kế', '**Cố định 3 giây** trong code site', '**Không đổi được** trong admin'],
+          ['My page lật sang cặp kế', '**Tự tính** = Rotation period ÷ số banner, tối thiểu 2 giây', 'Đổi **Rotation period** của vùng My page'],
+          ['Chu kỳ bắt đầu lúc nào', '**Theo đồng hồ**: 60 s = mỗi phút tròn; 300 s = 10:00, 10:05, 10:10…', 'Không đổi được — **không** tính từ lúc đăng banner'],
+          ['Site nhận thứ tự mới', 'Site giữ danh sách **tối đa 60 giây**', 'Không đổi được — có thể **trễ tới ~1 phút**'],
+        ],
+      },
+      {
+        kind: 'shot',
+        src: '/shots/ps/placement-edit-display.jpg',
+        where: 'Admin',
+        caption: '**Product settings → Placements** → bút chì → **Edit placement**: ô **Rotation period (s)** — ở đây vùng *Company page - Long banner*, 300 giây. Danh sách Placements có cột **Rotation (s)** để xem nhanh giá trị của mọi vùng.',
+      },
+      {
+        kind: 'table',
         heading: 'Hai loại banner — có slide và không có slide',
         note: 'Cùng một luật xoay vòng, nhưng người xem thấy rất khác nhau. Hỏi trước: vùng này **có slide** hay **chỉ có một ô**?',
         cols: ['', 'Banner CÓ slide (slider)', 'Banner KHÔNG có slide (1 ô)'],
@@ -984,23 +1003,6 @@ export const PRODUCT_SERVICE_PAGE_DOCS: Record<string, PageDoc> = {
         kind: 'diagram',
         id: 'boost-slider',
         heading: 'Ví dụ A — banner có slide: Home Hero, 10 banner, Rotation period 300 giây',
-      },
-      {
-        kind: 'example',
-        heading: 'Ví dụ A — thứ tự slider của Home Hero theo từng chu kỳ 5 phút',
-        scenario:
-          'Vùng **[JS] Homepage - Home Hero** có **10 banner** đang chạy, Rotation period = **300 giây**. Thứ tự gốc 1 → 10; giả sử chu kỳ 10:00–10:05 bắt đầu từ banner 1 (thực tế mỗi vùng có điểm xuất phát riêng). Slider luôn có đủ 10 slide và tự trượt mỗi 3 giây — mỗi 5 phút chỉ đổi **slide đứng đầu**.',
-        cols: ['Thời gian', 'Thứ tự slider', 'Người mở trang lúc này thấy'],
-        rows: [
-          ['10:00 – 10:05', '**1**, 2, 3, 4, 5, 6, 7, 8, 9, 10', 'Banner **1** trước, rồi 2, 3… mỗi 3 giây; hết 10 lại về 1'],
-          ['10:05 – 10:10', '**2**, 3, 4, 5, 6, 7, 8, 9, 10, 1', 'Banner **2** trước'],
-          ['10:10 – 10:15', '**3**, 4, 5, 6, 7, 8, 9, 10, 1, 2', 'Banner **3** trước'],
-          ['…', '…', '…'],
-          ['10:45 – 10:50', '**10**, 1, 2, 3, 4, 5, 6, 7, 8, 9', 'Banner **10** trước'],
-          ['10:50 – 10:55', '**1**, 2, 3, 4, 5, 6, 7, 8, 9, 10', 'Như lúc 10:00 — **mỗi banner đứng đầu một lần mỗi 50 phút**'],
-        ],
-        note:
-          'Slider **không chia trang**: không có kiểu “10 banner, 4 slide → 1–4, rồi 5–8, rồi 9, 10, 1, 2”. Mọi banner đang chạy đều là một slide, nên **số chấm dưới slider = số banner đang chạy**. Có banner bắt đầu hoặc hết hạn thì số banner đổi và thứ tự **tính lại**. *Number of slides* trên trang Placements là số banner **tối đa được chạy cùng lúc** trong vùng, không phải số slide mỗi trang — ví dụ này cần ≥ 10 (code đặt sẵn 10; dev hiện để **2**).',
       },
       {
         kind: 'diagram',
