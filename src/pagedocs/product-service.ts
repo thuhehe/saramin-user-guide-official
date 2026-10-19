@@ -937,6 +937,8 @@ export const PRODUCT_SERVICE_PAGE_DOCS: Record<string, PageDoc> = {
 
   boosting: {
     logic: [
+      '**Rotation period là gì?** Thời gian **một banner đứng đầu** vùng, tính bằng giây. Hết mỗi chu kỳ, banner đứng đầu xuống cuối: A, B, C → B, C, A → C, A, B — qua N chu kỳ, mỗi banner đứng đầu đúng một lần.',
+      '**Rotation period đặt ở đâu?** Admin đặt **riêng cho từng vùng**: **Product settings → Placements** → bút chì → **Edit placement** → ô **Rotation period (s)** → **Save**. Để trống = không xoay. Thời gian **chuyển slide** của Home Hero (**3 giây**) thì **cố định trong code**, không đặt ở đây. Chi tiết và ví dụ: **Phần 1** bên dưới.',
       'Trang này dùng để **đặt banner hoặc popup** lên site Saramin từ Admin — và để **đọc trang Placements trước**, để quảng cáo vào đúng vùng, vừa khung và thật sự hiện ra. Nguồn: trang Notion *Banner booking — Boosting & Placements* (viết trên dev 30/09/2026), đối chiếu lại với build `saramin-vn-admin` `origin/dev` 4595410 ngày 08/10/2026.',
       'Banner và popup **gộp một danh sách duy nhất** (trước là trang Displays hai tab) — mọi quảng cáo trả tiền, miễn phí và nội bộ. Nút **New** hỏi **Placement trước** — chọn vùng popup thì thành popup, chọn vùng khác thì thành banner.',
       'Một banner **không bao giờ chỉ là “tải ảnh lên”**. Nó cưỡi trên một **booking** — quyền (trả tiền hoặc miễn phí) chạy một quảng cáo, ở một vùng, trong một số ngày.',
@@ -988,15 +990,15 @@ export const PRODUCT_SERVICE_PAGE_DOCS: Record<string, PageDoc> = {
       {
         kind: 'table',
         heading: 'Hai loại banner — có slide và không có slide',
-        note: 'Cùng một luật xoay vòng, nhưng người xem thấy rất khác nhau. Hỏi trước: vùng này **có slide** hay **chỉ có một ô**?',
-        cols: ['', 'Banner CÓ slide (slider)', 'Banner KHÔNG có slide (1 ô)'],
+        note: 'Cùng một luật xoay vòng, nhưng người xem thấy rất khác nhau. **Chỉ Home Hero có slide** — mọi vùng còn lại không có. Vài vùng có cách hiện riêng (My page, Search, [CO], Popup): xem bảng **Từng vùng dùng danh sách đó thế nào** ở cuối phần này.',
+        cols: ['', 'Banner CÓ slide (slider)', 'Banner KHÔNG có slide'],
         rows: [
-          ['Vùng', '**[JS] Homepage - Home Hero** · **[JS] My page - My page banner**', '**[JS] Homepage - Home Ribbon** · **[JS] Homepage - Home Middle** · **[JS] Job detail - Bottom Banner** · **Company page - Long banner**'],
-          ['Trên màn hình', '**Mọi** banner đang chạy đều nằm trong slider. Home Hero: **một** banner mỗi lần, số chấm dưới slider = số banner. My page: **hai** banner mỗi lần, lật theo cặp (1–2 → 3–4 → …)', '**Một** banner — cái đứng đầu danh sách'],
-          ['Banner đổi khi nào', 'Slider **tự trượt**: Home Hero mỗi **3 giây**; My page mỗi (Rotation period ÷ số banner) giây, tối thiểu 2 giây', 'Khi sang **chu kỳ Rotation period** mới — và người xem phải **tải lại trang**'],
+          ['Vùng', '**[JS] Homepage - Home Hero**', '**Tất cả các banner còn lại**'],
+          ['Trên màn hình', '**Mọi** banner đang chạy đều nằm trong slider, **một** banner mỗi lần — số chấm dưới slider = số banner', '**Một** banner — cái đứng đầu danh sách'],
+          ['Banner đổi khi nào', 'Slider **tự trượt mỗi 3 giây**', 'Khi sang **chu kỳ Rotation period** mới — và người xem phải **tải lại trang**'],
           ['Rotation period làm gì', 'Chỉ đổi **slide nào đứng đầu** — slide người xem thấy đầu tiên khi mở trang', 'Đổi **banner nào được hiện**'],
           ['Đang xem có tự đổi không?', '**Có**', '**Không**'],
-          ['Mỗi banner được thấy', 'Mỗi vòng slider — Home Hero 10 banner × 3 giây = **30 giây** một vòng', '**Một chu kỳ** trong mỗi N chu kỳ (N = số banner đang chạy)'],
+          ['Mỗi banner được thấy', 'Mỗi vòng slider — 10 banner × 3 giây = **30 giây** một vòng', '**Một chu kỳ** trong mỗi N chu kỳ (N = số banner đang chạy)'],
         ],
       },
       {
