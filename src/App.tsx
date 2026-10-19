@@ -174,7 +174,7 @@ export function App() {
         <aside className="sticky top-0 hidden h-screen w-[262px] shrink-0 overflow-y-auto border-r border-line py-6 pr-5 lg:block print:hidden">
           <button onClick={() => pick({ t: 'home' })} className="block text-left">
             <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-brand">Saramin</p>
-            <p className="mt-0.5 text-[15px] font-bold leading-tight tracking-tight">Admin console</p>
+            <p className="mt-0.5 text-[15px] font-bold leading-tight tracking-tight">User guide</p>
             <p className="text-[11px] text-faint">{dev ? 'bản Developer' : 'bản Sales & nghiệp vụ'}</p>
           </button>
 
