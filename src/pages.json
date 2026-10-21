@@ -418,7 +418,7 @@
   "path": "/content/notices",
   "perm": "site_notice:read",
   "flag": "",
-  "what": "Bảng thông báo và sự kiện của trung tâm trợ giúp (공지/이벤트).",
+  "what": "Bảng thông báo và lưới sự kiện của trung tâm hỗ trợ — **đăng ở Admin**, hiện ở `/help/notices` và `/help/events` của site ứng viên. Từ Admin ra tới trang khách, một trang.",
   "sub": [
    "/content/notices/new",
    "/content/notices/:id/edit"
@@ -426,43 +426,23 @@
  },
  {
   "group": "Content",
-  "key": "faq",
-  "label": "FAQ",
-  "path": "/content/faq",
+  "key": "help-center",
+  "label": "How can we help?",
+  "path": "/content/faq?tab=HELP_CENTER",
   "perm": "site_faq:read",
-  "flag": "contentPages",
-  "what": "FAQ hiển thị trên site, mỗi tab một vùng.",
+  "flag": "",
+  "what": "Trang *How can we help?* của site ứng viên (`/help`) — **nhập ở Admin** *Content → FAQ*, tab *Help centre*: danh mục, câu hỏi, khối trang chủ, chip gợi ý. Từ Admin ra tới trang khách, một trang.",
   "sub": []
  },
  {
   "group": "Content",
-  "key": "help-center",
-  "label": "Help centre — How can we help?",
-  "path": "/ho-tro",
-  "perm": "",
-  "flag": "",
-  "site": "Jobseeker site",
-  "what": "Trung tâm hỗ trợ trên site jobseeker, tab **Chúng tôi có thể giúp gì?**: tìm kiếm FAQ, chọn **Cá nhân / Doanh nghiệp**, lọc theo danh mục, mở câu trả lời ngay trong trang. Thêm hai lối ra: **Tìm ID / mật khẩu** và **Xoá tài khoản**. Nội dung lấy từ màn **FAQ** của admin.",
-  "sub": [
-   "/ho-tro/tim-kiem",
-   "/ho-tro/cau-hoi/:id",
-   "/ho-tro/xoa-tai-khoan",
-   "/auth/forgot-password"
-  ]
- },
- {
-  "group": "Content",
-  "key": "help-notices",
-  "label": "Help centre — Notices & events",
-  "path": "/ho-tro/thong-bao",
-  "perm": "",
-  "flag": "",
-  "site": "Jobseeker site",
-  "what": "Tab **Thông báo & sự kiện** của trung tâm hỗ trợ: **bảng thông báo** (lọc đối tượng, danh mục, từ khoá, 20 dòng/trang) và **lưới sự kiện**. Nội dung lấy từ màn **Notices & events** của admin.",
-  "sub": [
-   "/ho-tro/thong-bao/:id",
-   "/ho-tro/su-kien"
-  ]
+  "key": "faq",
+  "label": "FAQ — Company information",
+  "path": "/content/faq",
+  "perm": "site_faq:read",
+  "flag": "contentPages",
+  "what": "Tab *Company information* của *Content → FAQ*: câu hỏi trên trang **Company information** của **site nhà tuyển dụng**. (Tab *Help centre* → trang *How can we help?*.)",
+  "sub": []
  },
  {
   "group": "Content",

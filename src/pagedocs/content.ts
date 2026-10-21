@@ -499,19 +499,24 @@ export const CONTENT_PAGE_DOCS: Record<string, PageDoc> = {
     ],
   },
 
-  /* ── Notices & events ────────────────────────────────────────────────────── */
+  /* Notices & events — ONE page from the Admin screen (Content → Notices & events) to
+     the jobseeker pages it feeds (/help/notices, /help/events). Merged 21/10/2026 with the
+     former `help-notices` entry; /trang/help-notices redirects here. */
   'site-notices': {
     logic: [
-      'Bảng thông báo và sự kiện của **trung tâm trợ giúp** (고객센터) trên site jobseeker — phần khách truy cập đọc dưới mục 공지/이벤트: `/ho-tro/thong-bao` (bảng thông báo), `/ho-tro/su-kien` (lưới sự kiện), chi tiết ở `/ho-tro/thong-bao/<id>` (EN `/help/notices`, `/help/events`).',
-      'Hai loại nội dung **trong một danh sách** (lọc bằng *Type*): **Notice** — một dòng trên bảng, có **danh mục**, ngày đăng và **lượt xem**; **Event** — một thẻ có **ảnh** và **khoảng ngày** trên lưới sự kiện, mở ra cùng trang chi tiết như notice.',
-      'Mỗi bản ghi có **đối tượng** (*Shown to*): *Everyone*, *Jobseekers* hoặc *Employers*. *Everyone* hiện ở **cả hai** tab Jobseeker và Employer của bảng công khai — không phải tab thứ ba.',
+      '**Một nội dung, hai nơi.** Đăng ở Admin — *Content → Notices & events*; hiện ở tab **Notices & events** của trung tâm hỗ trợ trên site ứng viên. **Notice** → một dòng trên **bảng thông báo** (`/help/notices`), **Event** → một thẻ trên **lưới sự kiện** (`/help/events`). Một bản ghi là một trong hai, không bao giờ cả hai.',
+      '**Đối tượng.** *Shown to* ở Admin = tab *Tất cả · Cá nhân · Doanh nghiệp* của bảng. *Everyone* hiện ở **cả hai** tab Cá nhân và Doanh nghiệp, không phải tab thứ ba.',
       'Viết bằng **ít nhất một** ngôn ngữ; mỗi ngôn ngữ cần **cả tiêu đề lẫn nội dung**. Ngôn ngữ nào không viết thì **khách đọc site bằng ngôn ngữ đó không thấy bản ghi** (không rơi về VI).',
+      '**Bài ghim** đứng đầu **trang 1**, và cột danh mục của nó ghi **Thông báo** in đậm thay cho danh mục thật.',
+      '**Sự kiện hết hạn tự biến mất khỏi lưới** — không có nhãn *Đang diễn ra / Đã kết thúc*. Đường link chi tiết của nó vẫn mở được.',
       'Quyền `site_notice` (read · create · update · delete), **mặc định chỉ HQ admin** (seed V533). **Publish, Unpublish, Archive, Pin đều là quyền Update** — và **tạo thẳng ở trạng thái Published cũng cần Update** (không chỉ Create).',
     ],
     how: [
-      '**New record** → chọn **Type** (Notice / Event) → **Filed under** (danh mục, chỉ Notice) hoặc **Card artwork** + **Runs from / Runs until** (chỉ Event) → **Shown to** → tiêu đề + nội dung theo ngôn ngữ → trạng thái ban đầu (*Draft* hoặc *Published*) và **Publication date** (tuỳ chọn) → lưu.',
-      'Đăng bài đã soạn: thẻ **Publication** ở cột phải → **Publish** (tự lưu trước). Gỡ: **Unpublish** (về Draft). Kết thúc: **Archive**.',
-      'Ghim lên đầu: kebab ⋮ trên danh sách → **Pin to the top**.',
+      '**Admin:** *Content → Notices & events* → **New record** → chọn **Notice** (kèm danh mục) hoặc **Event** (kèm ảnh thẻ và ngày chạy) → **Shown to** → tiêu đề + nội dung ở VI (rồi EN, KO).',
+      'Bấm **Save** — bài **chưa** lên site.',
+      'Ở thẻ **Publication** bên phải, bấm **Publish** → xác nhận.',
+      '**Đợi khoảng 1 phút**, mở `dev-saramin.saramin.vn/help/notices` (Notice) hoặc `/help/events` (Event), đúng tab đối tượng.',
+      'Không thấy? Bảng kiểm ở **§9**. Chi tiết từng thao tác ở Phần 1, khách thấy gì ở Phần 2.',
     ],
     watch: [
       '**Save không bao giờ publish.** Sau khi tạo, trạng thái và ngày đăng **chỉ đổi bằng thẻ Publication** — hai ô đó bị khoá trong form sửa.',
@@ -520,12 +525,24 @@ export const CONTENT_PAGE_DOCS: Record<string, PageDoc> = {
       '**Unpublish rồi Publish lại giữ nguyên ngày đăng gốc** — bài không nhảy lên đầu bảng.',
       'Bài **ghim chỉ đứng đầu trang 1**, vẫn phải qua bộ lọc của khách (tab đối tượng, danh mục, từ khoá) và vẫn tính vào tổng số.',
       '**Delete là vĩnh viễn và mất luôn lượt xem.** Muốn cho nghỉ thì **Archive** (giữ ngày đăng và lượt xem, Publish lại được).',
+      '**Đổi danh mục chưa lọc ngay** — phải bấm **Tìm**.',
+      '**Từ khoá chỉ tìm trong tiêu đề**, và không nhận các ký tự `! # @ % ^ & * $ ) [ ] : ; ’ " . , /` (hiện dòng báo ngay dưới ô). Dấu `(` thì được.',
+      '**Bấm Danh sách ở trang chi tiết là về bảng từ đầu** — bộ lọc, từ khoá và số trang đang chọn bị mất.',
+      '**Bài hẹn giờ không hiện tới đúng giờ.** Operator đặt ngày đăng ở tương lai thì bài nằm ẩn tới thời điểm đó. Sự kiện thì khác: **ngày bắt đầu ở tương lai vẫn hiện thẻ**, chỉ ngày kết thúc mới quyết định ẩn.',
+      '**Mỗi lần mở trang chi tiết cộng 1 lượt xem**, kể cả khi chính Operator mở để kiểm tra.',
     ],
     blocks: [
-      /* Part 1 — step by step. Screens: dev-admin.saramin.vn on 21/10/2026 (forms
-         opened, nothing saved); strings: saramin-vn-admin origin/dev 322830e3,
-         src/modules/content/notices/. */
-      { kind: 'h', text: 'Phần 1 · Làm trên Admin — từng bước' },
+      {
+        kind: 'table',
+        heading: 'Một nội dung, hai nơi',
+        cols: ['', 'Ở đâu', 'Ai dùng'],
+        rows: [
+          ['**Đăng**', 'Admin — *Content → Notices & events* (`dev-admin.saramin.vn/content/notices`)', 'Operator HQ (quyền *Notices & events*)'],
+          ['**Hiện — Notice**', 'Site ứng viên — tab **Notices & events** → **bảng thông báo**: `dev-saramin.saramin.vn/help/notices` (VI `/ho-tro/thong-bao`); chi tiết `/ho-tro/thong-bao/<id>`', 'Khách, không cần đăng nhập'],
+          ['**Hiện — Event**', 'Cùng tab → **lưới sự kiện**: `/help/events` (VI `/ho-tro/su-kien`)', 'Khách, không cần đăng nhập'],
+        ],
+      },
+      { kind: 'h', text: 'Phần 1 · Trên Admin — từng bước' },
       {
         kind: 'p',
         text:
@@ -551,7 +568,6 @@ export const CONTENT_PAGE_DOCS: Record<string, PageDoc> = {
         where: 'Admin',
         caption: 'Danh sách — xếp **đúng như bảng trên site**: bài ghim trước, rồi mới nhất. **Filter** lọc theo *Type · Status · Audience · Category*; ô *Search by title* tìm theo tiêu đề (nhấn Enter). Bấm một dòng để mở.',
       },
-
       { kind: 'h', text: '§1 · Đăng một thông báo (Notice)' },
       {
         kind: 'list',
@@ -588,7 +604,6 @@ export const CONTENT_PAGE_DOCS: Record<string, PageDoc> = {
         text:
           '**Ngôn ngữ nào không viết thì khách đọc site bằng ngôn ngữ đó KHÔNG thấy bài.** Mỗi ngôn ngữ đã gõ phải đủ **cả tiêu đề lẫn nội dung** — thiếu một nửa thì Save báo *One language is only half written* và tự mở tab đó. Cột *Title* của danh sách in các ngôn ngữ bài đã có (*VI · EN · KO*).',
       },
-
       { kind: 'h', text: '§2 · Đăng một sự kiện (Event)' },
       {
         kind: 'list',
@@ -619,7 +634,6 @@ export const CONTENT_PAGE_DOCS: Record<string, PageDoc> = {
         ],
         note: 'Hết đợt, sự kiện tự rời lưới nhưng **trang chi tiết vẫn mở được** và bài vẫn *Published* ở Admin — Archive nếu muốn dọn hẳn.',
       },
-
       { kind: 'h', text: '§3 · Hẹn giờ đăng' },
       {
         kind: 'list',
@@ -634,7 +648,6 @@ export const CONTENT_PAGE_DOCS: Record<string, PageDoc> = {
         text:
           '**Phải đặt ngày ngay lúc tạo.** Sau lần lưu đầu, ô *Publication date* bị khoá (*Set when first published*); bài nháp **không có ngày** thì Publish đóng dấu **ngay lúc bấm**. Lỡ lưu nháp mà chưa đặt ngày thì tạo một bản ghi mới có ngày hẹn và xoá bản nháp. Ví dụ đầy đủ: bảng *Hẹn giờ thông báo bảo trì* ở Phần 2.',
       },
-
       { kind: 'h', text: '§4 · Ghim lên đầu bảng' },
       {
         kind: 'list',
@@ -644,7 +657,6 @@ export const CONTENT_PAGE_DOCS: Record<string, PageDoc> = {
           'Bài ghim chỉ đứng đầu **trang 1**, và vẫn phải khớp tab / danh mục / từ khoá khách đang lọc. Ghim nhiều bài thì chúng xếp với nhau theo ngày đăng.',
         ],
       },
-
       { kind: 'h', text: '§5 · Sửa, gỡ, cất, xoá' },
       {
         kind: 'list',
@@ -676,8 +688,55 @@ export const CONTENT_PAGE_DOCS: Record<string, PageDoc> = {
         text:
           '**Gõ nhầm loại (Notice ↔ Event)?** Không đổi được — tạo bản ghi mới đúng loại, rồi xoá hoặc Archive bản cũ.',
       },
-
-      { kind: 'h', text: '§6 · Kiểm trên site — và khi không thấy' },
+      { kind: 'h', text: 'Phần 2 · Trên site ứng viên — khách thấy gì' },
+      { kind: 'h', text: '§6 · Bảng thông báo', path: '/ho-tro/thong-bao' },
+      {
+        kind: 'shot',
+        src: '/shots/help/help-09-notices.jpg',
+        where: 'Jobseeker site',
+        caption: 'Ba tab đối tượng, thanh lọc (*Tổng N kết quả* · danh mục · từ khoá · **Tìm** · xoá lọc), rồi bảng ba cột: **danh mục · tiêu đề · ngày đăng**. Bốn dòng đầu in đậm *Thông báo* là bài ghim.',
+      },
+      {
+        kind: 'table',
+        heading: 'Bảng thông báo — từng phần',
+        cols: ['Phần', 'Nghĩa'],
+        rows: [
+          ['**Tất cả · Cá nhân · Doanh nghiệp**', 'Lọc theo đối tượng (`?audience=all | person | company`). Bài *Everyone* có mặt ở cả ba tab.'],
+          ['**Ô danh mục**', '*Tất cả · Hướng dẫn · Ra mắt · Khác · Cập nhật · Cách sử dụng · Khuyến mãi*.'],
+          ['**Ô từ khoá**', '*Nhập từ khoá không chứa ký tự đặc biệt.* — chỉ khớp tiêu đề.'],
+          ['**Bảng**', 'Không có hàng tiêu đề cột. Ngày theo dạng **YYYY.MM.DD**. Bài ghim lên đầu trang 1 và vẫn tính vào tổng. Không có kết quả: *Không có kết quả nào.*'],
+          ['**Phân trang**', '20 bài/trang.'],
+        ],
+      },
+      { kind: 'h', text: '§7 · Trang chi tiết', path: '/ho-tro/thong-bao/<id>' },
+      {
+        kind: 'shot',
+        src: '/shots/help/help-11-notice-detail.jpg',
+        where: 'Jobseeker site',
+        caption: 'Tiêu đề, *Ngày đăng · Lượt xem*, nội dung, nút **Danh sách**, và hai thẻ bài trước / bài sau.',
+        note: 'Không có ngày *Cập nhật* (khác trang câu hỏi FAQ). Bài trước / sau là bài **cùng loại**, xếp theo ngày đăng. Sự kiện dùng chung trang này; **Danh sách** từ một sự kiện thì về lưới sự kiện.',
+      },
+      { kind: 'h', text: '§8 · Lưới sự kiện', path: '/ho-tro/su-kien' },
+      {
+        kind: 'shot',
+        src: '/shots/help/help-10-events.jpg',
+        where: 'Jobseeker site',
+        caption: 'Mỗi sự kiện một thẻ, 3 thẻ/hàng trên máy tính: ảnh, tiêu đề, thời gian chạy, *Đối tượng*. Không có bộ lọc, tìm kiếm hay phân trang.',
+        note: '**Ảnh thẻ đang trống trên dev (21/10)** — các bản ghi mẫu chưa có ảnh tải lên. Ở admin, ảnh thẻ là bắt buộc với Event (tối thiểu 616×318).',
+      },
+      {
+        kind: 'table',
+        heading: 'Dòng thời gian trên thẻ sự kiện',
+        cols: ['Dữ liệu ở admin', 'Thẻ ghi'],
+        rows: [
+          ['Có ngày bắt đầu và kết thúc', '`2026-10-01 ~ 2026-11-30`'],
+          ['Có ngày bắt đầu, không có ngày kết thúc', '*Từ 2026-09-15*'],
+          ['Không có ngày nào', '*Thường xuyên*'],
+          ['Ngày kết thúc đã qua', 'Thẻ **biến mất** khỏi lưới (link chi tiết vẫn mở được)'],
+        ],
+        note: 'Dòng *Đối tượng*: *Tất cả thành viên · Thành viên cá nhân · Thành viên doanh nghiệp*.',
+      },
+      { kind: 'h', text: '§9 · Kiểm trên site — và khi không thấy' },
       {
         kind: 'p',
         text:
@@ -697,8 +756,7 @@ export const CONTENT_PAGE_DOCS: Record<string, PageDoc> = {
           ['7', 'Đã quá **1 phút** chưa?', 'Tải lại trang'],
         ],
       },
-
-      { kind: 'h', text: 'Phần 2 · Tra cứu' },
+      { kind: 'h', text: 'Phần 3 · Tra cứu' },
       {
         kind: 'table',
         heading: 'Danh sách — cột và bộ lọc',
@@ -791,207 +849,52 @@ export const CONTENT_PAGE_DOCS: Record<string, PageDoc> = {
         text:
           '**Tài liệu admin chưa cập nhật:** `docs/features/notices.md` (admin 45954108) vẫn ghi “svn-be in flight” — thực tế `AdminSiteNoticeController` đã có trên svn-be ee1db5ea9 (V533). Màn hình đã mở và chụp trên dev-admin.saramin.vn ngày 21/10/2026 (admin 322830e3) — mở form, **không lưu** bản ghi nào; các bước Phần 1 khớp với màn hình.',
       },
+      {
+        kind: 'list',
+        heading: 'Chưa làm — theo quyết định, không phải lỗi',
+        items: [
+          'Tệp đính kèm trong thông báo.',
+          'Nhãn *Mới* cho bài vừa đăng.',
+          'Tab *Đang diễn ra / Đã kết thúc / Người thắng*, nút tham gia sự kiện.',
+        ],
+      },
+      {
+        kind: 'warn',
+        text: '**Nguồn và độ mới.** Viết theo build, kiểm ngày **21/10/2026** với svn-web `178a3709` · svn-be `7cb93f053` · admin `ce90a489` (nhánh `origin/dev`). Ảnh chụp cùng ngày trên `dev-saramin.saramin.vn`, chưa đăng nhập, tiếng Việt.',
+      },
     ],
   },
 
-  /* ── FAQ ─────────────────────────────────────────────────────────────────── */
+  /* FAQ — the Company information tab only, which feeds the Employer site's Company
+     information page (/company-join). The Help centre tab lives on 'help-center'. */
   faq: {
     logic: [
-      'Các danh sách câu hỏi mà site công khai vẽ. **Hai tab, hai vùng (surface)**: **Company information** — FAQ dưới hồ sơ pháp lý trên trang *company-join* của site tuyển dụng, một danh sách phẳng có thứ tự; **Help centre** — câu hỏi của trung tâm trợ giúp `/ho-tro/cau-hoi`, ba tầng *đối tượng → danh mục → câu hỏi*.',
+      '**Tab *Company information*** của *Content → FAQ* là danh sách câu hỏi trên trang **Company information** của **site nhà tuyển dụng** (`dev-hiring.saramin.vn/company-join`, VI `/thong-tin-doanh-nghiep`) — dưới hồ sơ pháp lý và giấy tờ đăng ký. Một danh sách phẳng, có thứ tự, chung cho mọi công ty.',
+      '**Tab *Help centre* của cùng màn này là chuyện khác** — nó nuôi trang *How can we help?* của site ứng viên. Xem trang **How can we help?** của guide này.',
       'Màn hình này nằm ở *System → FAQ* (`/system/faq`) tới 21/09; đường cũ vẫn chuyển hướng sang `/content/faq`.',
-      '**Quy tắc ngôn ngữ ngược với mọi màn hình khác**: một câu hỏi viết bằng **ít nhất một** trong VI/EN/KO (chỉ tiếng Hàn cũng hợp lệ); mỗi ngôn ngữ phải có **cả câu hỏi lẫn câu trả lời**; ngôn ngữ thiếu thì **câu đó bị giấu với khách đọc ngôn ngữ ấy** — không rơi về VI. Cột *Languages* cho biết tầm với.',
-      '**Danh mục và từ khoá gợi ý thì ngược lại**: VI bắt buộc, EN/KO thiếu thì rơi về VI (vì chúng là điều hướng — giấu đi là mất đường vào).',
+      '**Ngôn ngữ:** một câu hỏi viết bằng **ít nhất một** trong VI / EN / KO, mỗi ngôn ngữ đủ **cả câu hỏi lẫn câu trả lời**; ngôn ngữ thiếu thì câu đó **bị giấu** với khách đọc ngôn ngữ ấy (không rơi về VI).',
       'Quyền `site_faq` (read · create · update · delete), **mặc định chỉ HQ admin** (seed V457). Riêng với `site_notice` — cấp cái này không cấp cái kia.',
     ],
     how: [
-      'Chọn tab **Company information** hoặc **Help centre**.',
-      '**Help centre**: chọn đối tượng (*Jobseekers / Employers*) → chọn **danh mục** ở cột trái (hoặc *New* để tạo) → bảng câu hỏi của danh mục đó hiện bên phải.',
-      '**New entry** → câu hỏi + câu trả lời theo ngôn ngữ → trạng thái → (Help centre) danh mục và *Show on the help centre home page* → lưu.',
-      'Sắp thứ tự: **kéo tay nắm** hoặc ▲▼. Bảng gửi lại **cả nhóm** trong một lần.',
-      'Đổi trạng thái từ kebab ⋮: *Publish · Unpublish · Send for review · Archive · Delete* (mỗi cái hỏi xác nhận).',
-      '**Recommended searches** (cột trái, dưới danh mục): các chip dưới ô tìm kiếm của trung tâm trợ giúp, dùng chung cho cả hai đối tượng.',
+      '*Content → FAQ* → tab **Company information**.',
+      '**New entry** → **Question** + **Answer** (chữ thường, giữ xuống dòng, tối đa 2.000 ký tự) ở VI, rồi EN / KO → **Status** (*Published* để hiện) → **Save**.',
+      'Sắp thứ tự: kéo **tay nắm** hoặc **▲ / ▼** — bấm **All** trước nếu đang lọc trạng thái.',
+      'Đổi trạng thái: **⋮** cuối dòng → *Publish · Unpublish · Send for review · Archive · Delete* — giống hệt tab Help centre (xem *How can we help?* §3).',
+      'Kiểm: đăng nhập site nhà tuyển dụng → trang **Company information**, đợi khoảng 1 phút.',
     ],
     watch: [
-      '**Danh mục không Published thì giấu MỌI câu bên trong**, kể cả câu đã Published. Đặt danh mục về Draft là cách tắt cả nhóm.',
-      'Trang chủ trung tâm trợ giúp chỉ lấy **5 câu “featured” đầu tiên mỗi danh mục**, theo thứ tự trong bảng. Câu featured thứ 6 vẫn bật nhưng **không hiện**.',
       '**Kéo thả bị tắt khi đang lọc trạng thái** — xoá bộ lọc để sắp lại.',
-      'Không xoá được danh mục còn câu hỏi: “This category still has entries in it…” — chuyển/xoá câu trước, hoặc đặt danh mục về Draft.',
       'Dòng cảnh báo đầu bảng: “{n} of {total} published entries are missing a language…” — những câu đó vô hình với khách đọc ngôn ngữ thiếu.',
       'Site cache danh sách FAQ **60 giây** — sửa xong đợi khoảng một phút.',
+      'Tab này **không có** danh mục, công tắc trang chủ hay từ khoá gợi ý — những thứ đó chỉ có ở tab *Help centre*.',
     ],
     blocks: [
-      /* Part 1 — step by step, for the ops person who has to change the help centre
-         tomorrow. Screens: dev-admin.saramin.vn on 21/10/2026 (forms opened, nothing
-         saved); strings: saramin-vn-admin origin/dev 322830e3, src/modules/system/faq/. */
-      { kind: 'h', text: 'Phần 1 · Làm trên Admin — từng bước' },
-      {
-        kind: 'p',
-        text:
-          'Phần này dành cho người **sửa nội dung trang *How can we help?*** (`/ho-tro`, EN `/help`) trên site ứng viên. Mọi thứ trên trang đó — danh mục, câu hỏi, khối *frequently asked*, chip *Suggested* — đều nhập ở **một** màn: *Content → FAQ*, tab **Help centre**. Cần quyền **FAQ** (`site_faq`): *View* để xem, *Create / Update / Delete* để sửa; mặc định chỉ HQ admin có. Nút nào không có quyền thì **ẩn hẳn**, không mờ.',
-      },
-      {
-        kind: 'table',
-        heading: 'Cái gì trên Admin thành cái gì trên site',
-        cols: ['Trên Admin (Content → FAQ → Help centre)', 'Trên site — How can we help?'],
-        rows: [
-          ['Nút **Jobseekers** / **Employers** đầu tab', 'Hai tab **Individual** / **Company** (*Cá nhân* / *Doanh nghiệp*) — mỗi bên một bộ danh mục riêng'],
-          ['Cột **Categories**, theo thứ tự trong cột', 'Hàng **chip danh mục** sau chip *All*, và thứ tự các khối *… — frequently asked*'],
-          ['Bảng câu hỏi của một danh mục, theo thứ tự trong bảng', 'Danh sách câu hỏi khi khách bấm danh mục đó (20 câu/trang)'],
-          ['Công tắc **Show on the help centre home page** của câu hỏi', 'Câu đó lên **khối của danh mục** ở trang chủ trợ giúp — **5 câu bật đầu tiên** theo thứ tự bảng'],
-          ['Cột **Recommended searches**', 'Các chip **Suggested** dưới ô tìm kiếm — **dùng chung** cho cả Individual và Company'],
-          ['Tab **Company information**', '**Không** thuộc trang này — là FAQ dưới hồ sơ pháp lý trên trang công ty của site tuyển dụng'],
-        ],
-      },
       {
         kind: 'shot',
-        src: '/shots/help-admin/faq-02-helpcentre.jpg',
+        src: '/shots/help-admin/faq-01-company.jpg',
         where: 'Admin',
-        caption: '*Content → FAQ* → tab **Help centre** → **Jobseekers**. Trái: **Categories** (bấm một dòng để mở) và **Recommended searches**. Phải: câu hỏi của danh mục đang chọn — cột *Home block* là công tắc trang chủ.',
+        caption: '*Content → FAQ* → tab **Company information**: một danh sách phẳng — mỗi dòng một câu hỏi, chip ngôn ngữ, trạng thái, thứ tự.',
       },
-
-      { kind: 'h', text: '§1 · Thêm một câu hỏi' },
-      {
-        kind: 'list',
-        items: [
-          '**Bước 1.** Vào *Content → FAQ* → tab **Help centre**.',
-          '**Bước 2.** Chọn **Jobseekers** (cho tab *Individual* của site) hoặc **Employers** (cho tab *Company*).',
-          '**Bước 3.** Ở cột **Categories**, bấm vào danh mục sẽ chứa câu hỏi. Chưa chọn danh mục thì nút *New entry* bị khoá.',
-          '**Bước 4.** Bấm **New entry** (góc phải bảng). Ngăn kéo **New FAQ entry** mở ra bên phải.',
-          '**Bước 5.** **Category** — đã điền sẵn danh mục đang chọn; đổi được nếu cần.',
-          '**Bước 6.** **Show on the help centre home page** — bật nếu muốn câu này lên khối của danh mục ở trang chủ trợ giúp (xem §2).',
-          '**Bước 7.** **Question** — gõ câu hỏi ở tab **VI** (tối đa 300 ký tự). **Answer** — gõ câu trả lời trong khung soạn thảo: có heading, in đậm, danh sách, link, bảng và nút chèn ảnh.',
-          '**Bước 8.** Bấm **EN**, rồi **KO**, và lặp lại bước 7 cho từng ngôn ngữ muốn có. Hai ô Question và Answer **đổi tab cùng nhau**.',
-          '**Bước 9.** **Status** — để **Draft** nếu còn chờ bản dịch hoặc người duyệt; chọn **Published** nếu muốn hiện ngay.',
-          '**Bước 10.** Bấm **Save**. Toast *FAQ entry created*; câu mới nằm **cuối** bảng của danh mục — kéo lên nếu cần (§3).',
-        ],
-      },
-      {
-        kind: 'shot',
-        src: '/shots/help-admin/faq-03-new-entry.jpg',
-        where: 'Admin',
-        caption: 'Ngăn kéo **New FAQ entry**: *Where it appears* (danh mục, công tắc trang chủ) → *Question and answer* (tab VI · EN · KO) → *Publication* (trạng thái) → **Save**.',
-      },
-      {
-        kind: 'warn',
-        text:
-          '**Ngôn ngữ nào không viết thì khách đọc site bằng ngôn ngữ đó KHÔNG thấy câu hỏi** — không tự lấy bản tiếng Việt thay. Mỗi ngôn ngữ đã gõ phải có **đủ cả câu hỏi lẫn câu trả lời**; thiếu một nửa thì Save báo *This answer needs its question in {locale} too* và tự mở tab ngôn ngữ đó. Trang khách mặc định đọc tiếng Việt, nên **luôn viết VI**.',
-      },
-      {
-        kind: 'p',
-        text:
-          '**Câu trả lời tối đa 20.000 ký tự — tính cả mã định dạng**, không chỉ chữ nhìn thấy. Ảnh và bảng ăn giới hạn rất nhanh; quá thì Save báo *This answer is {length} characters. The limit is 20000.* — tách thành hai câu hỏi.',
-      },
-
-      { kind: 'h', text: '§2 · Đưa câu hỏi lên trang chủ trợ giúp' },
-      {
-        kind: 'list',
-        items: [
-          '**Bước 1.** Mở câu hỏi: bấm vào dòng của nó (hoặc ⋮ → **Edit**).',
-          '**Bước 2.** Bật **Show on the help centre home page** → **Save**. Cột *Home block* của dòng đổi thành **On**.',
-          '**Bước 3.** Kéo câu đó lên trong bảng (§3) nếu danh mục đã có từ 5 câu bật trở lên.',
-        ],
-      },
-      {
-        kind: 'warn',
-        text:
-          '**Mỗi khối trang chủ chỉ có 5 câu: 5 câu *On* đầu tiên theo thứ tự trong bảng.** Bật câu thứ 6 vẫn được, cột vẫn ghi *On*, nhưng nó **không hiện** — không có cảnh báo nào. Muốn đổi câu nào lên trang chủ thì **sắp lại thứ tự**, hoặc tắt bớt một câu.',
-      },
-
-      { kind: 'h', text: '§3 · Sắp thứ tự, sửa, ẩn, xoá câu hỏi' },
-      {
-        kind: 'list',
-        items: [
-          '**Sắp thứ tự:** kéo **tay nắm** ⠿ ở đầu dòng, hoặc bấm **▲ / ▼** ở cột *Order*. Lưu ngay — toast *FAQ order saved*. Đang lọc theo trạng thái (*Published / Draft…*) thì kéo thả **tắt**, dòng gợi ý đổi thành *Clear the status filter to reorder* — bấm **All** trước.',
-          '**Sửa nội dung:** bấm vào dòng → sửa → **Save** (toast *FAQ entry saved*). Câu đang *Published* thì sửa xong **hiện luôn** bản mới.',
-          '**Đổi trạng thái:** nút **⋮** cuối dòng. Mỗi lựa chọn hỏi xác nhận trước khi chạy — bảng dưới.',
-        ],
-      },
-      {
-        kind: 'table',
-        heading: 'Nút ⋮ của một câu hỏi',
-        cols: ['Chọn', 'Có khi', 'Kết quả trên site'],
-        rows: [
-          ['**Edit**', 'Luôn có', 'Mở ngăn kéo sửa'],
-          ['**Publish**', 'Câu chưa *Published*', '**Hiện** — với các ngôn ngữ đã viết đủ (hộp xác nhận liệt kê chúng)'],
-          ['**Unpublish**', '*Published* hoặc *Review*', 'Gỡ khỏi site, về **Draft**; nội dung giữ nguyên'],
-          ['**Send for review**', 'Chỉ *Draft*', 'Không hiện; đánh dấu chờ người duyệt'],
-          ['**Archive**', 'Chưa *Archived*', 'Gỡ khỏi site, cất đi; **Publish lại được**'],
-          ['**Delete**', 'Luôn có (chữ đỏ)', '**Xoá vĩnh viễn** cả câu và mọi bản dịch — muốn giữ thì Archive'],
-        ],
-      },
-
-      { kind: 'h', text: '§4 · Thêm, sửa, ẩn danh mục' },
-      {
-        kind: 'list',
-        items: [
-          '**Bước 1.** Chọn đúng **Jobseekers** hoặc **Employers** — danh mục **gắn cố định** vào đối tượng lúc tạo, sau này không chuyển được.',
-          '**Bước 2.** Bấm **+ New** cạnh chữ *Categories*. Hộp **New category** mở ra.',
-          '**Bước 3.** **Name (VI)** — bắt buộc, tối đa 120 ký tự. **Name (EN)** / **Name (KO)** — tuỳ chọn; để trống thì site hiện tên tiếng Việt.',
-          '**Bước 4.** **Status** — **Published** để hiện; *Draft* để soạn trước.',
-          '**Bước 5.** **Save** (toast *Category created*). Danh mục mới nằm cuối cột; kéo tay nắm hoặc ▲▼ để đổi chỗ — đó cũng là thứ tự chip trên site.',
-          '**Sửa / ẩn:** ⋮ trên dòng danh mục → **Edit** → đổi tên hoặc **Status** → Save. Danh mục chỉ có hai lựa chọn: *Edit* và *Delete* — trạng thái đổi trong hộp Edit.',
-        ],
-      },
-      {
-        kind: 'shot',
-        src: '/shots/help-admin/faq-04-new-category.jpg',
-        where: 'Admin',
-        caption: 'Hộp **New category** — chỉ tên tiếng Việt là bắt buộc; dòng dưới *Status* nhắc rằng danh mục không *Published* thì **giấu mọi câu bên trong**.',
-      },
-      {
-        kind: 'warn',
-        text:
-          '**Danh mục không *Published* thì giấu MỌI câu bên trong, kể cả câu đã *Published*.** Đây là cách tắt cả nhóm một lần. Ngược lại, **không xoá được danh mục còn câu hỏi** — hộp *This category cannot be deleted yet* chỉ có nút *Close*: chuyển hoặc xoá câu trước, hoặc đặt danh mục về Draft.',
-      },
-
-      { kind: 'h', text: '§5 · Từ khoá gợi ý (chip Suggested)' },
-      {
-        kind: 'list',
-        items: [
-          '**Thêm:** bấm **+ New** cạnh *Recommended searches* → **Keyword (VI)** bắt buộc, EN / KO tuỳ chọn (tối đa 120 ký tự) → **Save**.',
-          '**Đổi thứ tự:** kéo tay nắm hoặc ▲▼ — chip trên site đi đúng thứ tự này.',
-          '**Sửa / xoá:** ⋮ → *Edit* hoặc *Delete*.',
-          'Một danh sách cho **cả hai** đối tượng. Không giới hạn số chip — thiết kế mẫu dùng **4**, nhiều hơn thì hàng chip dài ra.',
-        ],
-      },
-      {
-        kind: 'shot',
-        src: '/shots/help-admin/faq-05-new-keyword.jpg',
-        where: 'Admin',
-        caption: 'Hộp **New recommended search**. Chip chưa có bản dịch vẫn hiện — bằng chữ tiếng Việt, không bao giờ bị ẩn.',
-      },
-      {
-        kind: 'p',
-        text:
-          '**Giữ mỗi từ khoá trong 20 ký tự.** Ô tìm kiếm trên site chỉ nhận 20 ký tự, và server **lặng lẽ cắt** từ khoá dài hơn về 20 ký tự đầu — bấm một chip dài sẽ tìm theo nửa đầu của nó, không báo lỗi.',
-      },
-
-      { kind: 'h', text: '§6 · Kiểm trên site — và khi không thấy' },
-      {
-        kind: 'p',
-        text:
-          'Mở `https://dev-saramin.saramin.vn/ho-tro` (không cần đăng nhập) — **đợi khoảng 1 phút**, vì site giữ danh sách FAQ trong bộ nhớ đệm 60 giây. Đổi ngôn ngữ ở góc trên (VI · EN · KO) để kiểm từng bản dịch.',
-      },
-      {
-        kind: 'table',
-        heading: 'Đã lưu mà không thấy trên site — kiểm theo thứ tự',
-        cols: ['#', 'Kiểm', 'Ở đâu'],
-        rows: [
-          ['1', 'Câu hỏi có **Published** chưa?', 'Cột *Status* của dòng'],
-          ['2', '**Danh mục** của nó có Published không?', 'Dòng chữ nhỏ dưới tên danh mục: *Published · N entries*'],
-          ['3', 'Câu có viết **bằng ngôn ngữ đang đọc** không?', 'Cột *Languages* — chip mờ là ngôn ngữ chưa viết'],
-          ['4', 'Đang xem đúng tab **Individual / Company** chưa?', 'Nút *Jobseekers / Employers* ở Admin'],
-          ['5', '(Trang chủ) Câu có nằm trong **5 câu *On* đầu tiên** của danh mục không?', 'Cột *Home block* + thứ tự bảng'],
-          ['6', 'Đã quá **1 phút** chưa?', 'Tải lại trang'],
-        ],
-      },
-      {
-        kind: 'p',
-        text:
-          '**Tab Company information** dùng cùng cách làm (*New entry* → câu hỏi + câu trả lời → *Status* → *Save*), nhưng không có danh mục, không có công tắc trang chủ, và câu trả lời là **chữ thường** tối đa 2.000 ký tự. Nó hiện trên trang công ty của site tuyển dụng, **không** trên How can we help?.',
-      },
-
-      { kind: 'h', text: 'Phần 2 · Tra cứu' },
       {
         kind: 'table',
         heading: 'Hai vùng FAQ',
@@ -1000,37 +903,6 @@ export const CONTENT_PAGE_DOCS: Record<string, PageDoc> = {
           ['**Company information**', 'Site tuyển dụng — trang *company-join* (dưới hồ sơ pháp lý, giấy tờ đăng ký)', 'Một danh sách phẳng có thứ tự', '**Chữ thường**, giữ xuống dòng; tối đa **2.000** ký tự'],
           ['**Help centre**', 'Site jobseeker — `/ho-tro`, `/ho-tro/cau-hoi/<id>`, tìm kiếm `/ho-tro/tim-kiem`', 'Đối tượng → danh mục → câu hỏi; thứ tự **trong từng danh mục**', '**Rich text** (ảnh, bảng, heading); tối đa **20.000** ký tự'],
         ],
-      },
-      {
-        kind: 'table',
-        heading: 'Cột trong bảng câu hỏi',
-        cols: ['Cột', 'Nghĩa'],
-        rows: [
-          ['**Question**', 'Câu hỏi (ngôn ngữ đầu tiên có)'],
-          ['**Languages**', 'Ba chip VI/EN/KO — chip tắt = “hidden from those visitors”'],
-          ['**Home block**', '(Help centre) có lên khối trang chủ hay không — chỉ đọc, sửa trong drawer'],
-          ['**Status**', 'Draft · Review · Published · Archived'],
-          ['**Updated**', 'Lần sửa gần nhất'],
-          ['**Order**', 'Tay nắm kéo + ▲▼'],
-        ],
-        note: 'Không phân trang, không tìm kiếm, không sắp theo cột — bảng là toàn bộ một vùng (hoặc một danh mục). Bộ lọc trạng thái chạy trong trình duyệt.',
-      },
-      {
-        kind: 'table',
-        heading: 'Trạng thái của một câu hỏi',
-        cols: ['Trạng thái', 'Trên site', 'Tới bằng cách nào', 'Làm gì tiếp'],
-        rows: [
-          ['**Draft**', 'Không hiện — chỗ chờ đủ bản dịch', 'Tạo · **Unpublish** từ Published/Review', 'Publish · Send for review · Archive · Delete'],
-          ['**Review**', 'Không hiện', '**Send for review** (chỉ từ Draft) hoặc chọn trong drawer', 'Publish · Unpublish · Archive · Delete'],
-          ['**Published**', '**Hiện** — nếu danh mục cũng Published và đúng ngôn ngữ', '**Publish**', 'Unpublish · Archive · Delete'],
-          ['**Archived**', 'Không hiện; giữ nội dung', '**Archive**', 'Publish · Delete'],
-        ],
-        note: 'Không có cờ “ẩn” riêng — ba trên bốn trạng thái đã là ẩn. Danh mục cũng có trạng thái; danh mục không Published **thắng** trạng thái của câu hỏi.',
-      },
-      {
-        kind: 'warn',
-        text:
-          '**Sửa so với bản cũ của trang này:** FAQ **không còn chỉ một vùng** — có hai tab, *Company information* và *Help centre*; tab Help centre có danh mục theo đối tượng, cờ trang chủ và từ khoá gợi ý.',
       },
     ],
   },
@@ -1269,25 +1141,33 @@ export const CONTENT_PAGE_DOCS: Record<string, PageDoc> = {
       },
     ],
   },
+  /* How can we help? — ONE page from the Admin screen that feeds it (Content → FAQ,
+     tab Help centre) to the jobseeker page (/help). Merged 21/10/2026 from the former
+     `faq` (help-centre half) and `help-center` entries; /trang/help-center keeps working. */
   'help-center': {
     logic: [
+      '**Một nội dung, hai nơi.** Nhập ở Admin — *Content → FAQ*, tab **Help centre**; hiện ở trang **How can we help?** của site ứng viên (`/help`, VI `/ho-tro`). Không câu nào viết cứng trong code: muốn đổi trang này thì đổi ở Admin.',
       '**Trung tâm hỗ trợ** của site jobseeker, tab **Chúng tôi có thể giúp gì?** — `/ho-tro` (EN `/help`). Công khai: **không cần đăng nhập**, trừ tab *Xoá tài khoản*. Ứng viên và nhà tuyển dụng dùng **chung một trang**; nhà tuyển dụng bấm **Doanh nghiệp**.',
-      '**Mọi câu hỏi, danh mục và từ khoá gợi ý đều do Operator nhập ở admin** (*Content → FAQ*, tab *Help centre*) — không có câu nào viết cứng trong code. Muốn đổi nội dung trang này thì đổi ở màn FAQ.',
       '**Cá nhân / Doanh nghiệp là hai bộ danh mục riêng**, mỗi bên 7 danh mục. Trang chủ vẽ **mỗi danh mục một khối**, mỗi khối tối đa **5 câu** — chỉ những câu Operator bật *Show on the help centre home page*, theo đúng thứ tự trong bảng admin.',
       '**Bấm câu hỏi thì câu trả lời mở ngay tại chỗ** (accordion), mỗi lúc chỉ mở một câu. Mở kiểu này **không tính lượt xem**. Chỉ khi mở câu hỏi từ **kết quả tìm kiếm** thì mới sang trang riêng `/ho-tro/cau-hoi/<id>` và cộng 1 lượt xem.',
-      '**Mỗi ngôn ngữ một nội dung.** Câu hỏi chưa viết bằng ngôn ngữ khách đang đọc thì **không hiện** với khách đó (không rơi về tiếng Việt). Tên danh mục và từ khoá gợi ý thì ngược lại: thiếu ngôn ngữ nào sẽ hiện bản tiếng Việt.',
+      '**Quy tắc ngôn ngữ ngược với mọi màn hình khác**: một câu hỏi viết bằng **ít nhất một** trong VI/EN/KO (chỉ tiếng Hàn cũng hợp lệ); mỗi ngôn ngữ phải có **cả câu hỏi lẫn câu trả lời**; ngôn ngữ thiếu thì **câu đó bị giấu với khách đọc ngôn ngữ ấy** — không rơi về VI. Cột *Languages* cho biết tầm với.',
+      '**Danh mục và từ khoá gợi ý thì ngược lại**: VI bắt buộc, EN/KO thiếu thì rơi về VI (vì chúng là điều hướng — giấu đi là mất đường vào).',
+      'Quyền `site_faq` (read · create · update · delete), **mặc định chỉ HQ admin** (seed V457). Riêng với `site_notice` — cấp cái này không cấp cái kia.',
+      '**Tab *Company information* của cùng màn FAQ không thuộc trang này** — nó nuôi trang Company information của site nhà tuyển dụng. Xem *FAQ — Company information*.',
     ],
     how: [
-      '**Tìm câu hỏi:** gõ vào ô *Bạn có thắc mắc? Hãy tìm kiếm tại đây.* (tối đa **20 ký tự**) → bấm kính lúp, hoặc bấm một chip **Từ khoá gợi ý**.',
-      '**Xem theo nhóm:** chọn **Cá nhân** hoặc **Doanh nghiệp** → bấm một danh mục (hoặc **Xem thêm** ở góc khối) để thấy toàn bộ câu của danh mục đó, 20 câu/trang.',
-      '**Đọc câu trả lời:** bấm vào câu hỏi — câu trả lời mở ngay bên dưới, kèm *Ngày đăng · Cập nhật · Lượt xem*.',
-      '**Quên mật khẩu:** tab **Tìm ID / mật khẩu** → xác thực số điện thoại bằng mã Zalo → đặt mật khẩu mới.',
-      '**Xoá tài khoản ứng viên:** đăng nhập → tab **Xoá tài khoản** → đọc và tick đồng ý → xác thực số điện thoại → chọn lý do → xác nhận.',
+      '**Admin:** *Content → FAQ* → tab **Help centre** → **Jobseekers** (tab *Individual* của site) hoặc **Employers** (tab *Company*).',
+      'Bấm **danh mục** ở cột trái → **New entry** → viết **Question** + **Answer** ở VI (rồi EN, KO) → bật *Show on the help centre home page* nếu muốn lên trang chủ → **Status = Published** → **Save**.',
+      '**Đợi khoảng 1 phút**, mở `dev-saramin.saramin.vn/help` → đúng tab *Individual* / *Company* → câu hỏi có trong danh mục, và (nếu bật) trong khối *… — frequently asked*.',
+      'Không thấy? Bảng kiểm ở **§11**. Chi tiết từng thao tác ở Phần 1, khách thấy gì ở Phần 2.',
     ],
     watch: [
-      '**Sửa ở admin, đợi khoảng 1 phút.** Trang chủ và kết quả tìm kiếm được cache 60 giây; site không được báo khi Operator bấm Publish.',
+      '**Danh mục không Published thì giấu MỌI câu bên trong**, kể cả câu đã Published. Đặt danh mục về Draft là cách tắt cả nhóm.',
       '**Một khối có thể hiện tiêu đề mà không có câu nào** nếu danh mục có câu hỏi nhưng chưa câu nào được bật *Show on the help centre home page*. Sửa ở admin: bật cờ đó cho vài câu.',
       '**Câu thứ 6 trở đi của một danh mục không hiện trên trang chủ**, dù đã bật cờ home page. Khách thấy chúng qua **Xem thêm**.',
+      '**Kéo thả bị tắt khi đang lọc trạng thái** — xoá bộ lọc để sắp lại.',
+      'Dòng cảnh báo đầu bảng: “{n} of {total} published entries are missing a language…” — những câu đó vô hình với khách đọc ngôn ngữ thiếu.',
+      '**Sửa ở admin, đợi khoảng 1 phút.** Trang chủ và kết quả tìm kiếm được cache 60 giây; site không được báo khi Operator bấm Publish.',
       '**Giới hạn 20 ký tự chỉ kiểm khi bấm tìm.** Ô vẫn cho gõ dài hơn; bấm tìm thì hiện dòng *Nhập tối đa 20 ký tự.* và không tìm. Bấm tìm với ô trống thì ra **toàn bộ** câu hỏi.',
       '**Tìm kiếm quét cả Cá nhân lẫn Doanh nghiệp**, cả câu hỏi lẫn nội dung trả lời, chỉ trong ngôn ngữ đang đọc. Câu khớp ở tiêu đề xếp trước.',
       '**“Tìm ID” không còn.** Tab vẫn tên *Tìm ID / mật khẩu* nhưng chỉ đặt lại **mật khẩu**, và chỉ cho **ứng viên**, bằng **số điện thoại** (không phải email). Nhà tuyển dụng quên mật khẩu dùng trang đăng nhập của site tuyển dụng.',
@@ -1296,15 +1176,153 @@ export const CONTENT_PAGE_DOCS: Record<string, PageDoc> = {
     ],
     blocks: [
       {
+        kind: 'table',
+        heading: 'Một nội dung, hai nơi',
+        cols: ['', 'Ở đâu', 'Ai dùng'],
+        rows: [
+          ['**Nhập**', 'Admin — *Content → FAQ* → tab **Help centre** (`dev-admin.saramin.vn/content/faq`)', 'Operator HQ (quyền *FAQ*)'],
+          ['**Hiện**', 'Site ứng viên — **How can we help?**: `dev-saramin.saramin.vn/help` (VI `/ho-tro`); trang một câu hỏi `/ho-tro/cau-hoi/<id>`; tìm kiếm `/ho-tro/tim-kiem`', 'Khách — ứng viên **và** nhà tuyển dụng, không cần đăng nhập'],
+        ],
+      },
+      { kind: 'h', text: 'Phần 1 · Trên Admin — từng bước' },
+      {
         kind: 'p',
         text:
-          '**Sửa nội dung trang này ở Admin:** *Content → FAQ* → tab **Help centre** (danh mục, câu hỏi, khối trang chủ, chip gợi ý). Xem trang **FAQ** của guide này — **Phần 1 · Làm trên Admin — từng bước**.',
+          'Phần này dành cho người **sửa nội dung trang *How can we help?*** (`/ho-tro`, EN `/help`) trên site ứng viên. Mọi thứ trên trang đó — danh mục, câu hỏi, khối *frequently asked*, chip *Suggested* — đều nhập ở **một** màn: *Content → FAQ*, tab **Help centre**. Tab kia của cùng màn, **Company information**, nuôi site nhà tuyển dụng — xem trang *FAQ — Company information*. Cần quyền **FAQ** (`site_faq`): *View* để xem, *Create / Update / Delete* để sửa; mặc định chỉ HQ admin có. Nút nào không có quyền thì **ẩn hẳn**, không mờ.',
+      },
+      {
+        kind: 'table',
+        heading: 'Cái gì trên Admin thành cái gì trên site',
+        cols: ['Trên Admin (Content → FAQ → Help centre)', 'Trên site — How can we help?'],
+        rows: [
+          ['Nút **Jobseekers** / **Employers** đầu tab', 'Hai tab **Individual** / **Company** (*Cá nhân* / *Doanh nghiệp*) — mỗi bên một bộ danh mục riêng'],
+          ['Cột **Categories**, theo thứ tự trong cột', 'Hàng **chip danh mục** sau chip *All*, và thứ tự các khối *… — frequently asked*'],
+          ['Bảng câu hỏi của một danh mục, theo thứ tự trong bảng', 'Danh sách câu hỏi khi khách bấm danh mục đó (20 câu/trang)'],
+          ['Công tắc **Show on the help centre home page** của câu hỏi', 'Câu đó lên **khối của danh mục** ở trang chủ trợ giúp — **5 câu bật đầu tiên** theo thứ tự bảng'],
+          ['Cột **Recommended searches**', 'Các chip **Suggested** dưới ô tìm kiếm — **dùng chung** cho cả Individual và Company'],
+          ['Tab **Company information**', '**Không** thuộc trang này — là FAQ dưới hồ sơ pháp lý trên trang công ty của site tuyển dụng'],
+        ],
+      },
+      {
+        kind: 'shot',
+        src: '/shots/help-admin/faq-02-helpcentre.jpg',
+        where: 'Admin',
+        caption: '*Content → FAQ* → tab **Help centre** → **Jobseekers**. Trái: **Categories** (bấm một dòng để mở) và **Recommended searches**. Phải: câu hỏi của danh mục đang chọn — cột *Home block* là công tắc trang chủ.',
+      },
+      { kind: 'h', text: '§1 · Thêm một câu hỏi' },
+      {
+        kind: 'list',
+        items: [
+          '**Bước 1.** Vào *Content → FAQ* → tab **Help centre**.',
+          '**Bước 2.** Chọn **Jobseekers** (cho tab *Individual* của site) hoặc **Employers** (cho tab *Company*).',
+          '**Bước 3.** Ở cột **Categories**, bấm vào danh mục sẽ chứa câu hỏi. Chưa chọn danh mục thì nút *New entry* bị khoá.',
+          '**Bước 4.** Bấm **New entry** (góc phải bảng). Ngăn kéo **New FAQ entry** mở ra bên phải.',
+          '**Bước 5.** **Category** — đã điền sẵn danh mục đang chọn; đổi được nếu cần.',
+          '**Bước 6.** **Show on the help centre home page** — bật nếu muốn câu này lên khối của danh mục ở trang chủ trợ giúp (xem §2).',
+          '**Bước 7.** **Question** — gõ câu hỏi ở tab **VI** (tối đa 300 ký tự). **Answer** — gõ câu trả lời trong khung soạn thảo: có heading, in đậm, danh sách, link, bảng và nút chèn ảnh.',
+          '**Bước 8.** Bấm **EN**, rồi **KO**, và lặp lại bước 7 cho từng ngôn ngữ muốn có. Hai ô Question và Answer **đổi tab cùng nhau**.',
+          '**Bước 9.** **Status** — để **Draft** nếu còn chờ bản dịch hoặc người duyệt; chọn **Published** nếu muốn hiện ngay.',
+          '**Bước 10.** Bấm **Save**. Toast *FAQ entry created*; câu mới nằm **cuối** bảng của danh mục — kéo lên nếu cần (§3).',
+        ],
+      },
+      {
+        kind: 'shot',
+        src: '/shots/help-admin/faq-03-new-entry.jpg',
+        where: 'Admin',
+        caption: 'Ngăn kéo **New FAQ entry**: *Where it appears* (danh mục, công tắc trang chủ) → *Question and answer* (tab VI · EN · KO) → *Publication* (trạng thái) → **Save**.',
       },
       {
         kind: 'warn',
-        text: '**Nguồn và độ mới.** Viết theo build, kiểm ngày **21/10/2026** với svn-web `178a3709` · svn-be `7cb93f053` · admin `ce90a489` (nhánh `origin/dev`). Ảnh chụp cùng ngày trên `dev-saramin.saramin.vn`, **chưa đăng nhập**, giao diện tiếng Việt — nên tab *Xoá tài khoản* không có ảnh (trang đó bắt đăng nhập).',
+        text:
+          '**Ngôn ngữ nào không viết thì khách đọc site bằng ngôn ngữ đó KHÔNG thấy câu hỏi** — không tự lấy bản tiếng Việt thay. Mỗi ngôn ngữ đã gõ phải có **đủ cả câu hỏi lẫn câu trả lời**; thiếu một nửa thì Save báo *This answer needs its question in {locale} too* và tự mở tab ngôn ngữ đó. Trang khách mặc định đọc tiếng Việt, nên **luôn viết VI**.',
       },
-      { kind: 'h', text: '§1 · Trang chủ trợ giúp', path: '/ho-tro' },
+      {
+        kind: 'p',
+        text:
+          '**Câu trả lời tối đa 20.000 ký tự — tính cả mã định dạng**, không chỉ chữ nhìn thấy. Ảnh và bảng ăn giới hạn rất nhanh; quá thì Save báo *This answer is {length} characters. The limit is 20000.* — tách thành hai câu hỏi.',
+      },
+      { kind: 'h', text: '§2 · Đưa câu hỏi lên trang chủ trợ giúp' },
+      {
+        kind: 'list',
+        items: [
+          '**Bước 1.** Mở câu hỏi: bấm vào dòng của nó (hoặc ⋮ → **Edit**).',
+          '**Bước 2.** Bật **Show on the help centre home page** → **Save**. Cột *Home block* của dòng đổi thành **On**.',
+          '**Bước 3.** Kéo câu đó lên trong bảng (§3) nếu danh mục đã có từ 5 câu bật trở lên.',
+        ],
+      },
+      {
+        kind: 'warn',
+        text:
+          '**Mỗi khối trang chủ chỉ có 5 câu: 5 câu *On* đầu tiên theo thứ tự trong bảng.** Bật câu thứ 6 vẫn được, cột vẫn ghi *On*, nhưng nó **không hiện** — không có cảnh báo nào. Muốn đổi câu nào lên trang chủ thì **sắp lại thứ tự**, hoặc tắt bớt một câu.',
+      },
+      { kind: 'h', text: '§3 · Sắp thứ tự, sửa, ẩn, xoá câu hỏi' },
+      {
+        kind: 'list',
+        items: [
+          '**Sắp thứ tự:** kéo **tay nắm** ⠿ ở đầu dòng, hoặc bấm **▲ / ▼** ở cột *Order*. Lưu ngay — toast *FAQ order saved*. Đang lọc theo trạng thái (*Published / Draft…*) thì kéo thả **tắt**, dòng gợi ý đổi thành *Clear the status filter to reorder* — bấm **All** trước.',
+          '**Sửa nội dung:** bấm vào dòng → sửa → **Save** (toast *FAQ entry saved*). Câu đang *Published* thì sửa xong **hiện luôn** bản mới.',
+          '**Đổi trạng thái:** nút **⋮** cuối dòng. Mỗi lựa chọn hỏi xác nhận trước khi chạy — bảng dưới.',
+        ],
+      },
+      {
+        kind: 'table',
+        heading: 'Nút ⋮ của một câu hỏi',
+        cols: ['Chọn', 'Có khi', 'Kết quả trên site'],
+        rows: [
+          ['**Edit**', 'Luôn có', 'Mở ngăn kéo sửa'],
+          ['**Publish**', 'Câu chưa *Published*', '**Hiện** — với các ngôn ngữ đã viết đủ (hộp xác nhận liệt kê chúng)'],
+          ['**Unpublish**', '*Published* hoặc *Review*', 'Gỡ khỏi site, về **Draft**; nội dung giữ nguyên'],
+          ['**Send for review**', 'Chỉ *Draft*', 'Không hiện; đánh dấu chờ người duyệt'],
+          ['**Archive**', 'Chưa *Archived*', 'Gỡ khỏi site, cất đi; **Publish lại được**'],
+          ['**Delete**', 'Luôn có (chữ đỏ)', '**Xoá vĩnh viễn** cả câu và mọi bản dịch — muốn giữ thì Archive'],
+        ],
+      },
+      { kind: 'h', text: '§4 · Thêm, sửa, ẩn danh mục' },
+      {
+        kind: 'list',
+        items: [
+          '**Bước 1.** Chọn đúng **Jobseekers** hoặc **Employers** — danh mục **gắn cố định** vào đối tượng lúc tạo, sau này không chuyển được.',
+          '**Bước 2.** Bấm **+ New** cạnh chữ *Categories*. Hộp **New category** mở ra.',
+          '**Bước 3.** **Name (VI)** — bắt buộc, tối đa 120 ký tự. **Name (EN)** / **Name (KO)** — tuỳ chọn; để trống thì site hiện tên tiếng Việt.',
+          '**Bước 4.** **Status** — **Published** để hiện; *Draft* để soạn trước.',
+          '**Bước 5.** **Save** (toast *Category created*). Danh mục mới nằm cuối cột; kéo tay nắm hoặc ▲▼ để đổi chỗ — đó cũng là thứ tự chip trên site.',
+          '**Sửa / ẩn:** ⋮ trên dòng danh mục → **Edit** → đổi tên hoặc **Status** → Save. Danh mục chỉ có hai lựa chọn: *Edit* và *Delete* — trạng thái đổi trong hộp Edit.',
+        ],
+      },
+      {
+        kind: 'shot',
+        src: '/shots/help-admin/faq-04-new-category.jpg',
+        where: 'Admin',
+        caption: 'Hộp **New category** — chỉ tên tiếng Việt là bắt buộc; dòng dưới *Status* nhắc rằng danh mục không *Published* thì **giấu mọi câu bên trong**.',
+      },
+      {
+        kind: 'warn',
+        text:
+          '**Danh mục không *Published* thì giấu MỌI câu bên trong, kể cả câu đã *Published*.** Đây là cách tắt cả nhóm một lần. Ngược lại, **không xoá được danh mục còn câu hỏi** — hộp *This category cannot be deleted yet* chỉ có nút *Close*: chuyển hoặc xoá câu trước, hoặc đặt danh mục về Draft.',
+      },
+      { kind: 'h', text: '§5 · Từ khoá gợi ý (chip Suggested)' },
+      {
+        kind: 'list',
+        items: [
+          '**Thêm:** bấm **+ New** cạnh *Recommended searches* → **Keyword (VI)** bắt buộc, EN / KO tuỳ chọn (tối đa 120 ký tự) → **Save**.',
+          '**Đổi thứ tự:** kéo tay nắm hoặc ▲▼ — chip trên site đi đúng thứ tự này.',
+          '**Sửa / xoá:** ⋮ → *Edit* hoặc *Delete*.',
+          'Một danh sách cho **cả hai** đối tượng. Không giới hạn số chip — thiết kế mẫu dùng **4**, nhiều hơn thì hàng chip dài ra.',
+        ],
+      },
+      {
+        kind: 'shot',
+        src: '/shots/help-admin/faq-05-new-keyword.jpg',
+        where: 'Admin',
+        caption: 'Hộp **New recommended search**. Chip chưa có bản dịch vẫn hiện — bằng chữ tiếng Việt, không bao giờ bị ẩn.',
+      },
+      {
+        kind: 'p',
+        text:
+          '**Giữ mỗi từ khoá trong 20 ký tự.** Ô tìm kiếm trên site chỉ nhận 20 ký tự, và server **lặng lẽ cắt** từ khoá dài hơn về 20 ký tự đầu — bấm một chip dài sẽ tìm theo nửa đầu của nó, không báo lỗi.',
+      },
+      { kind: 'h', text: 'Phần 2 · Trên site ứng viên — khách thấy gì' },
+      { kind: 'h', text: '§6 · Trang chủ trợ giúp', path: '/ho-tro' },
       {
         kind: 'shot',
         src: '/shots/help/help-01-home.jpg',
@@ -1327,27 +1345,12 @@ export const CONTENT_PAGE_DOCS: Record<string, PageDoc> = {
         ],
       },
       {
-        kind: 'table',
-        heading: 'Danh mục mặc định (seed)',
-        cols: ['Cá nhân', 'Doanh nghiệp'],
-        rows: [
-          ['Thông tin tài khoản, ID và mật khẩu', 'Đăng và quản lý tin tuyển dụng'],
-          ['Đăng và quản lý hồ sơ', 'Dịch vụ trả phí và thanh toán'],
-          ['Ứng tuyển và quản lý hồ sơ ứng tuyển', 'Kho ứng viên'],
-          ['Tìm kiếm và quản lý tin tuyển dụng', 'Tài khoản và thông tin công ty, ID và mật khẩu'],
-          ['Đăng ký và huỷ tài khoản', 'Đăng ký và huỷ tài khoản'],
-          ['Gợi ý việc làm và tìm kiếm đã lưu', 'Quản lý ứng viên và phỏng vấn'],
-          ['Dịch vụ thành viên khác', 'Dịch vụ thành viên khác'],
-        ],
-        note: 'Đây là bộ danh mục hệ thống tạo sẵn. Operator đổi tên, thêm, ẩn và sắp lại ở admin — nên thứ tự trên dev có thể khác bảng này.',
-      },
-      {
         kind: 'shot',
         src: '/shots/help/help-02-company.jpg',
         where: 'Jobseeker site',
         caption: 'Bấm **Doanh nghiệp**: cùng bố cục, bộ danh mục và câu hỏi của nhà tuyển dụng.',
       },
-      { kind: 'h', text: '§2 · Mở một danh mục và đọc câu trả lời', path: '/ho-tro?category=<id>' },
+      { kind: 'h', text: '§7 · Mở một danh mục và đọc câu trả lời', path: '/ho-tro?category=<id>' },
       {
         kind: 'shot',
         src: '/shots/help/help-03-category.jpg',
@@ -1361,7 +1364,7 @@ export const CONTENT_PAGE_DOCS: Record<string, PageDoc> = {
         caption: 'Bấm câu hỏi: câu trả lời mở ngay tại chỗ, dưới là *Ngày đăng · Cập nhật · Lượt xem*. Bấm câu khác thì câu đang mở tự đóng.',
         note: 'Trên điện thoại chỉ hiện *Ngày đăng*; *Cập nhật* và *Lượt xem* bị ẩn.',
       },
-      { kind: 'h', text: '§3 · Tìm kiếm', path: '/ho-tro/tim-kiem?keyword=…' },
+      { kind: 'h', text: '§8 · Tìm kiếm', path: '/ho-tro/tim-kiem?keyword=…' },
       {
         kind: 'shot',
         src: '/shots/help/help-04-search.jpg',
@@ -1386,7 +1389,7 @@ export const CONTENT_PAGE_DOCS: Record<string, PageDoc> = {
           ['**Danh sách**', 'Về toàn bộ câu của danh mục đó.'],
         ],
       },
-      { kind: 'h', text: '§4 · Tìm ID / mật khẩu', path: '/auth/forgot-password' },
+      { kind: 'h', text: '§9 · Tìm ID / mật khẩu', path: '/auth/forgot-password' },
       {
         kind: 'shot',
         src: '/shots/help/help-08-forgot.jpg',
@@ -1394,7 +1397,7 @@ export const CONTENT_PAGE_DOCS: Record<string, PageDoc> = {
         caption: 'Bấm tab *Tìm ID / mật khẩu* là **rời trung tâm hỗ trợ** sang trang *Tìm mật khẩu cho ứng viên*: nhập số điện thoại → **Xác thực** → nhập mã 6 số → **Đặt lại mật khẩu** → nhập mật khẩu mới hai lần.',
         note: 'Đặt lại xong, mọi thiết bị khác đang đăng nhập tài khoản đó bị đăng xuất. Mã được gửi qua **Zalo** tới số điện thoại của tài khoản — số điện thoại là cách xác minh duy nhất.',
       },
-      { kind: 'h', text: '§5 · Xoá tài khoản', path: '/ho-tro/xoa-tai-khoan' },
+      { kind: 'h', text: '§10 · Xoá tài khoản', path: '/ho-tro/xoa-tai-khoan' },
       {
         kind: 'table',
         heading: 'Ba bước trên một màn hình — chỉ cho ứng viên đã đăng nhập',
@@ -1406,9 +1409,66 @@ export const CONTENT_PAGE_DOCS: Record<string, PageDoc> = {
         ],
         note: 'Xoá xong, site chuyển sang trang *Tài khoản đã xoá*. Chưa đăng nhập mà bấm tab này thì bị đưa sang trang đăng nhập. Nhà tuyển dụng không xoá tài khoản ở đây — họ xoá trong trang quản lý tài khoản của site tuyển dụng.',
       },
+      { kind: 'h', text: '§11 · Kiểm trên site — và khi không thấy' },
       {
-        kind: 'open',
-        text: '**Có thể là lỗi, chưa kiểm trên dev:** từ trang riêng của một câu hỏi **Doanh nghiệp**, bấm **Danh sách** sẽ quay về danh mục đó nhưng công tắc lại đứng ở **Cá nhân** và không viên danh mục nào sáng — vì đường link không mang theo đối tượng. Đọc thấy trong code (`faq-detail-page.tsx`), cần QA xác nhận.',
+        kind: 'p',
+        text:
+          'Mở `https://dev-saramin.saramin.vn/ho-tro` (không cần đăng nhập) — **đợi khoảng 1 phút**, vì site giữ danh sách FAQ trong bộ nhớ đệm 60 giây. Đổi ngôn ngữ ở góc trên (VI · EN · KO) để kiểm từng bản dịch.',
+      },
+      {
+        kind: 'table',
+        heading: 'Đã lưu mà không thấy trên site — kiểm theo thứ tự',
+        cols: ['#', 'Kiểm', 'Ở đâu'],
+        rows: [
+          ['1', 'Câu hỏi có **Published** chưa?', 'Cột *Status* của dòng'],
+          ['2', '**Danh mục** của nó có Published không?', 'Dòng chữ nhỏ dưới tên danh mục: *Published · N entries*'],
+          ['3', 'Câu có viết **bằng ngôn ngữ đang đọc** không?', 'Cột *Languages* — chip mờ là ngôn ngữ chưa viết'],
+          ['4', 'Đang xem đúng tab **Individual / Company** chưa?', 'Nút *Jobseekers / Employers* ở Admin'],
+          ['5', '(Trang chủ) Câu có nằm trong **5 câu *On* đầu tiên** của danh mục không?', 'Cột *Home block* + thứ tự bảng'],
+          ['6', 'Đã quá **1 phút** chưa?', 'Tải lại trang'],
+        ],
+      },
+      { kind: 'h', text: 'Phần 3 · Tra cứu' },
+      {
+        kind: 'table',
+        heading: 'Danh mục mặc định (seed)',
+        cols: ['Cá nhân', 'Doanh nghiệp'],
+        rows: [
+          ['Thông tin tài khoản, ID và mật khẩu', 'Đăng và quản lý tin tuyển dụng'],
+          ['Đăng và quản lý hồ sơ', 'Dịch vụ trả phí và thanh toán'],
+          ['Ứng tuyển và quản lý hồ sơ ứng tuyển', 'Kho ứng viên'],
+          ['Tìm kiếm và quản lý tin tuyển dụng', 'Tài khoản và thông tin công ty, ID và mật khẩu'],
+          ['Đăng ký và huỷ tài khoản', 'Đăng ký và huỷ tài khoản'],
+          ['Gợi ý việc làm và tìm kiếm đã lưu', 'Quản lý ứng viên và phỏng vấn'],
+          ['Dịch vụ thành viên khác', 'Dịch vụ thành viên khác'],
+        ],
+        note: 'Đây là bộ danh mục hệ thống tạo sẵn. Operator đổi tên, thêm, ẩn và sắp lại ở admin — nên thứ tự trên dev có thể khác bảng này.',
+      },
+      {
+        kind: 'table',
+        heading: 'Cột trong bảng câu hỏi',
+        cols: ['Cột', 'Nghĩa'],
+        rows: [
+          ['**Question**', 'Câu hỏi (ngôn ngữ đầu tiên có)'],
+          ['**Languages**', 'Ba chip VI/EN/KO — chip tắt = “hidden from those visitors”'],
+          ['**Home block**', '(Help centre) có lên khối trang chủ hay không — chỉ đọc, sửa trong drawer'],
+          ['**Status**', 'Draft · Review · Published · Archived'],
+          ['**Updated**', 'Lần sửa gần nhất'],
+          ['**Order**', 'Tay nắm kéo + ▲▼'],
+        ],
+        note: 'Không phân trang, không tìm kiếm, không sắp theo cột — bảng là toàn bộ một vùng (hoặc một danh mục). Bộ lọc trạng thái chạy trong trình duyệt.',
+      },
+      {
+        kind: 'table',
+        heading: 'Trạng thái của một câu hỏi',
+        cols: ['Trạng thái', 'Trên site', 'Tới bằng cách nào', 'Làm gì tiếp'],
+        rows: [
+          ['**Draft**', 'Không hiện — chỗ chờ đủ bản dịch', 'Tạo · **Unpublish** từ Published/Review', 'Publish · Send for review · Archive · Delete'],
+          ['**Review**', 'Không hiện', '**Send for review** (chỉ từ Draft) hoặc chọn trong drawer', 'Publish · Unpublish · Archive · Delete'],
+          ['**Published**', '**Hiện** — nếu danh mục cũng Published và đúng ngôn ngữ', '**Publish**', 'Unpublish · Archive · Delete'],
+          ['**Archived**', 'Không hiện; giữ nội dung', '**Archive**', 'Publish · Delete'],
+        ],
+        note: 'Không có cờ “ẩn” riêng — ba trên bốn trạng thái đã là ẩn. Danh mục cũng có trạng thái; danh mục không Published **thắng** trạng thái của câu hỏi.',
       },
       {
         kind: 'list',
@@ -1419,99 +1479,17 @@ export const CONTENT_PAGE_DOCS: Record<string, PageDoc> = {
           'Ô tìm kiếm nhắc từ khi đang gõ.',
         ],
       },
-    ],
-  },
-
-  'help-notices': {
-    logic: [
-      'Tab **Thông báo & sự kiện** của trung tâm hỗ trợ, có hai tab con: **Thông báo** (`/ho-tro/thong-bao`, EN `/help/notices`) và **Sự kiện** (`/ho-tro/su-kien`, EN `/help/events`). Công khai, không cần đăng nhập.',
-      '**Mọi bài đều do Operator đăng ở admin** (*Content → Notices & events*). Một bản ghi ở admin là **Notice** (hiện trên bảng thông báo) hoặc **Event** (hiện trên lưới sự kiện) — không bao giờ cả hai.',
-      '**Đối tượng.** Bảng thông báo có ba tab *Tất cả · Cá nhân · Doanh nghiệp*. Bài gửi *Everyone* hiện ở **cả hai** tab Cá nhân và Doanh nghiệp.',
-      '**Bài ghim** đứng đầu **trang 1**, và cột danh mục của nó ghi **Thông báo** in đậm thay cho danh mục thật.',
-      '**Sự kiện hết hạn tự biến mất khỏi lưới** — không có nhãn *Đang diễn ra / Đã kết thúc*. Đường link chi tiết của nó vẫn mở được.',
-    ],
-    how: [
-      '**Tìm thông báo:** chọn tab đối tượng → chọn danh mục ở ô thả xuống → (tuỳ chọn) gõ từ khoá → bấm **Tìm**. Bấm biểu tượng xoay vòng để xoá bộ lọc.',
-      '**Đọc một thông báo:** bấm tiêu đề → trang chi tiết với *Ngày đăng · Lượt xem*, nội dung, bài trước / bài sau, nút **Danh sách**.',
-      '**Xem sự kiện:** tab con **Sự kiện** → bấm một thẻ để mở trang chi tiết (cùng dạng trang chi tiết của thông báo).',
-    ],
-    watch: [
-      '**Đổi danh mục chưa lọc ngay** — phải bấm **Tìm**.',
-      '**Từ khoá chỉ tìm trong tiêu đề**, và không nhận các ký tự `! # @ % ^ & * $ ) [ ] : ; ’ " . , /` (hiện dòng báo ngay dưới ô). Dấu `(` thì được.',
-      '**Bấm Danh sách ở trang chi tiết là về bảng từ đầu** — bộ lọc, từ khoá và số trang đang chọn bị mất.',
-      '**Bài hẹn giờ không hiện tới đúng giờ.** Operator đặt ngày đăng ở tương lai thì bài nằm ẩn tới thời điểm đó. Sự kiện thì khác: **ngày bắt đầu ở tương lai vẫn hiện thẻ**, chỉ ngày kết thúc mới quyết định ẩn.',
-      '**Sửa ở admin, đợi khoảng 1 phút** — bảng và lưới cache 60 giây.',
-      '**Bài chưa viết bằng ngôn ngữ khách đang đọc thì không hiện** với khách đó (không rơi về tiếng Việt).',
-      '**Mỗi lần mở trang chi tiết cộng 1 lượt xem**, kể cả khi chính Operator mở để kiểm tra.',
-    ],
-    blocks: [
       {
-        kind: 'p',
-        text:
-          '**Sửa nội dung trang này ở Admin:** *Content → Notices & events* (thông báo, sự kiện, ghim, hẹn giờ). Xem trang **Notices & events** của guide này — **Phần 1 · Làm trên Admin — từng bước**.',
+        kind: 'open',
+        text: '**Có thể là lỗi, chưa kiểm trên dev:** từ trang riêng của một câu hỏi **Doanh nghiệp**, bấm **Danh sách** sẽ quay về danh mục đó nhưng công tắc lại đứng ở **Cá nhân** và không viên danh mục nào sáng — vì đường link không mang theo đối tượng. Đọc thấy trong code (`faq-detail-page.tsx`), cần QA xác nhận.',
       },
       {
         kind: 'warn',
-        text: '**Nguồn và độ mới.** Viết theo build, kiểm ngày **21/10/2026** với svn-web `178a3709` · svn-be `7cb93f053` · admin `ce90a489` (nhánh `origin/dev`). Ảnh chụp cùng ngày trên `dev-saramin.saramin.vn`, chưa đăng nhập, tiếng Việt.',
-      },
-      { kind: 'h', text: '§1 · Bảng thông báo', path: '/ho-tro/thong-bao' },
-      {
-        kind: 'shot',
-        src: '/shots/help/help-09-notices.jpg',
-        where: 'Jobseeker site',
-        caption: 'Ba tab đối tượng, thanh lọc (*Tổng N kết quả* · danh mục · từ khoá · **Tìm** · xoá lọc), rồi bảng ba cột: **danh mục · tiêu đề · ngày đăng**. Bốn dòng đầu in đậm *Thông báo* là bài ghim.',
-      },
-      {
-        kind: 'table',
-        heading: 'Bảng thông báo — từng phần',
-        cols: ['Phần', 'Nghĩa'],
-        rows: [
-          ['**Tất cả · Cá nhân · Doanh nghiệp**', 'Lọc theo đối tượng (`?audience=all | person | company`). Bài *Everyone* có mặt ở cả ba tab.'],
-          ['**Ô danh mục**', '*Tất cả · Hướng dẫn · Ra mắt · Khác · Cập nhật · Cách sử dụng · Khuyến mãi*.'],
-          ['**Ô từ khoá**', '*Nhập từ khoá không chứa ký tự đặc biệt.* — chỉ khớp tiêu đề.'],
-          ['**Bảng**', 'Không có hàng tiêu đề cột. Ngày theo dạng **YYYY.MM.DD**. Bài ghim lên đầu trang 1 và vẫn tính vào tổng. Không có kết quả: *Không có kết quả nào.*'],
-          ['**Phân trang**', '20 bài/trang.'],
-        ],
-      },
-      { kind: 'h', text: '§2 · Trang chi tiết', path: '/ho-tro/thong-bao/<id>' },
-      {
-        kind: 'shot',
-        src: '/shots/help/help-11-notice-detail.jpg',
-        where: 'Jobseeker site',
-        caption: 'Tiêu đề, *Ngày đăng · Lượt xem*, nội dung, nút **Danh sách**, và hai thẻ bài trước / bài sau.',
-        note: 'Không có ngày *Cập nhật* (khác trang câu hỏi FAQ). Bài trước / sau là bài **cùng loại**, xếp theo ngày đăng. Sự kiện dùng chung trang này; **Danh sách** từ một sự kiện thì về lưới sự kiện.',
-      },
-      { kind: 'h', text: '§3 · Lưới sự kiện', path: '/ho-tro/su-kien' },
-      {
-        kind: 'shot',
-        src: '/shots/help/help-10-events.jpg',
-        where: 'Jobseeker site',
-        caption: 'Mỗi sự kiện một thẻ, 3 thẻ/hàng trên máy tính: ảnh, tiêu đề, thời gian chạy, *Đối tượng*. Không có bộ lọc, tìm kiếm hay phân trang.',
-        note: '**Ảnh thẻ đang trống trên dev (21/10)** — các bản ghi mẫu chưa có ảnh tải lên. Ở admin, ảnh thẻ là bắt buộc với Event (tối thiểu 616×318).',
-      },
-      {
-        kind: 'table',
-        heading: 'Dòng thời gian trên thẻ sự kiện',
-        cols: ['Dữ liệu ở admin', 'Thẻ ghi'],
-        rows: [
-          ['Có ngày bắt đầu và kết thúc', '`2026-10-01 ~ 2026-11-30`'],
-          ['Có ngày bắt đầu, không có ngày kết thúc', '*Từ 2026-09-15*'],
-          ['Không có ngày nào', '*Thường xuyên*'],
-          ['Ngày kết thúc đã qua', 'Thẻ **biến mất** khỏi lưới (link chi tiết vẫn mở được)'],
-        ],
-        note: 'Dòng *Đối tượng*: *Tất cả thành viên · Thành viên cá nhân · Thành viên doanh nghiệp*.',
-      },
-      {
-        kind: 'list',
-        heading: 'Chưa làm — theo quyết định, không phải lỗi',
-        items: [
-          'Tệp đính kèm trong thông báo.',
-          'Nhãn *Mới* cho bài vừa đăng.',
-          'Tab *Đang diễn ra / Đã kết thúc / Người thắng*, nút tham gia sự kiện.',
-        ],
+        text: '**Nguồn và độ mới.** Viết theo build, kiểm ngày **21/10/2026** với svn-web `178a3709` · svn-be `7cb93f053` · admin `ce90a489` (nhánh `origin/dev`). Ảnh chụp cùng ngày trên `dev-saramin.saramin.vn`, **chưa đăng nhập**, giao diện tiếng Việt — nên tab *Xoá tài khoản* không có ảnh (trang đó bắt đăng nhập).',
       },
     ],
   },
+
 }
 
 export const CONTENT_MODULE_DOCS: Record<string, ModuleDoc> = {

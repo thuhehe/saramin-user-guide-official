@@ -109,11 +109,18 @@ function href(s: Sel): string {
   return `/trang/${s.key}`
 }
 
+/* Pages folded into another one. The old link was sent to people, so it keeps landing
+   on the page that now carries its content instead of falling through to the home page. */
+const PAGE_ALIAS: Record<string, string> = {
+  'help-notices': 'site-notices', // merged into Notices & events, 21/10/2026
+}
+
 function parse(pathname: string): Sel {
   const [, kind, rest] = pathname.replace(/\/+$/, '').split('/')
   if (kind === 'toan-canh') return { t: 'flow' }
   if (kind === 'demo') return { t: 'demo' }
   if (kind === 'test') return { t: 'test' }
+  if (kind === 'trang' && rest && PAGE_ALIAS[rest]) return { t: 'page', key: PAGE_ALIAS[rest] }
   if (kind === 'trang' && rest && ALL.some((p) => p.key === rest)) return { t: 'page', key: rest }
   if (kind === 'logic' && rest && GROUP_BY_SLUG.has(rest)) return { t: 'module', group: GROUP_BY_SLUG.get(rest)! }
   if (kind === 'huong-dan' && rest && WORKFLOW.sections.some((x) => x.id === rest)) return { t: 'guide', id: rest }
