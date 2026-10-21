@@ -436,6 +436,36 @@
  },
  {
   "group": "Content",
+  "key": "help-center",
+  "label": "Help centre — How can we help?",
+  "path": "/ho-tro",
+  "perm": "",
+  "flag": "",
+  "site": "Jobseeker site",
+  "what": "Trung tâm hỗ trợ trên site jobseeker, tab **Chúng tôi có thể giúp gì?**: tìm kiếm FAQ, chọn **Cá nhân / Doanh nghiệp**, lọc theo danh mục, mở câu trả lời ngay trong trang. Thêm hai lối ra: **Tìm ID / mật khẩu** và **Xoá tài khoản**. Nội dung lấy từ màn **FAQ** của admin.",
+  "sub": [
+   "/ho-tro/tim-kiem",
+   "/ho-tro/cau-hoi/:id",
+   "/ho-tro/xoa-tai-khoan",
+   "/auth/forgot-password"
+  ]
+ },
+ {
+  "group": "Content",
+  "key": "help-notices",
+  "label": "Help centre — Notices & events",
+  "path": "/ho-tro/thong-bao",
+  "perm": "",
+  "flag": "",
+  "site": "Jobseeker site",
+  "what": "Tab **Thông báo & sự kiện** của trung tâm hỗ trợ: **bảng thông báo** (lọc đối tượng, danh mục, từ khoá, 20 dòng/trang) và **lưới sự kiện**. Nội dung lấy từ màn **Notices & events** của admin.",
+  "sub": [
+   "/ho-tro/thong-bao/:id",
+   "/ho-tro/su-kien"
+  ]
+ },
+ {
+  "group": "Content",
   "key": "pages",
   "label": "Pages",
   "path": "/content/pages",

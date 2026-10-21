@@ -57,7 +57,7 @@ const ALL = PAGES as Page[]
 const ADMIN_PAGES = ALL.filter((p) => !p.site)
 
 /* Dev hosts of the other two sites — the same ones the docs name in prose. */
-const SITE_BASE = { 'Company site': 'https://dev.hiring.svn.topdev.asia', 'Jobseeker site': 'https://dev.svn.topdev.asia' } as const
+const SITE_BASE = { 'Company site': 'https://dev-hiring.saramin.vn', 'Jobseeker site': 'https://dev-saramin.saramin.vn' } as const
 const pageUrl = (p: Page) => (p.site ? `${SITE_BASE[p.site]}${p.path}` : adminUrl(p.path))
 
 /** Admin sidebar order, as the console itself renders it — plus Resume management, Application management and Mega menu pages (see above). */
