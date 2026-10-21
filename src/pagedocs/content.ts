@@ -522,6 +522,183 @@ export const CONTENT_PAGE_DOCS: Record<string, PageDoc> = {
       '**Delete là vĩnh viễn và mất luôn lượt xem.** Muốn cho nghỉ thì **Archive** (giữ ngày đăng và lượt xem, Publish lại được).',
     ],
     blocks: [
+      /* Part 1 — step by step. Screens: dev-admin.saramin.vn on 21/10/2026 (forms
+         opened, nothing saved); strings: saramin-vn-admin origin/dev 322830e3,
+         src/modules/content/notices/. */
+      { kind: 'h', text: 'Phần 1 · Làm trên Admin — từng bước' },
+      {
+        kind: 'p',
+        text:
+          'Phần này dành cho người **đăng bài lên trang *Notices & events*** của trung tâm hỗ trợ (`/ho-tro/thong-bao`, `/ho-tro/su-kien`) trên site ứng viên. Mọi bài đều đăng ở *Content → Notices & events*. Cần quyền **Notices & events** (`site_notice`): *Create* để tạo, **Update** để sửa **và cũng để Publish, Unpublish, Archive, ghim**; *Delete* để xoá. Mặc định chỉ HQ admin có.',
+      },
+      {
+        kind: 'table',
+        heading: 'Cái gì trên Admin thành cái gì trên site',
+        cols: ['Trên Admin', 'Trên site — Notices & events'],
+        rows: [
+          ['**Type = Notice**', 'Một dòng trên **bảng thông báo** (`/ho-tro/thong-bao`)'],
+          ['**Type = Event**', 'Một thẻ có ảnh trên **lưới sự kiện** (`/ho-tro/su-kien`)'],
+          ['**Shown to** — *Jobseekers* / *Employers* / *Everyone*', 'Tab đối tượng của bảng. *Everyone* hiện ở **cả hai** tab, không phải tab thứ ba'],
+          ['**Filed under** (*Guide · Launch · Other · Update · How to · Promotion*)', 'Cột danh mục đầu bảng và bộ lọc danh mục (*Hướng dẫn · Ra mắt · Khác · Cập nhật · Cách sử dụng · Khuyến mãi*)'],
+          ['**Pin to the top**', 'Đứng đầu **trang 1** của bảng'],
+          ['**Publication date**', 'Ngày đăng in trên dòng — và lúc bài bắt đầu hiện'],
+          ['**Views**', 'Mỗi lần khách mở trang chi tiết cộng 1'],
+        ],
+      },
+      {
+        kind: 'shot',
+        src: '/shots/help-admin/ntc-01-list.jpg',
+        where: 'Admin',
+        caption: 'Danh sách — xếp **đúng như bảng trên site**: bài ghim trước, rồi mới nhất. **Filter** lọc theo *Type · Status · Audience · Category*; ô *Search by title* tìm theo tiêu đề (nhấn Enter). Bấm một dòng để mở.',
+      },
+
+      { kind: 'h', text: '§1 · Đăng một thông báo (Notice)' },
+      {
+        kind: 'list',
+        items: [
+          '**Bước 1.** Vào *Content → Notices & events* → bấm **New record** (góc phải). Trang **New record** mở ra.',
+          '**Bước 2.** **Type** — để **Notice**. Chọn kỹ: **loại không đổi được sau khi lưu**.',
+          '**Bước 3.** **Filed under** — chọn danh mục (bắt buộc với Notice).',
+          '**Bước 4.** **Shown to** — *Everyone* (mặc định), *Jobseekers* hoặc *Employers*.',
+          '**Bước 5.** **Pin to the top** — bật nếu muốn bài đứng đầu bảng (xem §4).',
+          '**Bước 6.** **Title** — tiêu đề ở tab **VI** (tối đa 300 ký tự). **Body** — nội dung trong khung soạn thảo (heading, in đậm, danh sách, link, bảng, chèn ảnh). Bấm **EN**, **KO** và viết tiếp cho từng ngôn ngữ muốn có.',
+          '**Bước 7.** Phần **Publication**: để **Status = Draft**, **Publication date** trống. Bấm **Save** (góc trên phải). Toast *Draft created*, trang chuyển sang **Edit record**.',
+          '**Bước 8.** Ở thẻ **Publication** bên phải, bấm **Publish** → xác nhận *Publish this record?* → **Publish**. Toast *Record is now live on the help centre board*; thẻ đổi thành *Live — visitors can read this on the help centre board now.*',
+        ],
+      },
+      {
+        kind: 'shot',
+        src: '/shots/help-admin/ntc-02-new-notice.jpg',
+        where: 'Admin',
+        caption: '**New record**, loại *Notice*: *What this is* (loại, danh mục, đối tượng, ghim) rồi *Title and body*. Thẻ **Publication** bên phải còn trống — **chưa lưu thì chưa có nút Publish**.',
+      },
+      {
+        kind: 'shot',
+        src: '/shots/help-admin/ntc-04-publication.jpg',
+        where: 'Admin',
+        caption: 'Cuối form: tiêu đề và nội dung theo tab VI · EN · KO, rồi khối **Publication** — *Status* và *Publication date*. Dòng nhắc: **Save không bao giờ publish**.',
+      },
+      {
+        kind: 'warn',
+        text:
+          '**Save không bao giờ đăng bài.** Chỉ nút **Publish** ở thẻ *Publication* mới đưa bài lên site (nó tự lưu form trước). Cách tắt: lúc tạo chọn luôn **Status = Published** rồi Save — bài lên ngay với ngày hôm nay (cần quyền *Update*), dù toast vẫn ghi *Draft created*. Sau lần lưu đầu, *Status* và *Publication date* **bị khoá trong form** — chỉ đổi bằng thẻ Publication.',
+      },
+      {
+        kind: 'warn',
+        text:
+          '**Ngôn ngữ nào không viết thì khách đọc site bằng ngôn ngữ đó KHÔNG thấy bài.** Mỗi ngôn ngữ đã gõ phải đủ **cả tiêu đề lẫn nội dung** — thiếu một nửa thì Save báo *One language is only half written* và tự mở tab đó. Cột *Title* của danh sách in các ngôn ngữ bài đã có (*VI · EN · KO*).',
+      },
+
+      { kind: 'h', text: '§2 · Đăng một sự kiện (Event)' },
+      {
+        kind: 'list',
+        items: [
+          '**Bước 1.** **New record** → **Type = Event**. Ô *Filed under* biến mất (sự kiện không có danh mục); khối **Event card** hiện ra.',
+          '**Bước 2.** **Shown to** và **Pin to the top** — như Notice.',
+          '**Bước 3.** **Card artwork** (bắt buộc) — kéo ảnh vào ô hoặc bấm để chọn file. Ảnh **rộng từ 616×318** trở lên, tối đa **20 MB**. Hộp **Crop image** mở ra, khung cắt **khoá đúng tỉ lệ thẻ** — kéo chọn phần muốn hiện → **Save**. Ảnh chỉ thật sự tải lên khi lưu bài.',
+          '**Bước 4.** **Runs from / Runs until** — chọn theo bảng dưới. Dòng chữ dưới hai ô đổi theo, nói rõ sự kiện sẽ chạy kiểu gì.',
+          '**Bước 5.** **Title** + **Body** theo từng ngôn ngữ, như Notice.',
+          '**Bước 6.** **Save**, rồi **Publish** ở thẻ *Publication* — như §1, bước 7–8.',
+        ],
+      },
+      {
+        kind: 'shot',
+        src: '/shots/help-admin/ntc-03-new-event.jpg',
+        where: 'Admin',
+        caption: 'Loại *Event*: khối **Event card** — ô ảnh thẻ (*Upload at 616×318 or wider*) và hai ô ngày **Runs from / Runs until**.',
+      },
+      {
+        kind: 'table',
+        heading: 'Chọn ngày cho sự kiện',
+        cols: ['Runs from', 'Runs until', 'Trên lưới sự kiện'],
+        rows: [
+          ['trống', 'trống', '**Always on** — ở trên lưới tới khi bạn Unpublish'],
+          ['có', 'trống', 'Chạy từ ngày bắt đầu, **không có ngày kết thúc**'],
+          ['có', 'có', '**Đợt cố định** — tự rời lưới **ngày sau** ngày kết thúc. Cùng một ngày = sự kiện một ngày'],
+          ['trống', 'có', '**Không lưu được** — *This event ends but never starts*'],
+        ],
+        note: 'Hết đợt, sự kiện tự rời lưới nhưng **trang chi tiết vẫn mở được** và bài vẫn *Published* ở Admin — Archive nếu muốn dọn hẳn.',
+      },
+
+      { kind: 'h', text: '§3 · Hẹn giờ đăng' },
+      {
+        kind: 'list',
+        items: [
+          '**Bước 1.** Lúc tạo bài, ở khối **Publication** đặt **Publication date** ở **tương lai** (ngày + giờ).',
+          '**Bước 2.** Chọn **Status**: *Published* để hẹn luôn — hoặc *Draft* nếu còn chờ duyệt, rồi bấm **Publish** khi sẵn sàng (Publish **giữ nguyên** ngày hẹn).',
+          '**Bước 3.** **Save**. Bài *Published* với ngày tương lai **chưa hiện** — nó lên site đúng giờ đã đặt (cộng tối đa ~1 phút bộ nhớ đệm).',
+        ],
+      },
+      {
+        kind: 'p',
+        text:
+          '**Phải đặt ngày ngay lúc tạo.** Sau lần lưu đầu, ô *Publication date* bị khoá (*Set when first published*); bài nháp **không có ngày** thì Publish đóng dấu **ngay lúc bấm**. Lỡ lưu nháp mà chưa đặt ngày thì tạo một bản ghi mới có ngày hẹn và xoá bản nháp. Ví dụ đầy đủ: bảng *Hẹn giờ thông báo bảo trì* ở Phần 2.',
+      },
+
+      { kind: 'h', text: '§4 · Ghim lên đầu bảng' },
+      {
+        kind: 'list',
+        items: [
+          '**Cách 1 — từ danh sách:** ⋮ cuối dòng → **Pin to the top** → xác nhận **Pin**. Bỏ ghim: ⋮ → **Remove from the top** → **Remove** (bài về đúng chỗ theo ngày).',
+          '**Cách 2 — trong form:** bật / tắt **Pin to the top** → **Save**.',
+          'Bài ghim chỉ đứng đầu **trang 1**, và vẫn phải khớp tab / danh mục / từ khoá khách đang lọc. Ghim nhiều bài thì chúng xếp với nhau theo ngày đăng.',
+        ],
+      },
+
+      { kind: 'h', text: '§5 · Sửa, gỡ, cất, xoá' },
+      {
+        kind: 'list',
+        items: [
+          '**Sửa nội dung:** bấm vào dòng → trang **Edit record** → sửa → **Save** (toast *Record saved*). Bài đang *Published* hiện bản mới luôn.',
+          '**Đổi trạng thái:** thẻ **Publication** bên phải trang sửa, hoặc ⋮ trên danh sách. Mỗi nút hỏi xác nhận.',
+        ],
+      },
+      {
+        kind: 'shot',
+        src: '/shots/help-admin/ntc-05-edit-publication.jpg',
+        where: 'Admin',
+        caption: '**Edit record** của một bài đang chạy: *Type* đã khoá (*Can’t be changed after creation*); thẻ **Publication** ghi *Live…* và có **Unpublish · Archive · Delete**. Bài nháp thì thẻ có **Publish · Archive · Delete**.',
+      },
+      {
+        kind: 'table',
+        heading: 'Nút trên thẻ Publication (và ⋮ trên danh sách)',
+        cols: ['Nút', 'Có khi', 'Kết quả'],
+        rows: [
+          ['**Publish**', 'Bài chưa *Published*', 'Lên bảng / lưới ngay. Lần đầu publish thì đóng dấu ngày đăng hôm nay; publish lại bài đã có ngày thì **giữ ngày gốc** (không nhảy lên đầu)'],
+          ['**Unpublish**', 'Bài *Published*', 'Gỡ khỏi site, về **Draft**'],
+          ['**Archive**', 'Bài chưa *Archived*', 'Gỡ khỏi site, **giữ ngày đăng và lượt xem**; Publish lại được nguyên vẹn'],
+          ['**Delete**', 'Luôn có (chữ đỏ, cần quyền *Delete*)', '**Xoá vĩnh viễn** cả bài, bản dịch và lượt xem — muốn cho nghỉ thì **Archive**'],
+          ['**Pin to the top / Remove from the top**', 'Chỉ trên ⋮ của danh sách', 'Xem §4'],
+        ],
+      },
+      {
+        kind: 'p',
+        text:
+          '**Gõ nhầm loại (Notice ↔ Event)?** Không đổi được — tạo bản ghi mới đúng loại, rồi xoá hoặc Archive bản cũ.',
+      },
+
+      { kind: 'h', text: '§6 · Kiểm trên site — và khi không thấy' },
+      {
+        kind: 'p',
+        text:
+          'Mở `https://dev-saramin.saramin.vn/ho-tro/thong-bao` (Notice) hoặc `/ho-tro/su-kien` (Event) — không cần đăng nhập. Danh sách và lưới được giữ trong bộ nhớ đệm **60 giây**, nên bài mới hiện sau khoảng **1 phút**; trang chi tiết thì hiện ngay.',
+      },
+      {
+        kind: 'table',
+        heading: 'Đã đăng mà không thấy trên site — kiểm theo thứ tự',
+        cols: ['#', 'Kiểm', 'Ở đâu'],
+        rows: [
+          ['1', 'Bài có **Published** chưa? (Save không đăng)', 'Cột *Status* · thẻ *Publication* ghi *Live…*'],
+          ['2', '**Publication date** có ở tương lai không?', 'Cột *Published* của danh sách'],
+          ['3', 'Bài có viết **bằng ngôn ngữ đang đọc** không?', 'Dòng *VI · EN · KO* dưới tiêu đề'],
+          ['4', 'Đang xem đúng **tab đối tượng** chưa?', '*Shown to* — *Jobseekers* chỉ ở tab ứng viên, *Employers* chỉ ở tab doanh nghiệp'],
+          ['5', '(Event) Đợt chạy đã **hết** chưa?', '*Runs until* — rời lưới ngày sau ngày kết thúc'],
+          ['6', 'Đang lọc **danh mục / từ khoá** trên site không?', 'Từ khoá chỉ tìm trong **tiêu đề**, bằng ngôn ngữ đang đọc'],
+          ['7', 'Đã quá **1 phút** chưa?', 'Tải lại trang'],
+        ],
+      },
+
+      { kind: 'h', text: 'Phần 2 · Tra cứu' },
       {
         kind: 'table',
         heading: 'Danh sách — cột và bộ lọc',
@@ -612,7 +789,7 @@ export const CONTENT_PAGE_DOCS: Record<string, PageDoc> = {
       {
         kind: 'open',
         text:
-          '**Tài liệu admin chưa cập nhật:** `docs/features/notices.md` (admin 45954108) vẫn ghi “svn-be in flight” — thực tế `AdminSiteNoticeController` đã có trên svn-be ee1db5ea9 (V533). Hành vi trên đây đọc từ controller, chưa chạy thử trên màn hình (chưa xác minh bằng ảnh).',
+          '**Tài liệu admin chưa cập nhật:** `docs/features/notices.md` (admin 45954108) vẫn ghi “svn-be in flight” — thực tế `AdminSiteNoticeController` đã có trên svn-be ee1db5ea9 (V533). Màn hình đã mở và chụp trên dev-admin.saramin.vn ngày 21/10/2026 (admin 322830e3) — mở form, **không lưu** bản ghi nào; các bước Phần 1 khớp với màn hình.',
       },
     ],
   },
@@ -643,6 +820,178 @@ export const CONTENT_PAGE_DOCS: Record<string, PageDoc> = {
       'Site cache danh sách FAQ **60 giây** — sửa xong đợi khoảng một phút.',
     ],
     blocks: [
+      /* Part 1 — step by step, for the ops person who has to change the help centre
+         tomorrow. Screens: dev-admin.saramin.vn on 21/10/2026 (forms opened, nothing
+         saved); strings: saramin-vn-admin origin/dev 322830e3, src/modules/system/faq/. */
+      { kind: 'h', text: 'Phần 1 · Làm trên Admin — từng bước' },
+      {
+        kind: 'p',
+        text:
+          'Phần này dành cho người **sửa nội dung trang *How can we help?*** (`/ho-tro`, EN `/help`) trên site ứng viên. Mọi thứ trên trang đó — danh mục, câu hỏi, khối *frequently asked*, chip *Suggested* — đều nhập ở **một** màn: *Content → FAQ*, tab **Help centre**. Cần quyền **FAQ** (`site_faq`): *View* để xem, *Create / Update / Delete* để sửa; mặc định chỉ HQ admin có. Nút nào không có quyền thì **ẩn hẳn**, không mờ.',
+      },
+      {
+        kind: 'table',
+        heading: 'Cái gì trên Admin thành cái gì trên site',
+        cols: ['Trên Admin (Content → FAQ → Help centre)', 'Trên site — How can we help?'],
+        rows: [
+          ['Nút **Jobseekers** / **Employers** đầu tab', 'Hai tab **Individual** / **Company** (*Cá nhân* / *Doanh nghiệp*) — mỗi bên một bộ danh mục riêng'],
+          ['Cột **Categories**, theo thứ tự trong cột', 'Hàng **chip danh mục** sau chip *All*, và thứ tự các khối *… — frequently asked*'],
+          ['Bảng câu hỏi của một danh mục, theo thứ tự trong bảng', 'Danh sách câu hỏi khi khách bấm danh mục đó (20 câu/trang)'],
+          ['Công tắc **Show on the help centre home page** của câu hỏi', 'Câu đó lên **khối của danh mục** ở trang chủ trợ giúp — **5 câu bật đầu tiên** theo thứ tự bảng'],
+          ['Cột **Recommended searches**', 'Các chip **Suggested** dưới ô tìm kiếm — **dùng chung** cho cả Individual và Company'],
+          ['Tab **Company information**', '**Không** thuộc trang này — là FAQ dưới hồ sơ pháp lý trên trang công ty của site tuyển dụng'],
+        ],
+      },
+      {
+        kind: 'shot',
+        src: '/shots/help-admin/faq-02-helpcentre.jpg',
+        where: 'Admin',
+        caption: '*Content → FAQ* → tab **Help centre** → **Jobseekers**. Trái: **Categories** (bấm một dòng để mở) và **Recommended searches**. Phải: câu hỏi của danh mục đang chọn — cột *Home block* là công tắc trang chủ.',
+      },
+
+      { kind: 'h', text: '§1 · Thêm một câu hỏi' },
+      {
+        kind: 'list',
+        items: [
+          '**Bước 1.** Vào *Content → FAQ* → tab **Help centre**.',
+          '**Bước 2.** Chọn **Jobseekers** (cho tab *Individual* của site) hoặc **Employers** (cho tab *Company*).',
+          '**Bước 3.** Ở cột **Categories**, bấm vào danh mục sẽ chứa câu hỏi. Chưa chọn danh mục thì nút *New entry* bị khoá.',
+          '**Bước 4.** Bấm **New entry** (góc phải bảng). Ngăn kéo **New FAQ entry** mở ra bên phải.',
+          '**Bước 5.** **Category** — đã điền sẵn danh mục đang chọn; đổi được nếu cần.',
+          '**Bước 6.** **Show on the help centre home page** — bật nếu muốn câu này lên khối của danh mục ở trang chủ trợ giúp (xem §2).',
+          '**Bước 7.** **Question** — gõ câu hỏi ở tab **VI** (tối đa 300 ký tự). **Answer** — gõ câu trả lời trong khung soạn thảo: có heading, in đậm, danh sách, link, bảng và nút chèn ảnh.',
+          '**Bước 8.** Bấm **EN**, rồi **KO**, và lặp lại bước 7 cho từng ngôn ngữ muốn có. Hai ô Question và Answer **đổi tab cùng nhau**.',
+          '**Bước 9.** **Status** — để **Draft** nếu còn chờ bản dịch hoặc người duyệt; chọn **Published** nếu muốn hiện ngay.',
+          '**Bước 10.** Bấm **Save**. Toast *FAQ entry created*; câu mới nằm **cuối** bảng của danh mục — kéo lên nếu cần (§3).',
+        ],
+      },
+      {
+        kind: 'shot',
+        src: '/shots/help-admin/faq-03-new-entry.jpg',
+        where: 'Admin',
+        caption: 'Ngăn kéo **New FAQ entry**: *Where it appears* (danh mục, công tắc trang chủ) → *Question and answer* (tab VI · EN · KO) → *Publication* (trạng thái) → **Save**.',
+      },
+      {
+        kind: 'warn',
+        text:
+          '**Ngôn ngữ nào không viết thì khách đọc site bằng ngôn ngữ đó KHÔNG thấy câu hỏi** — không tự lấy bản tiếng Việt thay. Mỗi ngôn ngữ đã gõ phải có **đủ cả câu hỏi lẫn câu trả lời**; thiếu một nửa thì Save báo *This answer needs its question in {locale} too* và tự mở tab ngôn ngữ đó. Trang khách mặc định đọc tiếng Việt, nên **luôn viết VI**.',
+      },
+      {
+        kind: 'p',
+        text:
+          '**Câu trả lời tối đa 20.000 ký tự — tính cả mã định dạng**, không chỉ chữ nhìn thấy. Ảnh và bảng ăn giới hạn rất nhanh; quá thì Save báo *This answer is {length} characters. The limit is 20000.* — tách thành hai câu hỏi.',
+      },
+
+      { kind: 'h', text: '§2 · Đưa câu hỏi lên trang chủ trợ giúp' },
+      {
+        kind: 'list',
+        items: [
+          '**Bước 1.** Mở câu hỏi: bấm vào dòng của nó (hoặc ⋮ → **Edit**).',
+          '**Bước 2.** Bật **Show on the help centre home page** → **Save**. Cột *Home block* của dòng đổi thành **On**.',
+          '**Bước 3.** Kéo câu đó lên trong bảng (§3) nếu danh mục đã có từ 5 câu bật trở lên.',
+        ],
+      },
+      {
+        kind: 'warn',
+        text:
+          '**Mỗi khối trang chủ chỉ có 5 câu: 5 câu *On* đầu tiên theo thứ tự trong bảng.** Bật câu thứ 6 vẫn được, cột vẫn ghi *On*, nhưng nó **không hiện** — không có cảnh báo nào. Muốn đổi câu nào lên trang chủ thì **sắp lại thứ tự**, hoặc tắt bớt một câu.',
+      },
+
+      { kind: 'h', text: '§3 · Sắp thứ tự, sửa, ẩn, xoá câu hỏi' },
+      {
+        kind: 'list',
+        items: [
+          '**Sắp thứ tự:** kéo **tay nắm** ⠿ ở đầu dòng, hoặc bấm **▲ / ▼** ở cột *Order*. Lưu ngay — toast *FAQ order saved*. Đang lọc theo trạng thái (*Published / Draft…*) thì kéo thả **tắt**, dòng gợi ý đổi thành *Clear the status filter to reorder* — bấm **All** trước.',
+          '**Sửa nội dung:** bấm vào dòng → sửa → **Save** (toast *FAQ entry saved*). Câu đang *Published* thì sửa xong **hiện luôn** bản mới.',
+          '**Đổi trạng thái:** nút **⋮** cuối dòng. Mỗi lựa chọn hỏi xác nhận trước khi chạy — bảng dưới.',
+        ],
+      },
+      {
+        kind: 'table',
+        heading: 'Nút ⋮ của một câu hỏi',
+        cols: ['Chọn', 'Có khi', 'Kết quả trên site'],
+        rows: [
+          ['**Edit**', 'Luôn có', 'Mở ngăn kéo sửa'],
+          ['**Publish**', 'Câu chưa *Published*', '**Hiện** — với các ngôn ngữ đã viết đủ (hộp xác nhận liệt kê chúng)'],
+          ['**Unpublish**', '*Published* hoặc *Review*', 'Gỡ khỏi site, về **Draft**; nội dung giữ nguyên'],
+          ['**Send for review**', 'Chỉ *Draft*', 'Không hiện; đánh dấu chờ người duyệt'],
+          ['**Archive**', 'Chưa *Archived*', 'Gỡ khỏi site, cất đi; **Publish lại được**'],
+          ['**Delete**', 'Luôn có (chữ đỏ)', '**Xoá vĩnh viễn** cả câu và mọi bản dịch — muốn giữ thì Archive'],
+        ],
+      },
+
+      { kind: 'h', text: '§4 · Thêm, sửa, ẩn danh mục' },
+      {
+        kind: 'list',
+        items: [
+          '**Bước 1.** Chọn đúng **Jobseekers** hoặc **Employers** — danh mục **gắn cố định** vào đối tượng lúc tạo, sau này không chuyển được.',
+          '**Bước 2.** Bấm **+ New** cạnh chữ *Categories*. Hộp **New category** mở ra.',
+          '**Bước 3.** **Name (VI)** — bắt buộc, tối đa 120 ký tự. **Name (EN)** / **Name (KO)** — tuỳ chọn; để trống thì site hiện tên tiếng Việt.',
+          '**Bước 4.** **Status** — **Published** để hiện; *Draft* để soạn trước.',
+          '**Bước 5.** **Save** (toast *Category created*). Danh mục mới nằm cuối cột; kéo tay nắm hoặc ▲▼ để đổi chỗ — đó cũng là thứ tự chip trên site.',
+          '**Sửa / ẩn:** ⋮ trên dòng danh mục → **Edit** → đổi tên hoặc **Status** → Save. Danh mục chỉ có hai lựa chọn: *Edit* và *Delete* — trạng thái đổi trong hộp Edit.',
+        ],
+      },
+      {
+        kind: 'shot',
+        src: '/shots/help-admin/faq-04-new-category.jpg',
+        where: 'Admin',
+        caption: 'Hộp **New category** — chỉ tên tiếng Việt là bắt buộc; dòng dưới *Status* nhắc rằng danh mục không *Published* thì **giấu mọi câu bên trong**.',
+      },
+      {
+        kind: 'warn',
+        text:
+          '**Danh mục không *Published* thì giấu MỌI câu bên trong, kể cả câu đã *Published*.** Đây là cách tắt cả nhóm một lần. Ngược lại, **không xoá được danh mục còn câu hỏi** — hộp *This category cannot be deleted yet* chỉ có nút *Close*: chuyển hoặc xoá câu trước, hoặc đặt danh mục về Draft.',
+      },
+
+      { kind: 'h', text: '§5 · Từ khoá gợi ý (chip Suggested)' },
+      {
+        kind: 'list',
+        items: [
+          '**Thêm:** bấm **+ New** cạnh *Recommended searches* → **Keyword (VI)** bắt buộc, EN / KO tuỳ chọn (tối đa 120 ký tự) → **Save**.',
+          '**Đổi thứ tự:** kéo tay nắm hoặc ▲▼ — chip trên site đi đúng thứ tự này.',
+          '**Sửa / xoá:** ⋮ → *Edit* hoặc *Delete*.',
+          'Một danh sách cho **cả hai** đối tượng. Không giới hạn số chip — thiết kế mẫu dùng **4**, nhiều hơn thì hàng chip dài ra.',
+        ],
+      },
+      {
+        kind: 'shot',
+        src: '/shots/help-admin/faq-05-new-keyword.jpg',
+        where: 'Admin',
+        caption: 'Hộp **New recommended search**. Chip chưa có bản dịch vẫn hiện — bằng chữ tiếng Việt, không bao giờ bị ẩn.',
+      },
+      {
+        kind: 'p',
+        text:
+          '**Giữ mỗi từ khoá trong 20 ký tự.** Ô tìm kiếm trên site chỉ nhận 20 ký tự, và server **lặng lẽ cắt** từ khoá dài hơn về 20 ký tự đầu — bấm một chip dài sẽ tìm theo nửa đầu của nó, không báo lỗi.',
+      },
+
+      { kind: 'h', text: '§6 · Kiểm trên site — và khi không thấy' },
+      {
+        kind: 'p',
+        text:
+          'Mở `https://dev-saramin.saramin.vn/ho-tro` (không cần đăng nhập) — **đợi khoảng 1 phút**, vì site giữ danh sách FAQ trong bộ nhớ đệm 60 giây. Đổi ngôn ngữ ở góc trên (VI · EN · KO) để kiểm từng bản dịch.',
+      },
+      {
+        kind: 'table',
+        heading: 'Đã lưu mà không thấy trên site — kiểm theo thứ tự',
+        cols: ['#', 'Kiểm', 'Ở đâu'],
+        rows: [
+          ['1', 'Câu hỏi có **Published** chưa?', 'Cột *Status* của dòng'],
+          ['2', '**Danh mục** của nó có Published không?', 'Dòng chữ nhỏ dưới tên danh mục: *Published · N entries*'],
+          ['3', 'Câu có viết **bằng ngôn ngữ đang đọc** không?', 'Cột *Languages* — chip mờ là ngôn ngữ chưa viết'],
+          ['4', 'Đang xem đúng tab **Individual / Company** chưa?', 'Nút *Jobseekers / Employers* ở Admin'],
+          ['5', '(Trang chủ) Câu có nằm trong **5 câu *On* đầu tiên** của danh mục không?', 'Cột *Home block* + thứ tự bảng'],
+          ['6', 'Đã quá **1 phút** chưa?', 'Tải lại trang'],
+        ],
+      },
+      {
+        kind: 'p',
+        text:
+          '**Tab Company information** dùng cùng cách làm (*New entry* → câu hỏi + câu trả lời → *Status* → *Save*), nhưng không có danh mục, không có công tắc trang chủ, và câu trả lời là **chữ thường** tối đa 2.000 ký tự. Nó hiện trên trang công ty của site tuyển dụng, **không** trên How can we help?.',
+      },
+
+      { kind: 'h', text: 'Phần 2 · Tra cứu' },
       {
         kind: 'table',
         heading: 'Hai vùng FAQ',
@@ -947,6 +1296,11 @@ export const CONTENT_PAGE_DOCS: Record<string, PageDoc> = {
     ],
     blocks: [
       {
+        kind: 'p',
+        text:
+          '**Sửa nội dung trang này ở Admin:** *Content → FAQ* → tab **Help centre** (danh mục, câu hỏi, khối trang chủ, chip gợi ý). Xem trang **FAQ** của guide này — **Phần 1 · Làm trên Admin — từng bước**.',
+      },
+      {
         kind: 'warn',
         text: '**Nguồn và độ mới.** Viết theo build, kiểm ngày **21/10/2026** với svn-web `178a3709` · svn-be `7cb93f053` · admin `ce90a489` (nhánh `origin/dev`). Ảnh chụp cùng ngày trên `dev-saramin.saramin.vn`, **chưa đăng nhập**, giao diện tiếng Việt — nên tab *Xoá tài khoản* không có ảnh (trang đó bắt đăng nhập).',
       },
@@ -1091,6 +1445,11 @@ export const CONTENT_PAGE_DOCS: Record<string, PageDoc> = {
       '**Mỗi lần mở trang chi tiết cộng 1 lượt xem**, kể cả khi chính Operator mở để kiểm tra.',
     ],
     blocks: [
+      {
+        kind: 'p',
+        text:
+          '**Sửa nội dung trang này ở Admin:** *Content → Notices & events* (thông báo, sự kiện, ghim, hẹn giờ). Xem trang **Notices & events** của guide này — **Phần 1 · Làm trên Admin — từng bước**.',
+      },
       {
         kind: 'warn',
         text: '**Nguồn và độ mới.** Viết theo build, kiểm ngày **21/10/2026** với svn-web `178a3709` · svn-be `7cb93f053` · admin `ce90a489` (nhánh `origin/dev`). Ảnh chụp cùng ngày trên `dev-saramin.saramin.vn`, chưa đăng nhập, tiếng Việt.',
