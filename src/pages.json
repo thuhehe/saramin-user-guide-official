@@ -441,7 +441,7 @@
   "path": "/content/faq",
   "perm": "site_faq:read",
   "flag": "contentPages",
-  "what": "Tab *Company information* của *Content → FAQ*: câu hỏi trên trang **Company information** của **site nhà tuyển dụng**. (Tab *Help centre* → trang *How can we help?*.)",
+  "what": "Câu hỏi thường gặp trên trang **Company information** của **site nhà tuyển dụng** (`/company-join`) — **nhập ở Admin** *Content → FAQ*, tab *Company information*. Từ Admin ra tới trang nhà tuyển dụng, một trang.",
   "sub": []
  },
  {

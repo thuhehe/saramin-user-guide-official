@@ -865,43 +865,188 @@ export const CONTENT_PAGE_DOCS: Record<string, PageDoc> = {
     ],
   },
 
-  /* FAQ — the Company information tab only, which feeds the Employer site's Company
-     information page (/company-join). The Help centre tab lives on 'help-center'. */
+  /* FAQ — Company information. ONE page from the Admin screen (Content → FAQ, tab Company
+     information) to the Employer site page it feeds (/company-join, section "Company
+     information FAQ"). Screens 22/10/2026: dev-admin (forms opened, nothing saved) and
+     dev-hiring signed in as a company user (page viewed, nothing changed). Code: svn-web
+     74511ba38 features/hiring/company/, saramin-vn-admin 322830e3 src/modules/system/faq/.
+     The Help centre tab of the same screen lives on 'help-center'. */
   faq: {
     logic: [
-      '**Tab *Company information*** của *Content → FAQ* là danh sách câu hỏi trên trang **Company information** của **site nhà tuyển dụng** (`dev-hiring.saramin.vn/company-join`, VI `/thong-tin-doanh-nghiep`) — dưới hồ sơ pháp lý và giấy tờ đăng ký. Một danh sách phẳng, có thứ tự, chung cho mọi công ty.',
+      '**Một nội dung, hai nơi.** Nhập ở Admin — *Content → FAQ*, tab **Company information**; hiện ở trang **Company information** của **site nhà tuyển dụng** (`dev-hiring.saramin.vn/company-join`, VI `/thong-tin-doanh-nghiep`), trong mục **Company information FAQ** (*Câu hỏi thường gặp về thông tin doanh nghiệp*) ở **cuối trang**, dưới hồ sơ pháp lý và giấy tờ đăng ký.',
+      '**Một danh sách chung cho mọi công ty.** Không có danh mục, không theo công ty, không theo gói: mọi nhà tuyển dụng mở trang này đều thấy cùng một danh sách (theo ngôn ngữ họ đang đọc), **đúng thứ tự trong bảng Admin**.',
       '**Tab *Help centre* của cùng màn này là chuyện khác** — nó nuôi trang *How can we help?* của site ứng viên. Xem trang **How can we help?** của guide này.',
-      'Màn hình này nằm ở *System → FAQ* (`/system/faq`) tới 21/09; đường cũ vẫn chuyển hướng sang `/content/faq`.',
-      '**Ngôn ngữ:** một câu hỏi viết bằng **ít nhất một** trong VI / EN / KO, mỗi ngôn ngữ đủ **cả câu hỏi lẫn câu trả lời**; ngôn ngữ thiếu thì câu đó **bị giấu** với khách đọc ngôn ngữ ấy (không rơi về VI).',
-      'Quyền `site_faq` (read · create · update · delete), **mặc định chỉ HQ admin** (seed V457). Riêng với `site_notice` — cấp cái này không cấp cái kia.',
+      '**Ngôn ngữ:** một câu hỏi viết bằng **ít nhất một** trong VI / EN / KO, mỗi ngôn ngữ đủ **cả câu hỏi lẫn câu trả lời**; ngôn ngữ thiếu thì câu đó **bị giấu** với nhà tuyển dụng đọc ngôn ngữ ấy (không rơi về VI).',
+      'Trang Company information **cần đăng nhập** bằng tài khoản nhà tuyển dụng; mọi thành viên đang gắn với công ty đều xem được, không cần quyền riêng. Riêng phần FAQ là dữ liệu công khai — nó không phụ thuộc hồ sơ công ty.',
+      'Quyền ở Admin: **FAQ** (`site_faq` — read · create · update · delete), **mặc định chỉ HQ admin**. Cùng quyền với tab Help centre. Màn hình nằm ở *System → FAQ* (`/system/faq`) tới 21/09; đường cũ vẫn chuyển sang `/content/faq`.',
     ],
     how: [
-      '*Content → FAQ* → tab **Company information**.',
-      '**New entry** → **Question** + **Answer** (chữ thường, giữ xuống dòng, tối đa 2.000 ký tự) ở VI, rồi EN / KO → **Status** (*Published* để hiện) → **Save**.',
-      'Sắp thứ tự: kéo **tay nắm** hoặc **▲ / ▼** — bấm **All** trước nếu đang lọc trạng thái.',
-      'Đổi trạng thái: **⋮** cuối dòng → *Publish · Unpublish · Send for review · Archive · Delete* — giống hệt tab Help centre (xem *How can we help?* §3).',
-      'Kiểm: đăng nhập site nhà tuyển dụng → trang **Company information**, đợi khoảng 1 phút.',
+      '**Admin:** *Content → FAQ* → tab **Company information** → **New entry**.',
+      'Viết **Question** + **Answer** ở VI (rồi EN, KO) → **Status = Published** → **Save**.',
+      'Kéo câu hỏi tới đúng chỗ trong bảng — **thứ tự bảng là thứ tự trên trang**.',
+      '**Đợi khoảng 1 phút**, đăng nhập `dev-hiring.saramin.vn` bằng tài khoản nhà tuyển dụng → menu tài khoản (góc phải) → **Company information** → cuộn xuống cuối trang.',
+      'Không thấy? Bảng kiểm ở **§5**. Chi tiết từng thao tác ở Phần 1, nhà tuyển dụng thấy gì ở Phần 2.',
     ],
     watch: [
-      '**Kéo thả bị tắt khi đang lọc trạng thái** — xoá bộ lọc để sắp lại.',
-      'Dòng cảnh báo đầu bảng: “{n} of {total} published entries are missing a language…” — những câu đó vô hình với khách đọc ngôn ngữ thiếu.',
-      'Site cache danh sách FAQ **60 giây** — sửa xong đợi khoảng một phút.',
-      'Tab này **không có** danh mục, công tắc trang chủ hay từ khoá gợi ý — những thứ đó chỉ có ở tab *Help centre*.',
+      '**Không câu nào *Published* bằng ngôn ngữ đang đọc thì cả mục FAQ biến mất** — kể cả tiêu đề *Company information FAQ*. Đó là chủ đích (một tiêu đề trên khoảng trống trông như trang hỏng), không phải lỗi.',
+      '**Câu trả lời là chữ thường**: không in đậm, không link, không ảnh, tối đa **2.000** ký tự. Ô ở Admin ghi *Line breaks are kept*, nhưng trang nhà tuyển dụng **có thể gộp các dòng thành một đoạn** (xem §4) — viết mỗi câu trả lời thành một đoạn cho chắc.',
+      '**Server lỗi thì trang hiện 6 câu mẫu cài sẵn trong code** — trông y như thật (bản gốc của 6 câu đang có ở Admin). Thấy trên trang một câu đã chuyển sang Draft ở Admin, hoặc đủ 6 câu khi Admin chỉ có 4 câu Published, thì báo dev kiểm tra kết nối — đừng đi sửa nội dung.',
+      '**Kéo thả bị tắt khi đang lọc trạng thái** — bấm **All** để sắp lại.',
+      'Dòng cảnh báo đầu bảng *“{n} of {total} published entries are missing a language…”* — những câu đó vô hình với nhà tuyển dụng đọc ngôn ngữ thiếu.',
+      'Site giữ danh sách trong bộ nhớ đệm **60 giây** — sửa xong đợi khoảng một phút.',
     ],
     blocks: [
+      {
+        kind: 'table',
+        heading: 'Một nội dung, hai nơi',
+        cols: ['', 'Ở đâu', 'Ai dùng'],
+        rows: [
+          ['**Nhập**', 'Admin — *Content → FAQ* → tab **Company information** (`dev-admin.saramin.vn/content/faq`)', 'Operator HQ (quyền *FAQ*)'],
+          ['**Hiện**', 'Site nhà tuyển dụng — trang **Company information** (`dev-hiring.saramin.vn/company-join`, VI `/thong-tin-doanh-nghiep`), mục **Company information FAQ** cuối trang', 'Nhà tuyển dụng đã đăng nhập — mọi thành viên của công ty'],
+        ],
+      },
+
+      { kind: 'h', text: 'Phần 1 · Trên Admin — từng bước' },
+      {
+        kind: 'table',
+        heading: 'Cái gì trên Admin thành cái gì trên trang nhà tuyển dụng',
+        cols: ['Trên Admin (Content → FAQ → Company information)', 'Trên trang Company information'],
+        rows: [
+          ['Một dòng trong bảng, trạng thái **Published**', 'Một ô có chữ **Q** đỏ trong mục *Company information FAQ*'],
+          ['Thứ tự trong bảng (tay nắm ⠿ / ▲▼)', 'Thứ tự các ô, từ trên xuống'],
+          ['**Question**', 'Dòng in đậm của ô — luôn hiện'],
+          ['**Answer**', 'Phần chữ mở ra khi bấm vào ô'],
+          ['Chip **VI · EN · KO** của dòng', 'Ngôn ngữ nào nhà tuyển dụng thấy được câu này (chip mờ = không thấy)'],
+          ['*Draft · Review · Archived*', '**Không hiện**'],
+        ],
+      },
       {
         kind: 'shot',
         src: '/shots/help-admin/faq-01-company.jpg',
         where: 'Admin',
-        caption: '*Content → FAQ* → tab **Company information**: một danh sách phẳng — mỗi dòng một câu hỏi, chip ngôn ngữ, trạng thái, thứ tự.',
+        caption: '*Content → FAQ* → tab **Company information**: 6 câu, 4 *Published* và 2 *Draft* (22/10). Không có danh mục hay cột trái — chỉ một bảng phẳng, kéo tay nắm ⠿ hoặc ▲▼ để sắp.',
+      },
+
+      { kind: 'h', text: '§1 · Thêm một câu hỏi' },
+      {
+        kind: 'list',
+        items: [
+          '**Bước 1.** Vào *Content → FAQ* → tab **Company information** (tab mở sẵn khi vào màn).',
+          '**Bước 2.** Bấm **New entry**. Ngăn kéo **New FAQ entry** mở ra bên phải.',
+          '**Bước 3.** **Question** — gõ câu hỏi ở tab **VI** (tối đa 300 ký tự).',
+          '**Bước 4.** **Answer** — gõ câu trả lời (chữ thường, tối đa **2.000** ký tự, có bộ đếm).',
+          '**Bước 5.** Bấm **EN**, rồi **KO**, và lặp lại bước 3–4 cho từng ngôn ngữ muốn có. Hai ô **đổi tab cùng nhau**.',
+          '**Bước 6.** **Status** — **Published** để hiện ngay; để **Draft** nếu còn chờ bản dịch.',
+          '**Bước 7.** Bấm **Save**. Toast *FAQ entry created*; câu mới nằm **cuối** bảng — tức là **cuối** danh sách trên trang. Kéo lên nếu cần (§2).',
+        ],
+      },
+      {
+        kind: 'shot',
+        src: '/shots/help-admin/faq-07-company-new.jpg',
+        where: 'Admin',
+        caption: '**New FAQ entry** ở tab Company information: chỉ có *Question*, *Answer* (ô chữ thường, *0 / 2000*) và *Status* — không có danh mục, không có công tắc trang chủ như tab Help centre.',
+      },
+      {
+        kind: 'warn',
+        text:
+          '**Ngôn ngữ nào không viết thì nhà tuyển dụng đọc site bằng ngôn ngữ đó KHÔNG thấy câu hỏi** — không tự lấy bản tiếng Việt thay. Mỗi ngôn ngữ đã gõ phải có **đủ cả câu hỏi lẫn câu trả lời**; thiếu một nửa thì Save báo *This answer needs its question in {locale} too* và tự mở tab ngôn ngữ đó.',
+      },
+
+      { kind: 'h', text: '§2 · Sắp thứ tự, sửa, ẩn, xoá' },
+      {
+        kind: 'list',
+        items: [
+          '**Sắp thứ tự:** kéo **tay nắm** ⠿ ở đầu dòng, hoặc bấm **▲ / ▼** ở cột *Order*. Lưu ngay — toast *FAQ order saved*. Đang lọc trạng thái thì kéo thả **tắt** (*Clear the status filter to reorder*) — bấm **All** trước.',
+          '**Sửa nội dung:** bấm vào dòng → sửa → **Save** (toast *FAQ entry saved*). Câu đang *Published* hiện bản mới sau khoảng 1 phút.',
+          '**Đổi trạng thái:** nút **⋮** cuối dòng — mỗi lựa chọn hỏi xác nhận trước khi chạy.',
+        ],
       },
       {
         kind: 'table',
-        heading: 'Hai vùng FAQ',
+        heading: 'Nút ⋮ của một câu hỏi',
+        cols: ['Chọn', 'Có khi', 'Kết quả trên trang nhà tuyển dụng'],
+        rows: [
+          ['**Edit**', 'Luôn có', 'Mở ngăn kéo sửa'],
+          ['**Publish**', 'Câu chưa *Published*', '**Hiện** — với các ngôn ngữ đã viết đủ (hộp xác nhận liệt kê chúng)'],
+          ['**Unpublish**', '*Published* hoặc *Review*', 'Gỡ khỏi trang, về **Draft**; nội dung giữ nguyên'],
+          ['**Send for review**', 'Chỉ *Draft*', 'Không hiện; đánh dấu chờ người duyệt'],
+          ['**Archive**', 'Chưa *Archived*', 'Gỡ khỏi trang, cất đi; **Publish lại được**'],
+          ['**Delete**', 'Luôn có (chữ đỏ)', '**Xoá vĩnh viễn** cả câu và mọi bản dịch — muốn giữ thì Archive'],
+        ],
+      },
+
+      { kind: 'h', text: 'Phần 2 · Trên site nhà tuyển dụng — họ thấy gì' },
+      { kind: 'h', text: '§3 · Mở trang Company information', path: '/company-join' },
+      {
+        kind: 'list',
+        items: [
+          'Đăng nhập `dev-hiring.saramin.vn` bằng tài khoản nhà tuyển dụng (chưa đăng nhập thì bị chuyển sang trang đăng nhập, tab *Employer*).',
+          'Bấm **tên công ty / tên mình** ở góc phải thanh trên → **Company information** (mục đầu tiên của menu).',
+          'Trang **Company information management** mở ra: *Company information* (hồ sơ pháp lý), *Basic information*, giấy tờ đăng ký, rồi **Company information FAQ** ở **cuối trang**.',
+        ],
+      },
+      {
+        kind: 'shot',
+        src: '/shots/help-admin/cfaq-03-account-menu.jpg',
+        where: 'Company site',
+        caption: 'Menu tài khoản của nhà tuyển dụng → **Company information**. Trang này giữ hồ sơ pháp lý của công ty; công ty đã *Verified* thì hồ sơ bị khoá, chỉ Saramin sửa được.',
+      },
+
+      { kind: 'h', text: '§4 · Mục Company information FAQ' },
+      {
+        kind: 'list',
+        items: [
+          'Mỗi câu *Published* là **một ô** có chữ **Q** đỏ và câu hỏi in đậm, **đúng thứ tự** bảng Admin.',
+          'Tất cả **đóng sẵn**. Bấm một ô thì câu trả lời mở ngay bên dưới; **mỗi lúc chỉ mở một ô** — mở ô khác thì ô trước tự đóng. Bấm lại để đóng.',
+          'Không có tìm kiếm, không có lượt xem, không có trang riêng cho từng câu.',
+          'Tiêu đề mục: *Company information FAQ* (EN) · *Câu hỏi thường gặp về thông tin doanh nghiệp* (VI).',
+        ],
+      },
+      {
+        kind: 'shot',
+        src: '/shots/help-admin/cfaq-02-faq-open.jpg',
+        where: 'Company site',
+        caption: 'Cuối trang Company information, công ty DatVietVAC (22/10): đúng **4** câu — chính là 4 câu *Published* ở Admin, cùng thứ tự; 2 câu *Draft* không hiện. Câu đầu đang mở.',
+      },
+      {
+        kind: 'open',
+        text:
+          '**Có thể là lỗi — chưa kiểm trên dev:** ô *Answer* ở Admin ghi *Line breaks are kept*, nhưng trang nhà tuyển dụng vẽ câu trả lời **không kèm kiểu giữ xuống dòng** (`company-faq.tsx`, svn-web 74511ba38) — một câu trả lời nhiều dòng nhiều khả năng hiện thành **một đoạn liền**. Cần thử: lưu một câu trả lời hai dòng ở Draft → Publish → xem trang. Nếu đúng là gộp dòng, sửa phía web (thêm `whitespace-pre-line`) hoặc bỏ câu *Line breaks are kept* ở Admin.',
+      },
+
+      { kind: 'h', text: '§5 · Kiểm trên trang — và khi không thấy' },
+      {
+        kind: 'table',
+        heading: 'Đã lưu mà không thấy trên trang — kiểm theo thứ tự',
+        cols: ['#', 'Kiểm', 'Ở đâu'],
+        rows: [
+          ['1', 'Câu hỏi có **Published** chưa?', 'Cột *Status* của dòng'],
+          ['2', 'Câu có viết **bằng ngôn ngữ đang đọc** không? (đổi ngôn ngữ ở góc trên trang: EN · VI · KO)', 'Cột *Languages* — chip mờ là ngôn ngữ chưa viết'],
+          ['3', 'Đang xem đúng tab **Company information** ở Admin chưa? (tab *Help centre* là trang khác)', 'Tab đầu màn FAQ'],
+          ['4', 'Đã quá **1 phút** chưa?', 'Tải lại trang'],
+          ['5', 'Trang hiện **đủ 6 câu** dù Admin chỉ có 4 câu Published?', 'Trang đang dùng bản mẫu vì không gọi được server — báo dev'],
+        ],
+      },
+
+      { kind: 'h', text: 'Phần 3 · Tra cứu' },
+      {
+        kind: 'table',
+        heading: 'Hai vùng FAQ — cùng một màn hình Admin',
         cols: ['Tab', 'Hiện ở đâu', 'Cấu trúc', 'Câu trả lời'],
         rows: [
-          ['**Company information**', 'Site tuyển dụng — trang *company-join* (dưới hồ sơ pháp lý, giấy tờ đăng ký)', 'Một danh sách phẳng có thứ tự', '**Chữ thường**, giữ xuống dòng; tối đa **2.000** ký tự'],
-          ['**Help centre**', 'Site jobseeker — `/ho-tro`, `/ho-tro/cau-hoi/<id>`, tìm kiếm `/ho-tro/tim-kiem`', 'Đối tượng → danh mục → câu hỏi; thứ tự **trong từng danh mục**', '**Rich text** (ảnh, bảng, heading); tối đa **20.000** ký tự'],
+          ['**Company information**', 'Site nhà tuyển dụng — trang *Company information* (`/company-join`), cuối trang', 'Một danh sách phẳng có thứ tự, chung cho mọi công ty', '**Chữ thường**; tối đa **2.000** ký tự'],
+          ['**Help centre**', 'Site ứng viên — *How can we help?* (`/help`) — xem trang **How can we help?**', 'Đối tượng → danh mục → câu hỏi; thứ tự **trong từng danh mục**', '**Rich text** (ảnh, bảng, heading); tối đa **20.000** ký tự'],
+        ],
+      },
+      {
+        kind: 'table',
+        heading: 'Trạng thái của một câu hỏi',
+        cols: ['Trạng thái', 'Trên trang', 'Tới bằng cách nào', 'Làm gì tiếp'],
+        rows: [
+          ['**Draft**', 'Không hiện — chỗ chờ đủ bản dịch', 'Tạo · **Unpublish**', 'Publish · Send for review · Archive · Delete'],
+          ['**Review**', 'Không hiện', '**Send for review** (chỉ từ Draft) hoặc chọn trong ngăn kéo', 'Publish · Unpublish · Archive · Delete'],
+          ['**Published**', '**Hiện** — với ngôn ngữ đã viết đủ', '**Publish**', 'Unpublish · Archive · Delete'],
+          ['**Archived**', 'Không hiện; giữ nội dung', '**Archive**', 'Publish · Delete'],
         ],
       },
     ],
