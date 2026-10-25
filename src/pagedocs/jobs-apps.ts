@@ -292,6 +292,8 @@ export const JOBS_APPS_PAGE_DOCS: Record<string, PageDoc> = {
           ['**Applications (N)**', 'Mọi trạng thái', 'Danh sách ứng viên của tin này.'],
           ['**Preview draft**', 'Draft · Schedule', 'Mở tin chưa đăng đúng như ứng viên sẽ thấy. Tin Open thì xem trang thật từ danh sách.'],
           ['**Post now**', 'Draft · Schedule', 'Đăng. Chưa chọn bậc thì mở hộp *Choose a posting tier*. Công ty thiếu MST hoặc không Active thì nút **khoá sẵn**, rê chuột thấy lý do.'],
+          ['**Warranty**', 'Open · Closed, **tin trả phí**, không phải tin bảo hành', 'Tạo ngay một **Draft tin bảo hành** — đăng lại miễn phí trên một product Free. Xem **§3.1**.'],
+          ['**Duplicate**', 'Mọi trạng thái', 'Chép tin thành một Draft mới.'],
           ['**Add add-on** *(mới)*', 'Open, đang có lượt chạy', 'Thêm *Display placement* và / hoặc *Label* cho tin đang chạy — xem bảng dưới. Chỉ ở Admin; trang công ty không có.'],
           ['**Close job**', 'Open', 'Ngừng nhận hồ sơ và gỡ tin khỏi site **ngay lập tức**.'],
           ['**Reopen**', 'Closed', 'Đưa tin **về Draft** — vẫn chưa ai thấy. **Đăng lại thì tốn một slot.**'],
@@ -324,6 +326,96 @@ export const JOBS_APPS_PAGE_DOCS: Record<string, PageDoc> = {
         where: 'Admin',
         caption: 'Chi tiết một tin đang **Open**: nút *Edit · Applications · Add add-on · Close job* — không còn *Upgrade tier*. Khung *Posting state*: Exposure, **Current tier**, Add-ons, Publish at, **End date** (sửa được bằng bút chì).',
         note: '**Exposure độc lập với status**: tin có thể đang *Open* mà vẫn không ai thấy, nếu Exposure tắt.',
+      },
+
+      {
+        kind: 'h',
+        text: '§3.1 · Job bảo hành (Warranty) — đăng lại miễn phí cho tin không có ứng viên',
+      },
+      {
+        kind: 'p',
+        text:
+          'Sales có thể bán tin kèm **bảo hành**: nếu tin không có ứng viên, HQ **đăng lại miễn phí**. Từ **12/10/2026** (SRM-940) việc đó làm ngay trên chi tiết tin gốc: nút **Warranty** tạo một **bản nháp tin bảo hành**, HQ chọn một product **Free** rồi đăng — **không hoá đơn, không trừ quota, không add-on**. Hai tin liên kết hai chiều. Đối chiếu code ngày 25/10/2026: svn-be `origin/dev` (`JobWarrantyService`, `JobService`), saramin-vn-admin `origin/dev`.',
+      },
+      {
+        kind: 'table',
+        heading: 'Khi nào có nút Warranty',
+        note: 'Hệ thống tự quyết (svn-be), Admin không tự đoán. Không đủ điều kiện thì nút **ẩn**, không phải khoá.',
+        cols: ['Điều kiện', 'Ghi chú'],
+        rows: [
+          ['Tin gốc đang **Open** hoặc **Closed**', 'Kể cả khi tin vẫn đang chạy. Draft / Schedule thì không có nút'],
+          ['Tin gốc là tin **trả phí**', 'Lượt chạy gần nhất của tin được đăng **bằng một PO** và trên **product không Free**. Tin đăng bằng product Free, quà tặng, hay chính tin bảo hành thì **không** bảo hành được'],
+          ['Tin gốc **không phải** tin bảo hành', 'Không bảo hành của bảo hành'],
+          ['Bạn có quyền **Create warranty job**', '`job:create_warranty` — mặc định *hq_admin* và *vn_ops*'],
+          ['Số lần', '**Không giới hạn** — một tin gốc có thể có nhiều tin bảo hành'],
+        ],
+      },
+      {
+        kind: 'shot',
+        src: '/shots/warranty/job-detail-warranty-button.jpg',
+        where: 'Admin',
+        caption: 'Tin gốc (trả phí, *Closed*): nút **Warranty** cạnh *Edit*. Khung *Posting state* ghi **Warranty jobs (1)** kèm mã tin bảo hành, bấm được.',
+      },
+      {
+        kind: 'list',
+        heading: 'Từng bước',
+        items: [
+          'Mở **Recruitment → Jobs** → mở **tin gốc** → bấm **Warranty**. **Không có hộp xác nhận**: hệ thống tạo ngay một **Draft**, báo *“Warranty draft {mã} created”* và mở form sửa.',
+          'Đầu form có dải *“Warranty job for {mã gốc} · {tiêu đề} →”* (bấm về tin gốc) và tag **Warranty job**. Nội dung **chép từ tin gốc** — sửa được tất cả, **trừ công ty**: công ty bị khoá, ghi *“A warranty job stays with the original job\'s company.”*',
+          '**Product**: chọn một product **Free** đăng tin (ví dụ *Tin tuyển dụng miễn phí 15 ngày*). Bỏ trống thì báo *“Pick the free product this warranty posts on”*; danh sách trống thì *“No free product is set up”* — bật một product Free ở **Products** trước. Không có ô chọn hoá đơn; khối dưới ghi **Type: Warranty · Price: Free · no quota used**.',
+          '**Không có add-on** cho tin bảo hành — hệ thống từ chối cả khi tạo lẫn khi tin đang chạy.',
+          'Bấm **Post** (hoặc đặt **Publish at** để hẹn giờ). Kiểm tra như mọi tin — công ty **Active**, có **MST**, đủ field — **trừ** hoá đơn và quota. Công ty bị archive hay thiếu MST thì vẫn tạo được nháp nhưng **không đăng được**.',
+        ],
+      },
+      {
+        kind: 'shot',
+        src: '/shots/warranty/warranty-job-form.jpg',
+        where: 'Admin',
+        caption: 'Form tin bảo hành: dải **Warranty job for …**, công ty **khoá**, **Product** chỉ chọn product Free, khối *Type Warranty · Price Free · no quota used*.',
+      },
+      {
+        kind: 'table',
+        heading: 'Sau khi đăng — thấy ở đâu',
+        cols: ['Ở đâu', 'Thấy gì'],
+        rows: [
+          ['**Chi tiết tin bảo hành**', 'Tag **Warranty** cạnh trạng thái và tag nội bộ **Job Bảo Hành**. *Posting state*: **Warranty of → {mã gốc} · {tiêu đề}**, *Current tier* = product Free đã chọn, **Price: Free · warranty**. Không có nút Warranty, không có Add add-on'],
+          ['**Chi tiết tin gốc**', '*Posting state*: **Warranty jobs (n) → {mã}, {mã}…** — mỗi mã một link, tính cả nháp'],
+          ['**Danh sách Jobs**', 'Cột **Job type** = *Warranty* (không phải *Free*), cột **Warranty of** = mã tin gốc, tag *Job Bảo Hành*. Bộ lọc *Job type → Warranty* chỉ còn tin bảo hành; Export có cùng cột'],
+          ['**Quota usage**', 'Đơn vị quota của **tin gốc** ghi thêm nhóm **Warranty 1**: product, ngày đăng và mã tin bảo hành'],
+          ['**Trang công ty (Employer)**', 'Nhãn *Warranty* trên tin; **Product usage** → nhóm *Free job posting* có dòng **“Warranty Job · n free posts”**. Công ty **không tự đăng** được tin bảo hành — chỉ HQ'],
+          ['**Site ứng viên**', 'Không khác gì tin thường'],
+        ],
+      },
+      {
+        kind: 'shot',
+        src: '/shots/warranty/warranty-job-detail.jpg',
+        where: 'Admin',
+        caption: 'Tin bảo hành đang **Open**: tag **Warranty** và **Job Bảo Hành**; *Posting state* ghi *Warranty of* và *Price: Free · warranty*.',
+      },
+      {
+        kind: 'shot',
+        src: '/shots/warranty/jobs-list-warranty.jpg',
+        where: 'Admin',
+        caption: 'Danh sách Jobs lọc **Job type = Warranty**: cột *Job type*, tag *Job Bảo Hành* và cột **Warranty of** (mã tin gốc).',
+      },
+      {
+        kind: 'table',
+        heading: 'Kiểm thử — làm trên dev',
+        cols: ['#', 'Làm', 'Kết quả đúng'],
+        rows: [
+          ['1', 'Mở một tin **trả phí** đang *Open* → **Warranty**', 'Mở ngay một **Draft**: nội dung chép, công ty khoá, không có ô hoá đơn, không add-on'],
+          ['2', 'Chọn product Free → **Post**', 'Tin lên site. Quota bậc tin và hoá đơn của công ty **không đổi**'],
+          ['3', 'Bấm **Warranty** lần nữa trên cùng tin gốc', 'Thêm một nháp bảo hành; tin gốc ghi *Warranty jobs (2)*'],
+          ['4', 'Mở tin **Free**, tin **bảo hành**, tin **Draft** — hoặc dùng tài khoản không có quyền', '**Không có** nút Warranty'],
+          ['5', 'Danh sách Jobs → lọc *Job type: Warranty* → Export', 'Chỉ tin bảo hành; file có cột *Warranty of*'],
+          ['6', 'Đăng nhập tài khoản công ty → **Product usage**', 'Dòng *Warranty Job · n free posts*; tin có nhãn *Warranty*'],
+          ['7', 'Đăng một tin **thường** mà không chọn hoá đơn', 'Vẫn bị chặn như cũ — đường không hoá đơn **chỉ** dành cho tin bảo hành'],
+        ],
+      },
+      {
+        kind: 'open',
+        text:
+          '**Khác với bảo hành CV search / Manual service:** tin bảo hành **không có ô lý do** (bảo hành CV search / Manual service bắt buộc lý do, xem trang **Quota usage §5**). Muốn ghi lý do thì hiện chỉ có thể ghi vào tag nội bộ hoặc ghi chú công ty.',
       },
 
       /* §4 Status and Exposure */
