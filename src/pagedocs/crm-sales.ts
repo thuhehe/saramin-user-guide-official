@@ -713,6 +713,40 @@ export const CRM_SALES_PAGE_DOCS: Record<string, PageDoc> = {
       '**Đính chính: ô “số PO của chính khách” không còn trên màn hình.** Số đó vẫn in ra nếu đã có từ trước, nhưng hiện không ai nhập được (endpoint còn, không có nút gọi).',
     ],
     blocks: [
+      { kind: 'h', text: 'Cập nhật 22/10/2026 · Thanh toán và QR (SRM-1080)' },
+      {
+        kind: 'table',
+        heading: 'Năm thay đổi, tóm tắt',
+        note: 'Áp dụng cho cả PO và Invoice. Quy tắc đầy đủ và ví dụ theo ngày: **§2** bên dưới.',
+        cols: ['', 'Thay đổi', 'Trước', 'Bây giờ'],
+        rows: [
+          ['1', '**Expected payment date**', 'Không bắt buộc, chỉ in lên đơn', '**Bắt buộc** khi Issue PO — chưa chọn thì nút *Issue PO* bị khoá. Với Woori bank đây cũng là ngày **QR hết hạn (23:59)**'],
+          ['2', '**Overdue tính từ đâu**', 'Theo điều khoản thanh toán', 'Hoá đơn **chính thức** + **30 ngày**, chỉ khi **chưa trả đồng nào**. Ngày thứ 30 hiện *Overdue +0d*'],
+          ['3', '**Không bao giờ Overdue**', '—', 'Hoá đơn còn *Draft* / *Invoice requested* · đơn **Partially paid** · QR hết hạn'],
+          ['4', '**Dòng QR** (Woori bank)', 'QR gửi kèm email, không hiện trạng thái ở đâu', 'Một dòng dưới tiêu đề PO và Invoice: **đã gửi** → **đã hết hạn** (đỏ) → **đã trả qua QR** (xanh). Không có nút gửi lại QR'],
+          ['5', '**PO list / Invoice list**', 'Không có thông tin QR', '**Không thêm cột.** Ghi chú nhỏ dưới nhãn Payment: *QR expires …* hoặc đỏ *QR expired …*'],
+        ],
+      },
+      {
+        kind: 'shot',
+        src: '/shots/crm/srm1080-issue-po.jpg',
+        where: 'Admin',
+        caption: '**Thay đổi 1 · Issue PO:** *Expected payment date* có dấu * đỏ; chưa chọn ngày thì nút **Issue PO** mờ, không bấm được. Dòng chữ dưới ô nhắc: với Woori bank, QR hết hạn 23:59 ngày này; Overdue tính từ hoá đơn chính thức.',
+        note: 'Ba ảnh trong mục này chụp từ build `dev` ngày 22/10/2026, chạy với dữ liệu mẫu.',
+      },
+      {
+        kind: 'shot',
+        src: '/shots/crm/srm1080-po-list.jpg',
+        where: 'Admin',
+        caption: '**Thay đổi 2, 3, 5 · PO list, cột Payment** (ảnh đã ẩn bớt cột): *Overdue +10d* (hoá đơn chính thức đã quá 30 ngày) · *Unpaid* kèm đỏ *QR expired 20 Oct* (QR hết hạn nhưng hoá đơn chưa đủ 30 ngày → **chưa trễ**) · *Unpaid* kèm *QR expires 31 Oct* · *Partially paid* (không bao giờ thành Overdue) · *Paid*. Đơn phương thức *Other* không có ghi chú QR.',
+      },
+      {
+        kind: 'shot',
+        src: '/shots/crm/srm1080-qr-line.jpg',
+        where: 'Admin',
+        caption: '**Thay đổi 4 · Dòng QR** ngay dưới tiêu đề PO, bốn trường hợp. Invoice detail hiện đúng dòng này, chỉ đọc.',
+      },
+
       { kind: 'h', text: '§1 · Vòng đời PO', path: '/crm/purchase-orders/:id' },
       {
         kind: 'table',
