@@ -533,8 +533,8 @@ export const CRM_SALES_PAGE_DOCS: Record<string, PageDoc> = {
         rows: [
           ['Option', '*Which option did the customer accept?*', 'Option đó được chép **nguyên văn** sang PO (dòng, tiền, VAT, chiết khấu). Hai option kia không bao giờ thành đơn'],
           ['*VAT billing*', 'Loại người mua + họ tên / CCCD (cá nhân) · *Also make this the company’s default*', 'Đổi **người nhận hoá đơn** cho riêng đơn này. Tên pháp lý, MST, địa chỉ đăng ký vẫn lấy từ hồ sơ công ty. Tick “default” thì ghi ngược về hồ sơ, cùng lúc với PO'],
-          ['*Payment*', '*Payment terms*: 100% in advance (mặc định) · 50 / 50 · Net 30 after invoice', '**Trường duy nhất có hệ quả**: 50/50 mở **hai** khoản thu ở ngân hàng'],
-          ['*Payment*', '*Payment method* (Bank transfer · Cash · Other) · *Expected payment date*', 'Chỉ để in lên đơn và hoá đơn. Ngày khách hẹn **không phải** hạn — không có gì quá hạn vì ngày này trôi qua'],
+          ['*Payment*', '*Payment terms*: 100% in advance (mặc định) · 50 / 50 · Net 30 after invoice', '**Chỉ in lên đơn** — không chia khoản thu: đơn thu một số tiền, trả thiếu thì hiện *Partially paid*'],
+          ['*Payment*', '*Payment method* (Woori bank · Woori Manual · Megapay — cho khách nước ngoài · Other) · *Expected payment date* — **bắt buộc**', 'Chưa chọn ngày thì nút *Issue PO* bị khoá. Với **Woori bank**, QR gửi qua email hết hạn **23:59 ngày này**. Ngày này **không phải** hạn thanh toán — Overdue chỉ đếm từ hoá đơn chính thức + 30 ngày (xem *Purchase order §2*)'],
         ],
       },
       {
@@ -612,7 +612,7 @@ export const CRM_SALES_PAGE_DOCS: Record<string, PageDoc> = {
     how: [
       'Mở PO từ báo giá (*View the order*) hoặc từ danh sách.',
       'Kiểm nội dung: dòng hàng, số lượng, đơn giá, chiết khấu, VAT, tổng, người nhận hoá đơn.',
-      '**Send the order to the customer** — email kèm PDF *XÁC NHẬN ĐƠN HÀNG* và **mã QR thanh toán**.',
+      '**Send the order to the customer** — email kèm PDF *XÁC NHẬN ĐƠN HÀNG*; phương thức **Woori bank** thì kèm thêm **mã QR thanh toán**, hết hạn 23:59 ngày *Expected payment date*.',
       '(Tuỳ chọn) **Export draft invoice** — xem bản nháp hoá đơn do nhà cung cấp HĐĐT dàn trang.',
       '**Request official invoice** — đẩy sang hàng đợi kế toán. Công ty phải **Verified**.',
     ],
@@ -649,9 +649,9 @@ export const CRM_SALES_PAGE_DOCS: Record<string, PageDoc> = {
         note: 'Thẻ pipeline của báo giá đã bị đóng **Lost** thì PO **đóng băng**: các nút bị vô hiệu, banner nói PO vẫn tự hết hạn cuối tháng.',
         cols: ['Nút', 'Khi nào', 'Quyền', 'Tác dụng'],
         rows: [
-          ['**Send the order to the customer** (biểu tượng thư)', 'Mọi trạng thái còn sống', '`purchase_order:update`', 'Soạn email: *To* (liên hệ của công ty), *CC* (liên hệ + chủ deal), tiêu đề, **PDF đơn hàng đính kèm**, link điều khoản, nội dung từ template *Notifications* `purchase_order.send_to_customer`. **QR thanh toán luôn chèn vào** — gửi lần đầu là **mở khoản thu ở ngân hàng**. Không đổi trạng thái PO; gửi lại được (*“This order has been emailed before”*)'],
+          ['**Send the order to the customer** (biểu tượng thư)', 'Mọi trạng thái còn sống', '`purchase_order:update`', 'Soạn email: *To* (liên hệ của công ty), *CC* (liên hệ + chủ deal), tiêu đề, **PDF đơn hàng đính kèm**, link điều khoản, nội dung từ template *Notifications* `purchase_order.send_to_customer`. Phương thức **Woori bank**: email kèm **QR thanh toán**, hết hạn **23:59 ngày Expected payment date** — gửi lần đầu là **mở khoản thu ở ngân hàng**. Phương thức khác: không có QR. Không đổi trạng thái PO; gửi lại được (*“This order has been emailed before”*)'],
           ['**View PDF**', 'Luôn', '`purchase_order:read`', 'PDF *XÁC NHẬN ĐƠN HÀNG* dựng từ chính số liệu đã đóng băng của PO'],
-          ['**Edit payment details**', 'Chưa có hoá đơn chính thức', '`purchase_order:update`', 'Sửa đúng **ba** trường: điều khoản, phương thức, ngày hẹn trả. **Điều khoản khoá** khi ngân hàng đã giữ khoản thu cho đơn này'],
+          ['**Edit payment details**', 'Chưa có hoá đơn chính thức', '`purchase_order:update`', 'Sửa đúng **ba** trường: điều khoản, phương thức, *Expected payment date* (vẫn **bắt buộc**). **Điều khoản khoá** khi ngân hàng đã giữ khoản thu cho đơn này; **ngày khoá** khi QR đã gửi (*“Fixed — the payment QR was sent with this date and expires at 23:59 on it.”*) vì QR không gửi lại được'],
           ['**Export draft invoice**', 'Active / Draft invoice / Invoice requested, chưa xuất nháp', '`purchase_order:update`', 'Tạo chứng từ hoá đơn (cấp mã `INV-…` nội bộ) nếu chưa có, đẩy bản nháp **lên nhà cung cấp HĐĐT** (chưa ký, chưa số, chưa khai) rồi mở PDF. Xong thì nút đổi thành nhãn **Draft exported**'],
           ['**Request official invoice**', 'Active hoặc Draft invoice', '`purchase_order:update`', 'Sang *Invoice requested*. Công ty chưa Verified → nút khoá kèm giải thích; server trả *“This company is not verified yet — the official invoice cannot be requested until an admin has verified its paperwork”*'],
           ['**View invoice** / **View draft invoice**', 'Khi chứng từ hoá đơn đã tồn tại', '`invoice:read`', 'Sang trang Invoice'],
@@ -668,26 +668,71 @@ export const CRM_SALES_PAGE_DOCS: Record<string, PageDoc> = {
         ],
       },
 
-      { kind: 'h', text: '§2 · Thanh toán — một nhãn, không phải một trạng thái' },
+      { kind: 'h', text: '§2 · Thanh toán — Payment status và dòng QR' },
       {
         kind: 'table',
-        heading: 'Nhãn thanh toán',
-        note: 'Thanh toán **thuộc về đơn hàng**, nên PO và hoá đơn luôn hiện cùng một nhãn. **Việc xuất hoá đơn không bao giờ bị chặn bởi thanh toán.**',
-        cols: ['Nhãn', 'Nghĩa'],
+        heading: 'Payment status — 4 nhãn, cùng một dữ liệu trên PO và Invoice',
+        note: 'Thanh toán **thuộc về đơn hàng**: PO list, Invoice list và hai trang chi tiết luôn hiện **cùng một nhãn**, đọc từ các khoản tiền đã về (ngân hàng báo về hoặc kế toán xác nhận). **Không ai chọn nhãn bằng tay**, và **việc xuất hoá đơn không bao giờ bị chặn bởi thanh toán**. Theo SRM-1080, có trên dev từ 22/10/2026.',
+        cols: ['Nhãn', 'Khi nào'],
         rows: [
-          ['*Unpaid*', 'Chưa có đồng nào về (kể cả khi chưa mở khoản thu)'],
-          ['*Partially paid*', 'Đã về một phần — ví dụ đợt 1 của 50/50'],
-          ['*Paid*', 'Đã đủ'],
-          ['*Overdue +N d*', 'Quá hạn N ngày. **Không phải trạng thái thứ tư** — chỉ là nhãn; phần “đã trả một phần” vẫn ở tooltip. Hạn tính từ điều khoản: trả trước 100% → hạn ngay khi phát hành; *Net 30* → 30 ngày sau'],
+          ['*Unpaid*', 'Chưa ghi nhận đồng nào. Mặc định từ lúc Issue PO'],
+          ['*Partially paid*', 'Đã về một phần, còn nợ. **Giữ nguyên tới khi trả đủ — không bao giờ chuyển Overdue**'],
+          ['*Paid*', 'Đã về đủ'],
+          ['*Overdue +N d*', 'Hoá đơn **chính thức** đã phát hành **từ 30 ngày trở lên** mà vẫn **Unpaid**. Ngày phát hành là ngày 0 (giờ VN): ngày 30 hiện *Overdue +0d*, ngày 31 *+1d*. Tự chuyển, không ai bấm. Rê chuột vào nhãn: *“Was due … — 30 days after the official invoice — and nothing has arrived”*'],
         ],
+      },
+      {
+        kind: 'warn',
+        text:
+          '**Overdue chỉ đếm từ hoá đơn chính thức + 30 ngày.** Không đếm từ ngày PO, không theo điều khoản thanh toán, không theo *Expected payment date*, và QR hết hạn **không** làm đơn trễ. Hoá đơn còn *Draft* hay *Invoice requested* thì **chưa có hạn** — để 45 ngày vẫn là *Unpaid* (tooltip: *“No official invoice yet, so nothing is due”*). Trước 22/10/2026 hạn tính theo điều khoản thanh toán; spec cũ là 14 ngày từ ngày PO — cả hai đã bỏ.',
+      },
+      {
+        kind: 'table',
+        heading: 'Expected payment date và QR Woori bank',
+        note: '**QR không phải một trạng thái** — không có cột “QR payment status”. QR chỉ là một dòng thông báo.',
+        cols: ['', 'Quy tắc'],
+        rows: [
+          ['**Expected payment date**', 'Ngày dự kiến khách trả. **Bắt buộc** khi Issue PO — chưa chọn thì nút *Issue PO* bị khoá (server cũng chặn). Với **Woori bank** đây cũng là **ngày QR hết hạn, 23:59 giờ VN**. **Không** dùng để tính Overdue'],
+          ['**Khi nào có QR**', 'Chỉ khi phương thức = **Woori bank** và sales đã bấm **Send the order to the customer**. Phương thức khác (*Woori Manual*, *Megapay*, *Other*): không có QR, không có dòng QR, không có ghi chú QR'],
+          ['**Sửa ngày**', '*Edit payment details* — ngày vẫn bắt buộc. **QR đã gửi thì ngày bị khoá**, vì QR không gửi lại được'],
+          ['**QR hết hạn**', 'Hết hẳn — **không có nút gửi lại**, không tạo QR mới. Khách chuyển khoản như thường, kế toán *Confirm payment* trên Invoice. QR hết hạn **không đổi** Payment status'],
+          ['**Khách trả qua QR**', 'Ngân hàng báo về → hệ thống tự ghi tiền, đơn chuyển *Paid*, dòng QR thành *Paid by QR*. Kế toán **không cần** bấm *Confirm payment*'],
+        ],
+      },
+      {
+        kind: 'table',
+        heading: 'Dòng QR hiện ở đâu',
+        cols: ['Nơi', 'Hiện gì'],
+        rows: [
+          ['**PO detail** (dưới header)', 'Một dòng, chỉ đọc, **không có nút**: *“QR sent dd/mm · expires 23:59 on dd/mm”* → đỏ *“QR expired dd/mm — the customer has not paid by QR”* → xanh *“Paid by QR on dd/mm”*'],
+          ['**Invoice detail**', 'Cùng dòng đó, chỉ đọc'],
+          ['**PO list · Invoice list**', '**Không có cột QR.** Ghi chú nhỏ dưới nhãn Payment: *“QR expires dd Mon”* hoặc đỏ *“QR expired dd Mon”*. Đơn không phải Woori bank: không có ghi chú'],
+        ],
+      },
+      {
+        kind: 'example',
+        heading: 'Ví dụ — QR và Overdue là hai mốc độc lập',
+        scenario:
+          'PO Woori bank **17.280.000 ₫**, *Expected payment date* **31/10/2026**. Sales gửi email kèm QR ngày **20/10**; kế toán phát hành hoá đơn chính thức ngày **25/10** (ngày 0).',
+        cols: ['Ngày', 'Việc', 'Payment status', 'Dòng QR (PO detail)'],
+        rows: [
+          ['20/10', 'Gửi email kèm QR', 'Unpaid', '*QR sent 20/10 · expires 23:59 on 31/10*'],
+          ['25/10', 'Hoá đơn chính thức phát hành', 'Unpaid', 'Như trên'],
+          ['01/11', 'QR hết hạn, khách chưa trả. Hoá đơn mới **7 ngày**', '**Unpaid** — không phải Overdue', 'Đỏ *QR expired 31/10 — the customer has not paid by QR*'],
+          ['23/11', 'Ngày 29 của hoá đơn', 'Unpaid', 'Đỏ, như trên'],
+          ['24/11', 'Ngày 30 của hoá đơn', '**Overdue +0d**', 'Đỏ, như trên'],
+          ['26/11', 'Khách chuyển khoản đủ, kế toán *Confirm payment*', '**Paid**', 'Vẫn đỏ *QR expired 31/10* — lịch sử, không mâu thuẫn'],
+          ['Nhánh khác', '28/10 khách quét QR, ngân hàng báo về', '**Paid**', 'Xanh *Paid by QR on 28/10*'],
+        ],
+        note: 'QR hết hạn chỉ đổi dòng QR. Trễ hạn chỉ đếm từ hoá đơn chính thức.',
       },
       {
         kind: 'list',
         items: [
-          '**Khoản thu** = tài khoản ảo ở ngân hàng (InfoPlus / Woori) kèm QR, **mỗi đợt một khoản**: trả trước 100% hoặc Net 30 → 1 khoản; 50/50 → 2 khoản (đợt cuối gánh đồng lẻ). Ngân hàng **chỉ nhận đúng số tiền** — chuyển sai số bị ngân hàng từ chối.',
-          'Khoản thu được mở khi **gửi đơn cho khách lần đầu** (lỗi ngân hàng hiện ngay trước mặt người gửi), hoặc lặng lẽ khi **hoá đơn được phát hành**.',
+          '**Điều khoản thanh toán** (100% trả trước, 50/50, Net 30) **chỉ in trên đơn** — không chia khoản thu: đơn thu **một số tiền**, trả thiếu thì hiện *Partially paid*.',
+          'Khoản thu ở ngân hàng được mở khi **gửi đơn cho khách lần đầu** (lỗi ngân hàng hiện ngay trước mặt người gửi), hoặc lặng lẽ khi **hoá đơn được phát hành**.',
           'Tiền về qua **webhook của ngân hàng**; một job mỗi giờ (phút :55) dò lại những khoản callback bị mất. Một mã giao dịch ngân hàng chỉ ghi **một lần**.',
-          'Tiền về tài khoản thường hoặc tiền mặt → kế toán bấm **Confirm payment** trên trang Invoice (quyền `purchase_order:confirm_payment`, của kế toán, không phải của sales).',
+          'Tiền về tài khoản thường hoặc tiền mặt → kế toán bấm **Confirm payment** trên trang Invoice (quyền `purchase_order:confirm_payment`, của kế toán, không phải của sales). Xác nhận trên Invoice → nhãn trên PO đổi **ngay**.',
         ],
       },
       {
@@ -698,8 +743,8 @@ export const CRM_SALES_PAGE_DOCS: Record<string, PageDoc> = {
         cols: ['Ngày', 'Việc', 'PO', 'Hoá đơn', 'Thanh toán', 'Khách có gì'],
         rows: [
           ['14/10', 'Issue PO → **PO-005871-10-2026**, hết hạn 31/10', 'Active', '—', 'Unpaid', '0 slot'],
-          ['14/10', 'Lan *Send the order to the customer* → mở **2 khoản thu 8.640.000 ₫**, QR trong email', 'Active', '—', 'Unpaid', '0 slot'],
-          ['15/10', 'Khách quét QR đợt 1 — webhook ghi tiền', 'Active', '—', '**Partially paid**', '0 slot — tiền về **không** cấp gì'],
+          ['14/10', 'Lan *Send the order to the customer* (Woori bank) — QR trong email, đơn thu **một khoản 17.280.000 ₫**', 'Active', '—', 'Unpaid', '0 slot'],
+          ['15/10', 'Khách chuyển khoản đợt 1 (8.640.000 ₫), kế toán *Confirm payment*', 'Active', '—', '**Partially paid**', '0 slot — tiền về **không** cấp gì'],
           ['17/10', 'Lan *Export draft invoice* → INV-003402-10-2026 (chưa số pháp lý)', 'Draft invoice', 'Draft', 'Partially paid', '0 slot'],
           ['20/10', 'Lan *Request official invoice*', 'Invoice requested', 'Requested', 'Partially paid', '0 slot'],
           ['22/10', 'Kế toán phát hành → số pháp lý **1C26TAA/0041**', '**Issued invoice**', '**Issued**', 'Partially paid', '**11 slot Tin Basic**, hạn kích hoạt **22/10/2027**'],
@@ -823,9 +868,11 @@ export const CRM_SALES_PAGE_DOCS: Record<string, PageDoc> = {
         kind: 'list',
         items: [
           '**Confirm payment** (quyền `purchase_order:confirm_payment`) — cho tiền ngân hàng không báo về: chuyển vào tài khoản thường, tiền mặt, hoặc callback bị mất.',
-          'Hỏi: **đợt nào** · **số tiền nhận** · **ngày nhận** · **mã giao dịch ngân hàng** (tuỳ chọn — bỏ trống cho tiền mặt, hệ thống tự sinh mã `MANUAL-…`) · ghi chú.',
+          'Hỏi: **Amount received** (mặc định = số còn lại) · **Deposited on** · **Bank transaction ID** (tuỳ chọn — bỏ trống cho tiền mặt, hệ thống tự sinh mã `MANUAL-…`) · **Note**. **Số tiền quyết định nhãn**: ít hơn số còn lại → *Partially paid*; bằng → *Paid*. Một nút, không có “confirm một phần” riêng.',
+          'Xác nhận được cả trên hoá đơn **Draft** (khách trả trước khi xuất hoá đơn là bình thường) → *Paid*, và giữ *Paid* khi phát hành chính thức sau đó. Xác nhận trên Invoice → nhãn trên PO đổi **ngay**.',
+          'Đơn Woori bank có thêm **dòng QR** (chỉ đọc) dưới header; khách trả qua QR thì ngân hàng tự báo về, **không cần** Confirm payment. Quy tắc Payment status, Overdue và QR: xem trang **Purchase order §2**.',
           'Mã giao dịch là **danh tính của khoản tiền**: nhập trùng → bị từ chối; webhook đến sau cho cùng giao dịch → bị bỏ qua. Không trả một đơn hai lần.',
-          'Số tiền lệch với đợt vẫn **được ghi**, kèm cờ trong audit log — trả thiếu, trả thừa đều có thật.',
+          'Số tiền lệch vẫn **được ghi**, kèm cờ trong audit log — trả thiếu, trả thừa đều có thật.',
           'Nút **tắt** khi đơn đã *Paid*. **Payment history** dưới chứng từ liệt kê mọi khoản đã về (ngân hàng hay ghi tay, ngày, số tiền, ghi chú).',
           'Ghi nhận thanh toán **không bao giờ cấp thêm quota**.',
         ],
@@ -1176,9 +1223,9 @@ export const CRM_SALES_MODULE_DOCS: Record<string, ModuleDoc> = {
         heading: 'Điều đáng biết về PO',
         items: [
           '**Hết hạn cuối tháng, không phải 30 ngày trôi** — PO ngày 05/07 và ngày 28/07 cùng hết hạn 31/07, giống luật của báo giá. Ngay sau nửa đêm cuối tháng, một dòng có thể vẫn ghi *Active* vài giờ trước khi lượt quét đánh dấu — nhưng nút phát hành đã từ chối.',
-          '**Thanh toán không phải trạng thái.** Huy hiệu và cột ghi *Unpaid / Partially paid / Paid* (và *Overdue +N d* khi quá hạn). Việc xuất hoá đơn **không bao giờ** bị chặn bởi thanh toán.',
+          '**Thanh toán không phải trạng thái.** Huy hiệu và cột ghi *Unpaid / Partially paid / Paid* (và *Overdue +N d* khi hoá đơn **chính thức** đã 30 ngày mà chưa có đồng nào — SRM-1080). Việc xuất hoá đơn **không bao giờ** bị chặn bởi thanh toán.',
           '**Không có Edit services.** Dòng, giá, người mua của PO cố định; chỉ *Edit payment details* (điều khoản · phương thức · ngày hẹn trả) sửa được, tới khi có hoá đơn chính thức.',
-          'Hộp thoại **Issue PO** hỏi thêm thứ báo giá không có: **điều khoản thanh toán** (100 % trả trước mặc định, hoặc 50/50 — mở hai khoản phải thu), phương thức, ngày khách hẹn trả. **Số PO của chính khách** hiện **không nhập được** trên giao diện (chỉ hiện nếu đã có từ trước) — nó không đổi gì cả.',
+          'Hộp thoại **Issue PO** hỏi thêm thứ báo giá không có: **điều khoản thanh toán** (100 % trả trước mặc định, 50/50 hoặc Net 30 — chỉ in trên đơn, không chia khoản thu), phương thức, và **Expected payment date — bắt buộc**, chưa chọn thì không bấm được *Issue PO* (với Woori bank, đó là ngày QR hết hạn). **Số PO của chính khách** hiện **không nhập được** trên giao diện (chỉ hiện nếu đã có từ trước) — nó không đổi gì cả.',
         ],
       },
       {
