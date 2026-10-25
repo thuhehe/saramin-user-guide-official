@@ -13,7 +13,7 @@ import { chromium } from 'playwright-core'
 import http from 'node:http'
 
 const BASE = process.env.ADMIN_BASE ?? 'https://dev-admin.saramin.vn'
-const ctx = await chromium.launchPersistentContext(new URL('../.pw-profile', import.meta.url).pathname, {
+const ctx = await chromium.launchPersistentContext(process.env.PW_PROFILE ?? new URL('../.pw-profile', import.meta.url).pathname, {
   headless: false,
   viewport: { width: 1408, height: 880 },
 })
@@ -92,4 +92,4 @@ http
       }
     })
   })
-  .listen(9334, '127.0.0.1', () => console.log('Browser open; jobs on http://127.0.0.1:9334'))
+  .listen(Number(process.env.PW_PORT ?? 9334), '127.0.0.1', () => console.log(`Browser open; jobs on http://127.0.0.1:${process.env.PW_PORT ?? 9334}`))
