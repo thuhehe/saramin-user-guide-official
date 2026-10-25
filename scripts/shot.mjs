@@ -16,5 +16,5 @@
  */
 const [, , a, b, ...steps] = process.argv
 const job = a === '--eval' ? { eval: b } : a === '--text' ? { text: Number(b ?? 4000) } : { path: a, out: b === '-' ? null : b && new URL(b, 'file://' + process.cwd() + '/').pathname, steps }
-const r = await fetch('http://127.0.0.1:9334', { method: 'POST', body: JSON.stringify(job) })
+const r = await fetch(`http://127.0.0.1:${process.env.PW_PORT ?? 9334}`, { method: 'POST', body: JSON.stringify(job) })
 console.log(await r.text())

@@ -224,14 +224,26 @@ export const JOBS_APPS_PAGE_DOCS: Record<string, PageDoc> = {
       {
         kind: 'table',
         heading: '§2.5 · Card artwork — chỉ hiện cho thứ product có bán',
-        note: 'Mục này **chỉ xuất hiện khi Main product đã chọn có bao gồm nó**; tin Basic không có mục artwork và sẽ không bao giờ có. Artwork **không bắt buộc để Post** — khung trống thì thẻ để trơn, không chặn.',
+        note: 'Mục này **chỉ xuất hiện khi Main product đã chọn có bao gồm nó**; tin Basic không có mục artwork và sẽ không bao giờ có. Artwork **không bắt buộc để Post** — khung trống thì thẻ để trơn, không chặn. Tab *Company images* có nút **Add images** để thêm ảnh vào kho của công ty ngay tại đây (thêm đúng 1 ảnh thì tự chọn luôn); đổi công ty khi tin còn nháp thì ảnh của công ty cũ bị gỡ. Luật đầy đủ của kho ảnh: trang **Companies → Company image source**.',
         cols: ['Khung', 'Là gì'],
         rows: [
-          ['**Card photo (at rest)**', '596 × 258 — thẻ trên các dải trả phí. Chọn từ **thư viện ảnh có bản quyền** (ảnh hợp ngành lên trước, *show all* để mở rộng) hoặc tải lên.'],
-          ['**Card photo (on hover)**', '600 × 1120 — thẻ cao khi rê chuột.'],
+          ['**Card photo (at rest)**', '596 × 258 — thẻ trên các dải trả phí. Bấm **Pick image** → bộ chọn có **3 tab**: **Company images** (kho ảnh riêng của công ty — mở sẵn khi công ty đã có ảnh, khoá khi chưa chọn công ty) · **Image gallery** (thư viện ảnh có bản quyền của HQ, ảnh hợp ngành lên trước) · **Upload** (file chỉ đi cùng tin này, tối đa 20 MB). Dưới khung ghi nguồn: *Company image* / *Gallery* / *Uploaded*.'],
+          ['**Card photo (on hover)**', '600 × 1120 — thẻ cao khi rê chuột. Cùng bộ chọn 3 tab như trên.'],
           ['**Short description**', 'Tối đa 400 ký tự, hiện khi rê chuột.'],
           ['**Card tag**', 'Mỗi lúc một pill, xoay qua ba nhóm — **Company tag** (ngày 1–10), **Job tag** (ngày 11–20), **Benefit tag** (ngày 21–30). Chọn từ danh mục **Job tags** theo **tiêu chí** của nó, không gõ.'],
         ],
+      },
+      {
+        kind: 'shot',
+        src: '/shots/img-source/job-artwork-frames.jpg',
+        where: 'Admin',
+        caption: 'Mục **Card artwork** khi sửa một tin: hai khung — *Photo — landscape* 596 × 258 và *Photo — portrait* 600 × 1120 — mỗi khung ghi **nguồn ảnh** (ở đây *Gallery*) và hai nút **Change · Clear**.',
+      },
+      {
+        kind: 'shot',
+        src: '/shots/img-source/job-picker-company.jpg',
+        where: 'Admin',
+        caption: 'Bấm **Change** / **Pick image** → bộ chọn ba tab, mở sẵn **Company images** khi công ty đã có ảnh trong kho.',
       },
       {
         kind: 'table',
