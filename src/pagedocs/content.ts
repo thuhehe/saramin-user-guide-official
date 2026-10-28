@@ -1386,6 +1386,78 @@ export const CONTENT_PAGE_DOCS: Record<string, PageDoc> = {
         text:
           '**Câu trả lời tối đa 20.000 ký tự — tính cả mã định dạng**, không chỉ chữ nhìn thấy. Ảnh và bảng ăn giới hạn rất nhanh; quá thì Save báo *This answer is {length} characters. The limit is 20000.* — tách thành hai câu hỏi.',
       },
+      /* Image rules for Help centre answers — asked by the client 28/10. Checked against
+         origin/dev: admin 9c58fd0b (rich-text-image-button, media-insert-dialog,
+         app-image-upload, faq-item-drawer), svn-be b89926d4 (MediaKind.BANNER,
+         MediaUploadService, DerivativeVariant, CwebpImageTranscoder, BlockHtml), svn-web
+         0d4a0a66 (faq-detail-page, components/content/html, globals.css .prose img,
+         help-center-shell, board-view). */
+      { kind: 'h', text: '§1.1 · Chèn ảnh vào câu trả lời — điều kiện' },
+      {
+        kind: 'list',
+        items: [
+          '**Cách chèn:** trong khung *Answer*, bấm nút **ảnh** trên thanh công cụ → **bấm chọn hoặc kéo thả file** vào ô tải lên → điền **Alt text** (nên có) → **Insert**.',
+          '**Đợi tới khoảng 1 phút** sau khi bấm Insert: hệ thống xử lý ảnh xong mới chèn (*Uploading and waiting for processing… this can take up to a minute.*). Nếu báo ảnh còn đang xử lý thì đợi một chút rồi bấm **Retry** — file đã tải lên được giữ lại, không phải chọn lại.',
+          '**Mỗi ngôn ngữ chèn ảnh riêng.** VI / EN / KO là ba câu trả lời độc lập; không có kho ảnh dùng lại, nên ảnh cần có ở ngôn ngữ nào thì tải lên ở tab ngôn ngữ đó.',
+        ],
+      },
+      {
+        kind: 'table',
+        heading: 'Điều kiện bắt buộc — hệ thống chặn nếu sai',
+        cols: ['Điều kiện', 'Giới hạn', 'Sai thì'],
+        rows: [
+          ['**Cách đưa ảnh vào**', 'Chỉ **tải file lên** bằng nút ảnh. Không có ô dán link ảnh.', 'Ảnh **copy–paste** từ trang web khác hoặc dán thẳng vào khung soạn thảo **không hiện** trên trang khách — hệ thống bỏ mọi ảnh không nằm trên máy chủ của Saramin.'],
+          ['**Định dạng**', '**PNG, JPG (JPEG) hoặc WebP**. Không nhận GIF, SVG, HEIC…', 'Máy chủ từ chối file (*Content type not allowed*); ảnh không được chèn.'],
+          ['**Dung lượng**', 'Tối đa **20 MB** một ảnh', 'Toast *Image exceeds 20MB*.'],
+          ['**Kích thước (px)**', '**Không giới hạn** — không có mức tối thiểu hay tối đa', '—'],
+          ['**Alt text**', 'Không bắt buộc; tối đa **300** ký tự', '—'],
+          ['**Độ dài câu trả lời**', 'Mỗi ảnh chèn vào **ăn vào giới hạn 20.000 ký tự** của câu trả lời (đường dẫn ảnh tính như chữ)', 'Save báo quá giới hạn — tách thành hai câu hỏi.'],
+        ],
+      },
+      {
+        kind: 'table',
+        heading: 'Hệ thống tự làm gì với ảnh',
+        cols: ['Việc', 'Chi tiết'],
+        rows: [
+          ['**Tự chuyển sang WebP**', 'Không cần tự đổi định dạng — tải PNG / JPG như bình thường. Máy chủ tạo các bản **WebP** (chất lượng 90) ở các bề rộng **320 · 768 · 1.536 px** và một bản lớn nhất **tới 2.560 px**.'],
+          ['**Không phóng to**', 'Bản lớn nhất **không bao giờ rộng hơn ảnh gốc**. Ảnh gốc hẹp hơn 320 px thì giữ nguyên, không chuyển.'],
+          ['**Câu trả lời dùng bản lớn nhất**', 'Khung soạn thảo chèn đường dẫn của bản WebP lớn nhất.'],
+          ['**Xoá file gốc**', 'Chuyển xong thì **file gốc bị xoá** — muốn sửa ảnh về sau, giữ file gốc ở máy mình.'],
+        ],
+      },
+      {
+        kind: 'table',
+        heading: 'Ảnh hiện thế nào trên trang khách',
+        cols: ['', 'Máy tính', 'Điện thoại'],
+        rows: [
+          ['**Bề rộng ảnh**', '**Luôn đầy cột nội dung: khoảng 820 px**', '**Luôn đầy cột: khoảng 311 px** (màn 375 px)'],
+          ['**Ảnh nhỏ hơn cột**', 'Bị **phóng to** cho đầy cột → **mờ**', 'Thường vẫn rõ'],
+          ['**Ảnh dọc (cao hơn rộng)**', 'Chiếm rất nhiều chiều cao', 'Chữ trong ảnh **rất nhỏ**, khó đọc'],
+          ['**Phóng to / xem ảnh lớn**', 'Không có', 'Không có'],
+        ],
+      },
+      {
+        kind: 'table',
+        heading: 'Khuyến nghị để ảnh hiển thị đẹp',
+        cols: ['Tiêu chí', 'Nên', 'Vì sao'],
+        rows: [
+          ['**Bề rộng**', '**Khoảng 1.600 px** — tối thiểu **820 px**', 'Gấp đôi cột 820 px → sắc nét trên màn hình độ phân giải cao (Retina, điện thoại).'],
+          ['**Tỷ lệ**', 'Ảnh **ngang**, khoảng **4:3 hoặc 16:9**. Màn hình dài thì **tách thành 2 ảnh**', 'Ảnh luôn đầy cột, nên ảnh dọc thành rất cao và chữ rất nhỏ trên điện thoại.'],
+          ['**Dung lượng thực tế**', '**Dưới 500 KB** (giới hạn 20 MB chỉ là mức chặn)', 'Trang trợ giúp hay được mở bằng 4G.'],
+          ['**Định dạng gốc**', '**PNG** cho ảnh chụp màn hình; **JPG** cho ảnh chụp thật', 'PNG giữ chữ trong ảnh sắc; hệ thống vẫn tự chuyển sang WebP.'],
+          ['**Nội dung**', '**Cắt đúng phần đang hướng dẫn**; đánh dấu bằng **một** mũi tên hoặc khung, **cùng một màu** cho mọi bài', 'Ảnh cả màn hình thu về 820 px thì không đọc được chữ nào.'],
+          ['**Ngôn ngữ trong ảnh**', 'Giao diện trong ảnh **cùng ngôn ngữ** với câu trả lời (câu VI → ảnh giao diện VI)', 'Ảnh giao diện tiếng Anh trong bài tiếng Việt gây rối.'],
+          ['**Thông tin cá nhân**', '**Che hoặc làm mờ** tên, email, số điện thoại, ảnh đại diện', 'Trang trợ giúp là trang công khai.'],
+          ['**Alt text**', 'Một câu ngắn mô tả ảnh (*Nút Quên mật khẩu ở màn hình đăng nhập*)', 'Cho trình đọc màn hình; hiện thay ảnh khi ảnh không tải được.'],
+          ['**Vai trò của ảnh**', '**Minh hoạ, không thay chữ** — viết bước bằng chữ, đặt ảnh **ngay sau bước** nó minh hoạ', 'Chữ trong ảnh không tìm kiếm được, không dịch được, và lỗi thời khi giao diện đổi.'],
+          ['**Ảnh trang trí**', '**Không dùng** (ảnh phong cảnh, toà nhà…)', 'Không giúp gì cho câu hỏi “làm thế nào”, chỉ làm trang nặng.'],
+        ],
+      },
+      {
+        kind: 'open',
+        text:
+          '**Chưa có trong build — cần quyết nếu khách hỏi:** (1) **không hiện được ảnh nhỏ hơn cột** (icon, ảnh một nút bấm) — mọi ảnh đều giãn đầy cột, muốn khác phải sửa code; (2) **thông báo lỗi ảnh ở Admin chỉ có tiếng Anh** (*Image exceeds 20MB*, thông báo đang xử lý); (3) **file gốc không được giữ** sau khi chuyển WebP.',
+      },
       { kind: 'h', text: '§2 · Đưa câu hỏi lên trang chủ trợ giúp' },
       {
         kind: 'list',
