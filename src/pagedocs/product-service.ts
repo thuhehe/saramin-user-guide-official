@@ -873,8 +873,8 @@ export const PRODUCT_SERVICE_PAGE_DOCS: Record<string, PageDoc> = {
         rows: [
           ['**CV search**', 'Nút **Gift** ở thẻ *Free products*', '**⋮ → Warranty** trên dòng CV search khách đã mua', 'CRM → Companies → mở công ty → tab **Products & billing**'],
           ['**Manual service**', 'Nút **Gift** ở thẻ *Free products*', '**⋮ → Warranty** trên dòng Manual service khách đã mua', 'Cùng chỗ'],
-          ['**Job posting**', 'Đăng tin bằng một product **Free** (ví dụ *Free Job*)', 'Nút **Warranty** trên chi tiết tin (tin **trả phí**, đang *Open* hoặc *Closed*) → tạo **Draft** bảo hành, chọn product Free, rồi đăng', 'Recruitment → **Jobs** → chi tiết tin'],
-          ['**Banner / Popup**', '**New ad → Customer → “— No order (free) —”** rồi chọn **Free product**', '**Chưa có.** Muốn bù cho khách thì tạo quảng cáo mới bằng làn miễn phí — nhưng không có lý do và không liên kết với booking gốc', 'Service delivery → **Boosting**'],
+          ['**Job posting**', 'Đăng tin bằng một product **Free** (ví dụ *Free Job*)', 'Nút **Warranty** trên chi tiết tin (tin **trả phí**, đang *Open* hoặc *Closed*) → tạo **Draft** bảo hành, chọn product Free, rồi đăng', 'Recruitment → **Jobs** → chi tiết tin — hướng dẫn ở trang **Jobs §3.1**'],
+          ['**Banner / Popup**', '**New ad → Customer → “— No order (free) —”** rồi chọn **Free product**', '**Chưa có.** Muốn bù cho khách thì tạo quảng cáo mới bằng làn miễn phí — nhưng không có lý do và không liên kết với booking gốc', 'Service delivery → **Boosting** — hướng dẫn ở trang **Boosting, Phần 3**'],
         ],
       },
       {
@@ -1272,6 +1272,75 @@ export const PRODUCT_SERVICE_PAGE_DOCS: Record<string, PageDoc> = {
           ['**Expired**', 'Hết số ngày — quảng cáo tự rời khỏi site', 'Không'],
           ['**Lapsed**', 'Chưa từng dùng trước hạn **Must be used within**', 'Không'],
         ],
+      },
+      { kind: 'h', text: 'Phần 3 · Banner miễn phí — tặng hoặc bù cho khách' },
+      {
+        kind: 'p',
+        text:
+          'Một quảng cáo **của khách** chạy **không cần PO**, dựa trên một product **Free** loại *Placement booking*. Dùng để **tặng** banner, hoặc **bù** cho một booking không chạy được — banner **chưa có đường bảo hành riêng** như CV search / Manual service / Job. **Không hoá đơn, không doanh thu.** Khác với quảng cáo **Internal** (của chính Saramin VN, không gắn công ty): banner miễn phí **thuộc về một công ty khách**. Đối chiếu code ngày 25/10/2026: svn-be `origin/dev` (`AdPublishing.grantFree / holdFree`, V597), saramin-vn-admin `origin/dev`.',
+      },
+      {
+        kind: 'table',
+        heading: 'Trước khi bắt đầu — mỗi vùng cần một product Free riêng',
+        note: 'Một product Free gắn với **đúng một vùng**: chọn product nào là quảng cáo chạy ở vùng đó. Vùng **chưa có** product Free thì **không tặng được** — tạo trước ở **Product settings → Products**: *Type* = Placement booking, bật **Free product**, chọn vùng và số ngày.',
+        cols: ['Product Free trên dev (25/10/2026)', 'Vùng', 'Số ngày'],
+        rows: [
+          ['Popup trang chủ — 30 ngày (miễn phí)', '[JS] Homepage - Popup', '30'],
+          ['Banner trang tìm kiếm — 30 ngày (miễn phí)', 'Trang tìm kiếm — Banner cột phải', '30'],
+          ['Banner trang hồ sơ ứng viên — 30 ngày (miễn phí)', '[JS] My page - My page banner', '30'],
+          ['Banner trang chi tiết việc làm — 30 ngày (miễn phí)', '[JS] Job detail - Bottom Banner', '30'],
+          ['Test ABC', 'Company page - Long banner', '30'],
+          ['*(chưa có)*', 'Home Hero · Home Ribbon · Home Middle · các vùng [CO]', '—'],
+        ],
+      },
+      {
+        kind: 'list',
+        heading: 'Từng bước',
+        items: [
+          '**Service delivery → Boosting → + New** → **Source = Customer** → chọn **Customer**.',
+          '**Order / PO** → chọn **“— No order (free) —”** (*“No purchase order: HQ grants a free placement product to this company instead.”*). Công ty không có đơn nào thì form **tự chọn sẵn** lựa chọn này.',
+          '**Free product** → chọn product Free (*“Granted with no purchase order behind it. It sets the display length.”*). Danh sách chỉ có product **Active + Free + loại Placement booking**. **Placement** tự điền theo product.',
+          'Vùng *Company page - Long banner* hỏi thêm **Shown on**: *Every company page* hoặc *One company page* (phải là chính công ty được tặng).',
+          'Điền **Banner name**, ảnh, link, **Start date** (ngày kết thúc = start + số ngày của product) như quảng cáo thường. Ghi **lý do tặng / bù vào ô Purpose** (chỉ admin thấy) — hệ thống không có ô lý do riêng cho banner.',
+          '**Publish** để chạy ngay, hoặc **Save as draft**.',
+        ],
+      },
+      {
+        kind: 'shot',
+        src: '/shots/banner-free/free-product-list.jpg',
+        where: 'Admin',
+        caption: 'New ad → Customer → **“— No order (free) —”** → danh sách **Free product**: mỗi product ghi *tên · vùng · số ngày*.',
+      },
+      {
+        kind: 'table',
+        heading: 'Luật cần biết',
+        cols: ['Điều', 'Luật'],
+        rows: [
+          ['Sức chứa', 'Lúc **Publish**, banner miễn phí qua **cùng kiểm tra sức chứa** như banner trả tiền — vùng kín thì bị từ chối'],
+          ['Bản nháp', '**Không giữ chỗ**. Xoá bản nháp thì booking miễn phí của nó **mất theo**'],
+          ['Chỉ khi tạo mới', 'Quảng cáo đã có **không chuyển** sang miễn phí được: *“Only available when creating a new ad — an existing one cannot be switched to a free product.”*'],
+          ['Sai vùng', 'Product Free của vùng khác thì bị từ chối: *“That free product is for a different placement.”*'],
+          ['Tiền', 'Không hoá đơn, không PO, không doanh thu'],
+          ['Quyền', '`content_display:create` — quyền tạo quảng cáo ở Boosting'],
+          ['Thấy ở đâu', 'Tab **By placement**: cột loại đơn ghi **Free**, dòng phụ *“Free product · {n} days”*. Booking miễn phí **không hiện** trên trang **Quota usage** (trang đó chỉ có hàng bán trên hoá đơn)'],
+        ],
+      },
+      {
+        kind: 'table',
+        heading: 'Kiểm thử — làm trên dev với công ty test',
+        cols: ['#', 'Làm', 'Kết quả đúng'],
+        rows: [
+          ['1', 'New ad → Customer = công ty test → *— No order (free) —* → Free product *Job detail* → ảnh → **Publish**', 'Quảng cáo chạy ở *Job detail - Bottom Banner*, đủ 30 ngày; công ty không có hoá đơn mới'],
+          ['2', 'Tab **By placement** → mở vùng *Job detail*', 'Dòng quảng cáo có loại **Free**'],
+          ['3', 'Tạo banner miễn phí vào vùng đã **kín** sức chứa', 'Bị từ chối vì vùng đầy, như banner trả tiền'],
+          ['4', '**Save as draft** rồi xoá bản nháp', 'Không giữ chỗ; booking miễn phí mất theo'],
+          ['5', 'Mở một quảng cáo đã có → **Edit**', 'Không đổi được sang *No order (free)*'],
+        ],
+      },
+      {
+        kind: 'open',
+        text:
+          '**Banner chưa có bảo hành thật sự.** Làn miễn phí không có ô lý do, không liên kết với booking gốc, và không đếm được *“bù mấy lần cho booking nào”*. Nếu cần như bảo hành CV search / Job thì phải làm thêm.',
       },
     ],
   },
