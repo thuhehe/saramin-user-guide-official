@@ -708,7 +708,7 @@ export const CRM_SALES_PAGE_DOCS: Record<string, PageDoc> = {
     watch: [
       'PO đã có mà khách vẫn không đăng tin được là **đúng** — quota chỉ vào khi hoá đơn Issued.',
       'Danh sách **không có nút tạo mới**, và đó là chủ đích: PO chỉ sinh ra từ một option báo giá đã được chọn.',
-      'PO **không sửa được dòng, giá, người mua** — khách đang cầm bản y hệt. Cần đổi thì *Duplicate* báo giá → gửi → Issue PO mới. PO cũ **không huỷ được**: nó tự hết hiệu lực **cuối tháng phát hành**.',
+      'PO **không sửa được dòng, giá, người mua** — khách đang cầm bản y hệt. Cần đổi thì *Duplicate* báo giá → gửi → Issue PO mới. PO cũ **không có nút huỷ của riêng nó**: nó tự hết hiệu lực **cuối tháng phát hành**, hoặc sang *Cancelled* khi kế toán huỷ hoá đơn của nó.',
       '**Đính chính: không có “Edit services”.** *Logic chung* và tài liệu cũ nói sửa dịch vụ được khi PO còn Active — build hiện tại **không có** nút hay endpoint nào cho việc đó. Chỉ sửa được ba trường thanh toán (xem bên dưới).',
       '**Đính chính: ô “số PO của chính khách” không còn trên màn hình.** Số đó vẫn in ra nếu đã có từ trước, nhưng hiện không ai nhập được (endpoint còn, không có nút gọi).',
     ],
@@ -716,8 +716,8 @@ export const CRM_SALES_PAGE_DOCS: Record<string, PageDoc> = {
       { kind: 'h', text: '§1 · Vòng đời PO', path: '/crm/purchase-orders/:id' },
       {
         kind: 'table',
-        heading: 'Năm trạng thái PO — ba bước tiến, một lối thoát',
-        note: 'Không có *Cancelled*, không có nút huỷ, không xoá. Cách duy nhất một PO “chết” là **hết hạn** — và lúc đó nó chưa từng cấp gì nên không có gì để thu hồi.',
+        heading: 'Sáu trạng thái PO — ba bước tiến, hai lối thoát',
+        note: 'Trên chính PO **không có nút huỷ** và không xoá. PO “chết” theo hai đường: **hết hạn** cuối tháng (lúc đó nó chưa từng cấp gì nên không có gì để thu hồi), hoặc kế toán **huỷ hoá đơn** của nó — PO sang *Cancelled*.',
         cols: ['Trạng thái', 'Hoá đơn bên dưới', 'Tới bằng', 'Ai', 'Làm gì tiếp được'],
         rows: [
           ['**Active**', '— chưa có', '*Issue PO* từ báo giá. **Thắng cam kết, cấp 0 thứ**', 'Sales', 'Gửi đơn · sửa thanh toán · *Export draft invoice* · *Request official invoice*'],
@@ -725,6 +725,7 @@ export const CRM_SALES_PAGE_DOCS: Record<string, PageDoc> = {
           ['**Invoice requested**', 'Requested', '*Request official invoice* — vào hàng đợi kế toán. Từ Active hoặc Draft invoice', 'Sales — công ty phải **Verified**', 'Chờ kế toán. Vẫn xuất lại được bản nháp PDF'],
           ['**Issued invoice**', 'Issued', 'Kế toán phát hành trên trang Invoice. **Sản phẩm vào tài khoản cùng lúc.** Điểm cuối', '**Chỉ kế toán**', '*View invoice* · ghi nhận thanh toán'],
           ['**Expired**', 'Archived', 'Qua **cuối tháng** mà chưa có hoá đơn chính thức — từ bất kỳ trạng thái nào trong ba cái đầu', 'Hệ thống (quét **mỗi giờ**, phút :25)', 'Không gì. Ra PO mới từ một báo giá còn sống'],
+          ['**Cancelled**', 'Cancelled', '**Cancel invoice** trên trang hoá đơn — từ *Draft invoice*, *Invoice requested* hoặc *Issued invoice*. Không hoàn tác', '**Chỉ kế toán** (`invoice:cancel`)', 'Không gì. Ra PO mới từ một báo giá còn sống'],
         ],
       },
       {
@@ -839,6 +840,7 @@ export const CRM_SALES_PAGE_DOCS: Record<string, PageDoc> = {
       'Hoá đơn **không được soạn ở đây**: chứng từ hoá đơn sinh ra từ trang PO (khi xuất nháp hoặc chuyển kế toán), trang này chỉ **phát hành**, xem PDF và ghi nhận thanh toán.',
       'Quyền phát hành tách khỏi quyền đọc — `invoice:issue` hiện chỉ *HQ admin* giữ (thay cho vai trò Kế toán chưa tạo), **cố ý không** giao cho sales: người có chỉ tiêu phụ thuộc việc chốt deal không được là người bấm nút giao hàng.',
       'Hoá đơn **không có trạng thái riêng** — nó đọc từ PO. Chuỗi trạng thái và bảng so sánh PO / hoá đơn: xem *Logic chung — CRM*.',
+      '**Huỷ hoá đơn** (*Cancel invoice*, SRM-1081) là của kế toán và **chỉ có hiệu lực trong hệ thống này** — EasyInvoice không đổi theo, quota đã cấp không bị thu hồi. Xem §1.',
     ],
     how: [
       'Mở hoá đơn ở trạng thái *Invoice requested* (lọc trạng thái trên danh sách, hoặc từ PO → *View draft invoice*).',
@@ -850,7 +852,7 @@ export const CRM_SALES_PAGE_DOCS: Record<string, PageDoc> = {
     watch: [
       'Danh sách hoá đơn là **chỉ đọc**; không có “tạo hoá đơn mới”.',
       'Sau khi phát hành, mở lại hồ sơ công ty để xác nhận quota có thật — đừng tin mỗi thông báo thành công.',
-      '**Hoá đơn đã phát hành thì không sửa được, và trong admin KHÔNG CÓ nút Huỷ.** Sai thì huỷ + biên bản + xuất lại trên **cổng của nhà cung cấp hoá đơn điện tử**, ngoài hệ thống này. **Quota đã cấp không có đường nào thu hồi.**',
+      '**Hoá đơn đã phát hành thì không sửa được** — chỉ huỷ được, bằng **Cancel invoice** (kế toán, bắt buộc nhập lý do, không hoàn tác). Huỷ ở đây **không** huỷ hoá đơn bên **EasyInvoice** và **không** thu hồi quota đã cấp: kế toán phải tự sang EasyInvoice điều chỉnh. Xem *§1 → Huỷ hoá đơn*.',
       '**Đính chính: email gửi khách đã chuyển sang trang PO** (29/09/2026). Hộp thoại phát hành giờ chỉ là một câu xác nhận — không còn ô người nhận, không đính PDF, **phát hành không gửi email**. Gửi khách: PO → *Send the order to the customer*.',
       'Thẻ pipeline của báo giá đã bị đóng **Lost** thì nút phát hành bị khoá và server từ chối — mở lại thẻ trước nếu đóng nhầm.',
     ],
@@ -858,7 +860,7 @@ export const CRM_SALES_PAGE_DOCS: Record<string, PageDoc> = {
       { kind: 'h', text: '§1 · Trạng thái và các nút', path: '/crm/invoices/:id' },
       {
         kind: 'table',
-        heading: 'Bốn trạng thái hoá đơn — không cái nào được lưu',
+        heading: 'Năm trạng thái hoá đơn — không cái nào được lưu',
         note: 'Trạng thái hoá đơn **suy ra từ PO của nó mỗi lần đọc**. Không có gì trên màn hình này đặt được nó; lọc theo trạng thái hoá đơn thực chất là lọc PO bên dưới. PO *Active* thì **chưa có** hoá đơn nào.',
         cols: ['Hoá đơn', 'PO tương ứng', 'Nghĩa', 'Nút có trên trang'],
         rows: [
@@ -866,6 +868,19 @@ export const CRM_SALES_PAGE_DOCS: Record<string, PageDoc> = {
           ['**Invoice requested**', 'Invoice requested', 'Đang trong hàng đợi kế toán. **Vẫn chưa cấp gì**, và đồng hồ cuối tháng **vẫn chạy**', '**Issue official invoice** · PDF nháp · *Confirm payment*'],
           ['**Issued**', 'Issued invoice', 'Đã khai với nhà cung cấp, **có số pháp lý**, bất biến. **Sản phẩm đã cấp**', '*Preview PDF* (bản ký số) · *Confirm payment*'],
           ['**Archived**', 'Expired', 'PO hết hạn trước. **Chưa từng cấp gì nên không có gì để thu hồi**', 'Không có PDF'],
+          ['**Cancelled**', 'Cancelled', 'Kế toán đã huỷ. **Không còn tính là doanh thu**; quota đã cấp **vẫn ở lại** với khách', 'Header ghi *“Cancelled on {ngày}. Reason: {lý do}”* · *Preview PDF* còn nếu hoá đơn đã từng phát hành'],
+        ],
+      },
+      {
+        kind: 'list',
+        heading: 'Huỷ hoá đơn — Cancel invoice',
+        items: [
+          '**Ai và ở đâu:** kế toán (quyền `invoice:cancel`, hiện nằm ở vai trò *HQ admin*), nút **Cancel invoice** trên trang chi tiết hoá đơn. Sales không thấy nút này.',
+          '**Khi nào:** hoá đơn ở *Draft*, *Invoice requested* hoặc *Issued*. *Archived* và hoá đơn đã huỷ thì không. Hộp thoại **bắt buộc nhập lý do** (≤ 500 ký tự) và **không hoàn tác được**.',
+          '**Hệ quả:** hoá đơn → *Cancelled*, PO → *Cancelled* (điểm cuối, không mở lại được). Hoá đơn đã phát hành **vẫn giữ số pháp lý, ngày phát hành và PDF ký số**; doanh thu của công ty được **tính lại** và hạng thành viên dựng lại theo phần còn đứng.',
+          '⚠ **Không đụng tới EasyInvoice.** Hoá đơn bên nhà cung cấp **giữ nguyên trạng thái** — EasyInvoice không cho huỷ, phải điều chỉnh / thay thế kèm biên bản. **Kế toán tự sang EasyInvoice xử lý** theo nguyên tắc kế toán; hệ thống không đồng bộ và không nhắc.',
+          '⚠ **Không thu hồi quota.** Slot đăng tin, credit mở CV, booking banner đã cấp **vẫn nằm ở tài khoản khách** (phần đã dùng thì không lấy lại được). Cần thu hồi thì chỉnh tay.',
+          'Job mỗi giờ vẫn **gắn cờ** hoá đơn bị thay thế / điều chỉnh / huỷ **trên cổng EasyInvoice** — chỉ phát hiện, không tự huỷ hoá đơn trong CRM. Hai chiều đều phải làm tay.',
         ],
       },
       {
@@ -1249,8 +1264,8 @@ export const CRM_SALES_MODULE_DOCS: Record<string, ModuleDoc> = {
       },
       {
         kind: 'table',
-        heading: 'PO — năm trạng thái, một chiều tiến, một lối ra',
-        note: 'Không có nút tạo PO trống, **không sửa dòng** (chỉ sửa được điều khoản, phương thức, ngày hẹn trả), **không xoá, không huỷ**. PO tồn tại chỉ vì một option được chấp nhận.',
+        heading: 'PO — sáu trạng thái, một chiều tiến, hai lối ra',
+        note: 'Không có nút tạo PO trống, **không sửa dòng** (chỉ sửa được điều khoản, phương thức, ngày hẹn trả), **không xoá**, và **không có nút huỷ trên chính PO** — nó chỉ sang *Cancelled* khi kế toán huỷ hoá đơn của nó. PO tồn tại chỉ vì một option được chấp nhận.',
         cols: ['Trạng thái PO', 'Hoá đơn bên dưới', 'Tới bằng', 'Ai'],
         rows: [
           ['**Active**', '— chưa có', '*Issue PO* từ option khách chấp nhận. Thắng, **chưa cấp gì**', 'Sales'],
@@ -1258,6 +1273,7 @@ export const CRM_SALES_MODULE_DOCS: Record<string, ModuleDoc> = {
           ['**Invoice requested**', 'Invoice requested', '*Request official invoice* — chuyển vào hàng đợi kế toán. Từ Active hoặc Draft invoice', 'Sales — cần công ty **Verified**'],
           ['**Issued invoice**', 'Issued', 'Kế toán phát hành trên trang hoá đơn. **Sản phẩm vào tài khoản cùng lúc.** Trạng thái cuối', '**Chỉ kế toán**'],
           ['**Expired**', 'Archived', 'Qua cuối tháng mà chưa có hoá đơn chính thức — từ Active, Draft invoice hoặc Invoice requested. Không ai bấm', 'Hệ thống (quét mỗi giờ)'],
+          ['**Cancelled**', 'Cancelled', '*Cancel invoice* trên trang hoá đơn — từ Draft invoice, Invoice requested hoặc Issued invoice. Không hoàn tác', '**Chỉ kế toán**'],
         ],
       },
       {
@@ -1277,7 +1293,7 @@ export const CRM_SALES_MODULE_DOCS: Record<string, ModuleDoc> = {
       },
       {
         kind: 'table',
-        heading: 'Hoá đơn — bốn trạng thái, không trạng thái nào được lưu riêng',
+        heading: 'Hoá đơn — năm trạng thái, không trạng thái nào được lưu riêng',
         note: 'Trạng thái hoá đơn **suy ra từ PO** mỗi lần đọc — không gì trên màn hình hoá đơn đặt được trạng thái. `/crm/invoices/new` không tồn tại: hoá đơn được chuẩn bị từ PO, chỉ được **phát hành** ở đây.',
         cols: ['Hoá đơn', 'PO', 'Nghĩa'],
         rows: [
@@ -1285,6 +1301,7 @@ export const CRM_SALES_MODULE_DOCS: Record<string, ModuleDoc> = {
           ['**Invoice requested**', 'Invoice requested', 'Trong hàng đợi kế toán. Vẫn không cấp gì; đồng hồ cuối tháng vẫn chạy'],
           ['**Issued**', 'Issued invoice', 'Đã khai với nhà cung cấp, có số pháp lý, **bất biến**. Sản phẩm được cấp · deal thắng · khách New → Existing · *Activate by* = ngày phát hành + 12 tháng'],
           ['**Archived**', 'Expired', 'PO hết hạn trước. Chưa từng cấp gì, nên **không có gì để thu hồi**'],
+          ['**Cancelled**', 'Cancelled', 'Kế toán bấm *Cancel invoice* — từ Draft, Invoice requested hoặc Issued. Hết là doanh thu, doanh thu công ty tính lại. **Quota đã cấp không bị thu hồi**, và **EasyInvoice không đổi theo**'],
         ],
       },
       {
@@ -1295,14 +1312,14 @@ export const CRM_SALES_MODULE_DOCS: Record<string, ModuleDoc> = {
           'Hộp thoại phát hành chỉ là **một câu xác nhận**, ngày phát hành là hôm nay. **Phát hành không gửi email.** Email cho khách (liên hệ của công ty, CC liên hệ + người phụ trách deal, PDF đơn hàng, **mã QR thanh toán**, link điều khoản) gửi từ trang **PO** → *Send the order to the customer*.',
           '**Số pháp lý do nhà cung cấp hoá đơn điện tử (EasyInvoice) cấp** và trả về kèm mã tra cứu — **không ai gõ tay**. Luôn có hai số: số của mình (`INV-…`, cấp từ lúc nháp) và số pháp lý (có lúc phát hành). Nháp hết hạn không tiêu số nào của dãy thuế.',
           '**Confirm a customer transfer** ghi nhận tiền (đợt, số tiền, ngày, mã giao dịch ngân hàng): đổi *Unpaid → Partially paid / Paid* và **không bao giờ cấp quota lần nữa**.',
-          '**Không có nút Huỷ** ở bất kỳ đâu trong module, không có trạng thái *Cancelled*. Hoá đơn phát hành sai được đính chính trên **cổng của nhà cung cấp hoá đơn điện tử**, ngoài hệ thống.',
+          '**Cancel invoice** (quyền `invoice:cancel`, **chỉ kế toán**, bắt buộc lý do, **không hoàn tác**) đưa hoá đơn và PO về *Cancelled*. Huỷ chỉ có hiệu lực **trong hệ thống này**: hoá đơn bên **EasyInvoice không đổi** — kế toán tự sang đó điều chỉnh — và **quota đã cấp không bị thu hồi**.',
         ],
       },
       {
         kind: 'shot',
         src: '/shots/crm/invoice-detail.jpg',
         where: 'Admin',
-        caption: 'Một hoá đơn **Issued** và **Unpaid** cùng lúc — số pháp lý từ nhà cung cấp, *Activate by* = ngày phát hành + 12 tháng, không có nút huỷ.',
+        caption: 'Một hoá đơn **Issued** và **Unpaid** cùng lúc — số pháp lý từ nhà cung cấp, *Activate by* = ngày phát hành + 12 tháng. Ảnh chụp **trước** khi có nút *Cancel invoice*.',
       },
       {
         kind: 'warn',
@@ -1318,7 +1335,7 @@ export const CRM_SALES_MODULE_DOCS: Record<string, ModuleDoc> = {
           ['Bản chất', 'Chứng từ thương mại — cam kết + yêu cầu trả tiền', 'Chứng từ thuế — bằng chứng pháp lý một giao dịch chịu thuế'],
           ['Ràng buộc giữa', 'Mình và khách', 'Mình và **cơ quan thuế**'],
           ['Đánh số', 'Dãy số của mình — `PO-005864-08-2026`', 'Dãy pháp lý của **nhà cung cấp HĐĐT**, cấp tự động khi phát hành'],
-          ['Sửa / huỷ', 'Không — PO không dùng thì **tự hết hạn cuối tháng**', '**Không trong admin** — đính chính trên cổng nhà cung cấp'],
+          ['Sửa / huỷ', 'Không sửa; không có nút huỷ riêng — PO không dùng thì **tự hết hạn cuối tháng**, hoặc theo hoá đơn sang *Cancelled*', 'Không sửa. **Huỷ được** — *Cancel invoice*, chỉ kế toán, có lý do. Nhưng **chỉ trong admin**: bên EasyInvoice phải điều chỉnh tay'],
           ['Ai sở hữu', 'Sales', '**Chỉ kế toán**'],
           ['Tác dụng', 'Deal = thắng', 'Cấp quota · khách thành Existing · bắt đầu đồng hồ “phải dùng trong”'],
         ],
@@ -1440,9 +1457,9 @@ export const CRM_SALES_MODULE_DOCS: Record<string, ModuleDoc> = {
 
       /* ── open ── */
       {
-        kind: 'open',
+        kind: 'warn',
         text:
-          '**Huỷ hoá đơn / thu hồi quota.** Requirement mô tả huỷ hoá đơn kèm thu hồi quota; **build đã bỏ hẳn chức năng huỷ** — đính chính làm trên cổng nhà cung cấp. Cần khách xác nhận “sửa trên cổng” là quy trình chính thức.',
+          '**Huỷ hoá đơn — đã chốt (06/11/2026).** Build đã có *Cancel invoice* (SRM-1081): *Cancelled* là trạng thái mới của hoá đơn CRM, chỉ kế toán bấm được. Khách chốt: **EasyInvoice không được cập nhật theo** — kế toán tự sang EasyInvoice điều chỉnh theo nguyên tắc kế toán, vì EasyInvoice không cho huỷ hoá đơn và thao tác thay thế / điều chỉnh khá phức tạp, trong khi số ca thực tế không nhiều. **Quota đã cấp cũng không bị thu hồi.** BB tạm **không làm thêm** gì cho luồng này.',
       },
       {
         kind: 'open',

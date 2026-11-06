@@ -236,7 +236,7 @@ export function CrmFlow() {
       <Box x={700} y={308} w={180} h={82} title="Invoice requested" sub="hàng đợi của kế toán" sub2="vẫn chưa cấp gì" />
       <Arrow d="M 880 349 L 918 349" tone="brand" label="Issue" lx={899} ly={341} />
       <Box x={920} y={300} w={250} h={98} title="Hoá đơn GTGT · Issued" sub="★ chỉ kế toán bấm được" sub2="số pháp lý do nhà cung cấp HĐĐT cấp" tone="money" />
-      <text x={1045} y={384} fontSize={10.5} textAnchor="middle" fill={MUT}>không có nút huỷ trong admin</text>
+      <text x={1045} y={384} fontSize={10.5} textAnchor="middle" fill={MUT}>huỷ được — chỉ kế toán · EasyInvoice sửa tay</text>
       <Arrow d="M 150 390 L 150 402" dashed />
       <Arrow d="M 445 390 L 445 402" dashed />
       <Arrow d="M 790 390 L 790 402" dashed />
@@ -274,7 +274,7 @@ export function CrmFlow() {
       <rect x={14} y={782} width={1172} height={68} rx={10} fill="#fffbeb" stroke={AMB} strokeWidth={1.5} />
       <text x={32} y={804} fontSize={11.5} fontWeight={800} fill={AMB}>Những điều luôn đúng</text>
       <text x={32} y={823} fontSize={11} fill={MUT}>
-        PO chưa cấp gì · tiền về chưa cấp gì · hoá đơn nháp chưa cấp gì — chỉ <tspan fontWeight={700} fill={INK}>Issued</tspan> · Không có nút Huỷ cho PO lẫn hoá đơn · Báo giá và PO hết hạn <tspan fontWeight={700} fill={INK}>cuối tháng</tspan>, không phải sau 30 ngày.
+        PO chưa cấp gì · tiền về chưa cấp gì · hoá đơn nháp chưa cấp gì — chỉ <tspan fontWeight={700} fill={INK}>Issued</tspan> · Huỷ hoá đơn: chỉ kế toán, EasyInvoice sửa tay · Báo giá và PO hết hạn <tspan fontWeight={700} fill={INK}>cuối tháng</tspan>, không phải sau 30 ngày.
       </text>
       <text x={32} y={841} fontSize={11} fill={MUT}>
         Sales không tạo công ty, không phát hành hoá đơn · Người có chỉ tiêu theo deal không phải người bấm nút giao hàng — quyền <tspan fontWeight={700} fill={INK}>invoice:issue</tspan> chỉ kế toán / HQ admin giữ.
