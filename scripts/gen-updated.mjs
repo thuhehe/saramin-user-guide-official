@@ -26,12 +26,22 @@ try {
 }
 
 /** line number (1-based) → unix seconds of the commit that last touched it */
-function blameTimes(file) {
+function blameTimes(file, lineCount) {
   const times = []
   const byCommit = new Map()
   let commit = null
   let line = 0
-  for (const row of git(['blame', '--line-porcelain', '--', file]).split('\n')) {
+  let raw
+  try {
+    raw = git(['blame', '--line-porcelain', '--', file])
+  } catch {
+    /* git has never seen this file — a doc file added in this working tree and not
+       yet committed. Nothing in it is committed, which is exactly the case the
+       zero-hash branch below calls "today", so say the same thing for every line
+       rather than letting blame's exit 128 take the whole build down. */
+    return Array(lineCount + 1).fill(Date.now() / 1000)
+  }
+  for (const row of raw.split('\n')) {
     const head = /^([0-9a-f]{40}) \d+ (\d+)/.exec(row)
     if (head) { commit = head[1]; line = Number(head[2]); continue }
     if (row.startsWith('committer-time ')) byCommit.set(commit, Number(row.slice(15)))
@@ -48,7 +58,7 @@ const day = (secs) => new Date(secs * 1000).toLocaleDateString('en-CA', { timeZo
 const out = {}
 for (const file of FILES) {
   const lines = readFileSync(file, 'utf8').split('\n')
-  const times = blameTimes(file)
+  const times = blameTimes(file, lines.length)
   let inPageDocs = false
   let key = null
   let newest = 0

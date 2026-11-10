@@ -30,6 +30,7 @@ import { NOTIF_SYSTEM_PAGE_DOCS, NOTIF_SYSTEM_MODULE_DOCS } from './pagedocs/not
 import { PRODUCT_SERVICE_PAGE_DOCS, PRODUCT_SERVICE_MODULE_DOCS } from './pagedocs/product-service'
 import { RESUME_PAGE_DOCS, RESUME_MODULE_DOCS } from './pagedocs/resume'
 import { USERS_ORG_PAGE_DOCS, USERS_ORG_MODULE_DOCS } from './pagedocs/users-org'
+import { RULE_DETAIL } from './pagedocs/rules-detail'
 
 export interface PageDoc {
   logic?: string[]
@@ -695,6 +696,16 @@ export const MODULE_DOCS: Record<string, ModuleDoc> = {
 
 
 
+}
+
+/* "Rule chi tiết" is appended to each module rather than written into the module's
+   own file: the rules came from one pass over Slack and the build, they are
+   maintained together, and a slice that rewrites a module file should not have to
+   merge them by hand. A group named in RULE_DETAIL but absent here is a typo, not
+   a new module, so it is dropped rather than inventing a page. */
+for (const [group, blocks] of Object.entries(RULE_DETAIL)) {
+  const mod = MODULE_DOCS[group]
+  if (mod) mod.blocks = [...mod.blocks, ...blocks]
 }
 
 /* ── Page-level guidance ────────────────────────────────────────────────────── */

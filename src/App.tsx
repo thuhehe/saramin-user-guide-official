@@ -7,6 +7,7 @@ import { MODULE_DOCS, PAGE_DOCS } from './docs'
 import type { DocBlock } from './docs'
 import { OverviewFlow } from './overview'
 import { DIAGRAMS } from './flows'
+import { RuleList } from './rulelist'
 import { DemoPlan } from './demo'
 import { TestPlan } from './testplan'
 import { md } from './md'
@@ -75,13 +76,14 @@ type Sel =
   | { t: 'home' }
   | { t: 'flow' }
   | { t: 'demo' }
+  | { t: 'rules' }
   | { t: 'test' }
   | { t: 'page'; key: string }
   | { t: 'module'; group: string }
   | { t: 'guide'; id: string }
 
 const selId = (s: Sel) =>
-  s.t === 'home' ? 'home' : s.t === 'flow' ? 'flow' : s.t === 'demo' ? 'demo' : s.t === 'test' ? 'test' : s.t === 'page' ? `p:${s.key}` : s.t === 'module' ? `m:${s.group}` : `g:${s.id}`
+  s.t === 'home' ? 'home' : s.t === 'flow' ? 'flow' : s.t === 'demo' ? 'demo' : s.t === 'rules' ? 'rules' : s.t === 'test' ? 'test' : s.t === 'page' ? `p:${s.key}` : s.t === 'module' ? `m:${s.group}` : `g:${s.id}`
 
 /* ── addressing ───────────────────────────────────────────────────────────────
    Every view has its own URL, because the commonest thing anyone does with a
@@ -103,6 +105,7 @@ function href(s: Sel): string {
   if (s.t === 'home') return '/'
   if (s.t === 'flow') return '/toan-canh'
   if (s.t === 'demo') return '/demo'
+  if (s.t === 'rules') return '/danh-sach-rule'
   if (s.t === 'test') return '/test'
   if (s.t === 'guide') return `/huong-dan/${s.id}`
   if (s.t === 'module') return `/logic/${slug(s.group)}`
@@ -119,6 +122,7 @@ function parse(pathname: string): Sel {
   const [, kind, rest] = pathname.replace(/\/+$/, '').split('/')
   if (kind === 'toan-canh') return { t: 'flow' }
   if (kind === 'demo') return { t: 'demo' }
+  if (kind === 'danh-sach-rule') return { t: 'rules' }
   if (kind === 'test') return { t: 'test' }
   if (kind === 'trang' && rest && PAGE_ALIAS[rest]) return { t: 'page', key: PAGE_ALIAS[rest] }
   if (kind === 'trang' && rest && ALL.some((p) => p.key === rest)) return { t: 'page', key: rest }
@@ -172,6 +176,15 @@ export function App() {
     window.scrollTo({ top: 0 })
   }
 
+  /* Danh sách rules → the rule's own section on a module's Logic page. The hash
+     goes into the address BEFORE the state changes, so the existing scroll-to-hash
+     effect finds it; and no scrollTo(0) here, which would undo it. */
+  const pickAnchor = (group: string, anchor: string) => {
+    window.history.pushState({}, '', `${href({ t: 'module', group })}#${anchor}`)
+    setSel({ t: 'module', group })
+    setQ('')
+  }
+
   const cur = selId(sel)
 
   return (
@@ -196,6 +209,7 @@ export function App() {
           <RailItem label="Tổng quan" to={href({ t: 'home' })} on={cur === 'home'} onClick={() => pick({ t: 'home' })} />
           <RailItem label="Toàn cảnh hệ thống" to={href({ t: 'flow' })} accent on={cur === 'flow'} onClick={() => pick({ t: 'flow' })} />
           <RailItem label="Danh sách flow" to={href({ t: 'demo' })} on={cur === 'demo'} onClick={() => pick({ t: 'demo' })} />
+          <RailItem label="Danh sách rules" to={href({ t: 'rules' })} on={cur === 'rules'} onClick={() => pick({ t: 'rules' })} />
           {GUIDE_IDS.map((id) => {
             const s = sec(id)
             return s ? <RailItem key={id} label={s.label} to={href({ t: 'guide', id })} on={cur === `g:${id}`} onClick={() => pick({ t: 'guide', id })} /> : null
@@ -250,6 +264,8 @@ export function App() {
             <OverviewFlow />
           ) : sel.t === 'demo' ? (
             <DemoPlan onPick={(k) => pick({ t: 'page', key: k })} />
+          ) : sel.t === 'rules' ? (
+            <RuleList onOpen={pickAnchor} />
           ) : sel.t === 'test' ? (
             <TestPlan onPick={(k) => pick({ t: 'page', key: k })} />
           ) : sel.t === 'guide' ? (
