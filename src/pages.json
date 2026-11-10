@@ -217,7 +217,7 @@
   "path": "/system/image-gallery",
   "perm": "content_gallery:read",
   "flag": "",
-  "what": "Kho ảnh HQ có bản quyền để làm **ảnh thẻ tin** (ảnh hover, ảnh banner) cho các bậc có perk ảnh.",
+  "what": "Kho **cụm ảnh**: mỗi cụm một cảnh cắt sẵn ba khung thẻ tin (Landscape · Portrait · Circle), gắn ngành để tin tự nhận ảnh.",
   "sub": []
  },
  {
