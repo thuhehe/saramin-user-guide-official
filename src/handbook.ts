@@ -235,7 +235,7 @@ export const WORKFLOW: Workflow = {
               [
                 '9. Rút đơn · khoá · xoá tài khoản',
                 'Console: **Jobseeker users** (*Deactivate* / *Reactivate* / *Restore*) · Jobseeker site: xoá tài khoản ở `/help/withdraw`',
-                'Ứng viên tự tắt **hoặc** HQ *Deactivate* → mọi đơn **đang chạy** bị rút khỏi bảng của NTD (trạng thái ứng viên thấy cho trường hợp này **chưa chốt** — không có trong 9 trạng thái), mỗi công ty đã nhận đơn được báo ngừng dùng dữ liệu. Xoá tài khoản → giống vậy, cộng **huỷ dữ liệu cá nhân sau 72 giờ**; NTD thấy dòng “tài khoản đã xoá”.',
+                'Ứng viên tự tắt **hoặc** HQ *Deactivate* → mọi đơn **đang chạy** bị rút khỏi bảng của NTD (trạng thái ứng viên thấy cho trường hợp này **chưa chốt** — không có trong 9 trạng thái), mỗi công ty đã nhận đơn được báo ngừng dùng dữ liệu. Xoá tài khoản (Phase 1) → **khác**: đơn **không bị rút**, dòng ở lại với UI *“Tài khoản đã bị xóa”* nhưng NTD **không mở được CV** (kể cả CV đã unlock); ứng viên nhận **JS 8**, công ty đã nhận đơn nhận **CO 11**; **huỷ dữ liệu cá nhân sau 72 giờ**, không gửi email lúc huỷ. Phase 1 **không có xoá CV**.',
                 '*Reactivate* **không trả đơn về**. *Restore* chỉ được **trước khi** lần huỷ 72 giờ chạy. Ứng viên **không tự thu hồi được** hồ sơ — không có nút sửa, thu hồi hay xoá ở bất kỳ trạng thái nào; chỉ Admin / CS **Recall**.',
               ],
             ],
@@ -253,7 +253,8 @@ export const WORKFLOW: Workflow = {
               ['**Tìm và lưu ứng viên** (`/search`)', 'Gói CV search **đang chạy** → đọc bản che của mọi CV. Không có gói → **10 CV** đọc miễn phí (bản che), sau đó thấy bản mờ.', 'Đã bật *Show CV to employers*, CV *Đạt*, tài khoản *Active*.', '**Miễn phí** — tìm, lọc, lưu vào folder.'],
               ['**Mở khoá CV**', 'Còn lượt trong một gói CV search. Gói **sắp hết hạn trước** trả trước; gói **chưa kích hoạt** tự kích hoạt ở lần mở đầu tiên; hết lượt thì lấy từ công ty bảo trợ (shared quota) nếu có.', '—', '**1 lượt / ứng viên**, một lần, cho cả công ty. Hết lượt: lỗi hết credit; gói đã hết hạn mà còn lượt: báo **gói đã hết hạn**, không phải “hết credit”.'],
               ['**CV bị từ chối sau khi đã mở khoá**', '—', 'HQ *Từ chối* CV ở CV review.', 'Lượt mở khoá của CV đó được **hoàn lại**; đơn đã gửi bằng đúng version bị từ chối chuyển *Recall* (thu hồi).'],
-              ['**Ứng viên rút / khoá / xoá**', 'Nhận thông báo ngừng dùng dữ liệu.', 'Tự tắt, bị HQ khoá, hoặc tự xoá tài khoản.', 'Lượt mở khoá **đã trả không hoàn** — công ty vẫn giữ danh tính đã mua.'],
+              ['**Ứng viên rút / khoá**', 'Nhận thông báo ngừng dùng dữ liệu.', 'Tự tắt hoặc bị HQ khoá.', 'Lượt mở khoá **đã trả không hoàn** — công ty vẫn giữ danh tính đã mua.'],
+              ['**Ứng viên xoá tài khoản** (Phase 1)', 'Nhận email **CO 11** nếu ứng viên đã ứng tuyển vào công ty.', 'Ứng viên tự xoá tài khoản.', 'Công ty **không xem được CV nữa** — kể cả CV đã mở khoá; lượt mở khoá **không hoàn**.'],
             ],
           },
         },

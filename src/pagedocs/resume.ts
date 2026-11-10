@@ -21,7 +21,8 @@ export const RESUME_PAGE_DOCS: Record<string, PageDoc> = {
   'create-cv': {
     logic: [
       '**Một thư viện, hai loại CV:** **Saramin CV** (ứng viên soạn trong form của Saramin) và **Upload CV** (ứng viên tải file **PDF / Word** lên). Cả hai nằm chung một danh sách ở **My CVs** (tiêu đề trang: *Resume Management*).',
-      '**Không giới hạn số CV.** Mỗi CV là một bản riêng: tên riêng, trạng thái riêng, số đơn đã nộp riêng.',
+      '**Tối đa 20 Saramin CV + 20 Upload CV** (Phase 1, §9). Mỗi CV là một bản riêng: tên riêng, trạng thái riêng, số đơn đã nộp riêng.',
+      '**Phase 1 (go-live 21/11/2026): ứng viên không xoá được CV** — chỉ Edit, Download và bật / tắt hiển thị. Edit một Upload CV là **thay file** (§9).',
       '**Mỗi CV tự khai *Experienced* hoặc *No experience*.** Khai báo này quyết định CV cần những mục nào để **Đạt**: luôn cần **Education**, cần thêm **Work experience** nếu khai *Experienced*.',
       '**Total experience** (số năm kinh nghiệm) là con số hiển thị **của từng CV**, **độc lập** với khai báo *Experienced / No experience* — nó không ảnh hưởng kết quả Đạt.',
       '**Chỉ một CV được hiển thị cho nhà tuyển dụng (NTD)** tìm kiếm tại một thời điểm. Các CV khác vẫn dùng để nộp đơn bình thường.',
@@ -37,10 +38,11 @@ export const RESUME_PAGE_DOCS: Record<string, PageDoc> = {
       '**Experienced / No experience và Total experience là hai thứ khác nhau.** CV có Total experience 11 năm nhưng khai *No experience* vẫn hiển thị **11 năm** — và chỉ cần Education để Đạt.',
       '**Bật *Show CV to employers* trên một CV là tự tắt CV đang hiển thị trước đó** — không hỏi xác nhận.',
       '**CV *Unfinished* bị làm mờ ở bước nộp đơn** và không bật hiển thị được. Ứng viên phải bổ sung rồi lưu, hoặc dùng CV khác.',
-      '**Xoá một CV rút các đơn đang xử lý đã nộp bằng nó** — công ty được thông báo và không xem được CV nữa. Không hoàn tác.',
+      '**Không có nút Delete** (Phase 1). Ứng viên muốn bỏ một CV thì **Edit** nó, hoặc tắt hiển thị. Chạm giới hạn 20 của một loại thì phải Edit CV cũ của loại đó.',
+      '**Tắt hết CV là NTD đã unlock cũng mất CV** — họ không xem được nữa và không được hoàn quota (§6).',
     ],
     blocks: [
-      { kind: 'p', text: 'Theo tài liệu *Resume Management · Create CV*, cập nhật 15/10/2026. Ảnh chụp trên dev ngày 15/10/2026.' },
+      { kind: 'p', text: 'Theo tài liệu *Resume Management · Create CV*, cập nhật 15/10/2026, ảnh chụp trên dev ngày 15/10/2026 — cộng quy tắc **Phase 1** từ tài liệu *Xóa tài khoản & Xóa CV* (10/11/2026): không xoá CV, giới hạn 20 + 20, Edit Upload CV = thay file (§9).' },
       {
         kind: 'diagram',
         id: 'cv-create',
@@ -79,7 +81,7 @@ export const RESUME_PAGE_DOCS: Record<string, PageDoc> = {
           ['**Bốn ô thông tin**', '**Total years of experience** · **Education** · **Latest job title** · **Skills** — lấy từ **chính CV đó**. *Latest job title* là chức danh ở công việc mới nhất trong Work experience'],
           ['**Applications N ›**', 'Số đơn đã nộp bằng CV này. Chỉ hiện trên CV đạt'],
           ['**Ghi chú**', 'Ô ghi nhớ của ứng viên cho CV này'],
-          ['**Menu ⋯**', '**Download** và **Delete**. CV cuối cùng không xoá được'],
+          ['**Menu ⋯**', '**Download**. Phase 1 **không có Delete** (§9)'],
           ['**Bộ lọc**', '**Total {n}** · *All / Saramin CV / Uploaded*'],
         ],
       },
@@ -87,12 +89,12 @@ export const RESUME_PAGE_DOCS: Record<string, PageDoc> = {
         kind: 'shot',
         src: '/shots/cv/cv-list-note.png',
         where: 'Jobseeker site',
-        caption: 'Khung **Please note** cuối trang: không giới hạn số CV; đúng một CV là CV để NTD tìm thấy; bật *Show CV to employers* trên CV này là tắt trên CV trước đó.',
-        note: 'Dòng cuối của khung ghi *“preview, download or delete”* — menu ⋯ thật chỉ có **Download** và **Delete** (Preview nằm ở danh sách chọn CV khi nộp đơn — xem **How to apply**).',
+        caption: 'Khung **Please note** cuối trang: đúng một CV là CV để NTD tìm thấy; bật *Show CV to employers* trên CV này là tắt trên CV trước đó.',
+        note: 'Ảnh 15/10. Khung còn ghi *“There is no limit on how many CVs you keep”* và *“preview, download or delete”* — Phase 1 có giới hạn **20 + 20** và **không có Delete**, nên câu chữ cần sửa (§9).',
       },
       {
         kind: 'warn',
-        text: '**Xoá một CV** sẽ rút các đơn đang xử lý đã nộp bằng CV đó: công ty được thông báo và **không xem được CV nữa**. Không hoàn tác được.',
+        text: '**Phase 1: ứng viên không xoá được CV.** Đơn ứng tuyển, Talent Pool và CV NTD đã unlock **không bao giờ** bị ảnh hưởng bởi thao tác xoá CV — quy tắc đầy đủ ở §9.',
       },
 
       /* ── §2 ─────────────────────────────────────────────────────────────── */
@@ -206,6 +208,7 @@ export const RESUME_PAGE_DOCS: Record<string, PageDoc> = {
           '**CV được tạo ngay khi file tải xong.** Hệ thống đọc (parse) file để lấy các mục: kinh nghiệm, học vấn, kỹ năng…',
           'Bấm **Save** để đặt tên CV, chọn *Experienced / No experience* và chọn có hiển thị CV cho NTD không (như Saramin CV).',
           '**Total experience** của Upload CV lấy từ kinh nghiệm đọc được trong file.',
+          '**Edit một Upload CV (Phase 1):** **thay file mới (replace)**, sửa tên CV và tổng số năm kinh nghiệm; hệ thống **parse lại** file mới (§9).',
         ],
       },
       {
@@ -218,6 +221,9 @@ export const RESUME_PAGE_DOCS: Record<string, PageDoc> = {
           ['**Điền sẵn**', '**Import CV** từ CV đã tải lên hoặc file PDF', 'Không cần, file tự được đọc'],
           ['**Chấm Đạt**', 'Ngay từ các mục đã nhập', 'Từ kết quả đọc file'],
           ['**Total experience**', 'Sửa ở chip Total experience', 'Lấy từ file'],
+          ['**Edit**', 'Sửa trực tiếp nội dung trên form', 'Thay file mới (replace), sửa tên CV, tổng số năm kinh nghiệm'],
+          ['**Tối đa**', '**20** Saramin CV', '**20** Upload CV'],
+          ['**Chuyển đổi sang loại kia**', '❌ Không', '❌ Không'],
         ],
       },
 
@@ -311,10 +317,23 @@ export const RESUME_PAGE_DOCS: Record<string, PageDoc> = {
         cols: ['Tình huống', 'Điều gì xảy ra'],
         rows: [
           ['**Bật trên một CV**', 'Chọn **Show CV to employers** ở dòng CV. CV đó lên thẻ **Employers see this CV**; CV đang hiển thị trước đó tự tắt. Không hỏi xác nhận'],
-          ['**Tắt**', 'Hệ thống hỏi trước: *If you’re job hunting right now, keep offers open too*, với 2 lựa chọn **Keep my CV visible** (mặc định) và **Hide my CV**'],
+          ['**Tắt**', 'Hệ thống hỏi trước: *If you’re job hunting right now, keep offers open too*, với 2 lựa chọn **Keep my CV visible** (mặc định) và **Hide my CV**. NTD đã unlock: còn bật CV khác thì họ thấy **CV đang bật**; **tắt hết** thì họ **không xem được nữa** và mất quota (sơ đồ dưới)'],
           ['**Không CV nào đang hiển thị**', 'Khung **CV hidden from employers**, chọn CV ở ô *Choose a CV* rồi bấm **Let employers find me**'],
           ['**File tải lên đầu tiên**', 'Nếu ứng viên chưa có CV nào đang hiển thị, file tải lên đầu tiên đọc xong được **tự đặt làm CV hiển thị**'],
           ['**Phía NTD**', 'Ứng viên có CV đang hiển thị — và CV đó *Qualified* — thì xuất hiện trong Talent Pool của NTD. Tên và thông tin liên hệ được che tới khi NTD mở khoá (xem **Talent pool**)'],
+        ],
+      },
+      {
+        kind: 'diagram',
+        id: 'cv-hide-unlock',
+        heading: 'NTD đã unlock CV, ứng viên tắt hiển thị — NTD còn thấy gì (Phase 1)',
+      },
+      {
+        kind: 'table',
+        cols: ['Trường hợp', 'NTD đã unlock sẽ thấy'],
+        rows: [
+          ['Ứng viên tắt CV 1 và **bật CV 2** (còn ít nhất 1 CV đang hiển thị)', 'Bản **CV đang được bật** (mới nhất)'],
+          ['Ứng viên **tắt hết** tất cả CV', '**Không xem được nữa**, hiển thị UI *CV đã ngừng hiển thị*; NTD mất quota'],
         ],
       },
 
@@ -366,6 +385,71 @@ export const RESUME_PAGE_DOCS: Record<string, PageDoc> = {
         ],
       },
 
+      /* ── §9 · Phase 1 ──────────────────────────────────────────────────── */
+      { kind: 'h', text: '§9 · Xoá CV và giới hạn số CV — quy tắc Phase 1' },
+      {
+        kind: 'p',
+        text: 'Theo tài liệu *Xóa tài khoản & Xóa CV – Quy tắc áp dụng Phase 1* (cập nhật 10/11/2026, go-live **21/11/2026**). **Ứng viên KHÔNG được xoá CV ở Phase 1** — chốt ngày 04/11/2026 bởi Saramin VN (chị Huyền, anh Danh). Lý do: hệ thống Saramin hiện tại **cũng không cho ứng viên xoá CV**; giữ nguyên Policy, tránh phải sửa Policy trước go-live; tránh mất dữ liệu đơn ứng tuyển và CV NTD đã unlock. Mọi mở rộng (cho xoá CV, xử lý khi vượt giới hạn) để **Phase 2**. **Toàn bộ tài liệu Phase 1, kèm sơ đồ: trang Delete account & Delete CV.**',
+      },
+      {
+        kind: 'diagram',
+        id: 'cv-actions',
+        heading: 'Ứng viên được làm gì với CV',
+      },
+      {
+        kind: 'table',
+        heading: 'Thao tác theo loại CV',
+        cols: ['Thao tác', 'Saramin CV', 'Upload CV (PDF / Word)'],
+        rows: [
+          ['**Edit**', '✅ Sửa trực tiếp nội dung', '✅ Thay file mới (replace), sửa tên CV, tổng số năm kinh nghiệm; hệ thống **parse lại** file mới'],
+          ['**Download**', '✅', '✅'],
+          ['**Bật / tắt hiển thị với NTD**', '✅', '✅'],
+          ['**Delete**', '❌ Ẩn nút', '❌ Ẩn nút'],
+          ['**Chuyển đổi giữa 2 loại**', '❌', '❌'],
+        ],
+      },
+      {
+        kind: 'table',
+        heading: 'Giới hạn số CV — tách riêng từng loại',
+        note: 'Vì không cho xoá và không chuyển đổi được giữa 2 loại CV. Khi chạm giới hạn của một loại: ứng viên **không tạo / upload thêm** loại đó, phải **Edit** CV cũ. Trường hợp vượt ngưỡng (edge case): enhancement **Phase 2**.',
+        cols: ['Loại CV', 'Tối đa'],
+        rows: [
+          ['**Saramin CV**', '**20**'],
+          ['**Upload CV**', '**20**'],
+          ['**Tổng**', '**40 CV / ứng viên**'],
+        ],
+      },
+      {
+        kind: 'table',
+        heading: 'Ảnh hưởng — vì không có thao tác xoá CV',
+        cols: ['Khu vực', 'Kết quả'],
+        rows: [
+          ['**Đơn ứng tuyển**', 'Giữ nguyên, NTD và Admin xem CV đã nộp như bình thường'],
+          ['**Talent Pool**', 'Chỉ thay đổi khi ứng viên **bật / tắt hiển thị** (§6), không có trường hợp CV biến mất do bị xoá'],
+          ['**CV NTD đã unlock**', 'Không bị mất do xoá CV'],
+          ['**Email**', '**Không có email** cho thao tác xoá CV. **CO 10** chỉ dùng cho trường hợp ứng viên **rút đơn ứng tuyển**'],
+          ['**Policy**', 'Không cần thêm điều khoản mới cho Phase 1. Nội dung **xoá CV trong Policy 09-21** (rút đơn + gửi mail NTD) **không còn áp dụng** vì ứng viên không xoá được CV; Saramin VN rà soát và gỡ / ghi chú mục này — **không chặn go-live**'],
+        ],
+      },
+      {
+        kind: 'table',
+        heading: 'Các phương án xoá CV đã đề xuất — KHÔNG áp dụng Phase 1',
+        note: 'Thảo luận trước ngày 04/11, chỉ giữ để tham khảo khi làm Phase 2.',
+        cols: ['Phương án', 'Nội dung', 'Trạng thái'],
+        rows: [
+          ['**Hướng 1**', 'Xoá CV = rút các đơn ứng tuyển dùng CV đó + gửi email cho NTD (CO 10). Đây cũng là nội dung đang ghi trong Policy 09-21', '❌ Không áp dụng'],
+          ['**Hướng 2**', 'Giữ bản CV tại thời điểm ứng tuyển, đơn không bị ảnh hưởng, không gửi email. Talent Pool – phương án A: NTD đã unlock vẫn xem bản cuối; NTD chưa unlock (kể cả đã lưu) không thấy nữa', '❌ Không áp dụng'],
+          ['**Luồng Saramin Hàn Quốc**', 'Không cho xoá CV đã dùng để ứng tuyển', '❌ Không dùng làm căn cứ — Phase 1 theo Policy Việt Nam, và **không cho xoá CV nào**'],
+        ],
+      },
+      {
+        kind: 'open',
+        text: '**Còn cần xác nhận (tài liệu Phase 1 §6).** (1) **Policy 09-21**, mục xoá CV đang ghi “rút đơn + gửi mail NTD” (Hướng 1) — **không còn áp dụng** ở Phase 1; Saramin VN gỡ hoặc ghi chú *“chưa áp dụng”* trong Policy. Hệ thống **không** làm theo nội dung này. Không chặn go-live. (2) Giới hạn **20 + 20 CV**: chờ dev xác nhận không ảnh hưởng hệ thống — nếu không được thì dùng **10 + 10**.',
+      },
+      {
+        kind: 'warn',
+        text: '**Build cũ chưa theo quyết định 04/11 (tài liệu Phase 1 §6 #5).** Ảnh chụp 15/10 còn menu ⋯ **Delete**, khung *Please note* ghi *“There is no limit on how many CVs you keep”* và *“preview, download or delete”*, và trang Upload **chưa có** màn thay file. Dev cập nhật build: **ẩn Delete**, áp giới hạn **20 + 20**, **Edit Upload CV = thay file**. Tài liệu nguồn *Resume Management · Create CV* đã được cập nhật theo.',
+      },
     ],
   },
 
@@ -774,7 +858,7 @@ export const RESUME_PAGE_DOCS: Record<string, PageDoc> = {
       '**Reject một CV đã gửi tới NTD sẽ thu hồi đơn ở mọi công ty đang giữ phiên bản CV đó.** Đọc kỹ khối ảnh hưởng trước khi bấm.',
       '**Ghi chú nội bộ luôn bắt buộc:** ghi rõ vì sao quyết định và đã thấy gì trong file.',
       '**Approve một file không đọc được** vẫn làm CV đạt, nhưng NTD không tìm thấy CV đó khi tìm theo kỹ năng, vì hệ thống không lấy được chữ từ file.',
-      '**Ứng viên đã xoá tài khoản:** công ty chưa mở khoá thì không mở khoá được nữa; thẻ đang lưu không chuyển ra khỏi cột *Saved* được. Công ty đã mở khoá từ trước không bị ảnh hưởng.',
+      '**Ứng viên đã xoá tài khoản (Phase 1):** ứng viên bị ẩn khỏi kho ngay; công ty chưa mở khoá thì không mở khoá được nữa; thẻ đang lưu không chuyển ra khỏi cột *Saved* được. **Công ty đã mở khoá từ trước cũng không xem được CV nữa** và **mất lượt quota** đã dùng (xem **Jobseeker users §5**).',
     ],
     blocks: [
       { kind: 'p', text: 'Theo tài liệu *Resume Management · Talent pool*, cập nhật 16/10/2026 (phiên bản sau khi sửa).' },
@@ -1252,7 +1336,8 @@ export const RESUME_PAGE_DOCS: Record<string, PageDoc> = {
         rows: [
           ['**Hết credit**', 'Báo hết credit, mời nạp thêm'],
           ['**Gói đã hết hạn**', 'Báo gói hết hạn. Credit còn lại được giữ, không mất'],
-          ['**Ứng viên đã xoá tài khoản**', 'Không mở khoá được, trừ khi công ty đã mở khoá từ trước'],
+          ['**Ứng viên đã xoá tài khoản**', 'Không mở khoá được. Phase 1: công ty **đã mở khoá từ trước cũng không xem được CV nữa** và mất quota'],
+          ['**Ứng viên tắt hết CV** (sau khi công ty đã mở khoá)', 'Phase 1: công ty **không xem được CV nữa**, UI *CV đã ngừng hiển thị*, mất quota. Ứng viên còn bật một CV khác thì công ty thấy **CV đang bật**'],
           ['**Ứng viên không còn CV nào đang bật**', 'Không mở khoá được, trừ khi đã mở khoá từ trước, hoặc ứng viên đã nộp đơn tới công ty'],
         ],
       },
@@ -1883,7 +1968,7 @@ export const RESUME_PAGE_DOCS: Record<string, PageDoc> = {
           'Mở khoá **một lần, dùng vĩnh viễn** cho cả công ty. Ứng viên đã mở khoá ở folder này thì ở folder khác cũng **không bị trừ lại**.',
           '**Hết credit:** hệ thống báo không đủ credit và mời mua thêm.',
           '**Gói tìm kiếm CV đã hết hạn:** không mở khoá được; credit còn lại được giữ, không mất.',
-          '**Ứng viên đã xoá tài khoản:** nếu công ty chưa mở khoá thì không mở khoá được nữa và thẻ không chuyển ra khỏi Saved được. Công ty đã mở khoá từ trước không bị ảnh hưởng.',
+          '**Ứng viên đã xoá tài khoản (Phase 1):** nếu công ty chưa mở khoá thì không mở khoá được nữa và thẻ không chuyển ra khỏi Saved được. **Công ty đã mở khoá từ trước cũng không xem được CV nữa** và mất lượt quota đã dùng (xem **Jobseeker users §5**).',
           'Nếu sau đó Saramin **từ chối CV** của ứng viên đã mở khoá, credit đã trả được **hoàn** vào số dư (xem **Talent pool §2.5**).',
         ],
       },
@@ -1952,6 +2037,218 @@ export const RESUME_PAGE_DOCS: Record<string, PageDoc> = {
       },
     ],
   },
+
+  /* ────────────────────────────────────────────────────────────────────────── */
+  /* Xoá tài khoản & Xoá CV — Phase 1. The client document carried whole, with
+     its five diagrams, so the rules sit in one place; Jobseeker users §5 and
+     Create CV §9 keep the screen-level detail and point here. */
+  'delete-account-cv': {
+    logic: [
+      '**Phạm vi:** tài liệu mô tả **hệ thống đang làm cho Phase 1** (go-live **21/11/2026**), không phải các đề xuất cho giai đoạn sau.',
+      '**Nguyên tắc Phase 1:** hạn chế thay đổi Policy nhiều nhất có thể. Vì vậy **ứng viên KHÔNG được xoá CV** ở Phase 1. Các phương án xoá CV đã từng đề xuất ghi ở §5 để tham khảo, **không áp dụng**.',
+      '**Xoá tài khoản:** tài khoản bị vô hiệu hoá **ngay**; NTD không còn xem được CV (kể cả đơn đã nộp và CV đã unlock); NTD nhận email **CO 11**; ứng viên nhận **JS 8**; dữ liệu cá nhân bị xoá vĩnh viễn sau **72 giờ**.',
+      '**Xoá CV:** không có — ẩn nút Delete, ứng viên chỉ **Edit**. Giới hạn **20 Saramin CV + 20 Upload CV**.',
+      '**Tắt hiển thị CV:** NTD đã unlock còn thấy CV nếu ứng viên đang bật 1 CV khác; **không thấy nữa** nếu ứng viên tắt hết.',
+    ],
+    how: [
+      'Trả lời ứng viên hỏi **“xoá CV thế nào?”**: Phase 1 không xoá được — hướng dẫn **Edit** CV (Upload CV thì thay file), hoặc tắt hiển thị.',
+      'Trả lời NTD hỏi **“vì sao không mở được CV đã unlock?”**: ứng viên đã **xoá tài khoản**, hoặc đã **tắt hết CV** (§4). Quota không hoàn — đã chấp nhận.',
+      'Màn hình và thao tác cụ thể: xoá tài khoản ở **Jobseeker users §5** (Admin, HQ khôi phục, lần huỷ 72 giờ); CV ở **Create CV §9**.',
+    ],
+    watch: [
+      '**Mọi email đều gửi tại T0**: JS 8 cho ứng viên, CO 11 cho các công ty ứng viên đã ứng tuyển. Lúc xoá dữ liệu sau 72 giờ **không gửi email nào**.',
+      '**CO 10** chỉ dùng cho trường hợp ứng viên **rút đơn ứng tuyển** — không phải xoá CV.',
+      '**Build cũ chưa theo quyết định 04/11:** build 08/10 rút đơn khi xoá tài khoản; ảnh 15/10 còn nút Delete CV, ghi chú “không giới hạn CV”, chưa có màn thay file.',
+    ],
+    blocks: [
+      {
+        kind: 'table',
+        heading: 'Thông tin tài liệu',
+        cols: ['Thông tin', 'Nội dung'],
+        rows: [
+          ['**Nguồn quyết định**', 'Call 04/11/2026 (16:55–17:28): Saramin VN (chị Huyền, anh Danh) – BurningBros (chị Thu, Nguyên)'],
+          ['**Cập nhật luồng xoá tài khoản**', 'Ghi nhận ngày 06/11/2026'],
+          ['**Ngày cập nhật tài liệu**', '10/11/2026'],
+          ['**Trạng thái**', 'Xoá CV: **đã chốt**. Xoá tài khoản: **đã chốt**'],
+          ['**Tài liệu gốc**', '`docs/xoa-tai-khoan-va-xoa-cv-phase-1.md`'],
+        ],
+      },
+
+      /* ── §1 ─────────────────────────────────────────────────────────────── */
+      { kind: 'h', text: '§1 · Tóm tắt nhanh' },
+      {
+        kind: 'table',
+        cols: ['Hành động của ứng viên', 'Phase 1 có cho phép?', 'Ảnh hưởng chính'],
+        rows: [
+          ['**Xoá tài khoản**', '✅ Có', 'Tài khoản bị vô hiệu hoá ngay; NTD không còn xem được CV (kể cả đơn đã nộp và CV đã unlock); NTD nhận email thông báo; dữ liệu cá nhân bị xoá vĩnh viễn sau 72 giờ'],
+          ['**Xoá CV**', '❌ Không', 'Ẩn nút Delete. Ứng viên chỉ **Edit** CV. Đơn ứng tuyển và Talent Pool không bị ảnh hưởng bởi thao tác xoá'],
+          ['**Tắt hiển thị CV với NTD**', '✅ Có', 'NTD đã unlock: còn thấy CV nếu ứng viên đang bật 1 CV khác; không thấy nữa nếu ứng viên tắt hết'],
+        ],
+      },
+
+      /* ── §2 ─────────────────────────────────────────────────────────────── */
+      { kind: 'h', text: '§2 · Xoá tài khoản (Delete Account)', path: '/ho-tro/xoa-tai-khoan' },
+      {
+        kind: 'diagram',
+        id: 'del-account',
+        heading: '2.1 Luồng xử lý',
+      },
+      {
+        kind: 'diagram',
+        id: 'del-timeline',
+        heading: '2.2 Dòng thời gian',
+      },
+      {
+        kind: 'table',
+        heading: '2.3 Ảnh hưởng theo từng khu vực',
+        cols: ['Khu vực', 'Trước khi xoá', 'Sau khi ứng viên xác nhận xoá'],
+        rows: [
+          ['**Tài khoản ứng viên**', 'Hoạt động', 'Bị vô hiệu hoá ngay, không đăng nhập được'],
+          ['**Email gửi ứng viên**', 'Theo lịch (JS 1–7)', 'Ngừng **ngay** khi xác nhận xoá (không đợi hết 72 giờ). Chỉ gửi JS 8'],
+          ['**Đơn ứng tuyển** (Candidate management của NTD)', 'NTD xem được CV trong đơn', 'Dòng ứng tuyển chuyển sang UI **“Tài khoản đã bị xóa”**; NTD **không xem được CV** nữa'],
+          ['**Talent Pool**', 'Ứng viên hiển thị nếu đang bật CV', 'Ứng viên bị ẩn khỏi Talent Pool'],
+          ['**CV NTD đã unlock**', 'NTD xem được CV', 'NTD **không xem được** nữa; **NTD mất lượt quota** đã dùng để unlock (đã chấp nhận)'],
+          ['**Thông báo cho NTD**', '—', '**CO 11**: ứng viên đã xoá tài khoản, NTD vui lòng xoá hồ sơ ứng viên khỏi hệ thống / thư mục của công ty'],
+          ['**Dữ liệu cá nhân**', 'Lưu trữ', 'Xoá vĩnh viễn sau **72 giờ** kể từ lúc xác nhận'],
+        ],
+      },
+      {
+        kind: 'table',
+        heading: '2.4 Email liên quan',
+        cols: ['Mã', 'Tên', 'Người nhận', 'Thời điểm'],
+        rows: [
+          ['**JS 8**', 'Xoá tài khoản thành công', 'Ứng viên', 'Ngay khi xác nhận xoá'],
+          ['**CO 11**', 'Ứng viên đã xoá tài khoản', 'Các công ty ứng viên **đã ứng tuyển**', 'Ngay khi xác nhận xoá'],
+          ['—', '(không có)', '—', 'Thời điểm xoá dữ liệu sau 72 giờ: **không gửi email**'],
+        ],
+      },
+      {
+        kind: 'p',
+        text: 'Các bước ứng viên đi qua trên site, lần huỷ 72 giờ (huỷ gì, giữ gì), chặn email đăng ký lại và việc HQ khôi phục: **Jobseeker users §5**.',
+      },
+
+      /* ── §3 ─────────────────────────────────────────────────────────────── */
+      { kind: 'h', text: '§3 · Xoá CV (Delete CV) — KHÔNG cho phép ở Phase 1', path: '/my-profile/cv-resume' },
+      {
+        kind: 'list',
+        heading: '3.1 Quyết định',
+        items: [
+          'Chốt ngày **04/11/2026** bởi Saramin VN (chị Huyền, anh Danh).',
+          'Lý do: hệ thống Saramin hiện tại **cũng không cho ứng viên xoá CV** · giữ nguyên Policy, tránh phải sửa Policy trước go-live · tránh mất dữ liệu đơn ứng tuyển và CV NTD đã unlock.',
+          'Mọi mở rộng (ví dụ cho xoá CV, xử lý khi vượt giới hạn) để **Phase 2**.',
+        ],
+      },
+      {
+        kind: 'diagram',
+        id: 'cv-actions',
+        heading: '3.2 Ứng viên được làm gì với CV',
+      },
+      {
+        kind: 'table',
+        cols: ['Thao tác', 'Saramin CV', 'Upload CV (PDF / DOC)'],
+        rows: [
+          ['**Edit**', '✅ Sửa trực tiếp nội dung', '✅ Thay file mới (replace), sửa tên CV, tổng số năm kinh nghiệm'],
+          ['**Download**', '✅', '✅'],
+          ['**Bật / tắt hiển thị với NTD**', '✅', '✅'],
+          ['**Delete**', '❌ Ẩn nút', '❌ Ẩn nút'],
+          ['**Chuyển đổi giữa 2 loại**', '❌', '❌'],
+        ],
+      },
+      {
+        kind: 'table',
+        heading: '3.3 Giới hạn số lượng CV',
+        note: 'Vì không cho xoá và không chuyển đổi được giữa 2 loại CV, giới hạn được **tách riêng**. Khi chạm giới hạn của một loại: ứng viên **không tạo / upload thêm** loại đó, phải **Edit** CV cũ. Trường hợp vượt ngưỡng (edge case): enhancement **Phase 2**.',
+        cols: ['Loại CV', 'Tối đa'],
+        rows: [
+          ['**Saramin CV**', '**20**'],
+          ['**Upload CV**', '**20**'],
+          ['**Tổng**', '**40 CV / ứng viên**'],
+        ],
+      },
+      {
+        kind: 'table',
+        heading: '3.4 Ảnh hưởng — vì không có thao tác xoá CV, các khu vực sau không bị ảnh hưởng',
+        cols: ['Khu vực', 'Kết quả'],
+        rows: [
+          ['**Đơn ứng tuyển**', 'Giữ nguyên, NTD và Admin xem CV đã nộp như bình thường'],
+          ['**Talent Pool**', 'Chỉ thay đổi khi ứng viên **bật / tắt hiển thị** (§4), không có trường hợp CV biến mất do bị xoá'],
+          ['**CV NTD đã unlock**', 'Không bị mất do xoá CV'],
+          ['**Email**', '**Không có email** cho thao tác xoá CV. **CO 10** chỉ dùng cho trường hợp ứng viên **rút đơn ứng tuyển**'],
+          ['**Policy**', 'Không cần thêm điều khoản mới cho Phase 1. Nội dung **xoá CV trong Policy 09-21** (rút đơn + gửi mail NTD) **không còn áp dụng** vì ứng viên không xoá được CV; Saramin VN rà soát và gỡ / ghi chú mục này (**không chặn go-live**)'],
+        ],
+      },
+      {
+        kind: 'p',
+        text: 'Màn My CVs, form Saramin CV, trang Upload và ảnh chụp: **Create CV** (§9 là bản tóm tắt quy tắc Phase 1 trên trang đó).',
+      },
+
+      /* ── §4 ─────────────────────────────────────────────────────────────── */
+      { kind: 'h', text: '§4 · Ẩn CV trên Talent Pool sau khi NTD đã unlock' },
+      {
+        kind: 'p',
+        text: 'Đây là **trường hợp duy nhất còn lại** làm NTD mất quyền xem CV đã unlock (ngoài xoá tài khoản).',
+      },
+      {
+        kind: 'diagram',
+        id: 'cv-hide-unlock',
+      },
+      {
+        kind: 'table',
+        cols: ['Trường hợp', 'NTD đã unlock sẽ thấy'],
+        rows: [
+          ['Ứng viên tắt CV 1 và **bật CV 2** (còn ít nhất 1 CV đang hiển thị)', 'Bản **CV đang được bật** (mới nhất)'],
+          ['Ứng viên **tắt hết** tất cả CV', '**Không xem được nữa**, hiển thị UI *CV đã ngừng hiển thị*; NTD mất quota'],
+        ],
+      },
+
+      /* ── §5 ─────────────────────────────────────────────────────────────── */
+      { kind: 'h', text: '§5 · Các phương án xoá CV đã đề xuất — KHÔNG áp dụng Phase 1' },
+      {
+        kind: 'table',
+        note: 'Đã thảo luận trước ngày 04/11 nhưng **không áp dụng**. Chỉ giữ lại để tham khảo khi làm Phase 2.',
+        cols: ['Phương án', 'Nội dung', 'Trạng thái'],
+        rows: [
+          ['**Hướng 1**', 'Xoá CV = rút các đơn ứng tuyển dùng CV đó + gửi email cho NTD (CO 10). Đây cũng là nội dung đang ghi trong Policy 09-21', '❌ Không áp dụng'],
+          ['**Hướng 2**', 'Giữ bản CV tại thời điểm ứng tuyển, đơn không bị ảnh hưởng, không gửi email. Talent Pool – phương án A: NTD đã unlock vẫn xem bản cuối; NTD chưa unlock (kể cả đã lưu) không thấy nữa', '❌ Không áp dụng'],
+          ['**Luồng Saramin Hàn Quốc**', 'Không cho xoá CV đã dùng để ứng tuyển', '❌ Không dùng làm căn cứ. Phase 1 theo Policy Việt Nam, và **không cho xoá CV nào**'],
+        ],
+      },
+      {
+        kind: 'diagram',
+        id: 'cv-delete-options',
+      },
+
+      /* ── §6 ─────────────────────────────────────────────────────────────── */
+      { kind: 'h', text: '§6 · Thuật ngữ' },
+      {
+        kind: 'table',
+        cols: ['Thuật ngữ', 'Ý nghĩa'],
+        rows: [
+          ['**UV**', 'Ứng viên (Jobseeker)'],
+          ['**NTD**', 'Nhà tuyển dụng (Employer)'],
+          ['**Talent Pool**', 'Kho CV ứng viên mà NTD tìm kiếm và unlock'],
+          ['**Unlock**', 'NTD dùng quota để mở khoá thông tin CV ứng viên trên Talent Pool'],
+          ['**Saramin CV**', 'CV tạo trực tiếp trên form của Saramin'],
+          ['**Upload CV**', 'CV dạng file (PDF / DOC) ứng viên tải lên'],
+          ['**JS 8**', 'Email gửi ứng viên khi xoá tài khoản thành công'],
+          ['**CO 10**', 'Email gửi NTD khi ứng viên rút đơn ứng tuyển'],
+          ['**CO 11**', 'Email gửi NTD khi ứng viên xoá tài khoản'],
+        ],
+      },
+      {
+        kind: 'table',
+        heading: 'Trang liên quan',
+        cols: ['Trang', 'Ở đó có gì'],
+        rows: [
+          ['**Jobseeker users §5**', 'Các bước xoá tài khoản trên site, lần huỷ 72 giờ, chặn email đăng ký lại, HQ khôi phục, so sánh Khoá / Xoá'],
+          ['**Create CV §9**', 'Menu ⋯ không có Delete, Edit Upload CV = thay file, giới hạn 20 + 20 trên màn My CVs'],
+          ['**Talent pool** · **Candidate management §10**', 'NTD mất CV đã unlock khi ứng viên xoá tài khoản hoặc tắt hết CV'],
+          ['**Applications §6**', 'Admin thấy gì khi ứng viên xoá tài khoản (tag *Deleted account*)'],
+          ['**Help center §10**', 'Màn *Xoá tài khoản* trong Trung tâm hỗ trợ'],
+        ],
+      },
+    ],
+  },
 }
 
 /* ── Module ───────────────────────────────────────────────────────────────── */
@@ -1987,7 +2284,7 @@ export const RESUME_MODULE_DOCS: Record<string, ModuleDoc> = {
         kind: 'table',
         cols: ['#', 'Chặng', 'Ai', 'Kết quả', 'Ghi chú build'],
         rows: [
-          ['1', '**Tạo**: soạn **Saramin CV** hoặc **tải file** (PDF / Word ≤ 10 MB); chọn *Experienced* / *No experience*', 'Ứng viên', 'Một CV trong thư viện, **v.1**', 'Không giới hạn số CV. File tải lên được **parse** ngay.'],
+          ['1', '**Tạo**: soạn **Saramin CV** hoặc **tải file** (PDF / Word ≤ 10 MB); chọn *Experienced* / *No experience*', 'Ứng viên', 'Một CV trong thư viện, **v.1**', 'Tối đa 20 Saramin CV + 20 Upload CV; không xoá được CV (Phase 1). File tải lên được **parse** ngay.'],
           ['2', '**Bật**: *Show CV to employers* — một CV tại một thời điểm', 'Ứng viên (hoặc hệ thống, cho file tải lên đầu tiên)', 'CV mặc định; ứng viên **vào kho tìm kiếm**', 'Vào kho Admin. NTD chỉ tìm thấy khi CV đang bật *Qualified* (*Showing*).'],
           ['3', '**Quét**: chấm theo quy tắc mỗi lần lưu / parse', 'Hệ thống', '*Đạt* · *Chưa đủ thông tin* · *Không đọc được*', 'Cờ **tắt**: file sinh ra *Đạt*, máy không ghi gì. Saramin CV luôn chấm trực tiếp, không qua máy quét.'],
           ['4', '**Duyệt**: CV nghi ngờ vào hàng đợi', 'HQ — CV review', 'Approve → *Đạt* · Reject → *Từ chối*', '**Chung cuộc** — không gỡ được (409).'],
@@ -2248,7 +2545,7 @@ export const RESUME_MODULE_DOCS: Record<string, ModuleDoc> = {
       {
         kind: 'warn',
         text:
-          '**Sửa so với bản trước của trang này:** quyết định của HQ **không gỡ được** (trước ghi “Duyệt — gỡ từ chối”); ứng viên bị từ chối thấy nhãn **Can’t read** chứ không phải *Chưa được duyệt*, và không có nút sửa; định dạng là PDF hoặc **Word**; số CV không giới hạn; tìm kiếm CV **không** còn đòi CV *Đạt*.',
+          '**Sửa so với bản trước của trang này:** quyết định của HQ **không gỡ được** (trước ghi “Duyệt — gỡ từ chối”); ứng viên bị từ chối thấy nhãn **Can’t read** chứ không phải *Chưa được duyệt*, và không có nút sửa; định dạng là PDF hoặc **Word**; số CV tối đa 20 + 20 và không xoá được CV (Phase 1); tìm kiếm CV **không** còn đòi CV *Đạt*.',
       },
       {
         kind: 'open',

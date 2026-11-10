@@ -1,6 +1,6 @@
 # Resume Management · Create CV
 
-Cập nhật 15/10/2026
+Cập nhật 15/10/2026 · cập nhật 10/11/2026 theo *Xóa tài khoản & Xóa CV – Quy tắc áp dụng Phase 1* (không xoá CV, giới hạn 20 + 20, Edit Upload CV = thay file)
 
 | Mục | Giá trị |
 | --- | --- |
@@ -15,7 +15,8 @@ Tài liệu mô tả cách ứng viên tạo và quản lý CV trên Saramin: ha
 ## Tổng quan luồng
 
 - **Một thư viện, hai loại CV:** **Saramin CV** (ứng viên soạn trong form của Saramin) và **Upload CV** (ứng viên tải file PDF / Word lên). Cả hai nằm chung một danh sách.
-- **Không giới hạn số CV.** Mỗi CV là một bản riêng: tên riêng, trạng thái riêng, số đơn đã nộp riêng.
+- **Tối đa 20 Saramin CV + 20 Upload CV** (tổng 40 CV / ứng viên). Mỗi CV là một bản riêng: tên riêng, trạng thái riêng, số đơn đã nộp riêng.
+- **Phase 1: ứng viên không xoá được CV.** Chỉ Edit, Download và bật / tắt hiển thị cho NTD.
 - **Mỗi CV tự khai Experienced hoặc No experience.** Khai báo này quyết định CV cần những mục nào để **Đạt**.
 - **Total experience** (số năm kinh nghiệm) là con số hiển thị của từng CV, **độc lập** với khai báo Experienced / No experience.
 - **Chỉ một CV được hiển thị cho NTD** tìm kiếm tại một thời điểm. Các CV khác vẫn dùng để nộp đơn bình thường.
@@ -63,12 +64,12 @@ flowchart TD
 | Bốn ô thông tin | **Total years of experience** · **Education** · **Latest job title** · **Skills**, lấy từ chính CV đó. Latest job title là chức danh ở công việc mới nhất trong Work experience |
 | Applications N › | Số đơn đã nộp bằng CV này. Chỉ hiện trên CV đạt |
 | Ghi chú | Ô ghi nhớ của ứng viên cho CV này |
-| Menu ⋯ | **Download** và **Delete**. CV cuối cùng không xoá được |
+| Menu ⋯ | **Download**. Phase 1 **không có Delete** |
 | Bộ lọc | **Total {n}** · All / Saramin CV / Uploaded |
 
 ![Ghi chú cuối trang My CVs](images/cv-list-note.png)
 
-**Xoá một CV** sẽ rút các đơn đang xử lý đã nộp bằng CV đó: công ty được thông báo và không xem được CV nữa. Không hoàn tác được.
+**Phase 1: không có xoá CV.** Đơn ứng tuyển, Talent Pool và CV NTD đã unlock không bị ảnh hưởng bởi thao tác xoá CV. Chạm giới hạn 20 của một loại thì ứng viên phải **Edit** CV cũ của loại đó.
 
 ---
 
@@ -140,6 +141,7 @@ flowchart TD
 - **CV được tạo ngay khi file tải xong.** Hệ thống đọc (parse) file để lấy các mục: kinh nghiệm, học vấn, kỹ năng…
 - Bấm **Save** để đặt tên CV, chọn Experienced / No experience và chọn có hiển thị CV cho NTD không (như Saramin CV).
 - Total experience của Upload CV lấy từ kinh nghiệm đọc được trong file.
+- **Edit một Upload CV:** **thay file mới (replace)**, sửa tên CV và tổng số năm kinh nghiệm; hệ thống **parse lại** file mới.
 
 ### So sánh hai loại CV
 
@@ -150,6 +152,9 @@ flowchart TD
 | Điền sẵn | **Import CV** từ CV đã tải lên hoặc file PDF | Không cần, file tự được đọc |
 | Chấm Đạt | Ngay từ các mục đã nhập | Từ kết quả đọc file |
 | Total experience | Sửa ở chip Total experience | Lấy từ file |
+| Edit | Sửa trực tiếp nội dung trên form | Thay file mới (replace), sửa tên CV, tổng số năm kinh nghiệm |
+| Tối đa | 20 Saramin CV | 20 Upload CV |
+| Chuyển đổi sang loại kia | Không | Không |
 
 ---
 
@@ -277,7 +282,7 @@ CV chưa đạt **không dùng để nộp đơn được** và **không bật h
 
 | Giới hạn | Giá trị |
 | --- | --- |
-| Số CV mỗi ứng viên | Không giới hạn |
+| Số CV mỗi ứng viên | 20 Saramin CV + 20 Upload CV (tổng 40). Không xoá được CV |
 | Định dạng file | PDF hoặc Word. Import CV chỉ nhận PDF |
 | Dung lượng file | Tối đa 10 MB |
 | Số CV hiển thị cho NTD | 1 |

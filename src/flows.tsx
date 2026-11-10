@@ -973,7 +973,7 @@ export function CvCreateFlow() {
       <Arrow d="M 600 255 C 635 255, 635 198, 668 198" />
       <Box x={670} y={150} w={220} h={70} title="Save" sub="đặt tên CV" sub2="chọn có hiển thị cho NTD" tone="brand" />
       <Arrow d="M 890 185 L 958 185" />
-      <Box x={960} y={150} w={210} h={70} title="Thư viện My CVs" sub="không giới hạn số CV" />
+      <Box x={960} y={150} w={210} h={70} title="Thư viện My CVs" sub="tối đa 20 + 20 · không xoá CV" />
       <Arrow d="M 1065 220 L 1065 258" />
       <Box x={960} y={260} w={210} h={56} title="CV Đạt?" sub="Education (+ Work nếu Experienced)" tone="wait" />
       <Arrow d="M 1065 316 L 1065 358" tone="brand" label="Đạt" lx={1075} ly={342} anchor="start" />
@@ -1176,6 +1176,163 @@ export function BoostSliderFlow() {
   )
 }
 
+/* ── Xoá tài khoản & xoá CV — Phase 1 (tài liệu 10/11/2026, go-live 21/11) ──────
+   Three drawings for the Phase 1 rules: everything that happens at T0 and at
+   T0 + 72h when a jobseeker deletes their account; what a jobseeker can do with
+   a CV now that Delete is gone; and the one remaining way an employer loses a
+   CV it has already unlocked. */
+export function DeleteAccountFlow() {
+  const rows: [string, string, Tone][] = [
+    ['JS 8 → ứng viên', 'xác nhận đã xoá tài khoản', 'brand'],
+    ['CO 11 → các công ty ứng viên đã ứng tuyển', 'vui lòng xoá hồ sơ ứng viên khỏi hệ thống của công ty', 'brand'],
+    ['Ngừng mọi email gửi ứng viên', 'ngay tại T0 — không đợi hết 72 giờ', 'plain'],
+    ['Ẩn khỏi Talent Pool', 'NTD không tìm thấy ứng viên nữa', 'plain'],
+    ['Đơn ứng tuyển: “Tài khoản đã bị xóa”', 'đơn KHÔNG bị rút — NTD không xem được CV', 'wait'],
+    ['CV NTD đã unlock: không xem được', 'NTD mất lượt quota đã dùng (đã chấp nhận)', 'stop'],
+  ]
+  const y = (i: number) => 88 + i * 52
+  return (
+    <Frame label="Xoá tài khoản Phase 1: điều xảy ra tại T0 và sau 72 giờ" w={1200} h={560}>
+      <Premise title="XOÁ TÀI KHOẢN — PHASE 1: mọi thứ xảy ra ngay tại T0, trừ việc xoá dữ liệu cá nhân (T0 + 72 giờ)">
+        T0 = lúc ứng viên <tspan fontWeight={700} fill={INK}>xác nhận</tspan> xoá. Từ T0 tài khoản không đăng nhập được và NTD không còn xem được CV ở bất kỳ đâu.
+      </Premise>
+      <Box x={30} y={110} w={210} h={60} title="Ứng viên chọn" sub="Xóa tài khoản" />
+      <Arrow d="M 135 170 L 135 208" />
+      <Box x={30} y={210} w={210} h={70} title="Xác nhận yêu cầu xoá" sub="không hợp lệ → quay lại" tone="wait" />
+      <Arrow d="M 240 245 L 298 245" tone="stop" label="hợp lệ" lx={269} ly={237} />
+      <Box x={300} y={200} w={230} h={90} title="Vô hiệu hoá ngay — T0" sub="không đăng nhập được" sub2="mọi phiên kết thúc" tone="stop" />
+      {rows.map(([t, s, tone], i) => (
+        <g key={t}>
+          <Arrow d={`M 530 245 C 565 245, 565 ${y(i) + 22}, 598 ${y(i) + 22}`} tone={tone === 'stop' ? 'stop' : tone === 'brand' ? 'brand' : 'plain'} />
+          <Box x={600} y={y(i)} w={570} h={44} title={t} sub={s} tone={tone} />
+        </g>
+      ))}
+      <Arrow d="M 415 290 L 415 418" dashed label="chờ 72 giờ" lx={425} ly={360} anchor="start" />
+      <Box x={300} y={420} w={230} h={60} title="T0 + 72 giờ" sub="xoá vĩnh viễn dữ liệu cá nhân" tone="stop" />
+      <Arrow d="M 530 450 L 598 450" />
+      <Box x={600} y={420} w={570} h={60} title="Không gửi email nào" sub="tại thời điểm xoá dữ liệu" tone="side" />
+      <rect x={14} y={500} width={1172} height={48} rx={8} fill="#fffbeb" stroke={AMB} strokeWidth={1.2} />
+      <text x={30} y={521} fontSize={11} fill={MUT}><tspan fontWeight={800} fill={AMB}>Luật · </tspan>Đơn ứng tuyển <tspan fontWeight={700} fill={INK}>không bị rút</tspan>: dòng ở lại phía NTD với nhãn “Tài khoản đã bị xóa”, nhưng CV không mở được.</text>
+      <text x={30} y={539} fontSize={11} fill={MUT}>Chỉ gửi đúng hai email, đều tại T0: JS 8 cho ứng viên và CO 11 cho các công ty ứng viên đã ứng tuyển.</text>
+    </Frame>
+  )
+}
+
+export function CvActionsFlow() {
+  const rows: [string, string, string | undefined, Tone][] = [
+    ['Saramin CV → Edit', 'sửa trực tiếp nội dung trên form', undefined, 'brand'],
+    ['Upload CV (PDF / Word) → Edit', 'thay file mới (replace) · sửa tên CV, tổng số năm KN', 'hệ thống parse lại file mới', 'brand'],
+    ['Download', 'cả hai loại', undefined, 'plain'],
+    ['Bật / tắt hiển thị với NTD', 'cả hai loại', undefined, 'plain'],
+    ['Delete', 'ẩn nút — không có ở Phase 1', undefined, 'stop'],
+  ]
+  const y = (i: number) => 86 + i * 64
+  return (
+    <Frame label="Phase 1: ứng viên làm được gì với một CV" w={1200} h={470}>
+      <Premise title="CV Ở PHASE 1 — chỉ Edit, Download, bật / tắt hiển thị; không có Delete">
+        Không xoá CV, và <tspan fontWeight={700} fill={INK}>không chuyển đổi</tspan> được giữa Saramin CV và Upload CV — nên giới hạn tính riêng cho từng loại.
+      </Premise>
+      <Box x={30} y={196} w={180} h={70} title="CV của ứng viên" tone="brand" />
+      {rows.map(([t, s, s2, tone], i) => (
+        <g key={t}>
+          <Arrow d={`M 210 231 C 240 231, 240 ${y(i) + 27}, 268 ${y(i) + 27}`} tone={tone === 'stop' ? 'stop' : 'plain'} dashed={tone === 'stop'} />
+          <Box x={270} y={y(i)} w={500} h={54} title={t} sub={s} sub2={s2} tone={tone === 'stop' ? 'side' : tone} />
+        </g>
+      ))}
+      <Box x={830} y={150} w={340} h={110} title="Giới hạn số CV" sub="Saramin CV ≤ 20 · Upload CV ≤ 20" sub2="tổng tối đa 40 CV / ứng viên" tone="wait" />
+      <text x={1000} y={290} fontSize={10.5} textAnchor="middle" fill={MUT}>chạm giới hạn của một loại →</text>
+      <text x={1000} y={306} fontSize={10.5} textAnchor="middle" fill={MUT}>không tạo / upload thêm loại đó,</text>
+      <text x={1000} y={322} fontSize={10.5} textAnchor="middle" fill={MUT}>phải Edit CV cũ</text>
+      <rect x={14} y={414} width={1172} height={44} rx={8} fill="#fffbeb" stroke={AMB} strokeWidth={1.2} />
+      <text x={30} y={440} fontSize={11} fill={MUT}><tspan fontWeight={800} fill={AMB}>Luật · </tspan>Vì không có xoá CV: đơn ứng tuyển, Talent Pool và CV NTD đã unlock <tspan fontWeight={700} fill={INK}>không bị ảnh hưởng</tspan>, và không có email nào cho thao tác này.</text>
+    </Frame>
+  )
+}
+
+export function CvHideAfterUnlockFlow() {
+  return (
+    <Frame label="NTD đã unlock CV, ứng viên tắt hiển thị: NTD còn thấy gì" w={1200} h={350}>
+      <Premise title="ẨN CV SAU KHI NTD ĐÃ UNLOCK — trường hợp duy nhất còn lại (ngoài xoá tài khoản) làm NTD mất CV đã mua">
+        NTD luôn thấy CV <tspan fontWeight={700} fill={INK}>đang được bật</tspan> của ứng viên. Không còn CV nào bật thì không còn gì để thấy.
+      </Premise>
+      <Box x={30} y={130} w={210} h={70} title="NTD đã unlock CV" sub="của ứng viên" tone="money" />
+      <Arrow d="M 240 165 L 288 165" />
+      <Box x={290} y={130} w={230} h={70} title="Ứng viên tắt hiển thị" sub="CV đang được hiển thị" />
+      <Arrow d="M 520 165 L 568 165" />
+      <Box x={570} y={130} w={220} h={70} title="Còn bật CV nào khác?" tone="wait" />
+      <Arrow d="M 790 150 L 868 112" tone="brand" label="Có — bật CV khác" lx={830} ly={116} />
+      <Arrow d="M 790 180 L 868 222" tone="stop" label="Không — tắt hết" lx={830} ly={222} />
+      <Box x={870} y={80} w={300} h={64} title="NTD thấy CV đang được bật" sub="bản mới nhất" tone="money" />
+      <Box x={870} y={190} w={300} h={80} title="NTD không xem được nữa" sub="UI: CV đã ngừng hiển thị" sub2="NTD mất quota đã unlock (chấp nhận)" tone="stop" />
+      <rect x={14} y={296} width={1172} height={40} rx={8} fill="#fffbeb" stroke={AMB} strokeWidth={1.2} />
+      <text x={30} y={320} fontSize={11} fill={MUT}><tspan fontWeight={800} fill={AMB}>Luật · </tspan>Không hoàn quota trong cả hai trường hợp mất CV: ứng viên tắt hết CV, hoặc ứng viên xoá tài khoản.</text>
+    </Frame>
+  )
+}
+
+/* The spec's sequence diagram (§2.2), drawn as three lifelines: who tells whom,
+   and when — every message lands at T0; the 72-hour mark is the system alone. */
+export function DeleteAccountTimeline() {
+  const UV = 190, SYS = 600, NTD = 1010
+  const msg = (y: number, from: number, to: number, label: string, tone: 'plain' | 'brand' | 'stop' = 'plain', dashed?: boolean) => (
+    <g>
+      <Arrow d={`M ${from} ${y} L ${to + (to > from ? -4 : 4)} ${y}`} tone={tone} dashed={dashed} />
+      <text x={(from + to) / 2} y={y - 8} fontSize={11} fontWeight={600} textAnchor="middle" fill={tone === 'brand' ? BR : tone === 'stop' ? '#be123c' : INK} {...HALO}>{label}</text>
+    </g>
+  )
+  return (
+    <Frame label="Dòng thời gian xoá tài khoản: ứng viên, hệ thống, nhà tuyển dụng" w={1200} h={520}>
+      <Premise title="DÒNG THỜI GIAN — mọi email đều gửi tại T0; lúc T0 + 72 giờ chỉ có hệ thống làm việc">
+        T0 = lúc ứng viên xác nhận xoá. Sau JS 8 và CO 11 <tspan fontWeight={700} fill={INK}>không còn email nào</tspan>.
+      </Premise>
+      {[[UV, 'Ứng viên', 'plain'], [SYS, 'Hệ thống Saramin', 'brand'], [NTD, 'Nhà tuyển dụng', 'plain']].map(([x, t, tone]) => (
+        <g key={t as string}>
+          <Box x={(x as number) - 110} y={84} w={220} h={44} title={t as string} tone={tone as Tone} />
+          <path d={`M ${x} 128 L ${x} 500`} fill="none" stroke="var(--color-line)" strokeWidth={1.5} strokeDasharray="4 5" />
+        </g>
+      ))}
+      {msg(170, UV, SYS, 'Xác nhận xoá tài khoản (T0)', 'stop')}
+      {msg(220, SYS, UV, 'JS 8 — xoá tài khoản thành công (ngay tại T0)', 'brand', true)}
+      {msg(270, SYS, NTD, 'CO 11 — ứng viên đã xoá tài khoản (T0, chỉ công ty đã nhận đơn)', 'brand', true)}
+      <rect x={330} y={296} width={540} height={56} rx={8} fill="#fffbeb" stroke={AMB} strokeWidth={1.2} />
+      <text x={600} y={318} fontSize={11} textAnchor="middle" fill={INK}>Từ T0: không đăng nhập được · ngừng mọi email</text>
+      <text x={600} y={336} fontSize={11} textAnchor="middle" fill={INK}>ẩn khỏi Talent Pool · NTD không xem được CV</text>
+      <path d={`M ${SYS} 384 L ${SYS + 70} 384 L ${SYS + 70} 414 L ${SYS + 6} 414`} fill="none" stroke="#e11d48" strokeWidth={1.8} markerEnd="url(#pf-s)" />
+      <text x={SYS + 82} y={403} fontSize={11} fontWeight={600} fill="#be123c" {...HALO}>T0 + 72 giờ: xoá vĩnh viễn dữ liệu cá nhân</text>
+      <rect x={330} y={436} width={540} height={40} rx={8} fill="var(--color-surface)" stroke="var(--color-line)" strokeWidth={1.2} strokeDasharray="5 4" />
+      <text x={600} y={461} fontSize={11} textAnchor="middle" fill={MUT}>Không gửi email nào tại thời điểm xoá dữ liệu</text>
+    </Frame>
+  )
+}
+
+/* §5 of the spec: three ways CV deletion was proposed, all set aside for Phase 1. */
+export function CvDeleteOptionsFlow() {
+  const opts: [string, string, string][] = [
+    ['Hướng 1: xoá CV + rút đơn', 'rút đơn dùng CV đó, email NTD (CO 10)', 'đang ghi trong Policy 09-21'],
+    ['Hướng 2: xoá CV + giữ bản đã nộp', 'đơn không bị ảnh hưởng, không email', 'NTD chưa unlock không thấy nữa'],
+    ['Luồng Saramin Hàn Quốc', 'không cho xoá CV đã dùng để ứng tuyển', 'không dùng làm căn cứ'],
+  ]
+  const y = (i: number) => 90 + i * 84
+  return (
+    <Frame label="Các phương án xoá CV đã đề xuất, không áp dụng ở Phase 1" w={1200} h={390}>
+      <Premise title="PHƯƠNG ÁN XOÁ CV — đã thảo luận trước 04/11, không phương án nào áp dụng ở Phase 1">
+        Chỉ giữ lại để tham khảo khi làm <tspan fontWeight={700} fill={INK}>Phase 2</tspan>.
+      </Premise>
+      {opts.map(([t, s, s2], i) => (
+        <g key={t}>
+          <Box x={30} y={y(i)} w={380} h={64} title={t} sub={s} sub2={s2} tone="side" />
+          <Arrow d={`M 410 ${y(i) + 32} C 470 ${y(i) + 32}, 470 200, 528 200`} tone="stop" />
+        </g>
+      ))}
+      <Box x={530} y={165} w={220} h={70} title="Không áp dụng" tone="stop" />
+      <Arrow d="M 750 200 L 818 200" tone="brand" />
+      <Box x={820} y={150} w={350} h={100} title="Phase 1: KHÔNG cho xoá CV" sub="chỉ Edit · Download · bật / tắt hiển thị" sub2="theo Policy Việt Nam — không cho xoá CV nào" tone="money" />
+      <rect x={14} y={342} width={1172} height={36} rx={8} fill="#fffbeb" stroke={AMB} strokeWidth={1.2} />
+      <text x={30} y={364} fontSize={11} fill={MUT}><tspan fontWeight={800} fill={AMB}>Luật · </tspan>Mục xoá CV trong Policy 09-21 (Hướng 1) <tspan fontWeight={700} fill={INK}>không còn áp dụng</tspan> — hệ thống không làm theo; Saramin VN gỡ hoặc ghi chú, không chặn go-live.</text>
+    </Frame>
+  )
+}
+
 export const DIAGRAMS: Record<string, () => JSX.Element> = {
   'product-chain': ProductFlow,
   'crm-chain': CrmFlow,
@@ -1205,4 +1362,9 @@ export const DIAGRAMS: Record<string, () => JSX.Element> = {
   'tpe-search': TalentPoolSearchFlow,
   'boost-rotation': BoostRotationFlow,
   'boost-slider': BoostSliderFlow,
+  'del-account': DeleteAccountFlow,
+  'cv-actions': CvActionsFlow,
+  'cv-hide-unlock': CvHideAfterUnlockFlow,
+  'del-timeline': DeleteAccountTimeline,
+  'cv-delete-options': CvDeleteOptionsFlow,
 }
