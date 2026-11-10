@@ -844,7 +844,7 @@ export const JOBS_APPS_PAGE_DOCS: Record<string, PageDoc> = {
         kind: 'table',
         cols: ['Ai', 'Làm được', 'Hồ sơ đổi thế nào'],
         rows: [
-          ['**Ứng viên**', 'Nộp · xoá CV · khoá hoặc xoá tài khoản. **Không** tự thu hồi được hồ sơ', 'Tạo hồ sơ mới'],
+          ['**Ứng viên**', 'Nộp · khoá hoặc xoá tài khoản. **Không** tự thu hồi được hồ sơ, **không** xoá được CV (Phase 1)', 'Tạo hồ sơ mới · xoá tài khoản: hồ sơ ở lại, NTD thấy *“Tài khoản đã bị xóa”*'],
           ['**Hệ thống**', 'Kiểm tra CV lúc nộp', 'Qualified → *Sent*, tạo thẻ ở Application Received, email cho NTD · Cannot Read / Not Enough Information → *Not Sent*'],
           ['**Operator**', '**Approve** / **Reject** hồ sơ đang chờ', 'Áp cho mọi hồ sơ cùng phiên bản CV (§3)'],
           ['**Admin / CS**', '**Recall** hồ sơ đã gửi (cùng Approve / Reject)', '→ Rejected · Recall, áp cho mọi hồ sơ cùng phiên bản CV. Không hoàn tác'],
@@ -852,22 +852,21 @@ export const JOBS_APPS_PAGE_DOCS: Record<string, PageDoc> = {
         ],
       },
 
-      { kind: 'h', text: '§6 · Khoá / xoá tài khoản, xoá CV' },
+      { kind: 'h', text: '§6 · Khoá tài khoản, xoá tài khoản' },
       {
         kind: 'table',
-        note: 'Theo build 08/10/2026. Hồ sơ **đang chạy** bị rút khỏi bảng của NTD; hồ sơ đã ở cột cuối giữ nguyên.',
+        note: 'Khoá tài khoản theo build 08/10/2026: hồ sơ **đang chạy** bị rút khỏi bảng của NTD, hồ sơ đã ở cột cuối giữ nguyên. Xoá tài khoản theo **quy tắc Phase 1** (go-live 21/11/2026, **Jobseeker users §5**): **không rút hồ sơ nào**. Phase 1 **không có xoá CV**.',
         cols: ['Cách', 'Ai bấm', 'NTD được báo', 'Trên bảng này'],
         rows: [
           ['**Ứng viên tự khoá tài khoản**', 'Ứng viên', 'Có — mỗi hồ sơ đã gửi một thông báo *ngừng sử dụng dữ liệu*', 'Không nhãn riêng'],
           ['**Admin *Deactivate***', 'HQ ở *Jobseeker users*', 'Có, như trên', 'Không nhãn riêng'],
-          ['**Xoá tài khoản** (ứng viên tự xoá, hoặc Admin *Delete*)', 'Ứng viên / HQ', 'Có — một thông báo *tài khoản đã xoá*', 'Tag *Deleted account*; sau 72 giờ dữ liệu cá nhân bị xoá hẳn: tag thay cho tên'],
-          ['**Xoá một CV**', 'Ứng viên', 'Có, cho hồ sơ gửi bằng CV đó', '*“CV deleted by candidate”*'],
-          ['**Admin *Reactivate* / *Restore***', 'HQ', '—', '**Không khôi phục** hồ sơ đã rút — ứng viên phải nộp lại'],
+          ['**Xoá tài khoản** (ứng viên tự xoá, hoặc Admin *Delete*) — Phase 1', 'Ứng viên / HQ', 'Có — email **CO 11** cho các công ty ứng viên đã ứng tuyển, ngay khi xác nhận xoá', 'Tag *Deleted account*; hồ sơ **không bị rút**. Phía NTD dòng hiện *“Tài khoản đã bị xóa”*, **không mở được CV**. Sau 72 giờ dữ liệu cá nhân bị xoá hẳn: tag thay cho tên'],
+          ['**Admin *Reactivate* / *Restore***', 'HQ', '—', '**Không khôi phục** hồ sơ đã bị rút do khoá'],
         ],
       },
       {
         kind: 'open',
-        text: '**Hồ sơ bị rút do khoá / xoá tài khoản hoặc xoá CV chưa có trong 9 trạng thái ứng viên thấy.** *Application Withdrawn* trong tài liệu 14/10 chỉ dành cho hồ sơ bị **Recall**. Cần chốt: các hồ sơ này hiện trạng thái gì, Application Status là gì, và có nhãn riêng trên bảng này không.',
+        text: '**Hồ sơ bị rút do khoá tài khoản chưa có trong 9 trạng thái ứng viên thấy.** (Xoá tài khoản ở Phase 1 không rút hồ sơ; Phase 1 không có xoá CV.) *Application Withdrawn* trong tài liệu 14/10 chỉ dành cho hồ sơ bị **Recall**. Cần chốt: các hồ sơ này hiện trạng thái gì, Application Status là gì, và có nhãn riêng trên bảng này không.',
       },
       {
         kind: 'warn',
@@ -909,7 +908,7 @@ export const JOBS_APPS_PAGE_DOCS: Record<string, PageDoc> = {
       {
         kind: 'open',
         text:
-          '**Còn cần chốt.** (1) Nộp lại vào job sau Recall — tài liệu và chữ trên hộp Recall nói khác nhau (**CV review §6**). (2) Hồ sơ nộp trong lúc CV đang bóc tách (~3 phút): chặn nút tạo CV, hay giữ Not Sent rồi tự xử lý. (3) Hồ sơ bị rút do khoá / xoá tài khoản (§6). (4) Hiện tên từng vòng ở cột Stage (*In Process · Interview 1*) là **giai đoạn 2**.',
+          '**Còn cần chốt.** (1) Nộp lại vào job sau Recall — tài liệu và chữ trên hộp Recall nói khác nhau (**CV review §6**). (2) Hồ sơ nộp trong lúc CV đang bóc tách (~3 phút): chặn nút tạo CV, hay giữ Not Sent rồi tự xử lý. (3) Hồ sơ bị rút do khoá tài khoản (§6). (4) Hiện tên từng vòng ở cột Stage (*In Process · Interview 1*) là **giai đoạn 2**.',
       },
       {
         kind: 'p',
@@ -1117,7 +1116,7 @@ export const JOBS_APPS_PAGE_DOCS: Record<string, PageDoc> = {
       {
         kind: 'open',
         text:
-          '**Nộp lại cùng một tin.** Tài liệu *Create CV* và *CV review* (15/10): mỗi ứng viên **chỉ nộp 1 lần vào mỗi job**, kể cả sau Recall / Withdraw. Nhưng hộp Recall ghi *“the candidate must apply again”* và tài liệu *Candidate management* (14/10) ghi “phải nộp hồ sơ mới” — chưa thống nhất (**CV review §6**). Cũng chưa chốt: hồ sơ bị rút do khoá / xoá tài khoản hay xoá CV hiện trạng thái gì.',
+          '**Nộp lại cùng một tin.** Tài liệu *Create CV* và *CV review* (15/10): mỗi ứng viên **chỉ nộp 1 lần vào mỗi job**, kể cả sau Recall / Withdraw. Nhưng hộp Recall ghi *“the candidate must apply again”* và tài liệu *Candidate management* (14/10) ghi “phải nộp hồ sơ mới” — chưa thống nhất (**CV review §6**). Cũng chưa chốt: hồ sơ bị rút do khoá tài khoản hiện trạng thái gì.',
       },
       {
         kind: 'open',
@@ -1210,7 +1209,7 @@ export const JOBS_APPS_MODULE_DOCS: Record<string, ModuleDoc> = {
         kind: 'table',
         cols: ['Ai', 'Được', 'Không được'],
         rows: [
-          ['**Ứng viên**', 'Nộp; xoá CV; khoá / xoá tài khoản', '**Thu hồi**, sửa hay xoá hồ sơ ở bất kỳ trạng thái nào; đổi CV của hồ sơ đã nộp'],
+          ['**Ứng viên**', 'Nộp; khoá / xoá tài khoản (Phase 1: không xoá được CV)', '**Thu hồi**, sửa hay xoá hồ sơ ở bất kỳ trạng thái nào; đổi CV của hồ sơ đã nộp'],
           ['**Operator**', '**Approve** / **Reject** hồ sơ đang chờ (*Applications* hoặc *CV review*)', 'Recall; kéo thẻ; thao tác lên hồ sơ đã Rejected hoặc đã Sent (trừ Recall)'],
           ['**Admin / CS**', '**Recall** hồ sơ đã gửi, cùng Approve / Reject; khoá / xoá tài khoản (*Jobseeker users*)', 'Hoàn tác Recall; kéo thẻ thay NTD'],
           ['**NTD**', 'Kéo thẻ giữa các cột (kể cả **vào và ra** Passed / Not This Time); thêm / xoá / đổi tên cột giữa; mở / tải CV', 'Thấy hay đụng vào hồ sơ *Not Sent*; thao tác với hồ sơ In Review, Invalid Application, Application Withdrawn; xoá / đổi tên 3 cột cố định'],
@@ -1230,7 +1229,9 @@ export const JOBS_APPS_MODULE_DOCS: Record<string, ModuleDoc> = {
           ['**Ứng viên**', 'Hàng tuần', '1 email tổng hợp cuối tuần, gom theo nhóm trạng thái'],
           ['**NTD**', 'Hồ sơ chuyển sang **Sent** (CV đạt lúc nộp, hoặc Operator Approve)', 'Email báo có đơn ứng tuyển mới. Hồ sơ Not Sent không gửi email'],
           ['**NTD**', 'Hồ sơ bị thu hồi', '**Email** thông báo; thẻ mang nhãn thu hồi, thông tin CV bị khoá'],
-          ['**NTD**', 'Ứng viên khoá / xoá tài khoản, xoá CV (build 08/10)', 'Email + chuông *ngừng sử dụng dữ liệu* — chỉ công ty đang giữ hồ sơ đã gửi'],
+          ['**NTD**', 'Ứng viên bị khoá / tự tạm dừng tài khoản (build 08/10)', 'Email + chuông *ngừng sử dụng dữ liệu* — chỉ công ty đang giữ hồ sơ đã gửi'],
+          ['**NTD**', 'Ứng viên **xoá tài khoản** (Phase 1)', 'Email **CO 11** — các công ty ứng viên đã ứng tuyển, ngay khi xác nhận xoá'],
+          ['**Ứng viên**', 'Xoá tài khoản (Phase 1)', 'Email **JS 8**; mọi email khác dừng ngay. Không có email lúc dữ liệu bị huỷ (72 giờ)'],
         ],
       },
 
@@ -1263,7 +1264,7 @@ export const JOBS_APPS_MODULE_DOCS: Record<string, ModuleDoc> = {
       {
         kind: 'open',
         text:
-          '**Những điểm cần chốt.** (1) Nộp lại vào job sau **Recall** — tài liệu và chữ trên hộp Recall nói khác nhau (**CV review §6**). (2) **CV Search Status** — đề xuất chỉ CV Qualified mới *Showing*. (3) Hồ sơ nộp trong lúc CV đang **bóc tách** (~3 phút). (4) Hồ sơ bị rút do **khoá / xoá tài khoản, xoá CV** chưa có trong 9 trạng thái. (5) **Thư xin việc** chưa được lưu lên hồ sơ (xem *How to apply*). (6) Hiện tên từng vòng ở cột Stage là **giai đoạn 2**.',
+          '**Những điểm cần chốt.** (1) Nộp lại vào job sau **Recall** — tài liệu và chữ trên hộp Recall nói khác nhau (**CV review §6**). (2) **CV Search Status** — đề xuất chỉ CV Qualified mới *Showing*. (3) Hồ sơ nộp trong lúc CV đang **bóc tách** (~3 phút). (4) Hồ sơ bị rút do **khoá tài khoản** chưa có trong 9 trạng thái. (5) **Thư xin việc** chưa được lưu lên hồ sơ (xem *How to apply*). (6) Hiện tên từng vòng ở cột Stage là **giai đoạn 2**.',
       },
     ],
   },

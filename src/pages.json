@@ -120,6 +120,19 @@
   ]
  },
  {
+  "group": "Resume management",
+  "key": "delete-account-cv",
+  "label": "Delete account & Delete CV",
+  "path": "/ho-tro/xoa-tai-khoan",
+  "perm": "",
+  "flag": "",
+  "site": "Jobseeker site",
+  "what": "Quy tắc **Phase 1** (go-live 21/11/2026): ứng viên **xoá được tài khoản** — NTD không còn xem được CV, email JS 8 + CO 11, dữ liệu huỷ sau 72 giờ — nhưng **không xoá được CV** (chỉ Edit, giới hạn 20 + 20); và NTD mất CV đã unlock khi ứng viên tắt hết CV.",
+  "sub": [
+   "/my-profile/cv-resume"
+  ]
+ },
+ {
   "group": "Application management",
   "key": "how-to-apply",
   "label": "How to apply",

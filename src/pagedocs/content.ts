@@ -1316,7 +1316,7 @@ export const CONTENT_PAGE_DOCS: Record<string, PageDoc> = {
       '**Giới hạn 20 ký tự chỉ kiểm khi bấm tìm.** Ô vẫn cho gõ dài hơn; bấm tìm thì hiện dòng *Nhập tối đa 20 ký tự.* và không tìm. Bấm tìm với ô trống thì ra **toàn bộ** câu hỏi.',
       '**Tìm kiếm quét cả Cá nhân lẫn Doanh nghiệp**, cả câu hỏi lẫn nội dung trả lời, chỉ trong ngôn ngữ đang đọc. Câu khớp ở tiêu đề xếp trước.',
       '**“Tìm ID” không còn.** Tab vẫn tên *Tìm ID / mật khẩu* nhưng chỉ đặt lại **mật khẩu**, và chỉ cho **ứng viên**, bằng **số điện thoại** (không phải email). Nhà tuyển dụng quên mật khẩu dùng trang đăng nhập của site tuyển dụng.',
-      '**Xoá tài khoản là xoá thật.** Ứng viên không tự khôi phục được; CS chỉ huỷ được trong **72 giờ**. Email đó bị chặn đăng ký và đăng nhập lại, đơn ứng tuyển đang chạy bị rút.',
+      '**Xoá tài khoản là xoá thật.** Ứng viên không tự khôi phục được; CS chỉ huỷ được trong **72 giờ**. Email đó bị chặn đăng ký và đăng nhập lại. Phase 1 (go-live 21/11/2026): đơn ứng tuyển **không bị rút** — NTD thấy *“Tài khoản đã bị xóa”* và không mở được CV; ứng viên nhận email **JS 8**, công ty đã nhận đơn nhận **CO 11** (xem **Jobseeker users §5**).',
       '**svn-be không trả lời thì trang hiện nội dung mẫu** — câu hỏi trông như thật nhưng là dữ liệu giả trong code. Thấy câu lạ không có trong admin thì báo dev kiểm tra kết nối, đừng đi sửa nội dung.',
     ],
     blocks: [
