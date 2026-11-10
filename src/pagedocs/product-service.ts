@@ -575,10 +575,10 @@ export const PRODUCT_SERVICE_PAGE_DOCS: Record<string, PageDoc> = {
     how: [
       '**Thư viện** (`/system/image-gallery`) là một **lưới thẻ, mỗi thẻ một cụm**, 24 cụm mỗi trang. Mỗi thẻ vẽ **cả ba khung cạnh nhau đúng hình thật** (tròn ra tròn, dọc ra dọc), kèm tên cụm (hoặc *Set #n* in nghiêng khi chưa đặt tên), *Jobs: n*, hạn bản quyền, chip ngành và tag.',
       'Lọc: **ô tìm theo tên hoặc tag** · **Industry** (cascader theo nhánh — mỗi mục in kèm *số cụm đủ cả ba khung* trong nhánh đó) · **Tag** · **Format** (chỉ hiện cụm **có** khung này) · công tắc **Show archived**. Bộ lọc và số trang nằm trên URL, gửi link là người nhận thấy đúng chỗ đó.',
-      '**Tạo một cụm — nút `Create set`, làm gọn trên MỘT màn:** thả một **ảnh gốc** vào ô trên cùng → nó được cắt vào **mọi khung còn trống**. Muốn một khung dùng ảnh riêng thì thả file thẳng vào khung đó — **ảnh gốc không bao giờ ghi đè** một khung đã có file riêng. Cắt lại từng khung ngay tại chỗ. Bên dưới là *Name* (tuỳ chọn, tối đa 120 ký tự, trùng tên bị chặn) · *Licence expiry* · *Tags* · *Industry*. Nút Save chỉ bị chặn bởi **hai** điều: chưa chọn ngành, hoặc **chưa có khung nào có ảnh**.',
-      '**Tạo hàng loạt — nút `Create bulk image sets`** (`/system/image-gallery/bulk`): một **bảng kiểu Excel, mỗi DÒNG là một cụm**. Thả ảnh vào ô khung (ô vẽ đúng hình thật của khung); ô chữ dùng được **Copy · Paste · Fill down** bằng nút hoặc `Ctrl+C` / `Ctrl+V` / `Ctrl+D`, và **dán được cả khối từ Google Sheets**. Thêm dòng bằng *Add row* / *Add 10 rows*. Bảng **tự lưu nháp lên server** — F5 hay đóng máy không mất.',
+      '**Tạo một cụm** — nút `Create set`, làm gọn trên **một màn duy nhất**: thả một **ảnh gốc** vào ô trên cùng → nó được cắt vào **mọi khung còn trống**. Muốn một khung dùng ảnh riêng thì thả file thẳng vào khung đó — **ảnh gốc không bao giờ ghi đè** một khung đã có file riêng. Cắt lại từng khung ngay tại chỗ. Bên dưới là *Name* (tuỳ chọn, tối đa 120 ký tự, trùng tên bị chặn) · *Licence expiry* · *Tags* · *Industry*. Nút Save chỉ bị chặn bởi **hai** điều: chưa chọn ngành, hoặc **chưa có khung nào có ảnh**.',
+      '**Tạo hàng loạt** — nút `Create bulk image sets` (`/system/image-gallery/bulk`): một **bảng kiểu Excel, mỗi DÒNG là một cụm**. Thả ảnh vào ô khung (ô vẽ đúng hình thật của khung); ô chữ dùng được **Copy · Paste · Fill down** bằng nút hoặc `Ctrl+C` / `Ctrl+V` / `Ctrl+D`, và **dán được cả khối từ Google Sheets**. Thêm dòng bằng *Add row* / *Add 10 rows*. Bảng **tự lưu nháp lên server** — F5 hay đóng máy không mất.',
       '**Mở một cụm** (bấm tên trên thẻ → `/system/image-gallery/<id>`): đổi tên ngay trên tiêu đề; mục **Frames** cho từng khung *Crop · Replace · Remove* (khung trống thì *Cut from master* — chỉ khi cụm có ảnh gốc — hoặc *Upload*); mục **Details** sửa *Licence expiry · Industry · Tags* rồi Save một lần. Nút **Archive / Restore** nằm ở góc phải trên.',
-      '**Quản lý tag — nút `Manage tags`** trên thanh lọc: thêm, đổi tên, xoá tag. Xoá một tag chỉ **gỡ nhãn** khỏi các cụm (hộp xác nhận ghi rõ số cụm bị ảnh hưởng) — **không xoá cụm nào, không xoá ảnh nào**.',
+      '**Quản lý tag** — nút `Manage tags` trên thanh lọc: thêm, đổi tên, xoá tag. Xoá một tag chỉ **gỡ nhãn** khỏi các cụm (hộp xác nhận ghi rõ số cụm bị ảnh hưởng) — **không xoá cụm nào, không xoá ảnh nào**.',
     ],
     watch: [
       '**Archive không phải xoá, và không đụng tới tin đang chạy.** Hộp xác nhận ghi thẳng số tin đang dùng cụm: *“Jobs using this set: n. They keep showing it — archiving only stops it being offered for new jobs.”* Đó là toàn bộ hàng rào — svn-be không chặn gì cả.',
@@ -594,7 +594,7 @@ export const PRODUCT_SERVICE_PAGE_DOCS: Record<string, PageDoc> = {
       {
         kind: 'warn',
         text:
-          '**Trang này vừa được thay hoàn toàn (bản `v1.0.13`, gắn thẻ 10/11/2026).** Kho ảnh cũ — ảnh rời, trường *Frame* với *Wordmark / Thumbnail / Photo — portrait*, *Topics*, và luồng **import .xlsx** kèm *Download template* — **không còn nữa**. Thay vào đó là cụm ảnh ba khung, tag tự tạo, và một **bảng nhập hàng loạt ngay trong admin** thay cho file Excel. Ai đọc bản hướng dẫn trước đó xin bỏ toàn bộ phần import .xlsx.',
+          '**Trang này vừa được thay hoàn toàn** — bản `v1.0.13`, gắn thẻ 10/11/2026. Kho ảnh cũ — ảnh rời, trường *Frame* với *Wordmark / Thumbnail / Photo — portrait*, *Topics*, và luồng **import .xlsx** kèm *Download template* — **không còn nữa**. Thay vào đó là cụm ảnh ba khung, tag tự tạo, và một **bảng nhập hàng loạt ngay trong admin** thay cho file Excel. Ai đọc bản hướng dẫn trước đó xin bỏ toàn bộ phần import .xlsx.',
       },
       {
         kind: 'table',
@@ -650,8 +650,8 @@ export const PRODUCT_SERVICE_PAGE_DOCS: Record<string, PageDoc> = {
         kind: 'list',
         heading: 'Hai nút dễ bỏ sót trong bảng nhập hàng loạt',
         items: [
-          '**Nhóm chọn `Use file as is` / `Open crop frame`** (góc phải, trên bảng): quyết định điều gì xảy ra **khi thả một ảnh sai hình**. *Use file as is* lấy luôn; *Open crop frame* mở khung cắt để chọn vùng. Đổi lúc nào cũng được, áp cho lần thả tiếp theo.',
-          '**`Clear created rows`** (chân bảng, chỉ hiện khi đã tạo được dòng nào): dọn các dòng đã tạo xong ra khỏi bảng để nhập tiếp, mà không phải tải lại trang.',
+          '**Nhóm chọn chế độ thả ảnh** — `Use file as is` / `Open crop frame` (góc phải, trên bảng): quyết định điều gì xảy ra **khi thả một ảnh sai hình**. *Use file as is* lấy luôn; *Open crop frame* mở khung cắt để chọn vùng. Đổi lúc nào cũng được, áp cho lần thả tiếp theo.',
+          '**Clear created rows** (chân bảng, chỉ hiện khi đã tạo được dòng nào): dọn các dòng đã tạo xong ra khỏi bảng để nhập tiếp, mà không phải tải lại trang.',
         ],
       },
       {
