@@ -12,7 +12,7 @@ import { DemoPlan } from './demo'
 import { TestPlan } from './testplan'
 import { md } from './md'
 
-/* ── Saramin Admin — cẩm nang toàn bộ hệ thống ────────────────────────────────
+/* ── Saramin — System guide ───────────────────────────────────────────────────
    A site of its own, not a page on the requirement site. The requirement says
    what SHOULD be built and is read by a BA; this says what IS built and is read
    by whoever has to operate it tomorrow.
@@ -194,7 +194,7 @@ export function App() {
         <aside className="sticky top-0 hidden h-screen w-[262px] shrink-0 overflow-y-auto border-r border-line py-6 pr-5 lg:block print:hidden">
           <button onClick={() => pick({ t: 'home' })} className="block text-left">
             <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-brand">Saramin</p>
-            <p className="mt-0.5 text-[15px] font-bold leading-tight tracking-tight">User guide</p>
+            <p className="mt-0.5 text-[15px] font-bold leading-tight tracking-tight">System guide</p>
             <p className="text-[11px] text-faint">{dev ? 'bản Developer' : 'bản Sales & nghiệp vụ'}</p>
           </button>
 
@@ -299,9 +299,9 @@ function Home({ onPick }: { onPick: (s: Sel) => void }) {
   return (
     <div>
       <div className="border-b-2 border-ink pb-4">
-        <p className="font-mono text-[10.5px] uppercase tracking-[0.18em] text-brand">Cẩm nang hệ thống</p>
+        <p className="font-mono text-[10.5px] uppercase tracking-[0.18em] text-brand">Logic & hướng dẫn sử dụng</p>
         <h1 className="mt-1.5 max-w-[16ch] text-[40px] font-bold leading-[1.05] tracking-[-0.02em]">
-          Admin console, toàn bộ
+          Hệ thống Saramin, toàn bộ
         </h1>
       </div>
 
