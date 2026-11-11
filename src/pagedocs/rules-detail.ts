@@ -89,15 +89,6 @@ export const RULE_DETAIL: Record<string, DocBlock[]> = {
       'Muốn làm nhiều lần mà vẫn giữ lịch sử thì phải hỏi team Saramin Hàn xem có tài liệu cho việc đó không, rồi mới implement thêm được.',
     ]),
 
-    rule('Rule — Phase 1 không cho xoá CV', [
-      '**Chốt ngày 04/11/2026 bởi Saramin VN** (chị Huyền, anh Danh), go-live **21/11/2026**. Ứng viên **không xoá được CV** ở Phase 1.',
-      'Ứng viên chỉ được **Edit**, **Download** và **bật / tắt hiển thị với NTD**. **Nút Delete bị ẩn** trên cả Saramin CV lẫn Upload CV, và **không chuyển đổi được** giữa hai loại. Edit một Upload CV nghĩa là **thay file mới** — hệ thống parse lại file đó.',
-      '**Lý do giữ nguyên:** hệ thống Saramin hiện tại cũng không cho ứng viên xoá CV; giữ nguyên Policy để khỏi phải sửa Policy ngay trước go-live; và tránh làm mất đơn ứng tuyển cùng CV mà nhà tuyển dụng đã trả tiền mở khoá.',
-      '**Hệ quả:** đơn ứng tuyển giữ nguyên và NTD cùng Admin xem CV đã nộp như bình thường; Talent Pool chỉ đổi khi ứng viên **bật / tắt hiển thị**, không có trường hợp CV biến mất vì bị xoá; CV NTD đã unlock không mất vì xoá CV.',
-      '⚠️ **Build vẫn còn đường xoá CV, và nó rút đơn.** Theo policy 09-21, xoá CV sẽ chuyển đơn đang xử lý sang `WITHDRAWN`, gỡ link CV khỏi mọi đơn, xoá ghi chú và sao đánh dấu của công ty, rồi gửi email yêu cầu công ty xoá dữ liệu. Trước go-live cần **ẩn nút Delete và chặn cả endpoint** — nếu chỉ ẩn nút thì một thao tác không còn được phép vẫn rút được đơn thật.',
-      'Một chốt chặn sẵn có trong build, vẫn hữu ích cho Phase 2 và cho đường xoá phía HQ: **CV chính không xoá được khi còn đơn đang xử lý** — phải chọn CV chính khác trước. Mục đích là tránh rút nhầm hàng loạt chứ không phải cấm rút có chủ đích.',
-      'Mọi mở rộng — cho phép xoá CV, xử lý khi vượt giới hạn — để **Phase 2**. Tài liệu đầy đủ kèm sơ đồ: trang **Delete account & Delete CV**.',
-    ]),
 
 
     rule('Rule — Migrate Open to work sang chọn CV', [
@@ -220,16 +211,6 @@ export const RULE_DETAIL: Record<string, DocBlock[]> = {
       '**Sống sót**: dòng tài khoản với địa chỉ thay bằng token một chiều; đơn ứng tuyển công ty đã nhận (de-link, giữ trạng thái và ngày); CV công ty **đã trả tiền** unlock, dưới dạng bản rỗng ruột — xoá hẳn sẽ làm bản ghi trừ credit trỏ vào hư không; và các bản ghi đồng ý, trừ thông tin thiết bị.',
     ]),
 
-    rule('Rule — Công ty thấy gì sau khi ứng viên xoá tài khoản', [
-      '**Quyết định Phase 1 (call 04/11/2026, luồng ghi nhận 06/11).** Tài khoản bị vô hiệu hoá **ngay** khi ứng viên xác nhận.',
-      '**NTD không còn xem được CV** — kể cả CV trong đơn đã nộp và **CV đã trả tiền mở khoá**. NTD **mất lượt quota** đã dùng để unlock; điều này đã được chấp nhận khi chốt.',
-      '**Đơn ứng tuyển KHÔNG bị rút.** Dòng ứng tuyển trong Candidate management chuyển sang UI **“Tài khoản đã bị xóa”** — đơn vẫn nằm đó, chỉ không mở được CV.',
-      '**Email:** ứng viên nhận **JS 8** ngay khi xác nhận, và mọi email theo lịch (JS 1–7) **ngừng ngay**, không đợi hết 72 giờ. NTD nhận **CO 11**: ứng viên đã xoá tài khoản, đề nghị xoá hồ sơ khỏi hệ thống và thư mục của công ty.',
-      '**Dữ liệu cá nhân bị xoá vĩnh viễn sau 72 giờ** kể từ lúc xác nhận. Trong 72 giờ đó chỉ HQ khôi phục được, và chỉ khi lần huỷ chưa chạy.',
-      '⚠️ **Build đang làm khác ở một điểm quan trọng:** nó **tự rút đơn đang xử lý** và cho đơn rời board, còn đơn đã kết thúc thì ẩn danh với tên `DELETED_CANDIDATE`. Phase 1 chốt là **giữ đơn** và hiện *“Tài khoản đã bị xóa”*. Cần sửa trước go-live.',
-      '⚠️ Nội dung email **JS 8** hiện vẫn còn câu *“Các đơn ứng tuyển bạn đã thực hiện đã được rút lại”* — sai với quyết định 04/11, cần sửa.',
-      'Tài liệu đầy đủ kèm sơ đồ: trang **Delete account & Delete CV**.',
-    ]),
 
     rule('Rule — Xác thực qua Zalo OTP', [
       '**Chỉ gửi qua số điện thoại.** Kênh EMAIL và cơ chế dự phòng “gửi mail khi mã không tới” đã bị gỡ bỏ.',

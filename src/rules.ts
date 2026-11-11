@@ -418,26 +418,6 @@ export const RULE_CATS: RuleCat[] = [
         kind: 'ab', group: 'Users', heading: 'Rule — Xoá tài khoản, cửa sổ khôi phục và lần quét xoá',
         src: 'svn-be CANDIDATE_ACCOUNT_DELETION',
       },
-      {
-        title: 'Xoá tài khoản: NTD mất quyền xem CV, nhưng đơn KHÔNG bị rút',
-        summary:
-          'Tài khoản vô hiệu hoá ngay. NTD **không còn xem được CV** — kể cả CV trong đơn đã nộp và CV đã trả tiền mở khoá — và **mất lượt quota** đã dùng để unlock, điều này đã được chấp nhận. Nhưng **đơn ứng tuyển không bị rút**: dòng ứng tuyển chuyển sang UI *“Tài khoản đã bị xóa”*. NTD nhận email **CO 11**, ứng viên nhận **JS 8**, và dữ liệu cá nhân bị xoá vĩnh viễn sau **72 giờ**.',
-        kind: 'lech',
-        conflict:
-          'Build đang **tự rút đơn đang xử lý** và cho đơn rời board, còn đơn đã kết thúc thì ẩn danh — ngược với quyết định Phase 1 là giữ đơn và hiện *“Tài khoản đã bị xóa”*. Ngoài ra nội dung email **JS 8** hiện vẫn còn câu “Các đơn ứng tuyển bạn đã thực hiện đã được rút lại”, cần sửa theo quyết định 04/11.',
-        group: 'Users', heading: 'Rule — Công ty thấy gì sau khi ứng viên xoá tài khoản',
-        src: 'Phase 1 chốt 04/11 · luồng ghi nhận 06/11 · svn-be §5',
-      },
-      {
-        title: 'Phase 1: ứng viên không xoá được CV',
-        summary:
-          'Chốt ngày **04/11/2026** bởi Saramin VN. Ứng viên chỉ **Edit**, **Download** và **bật / tắt hiển thị**; nút Delete bị ẩn trên cả hai loại CV. Lý do: hệ thống Saramin hiện tại cũng không cho xoá, giữ nguyên Policy để khỏi phải sửa trước go-live, và tránh làm mất đơn ứng tuyển cùng CV nhà tuyển dụng đã trả tiền mở khoá. Vì vậy **đơn ứng tuyển, Talent Pool và CV đã unlock không bao giờ bị ảnh hưởng bởi thao tác xoá CV**. Mọi mở rộng để Phase 2.',
-        kind: 'lech',
-        conflict:
-          'Build vẫn còn đường xoá CV, và nó **rút các đơn đã nộp bằng CV đó** rồi gửi email yêu cầu công ty xoá dữ liệu — đúng với policy 09-21 nhưng ngược với quyết định Phase 1. Trước go-live 21/11 cần ẩn nút Delete và chặn cả endpoint, nếu không một thao tác không còn được phép vẫn rút được đơn thật.',
-        group: 'Resume management', heading: 'Rule — Phase 1 không cho xoá CV',
-        src: 'Phase 1 chốt 04/11 · tài liệu 10/11 · svn-be §5c',
-      },
     ],
   },
   {
@@ -538,4 +518,59 @@ export const RULE_CATS: RuleCat[] = [
   },
 ]
 
+/*
+ * DELIBERATELY ABSENT — "Hiển thị CV phía NTD theo từng trường hợp (Phase 1)".
+ *
+ * Two rules used to live here: what a company sees after a candidate deletes
+ * their account, and the Phase 1 decision that candidates cannot delete a CV.
+ * Both now belong to the BA's Notion page of the same name, which works the
+ * same ground case by case — withdraw, recall, account deletion, blocking,
+ * talent pool — and whose 10/11 direction supersedes what was written here:
+ * the company still OPENS the CV and the identifying fields are masked, rather
+ * than the CV disappearing.
+ *
+ * Restating a half-settled rule in two places is how the last round of
+ * confusion started, so the register stays out of it until Notion is signed
+ * off; the rules then come back here in one piece. The site already carries the
+ * settled half on the Delete account & Delete CV page, which the footer points at.
+ */
 export const RULE_COUNT = RULE_CATS.reduce((n, c) => n + c.rules.length, 0)
+
+/*
+ * The register READS by module, even though it is AUTHORED by theme.
+ *
+ * Authoring by theme keeps related rules next to each other while writing, and
+ * stops the same rule being written twice under two screens. But a reader
+ * arrives with a question about a screen — "sao tin này không publish được" —
+ * not about a theme, and every rule's detail already lives on its module's
+ * Logic page. So the page regroups at render time and the order below mirrors
+ * GROUP_ORDER in App.tsx, which is the order of the rail: the list, the rail
+ * and the detail pages then all read in the same sequence.
+ */
+export const RULE_GROUP_ORDER = [
+  'Job management', 'Resume management', 'Application management', 'Users',
+  'Product settings', 'Service delivery', 'CRM', 'Content', 'Notifications',
+  'Organisation', 'System',
+]
+
+export interface RuleGroup {
+  group: string
+  rules: RuleEntry[]
+}
+
+/** Rules by module, in rail order. A module with no rule is left out. */
+export function rulesByGroup(): RuleGroup[] {
+  const all = RULE_CATS.flatMap((c) => c.rules)
+  const known = new Set(RULE_GROUP_ORDER)
+  /* A group not in the order above would vanish silently, so it goes last
+     rather than going missing — the check script fails on it either way. */
+  const extras = [...new Set(all.map((r) => r.group))].filter((g) => !known.has(g))
+  return [...RULE_GROUP_ORDER, ...extras]
+    .map((group) => ({ group, rules: all.filter((r) => r.group === group) }))
+    .filter((g) => g.rules.length)
+}
+
+/** `rules-job-management` — the section's own address on the list page. */
+export const groupAnchor = (group: string) =>
+  'rules-' + group.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '')
+
