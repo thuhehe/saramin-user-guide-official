@@ -412,6 +412,16 @@ export const RULE_CATS: RuleCat[] = [
         src: 'policy KH · BB rà soát 05/11',
       },
       {
+        title: 'Đổi mật khẩu và xoá tài khoản xác thực bằng mật khẩu, không dùng Zalo',
+        summary:
+          '**Xoá tài khoản: xác nhận bằng mật khẩu.** Ai quên mật khẩu thì đi qua luồng **quên mật khẩu — link gửi về email**, đặt lại rồi quay lại xoá. Tài khoản chỉ đăng nhập bằng social (chưa từng đặt mật khẩu) thì **re-auth với nhà cung cấp**. **Luồng mã Zalo bị bỏ khỏi cả hai việc này.** Link đặt lại mật khẩu sống **1 giờ** và dùng một lần.',
+        kind: 'lech',
+        conflict:
+          'Build đã có đường xác nhận bằng mật khẩu (`/auth/delete/password/verify`, SRM-1254 ngày 29/10) và đã đưa quên-mật-khẩu về link email cùng ngày — hai phần này khớp. Nhưng **đường mã Zalo vẫn còn nguyên trong build**: `/auth/delete/otp` và `/auth/delete/otp/verify` vẫn phục vụ, và tài liệu FE của backend vẫn ghi mã Zalo là “the normal path”. Cần gỡ hai endpoint đó và cập nhật tài liệu FE trước go-live 21/11.',
+        group: 'Users', heading: 'Rule — Xác thực khi đổi mật khẩu và xoá tài khoản',
+        src: 'Chốt 11/11 · SRM-1254 29/10 · svn-be WebAuthController',
+      },
+      {
         title: 'Xoá tài khoản là cửa một chiều, và email không bao giờ dùng lại được',
         summary:
           'Dòng tài khoản giữ vĩnh viễn — đó chính là thứ giữ chỗ địa chỉ email. Sau **72 giờ** một job quét chạy mỗi 5 phút sẽ xoá dữ liệu cá nhân: hồ sơ, mọi CV đã parse, thư viện CV và file, câu trả lời onboarding, lịch sử duyệt web, và cả ghi chú mà công ty viết **về** người đó. Khôi phục chỉ làm được trong 72 giờ đó và chỉ HQ admin mới làm được.',
@@ -424,11 +434,11 @@ export const RULE_CATS: RuleCat[] = [
     title: 'Tích hợp bên thứ ba',
     rules: [
       {
-        title: 'Zalo OTP chỉ gửi qua số điện thoại, không còn kênh email',
+        title: 'Zalo OTP chỉ dùng cho đăng ký, và chỉ gửi qua số điện thoại',
         summary:
-          'Kênh EMAIL và cơ chế dự phòng “gửi mail khi SMS không tới” đã bị gỡ. Tài khoản không có số trên hồ sơ thì không lấy được mã; không có nhà cung cấp Zalo thì trả 503. Mã sống 180 giây, gửi lại được sau 60 giây. Mọi ứng viên đều phải xác thực số điện thoại qua Zalo, **kể cả người nước ngoài** — checkbox “I live abroad” đã bỏ, và email thì không verify.',
-        kind: 'both', group: 'Users', heading: 'Rule — Xác thực qua Zalo OTP',
-        src: 'SRM-903 09/10 · Thu 09/10',
+          'Khi **đăng ký**, mọi ứng viên phải xác thực số điện thoại qua Zalo — **kể cả người nước ngoài**, checkbox “I live abroad” đã bỏ hẳn và email thì không verify. Kênh EMAIL cùng cơ chế dự phòng “gửi mail khi mã không tới” đã bị gỡ. Mã sống 180 giây, gửi lại được sau 60 giây; không có nhà cung cấp Zalo thì trả 503. **Đổi mật khẩu và xoá tài khoản thì không dùng Zalo nữa** — xem rule riêng ở nhóm Pháp lý.',
+        kind: 'both', group: 'Users', heading: 'Rule — Zalo OTP khi đăng ký',
+        src: 'SRM-903 09/10 · thu hẹp phạm vi 29/10',
       },
       {
         title: 'Callio không có API để gọi điện',

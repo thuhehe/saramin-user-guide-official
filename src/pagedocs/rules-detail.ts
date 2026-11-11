@@ -204,7 +204,7 @@ export const RULE_DETAIL: Record<string, DocBlock[]> = {
     ]),
 
     rule('Rule — Xoá tài khoản, cửa sổ khôi phục và lần quét xoá', [
-      'Xác thực để xoá: mã OTP gửi qua **Zalo** tới số trên hồ sơ của chính tài khoản đó. Tài khoản có mật khẩu thì dùng mật khẩu cũng được; tài khoản chỉ có social thì re-auth với nhà cung cấp.',
+      'Xác thực để xoá: **nhập mật khẩu**. Quên mật khẩu thì đặt lại qua link gửi về email rồi quay lại; tài khoản chỉ có social thì re-auth với nhà cung cấp. Mã Zalo **không còn dùng** cho việc này (chốt 11/11).',
       'Ứng viên chọn **lý do xoá** từ danh sách mã có sẵn, kèm ghi chú tự do không bắt buộc. Lý do được **giữ lại sau lần quét xoá** để làm thống kê; ghi chú tự do thì bị xoá.',
       'Sau khi xoá thành công: mọi refresh token bị thu hồi, phiên chết ngay lập tức, và trình duyệt được chuyển sang trang “tài khoản đã xoá”.',
       '**Lần quét xoá huỷ**: hồ sơ (số điện thoại, ngày sinh, giới tính, headline, ảnh đại diện), mọi CV đã parse, thư viện CV và file — kể cả bản đóng băng đã gửi cho công ty — câu trả lời onboarding, token đăng nhập và đặt lại mật khẩu, lịch sử duyệt và gợi ý, tuỳ chọn email, thành viên talent pool, và **ghi chú cùng sao đánh dấu mà công ty viết về người đó**.',
@@ -212,13 +212,21 @@ export const RULE_DETAIL: Record<string, DocBlock[]> = {
     ]),
 
 
-    rule('Rule — Xác thực qua Zalo OTP', [
-      '**Chỉ gửi qua số điện thoại.** Kênh EMAIL và cơ chế dự phòng “gửi mail khi mã không tới” đã bị gỡ bỏ.',
+    rule('Rule — Zalo OTP khi đăng ký', [
+      '**Chỉ dùng cho bước đăng ký**, và **chỉ gửi qua số điện thoại.** Kênh EMAIL cùng cơ chế dự phòng “gửi mail khi mã không tới” đã bị gỡ bỏ.',
       'Tài khoản **không có số trên hồ sơ** thì không lấy được mã. Deployment **không có nhà cung cấp Zalo**, hoặc lần gửi không đi được, thì trả 503.',
       'Người dùng phải **gõ lại chính số của mình** để xin mã; sai số thì bị từ chối trước cả bước đếm ngược và hạn mức gửi, nên gõ nhầm không tốn gì.',
-      'Mã sống **180 giây**; nút gửi lại bật sau **60 giây**. Mã không bao giờ nằm trong response.',
-      '**Mọi ứng viên đều phải verify số điện thoại qua Zalo**, kể cả người nước ngoài — checkbox “I live abroad” đã bỏ hẳn, và **email thì không verify**. Đây là đảo ngược so với đề xuất ngày 05/10.',
-      'Nhập sai OTP nhiều lần thì số bị khoá; mở lại phải nhờ team kỹ thuật.',
+      'Mã sống **180 giây**; nút gửi lại bật sau **60 giây**. Mã không bao giờ nằm trong response. Nhập sai nhiều lần thì số bị khoá, mở lại phải nhờ team kỹ thuật.',
+      '**Mọi ứng viên đều phải verify số điện thoại qua Zalo khi đăng ký**, kể cả người nước ngoài — checkbox “I live abroad” đã bỏ hẳn, và **email thì không verify**. Đây là đảo ngược so với đề xuất ngày 05/10.',
+      '⚠️ **Từ 29/10, Zalo không còn dùng cho đổi mật khẩu và xoá tài khoản** — xem mục dưới.',
+    ]),
+
+    rule('Rule — Xác thực khi đổi mật khẩu và xoá tài khoản', [
+      '**Xoá tài khoản: xác nhận bằng MẬT KHẨU.** Không dùng mã Zalo nữa.',
+      '**Quên mật khẩu thì đi đường email:** luồng quên-mật-khẩu gửi một **link đặt lại về email**, link sống **1 giờ** và **dùng một lần**; đặt lại xong thì quay lại thao tác xoá. Chính việc mở được link là bằng chứng kiểm soát hòm thư.',
+      '**Tài khoản chỉ đăng nhập bằng social** (Google / Facebook / LinkedIn / GitHub, chưa từng đặt mật khẩu) thì **re-auth với nhà cung cấp** — đó là yếu tố duy nhất họ có.',
+      'Nhập sai mật khẩu **5 lần trong 24 giờ** thì khoá, dùng chung bộ đếm với đường mã cũ; nhập đúng một lần là xoá bộ đếm. Trước SRM-1254 mật khẩu sai không hề bị giới hạn.',
+      '⚠️ **Build chưa gỡ đường Zalo.** `/auth/delete/password/verify` đã có từ 29/10 (SRM-1254) và luồng quên-mật-khẩu bằng link email cũng đã về cùng ngày — hai phần đó khớp. Nhưng `/auth/delete/otp` và `/auth/delete/otp/verify` **vẫn đang phục vụ**, và tài liệu FE của backend vẫn mô tả mã Zalo là đường chính. Cần gỡ endpoint và sửa tài liệu trước go-live 21/11, nếu không vẫn còn một đường xoá tài khoản mà rule đã bỏ.',
     ]),
 
     rule('Rule — Migrate mật khẩu từ hệ thống cũ', [
