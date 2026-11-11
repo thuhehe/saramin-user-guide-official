@@ -1,5 +1,5 @@
-import { useMemo, useState } from 'react'
-import { RULE_COUNT, anchorId, groupAnchor, rulesByGroup, type RuleEntry } from './rules'
+import { useEffect, useMemo, useRef, useState } from 'react'
+import { RULE_COUNT, anchorId, groupAnchor, rulesByGroup, type RuleEntry, type RuleGroup } from './rules'
 import { md } from './md'
 
 /*
@@ -11,15 +11,108 @@ import { md } from './md'
  * rule already sits on that module's Logic page.
  *
  * Deliberately plain. An earlier pass carried two paragraphs of preamble, four
- * filter chips and a type tag on every row; on a page of 56 rules all of that
+ * filter chips and a type tag on every row; on a page of 54 rules all of that
  * sat between the reader and the first rule. What survives is what a reader
  * uses: a contents list to jump with, a search box, and the rules.
+ *
+ * THE CONTENTS LIST IS A SIDEBAR, not a block at the top. The page is tens of
+ * thousands of pixels long, so a contents list that scrolls away is one a
+ * reader can only use once. On a wide screen it sits to the right and sticks;
+ * narrower than that there is no room beside the text, so it falls back to the
+ * block at the top — navigation that exists at every width beats navigation
+ * that is prettier at one.
  *
  * The one mark left on a row is `Lệch` — where the agreed rule and the running
  * code say different things. That is not decoration, it is the reason several
  * of these rules are on the page at all, so it stays visible and the
  * disagreement is printed in full rather than resolved by guesswork.
  */
+
+/** Number a group keeps wherever it is drawn, so the sidebar and the headings agree. */
+function useGroupIndex() {
+  const all = useMemo(() => rulesByGroup(), [])
+  return useMemo(() => new Map(all.map((g, i) => [g.group, i + 1])), [all])
+}
+
+/*
+ * Which section is being read. A scroll listener rather than IntersectionObserver:
+ * the question is "which heading did I last pass", which is one comparison per
+ * section, while an observer answers "what is on screen" and needs a second pass
+ * to turn several intersecting sections back into one answer.
+ */
+function useActiveSection(ids: string[]) {
+  const [active, setActive] = useState('')
+  const frame = useRef(0)
+  useEffect(() => {
+    const read = () => {
+      frame.current = 0
+      let found = ids[0] ?? ''
+      for (const id of ids) {
+        const el = document.getElementById(id)
+        if (el && el.getBoundingClientRect().top <= 96) found = id
+      }
+      setActive(found)
+    }
+    const onScroll = () => {
+      if (frame.current) return
+      frame.current = requestAnimationFrame(read)
+    }
+    read()
+    window.addEventListener('scroll', onScroll, { passive: true })
+    window.addEventListener('resize', onScroll)
+    return () => {
+      if (frame.current) cancelAnimationFrame(frame.current)
+      window.removeEventListener('scroll', onScroll)
+      window.removeEventListener('resize', onScroll)
+    }
+  }, [ids.join('|')])
+  return active
+}
+
+/* Not smooth: the last sections are tens of thousands of pixels down, and an
+   animated scroll over that reads as the page having hung. The rest of the
+   site jumps too. */
+function jump(e: React.MouseEvent, id: string) {
+  if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || e.button !== 0) return
+  e.preventDefault()
+  window.history.replaceState(null, '', `#${id}`)
+  document.getElementById(id)?.scrollIntoView({ block: 'start' })
+}
+
+function Contents({
+  groups, index, active, side,
+}: { groups: RuleGroup[]; index: Map<string, number>; active: string; side?: boolean }) {
+  return (
+    <ol className={side ? 'mt-2 space-y-0.5' : 'mt-2.5 grid grid-cols-1 gap-x-7 gap-y-1 sm:grid-cols-2'}>
+      {groups.map((g) => {
+        const id = groupAnchor(g.group)
+        const on = side && active === id
+        return (
+          <li key={g.group}>
+            <a
+              href={`#${id}`}
+              onClick={(e) => jump(e, id)}
+              aria-current={on ? 'true' : undefined}
+              className={`flex items-baseline gap-2 no-underline ${
+                side
+                  ? `border-l-2 py-[3px] pl-2.5 pr-1 text-[12px] leading-snug transition-colors ${
+                      on ? 'border-brand font-semibold text-ink' : 'border-transparent text-muted hover:border-line hover:text-ink'
+                    }`
+                  : 'py-0.5 text-[12.5px] text-ink/85 hover:text-brand'
+              }`}
+            >
+              <span className={`font-mono text-[10.5px] ${on ? 'text-brand' : 'text-faint'}`}>
+                {String(index.get(g.group) ?? 0).padStart(2, '0')}
+              </span>
+              <span className="min-w-0 flex-1 truncate">{g.group}</span>
+              <span className="font-mono text-[10.5px] text-faint">{g.rules.length}</span>
+            </a>
+          </li>
+        )
+      })}
+    </ol>
+  )
+}
 
 function RuleRow({ r, onOpen }: { r: RuleEntry; onOpen: (group: string, anchor: string) => void }) {
   return (
@@ -67,6 +160,7 @@ function RuleRow({ r, onOpen }: { r: RuleEntry; onOpen: (group: string, anchor: 
 
 export function RuleList({ onOpen }: { onOpen: (group: string, anchor: string) => void }) {
   const [q, setQ] = useState('')
+  const index = useGroupIndex()
 
   const groups = useMemo(() => {
     const t = q.trim().toLowerCase()
@@ -82,86 +176,69 @@ export function RuleList({ onOpen }: { onOpen: (group: string, anchor: string) =
   }, [q])
 
   const shown = groups.reduce((n, g) => n + g.rules.length, 0)
-  const full = useMemo(() => rulesByGroup(), [])
-
-  /* A contents entry scrolls rather than navigates: the section is on this very
-     page. The hash goes in too, so the address bar can be copied and the entry
-     keeps working as a real link for ⌘-click. */
-  const jump = (e: React.MouseEvent, id: string) => {
-    if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || e.button !== 0) return
-    e.preventDefault()
-    window.history.replaceState(null, '', `#${id}`)
-    /* Not smooth: the page is long enough that the last entries are tens of
-       thousands of pixels down, and an animated scroll over that distance reads
-       as the page having hung. The rest of the site jumps too. */
-    document.getElementById(id)?.scrollIntoView({ block: 'start' })
-  }
+  const active = useActiveSection(groups.map((g) => groupAnchor(g.group)))
 
   return (
-    <div className="space-y-8">
-      <header>
-        <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-brand">Rule đang chạy · nghiệp vụ và as-built</p>
-        <h1 className="mt-1 text-[26px] font-bold leading-tight tracking-tight">Danh sách rules</h1>
-      </header>
+    <div className="flex gap-10">
+      <div className="min-w-0 flex-1 space-y-8">
+        <header>
+          <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-brand">Rule đang chạy · nghiệp vụ và as-built</p>
+          <h1 className="mt-1 text-[26px] font-bold leading-tight tracking-tight">Danh sách rules</h1>
+        </header>
 
-      <nav aria-label="Mục lục" className="border-y border-line py-4">
-        <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-faint">Mục lục · {RULE_COUNT} rule</p>
-        <ol className="mt-2.5 grid grid-cols-1 gap-x-7 gap-y-1 sm:grid-cols-2 lg:grid-cols-3">
-          {full.map((g, i) => (
-            <li key={g.group}>
-              <a
-                href={`#${groupAnchor(g.group)}`}
-                onClick={(e) => jump(e, groupAnchor(g.group))}
-                className="flex items-baseline gap-2 py-0.5 text-[12.5px] text-ink/85 no-underline hover:text-brand"
-              >
-                <span className="font-mono text-[10.5px] text-faint">{String(i + 1).padStart(2, '0')}</span>
-                <span className="min-w-0 flex-1 truncate">{g.group}</span>
-                <span className="font-mono text-[10.5px] text-faint">{g.rules.length}</span>
-              </a>
-            </li>
-          ))}
-        </ol>
-      </nav>
+        {/* Narrow screens have no room for the sidebar, so the contents list rides along here. */}
+        <nav aria-label="Mục lục" className="border-y border-line py-4 xl:hidden">
+          <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-faint">Mục lục · {RULE_COUNT} rule</p>
+          <Contents groups={groups} index={index} active={active} />
+        </nav>
 
-      <div className="flex flex-wrap items-center gap-2">
-        <input
-          value={q}
-          onChange={(e) => setQ(e.target.value)}
-          placeholder="Tìm rule…"
-          className="min-w-0 flex-1 rounded-md border border-line bg-surface px-2.5 py-1.5 text-[12.5px] placeholder:text-faint focus:border-brand focus:outline-none"
-        />
-        {q && <span className="font-mono text-[11px] text-faint">{shown}/{RULE_COUNT}</span>}
+        <div className="flex flex-wrap items-center gap-2">
+          <input
+            value={q}
+            onChange={(e) => setQ(e.target.value)}
+            placeholder="Tìm rule…"
+            className="min-w-0 flex-1 rounded-md border border-line bg-surface px-2.5 py-1.5 text-[12.5px] placeholder:text-faint focus:border-brand focus:outline-none"
+          />
+          {q && <span className="font-mono text-[11px] text-faint">{shown}/{RULE_COUNT}</span>}
+        </div>
+
+        {!groups.length && <p className="py-10 text-[13px] text-faint">Không có rule nào khớp.</p>}
+
+        {groups.map((g) => (
+          <section key={g.group} id={groupAnchor(g.group)} className="scroll-mt-6">
+            <div className="flex items-baseline gap-2.5 border-b-2 border-ink pb-1.5">
+              <span className="font-mono text-[11px] font-bold text-brand">
+                {String(index.get(g.group) ?? 0).padStart(2, '0')}
+              </span>
+              <h2 className="text-[17px] font-bold tracking-tight">{g.group}</h2>
+              <span className="ml-auto font-mono text-[10.5px] text-faint">{g.rules.length} rule</span>
+            </div>
+            <ul className="mt-1">
+              {g.rules.map((r) => <RuleRow key={r.title} r={r} onOpen={onOpen} />)}
+            </ul>
+          </section>
+        ))}
+
+        <footer className="border-t border-line pt-4 text-[11.5px] leading-[1.7] text-faint">
+          Rule nghiệp vụ lấy từ spec site và kênh Slack #saramin_testing (07/09–10/11/2026); rule as-built đối chiếu
+          trực tiếp với mã nguồn <span className="font-mono">svn-be</span>, <span className="font-mono">svn-web</span>,{' '}
+          <span className="font-mono">saramin-vn-admin</span> nhánh <span className="font-mono">dev</span>. Mỗi rule
+          đánh dấu <strong>Lệch</strong> cần một câu trả lời bằng văn bản trước khi dev đi tiếp.
+          <br />
+          <br />
+          Rule <strong>hiển thị CV phía NTD theo từng trường hợp</strong> — rút đơn, thu hồi, xoá tài khoản, chặn công ty,
+          Talent Pool — cố tình không có ở đây: BA đang chốt riêng theo hướng mới ngày 10/11 (vẫn cho NTD mở CV, che
+          thông tin định danh). Phần đã chốt nằm ở trang <strong>Delete account &amp; Delete CV</strong>; chốt xong sẽ gom
+          về danh sách này.
+        </footer>
       </div>
 
-      {!groups.length && <p className="py-10 text-[13px] text-faint">Không có rule nào khớp.</p>}
-
-      {groups.map((g) => (
-        <section key={g.group} id={groupAnchor(g.group)} className="scroll-mt-6">
-          <div className="flex items-baseline gap-2.5 border-b-2 border-ink pb-1.5">
-            <span className="font-mono text-[11px] font-bold text-brand">
-              {String(full.findIndex((x) => x.group === g.group) + 1).padStart(2, '0')}
-            </span>
-            <h2 className="text-[17px] font-bold tracking-tight">{g.group}</h2>
-            <span className="ml-auto font-mono text-[10.5px] text-faint">{g.rules.length} rule</span>
-          </div>
-          <ul className="mt-1">
-            {g.rules.map((r) => <RuleRow key={r.title} r={r} onOpen={onOpen} />)}
-          </ul>
-        </section>
-      ))}
-
-      <footer className="border-t border-line pt-4 text-[11.5px] leading-[1.7] text-faint">
-        Rule nghiệp vụ lấy từ spec site và kênh Slack #saramin_testing (07/09–10/11/2026); rule as-built đối chiếu
-        trực tiếp với mã nguồn <span className="font-mono">svn-be</span>, <span className="font-mono">svn-web</span>,{' '}
-        <span className="font-mono">saramin-vn-admin</span> nhánh <span className="font-mono">dev</span>. Mỗi rule
-        đánh dấu <strong>Lệch</strong> cần một câu trả lời bằng văn bản trước khi dev đi tiếp.
-        <br />
-        <br />
-        Rule <strong>hiển thị CV phía NTD theo từng trường hợp</strong> — rút đơn, thu hồi, xoá tài khoản, chặn công ty,
-        Talent Pool — cố tình không có ở đây: BA đang chốt riêng theo hướng mới ngày 10/11 (vẫn cho NTD mở CV, che
-        thông tin định danh). Phần đã chốt nằm ở trang <strong>Delete account &amp; Delete CV</strong>; chốt xong sẽ gom
-        về danh sách này.
-      </footer>
+      <aside className="hidden w-[196px] shrink-0 xl:block print:hidden">
+        <nav aria-label="Mục lục" className="sticky top-6 max-h-[calc(100vh-3rem)] overflow-y-auto">
+          <p className="font-mono text-[10px] uppercase tracking-[0.16em] text-faint">Mục lục · {RULE_COUNT} rule</p>
+          <Contents groups={groups} index={index} active={active} side />
+        </nav>
+      </aside>
     </div>
   )
 }
