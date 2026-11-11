@@ -204,7 +204,7 @@ export const RULE_DETAIL: Record<string, DocBlock[]> = {
     ]),
 
     rule('Rule — Xoá tài khoản, cửa sổ khôi phục và lần quét xoá', [
-      'Xác thực để xoá: **nhập mật khẩu**. Quên mật khẩu thì đặt lại qua link gửi về email rồi quay lại; tài khoản chỉ có social thì re-auth với nhà cung cấp. Mã Zalo **không còn dùng** cho việc này (chốt 11/11).',
+      'Xác thực để xoá: **nhập lại mật khẩu**, hoặc **re-auth với nhà cung cấp** nếu tài khoản chỉ đăng nhập bằng social. Tài khoản quyết định dùng yếu tố nào, không phải người dùng chọn. Quên mật khẩu thì đặt lại qua link gửi về email rồi quay lại. Mã Zalo **không còn dùng** cho việc này (chốt 11/11).',
       'Ứng viên chọn **lý do xoá** từ danh sách mã có sẵn, kèm ghi chú tự do không bắt buộc. Lý do được **giữ lại sau lần quét xoá** để làm thống kê; ghi chú tự do thì bị xoá.',
       'Sau khi xoá thành công: mọi refresh token bị thu hồi, phiên chết ngay lập tức, và trình duyệt được chuyển sang trang “tài khoản đã xoá”.',
       '**Lần quét xoá huỷ**: hồ sơ (số điện thoại, ngày sinh, giới tính, headline, ảnh đại diện), mọi CV đã parse, thư viện CV và file — kể cả bản đóng băng đã gửi cho công ty — câu trả lời onboarding, token đăng nhập và đặt lại mật khẩu, lịch sử duyệt và gợi ý, tuỳ chọn email, thành viên talent pool, và **ghi chú cùng sao đánh dấu mà công ty viết về người đó**.',
@@ -222,11 +222,14 @@ export const RULE_DETAIL: Record<string, DocBlock[]> = {
     ]),
 
     rule('Rule — Xác thực khi đổi mật khẩu và xoá tài khoản', [
-      '**Xoá tài khoản: xác nhận bằng MẬT KHẨU.** Không dùng mã Zalo nữa.',
-      '**Quên mật khẩu thì đi đường email:** luồng quên-mật-khẩu gửi một **link đặt lại về email**, link sống **1 giờ** và **dùng một lần**; đặt lại xong thì quay lại thao tác xoá. Chính việc mở được link là bằng chứng kiểm soát hòm thư.',
-      '**Tài khoản chỉ đăng nhập bằng social** (Google / Facebook / LinkedIn / GitHub, chưa từng đặt mật khẩu) thì **re-auth với nhà cung cấp** — đó là yếu tố duy nhất họ có.',
-      'Nhập sai mật khẩu **5 lần trong 24 giờ** thì khoá, dùng chung bộ đếm với đường mã cũ; nhập đúng một lần là xoá bộ đếm. Trước SRM-1254 mật khẩu sai không hề bị giới hạn.',
-      '⚠️ **Build chưa gỡ đường Zalo.** `/auth/delete/password/verify` đã có từ 29/10 (SRM-1254) và luồng quên-mật-khẩu bằng link email cũng đã về cùng ngày — hai phần đó khớp. Nhưng `/auth/delete/otp` và `/auth/delete/otp/verify` **vẫn đang phục vụ**, và tài liệu FE của backend vẫn mô tả mã Zalo là đường chính. Cần gỡ endpoint và sửa tài liệu trước go-live 21/11, nếu không vẫn còn một đường xoá tài khoản mà rule đã bỏ.',
+      '**Xoá tài khoản luôn đòi chứng minh lại danh tính** — phiên đang đăng nhập không đủ. Đây là điểm khác căn bản so với *Deactivate*, vốn chỉ cần đang đăng nhập.',
+      '**Tài khoản CÓ mật khẩu → phải nhập lại mật khẩu đó.** **Tài khoản chỉ đăng nhập bằng social** (Google / Facebook / LinkedIn / GitHub, chưa từng đặt mật khẩu) **→ re-auth với nhà cung cấp**, bằng một lần đăng nhập mới.',
+      '⚠️ **Chính tài khoản quyết định dùng yếu tố nào, không phải client chọn.** Tài khoản đã có mật khẩu thì **không** được thay bằng social login. Lý do ghi thẳng trong code: nếu cho chọn, một phiên bị chiếm quyền có thể đi vòng qua đúng cái yếu tố mà chủ tài khoản đang nắm.',
+      'Không đưa yếu tố nào thì **403** và **tài khoản không bị đụng tới**. Mật khẩu sai trả lỗi riêng; sai **5 lần trong 24 giờ** thì khoá, dùng chung bộ đếm với đường mã cũ, và nhập đúng một lần là xoá bộ đếm. Trước SRM-1254 mật khẩu sai không bị giới hạn lần nào.',
+      '**Một bằng chứng là đủ, đó là toàn bộ cánh cổng** (chốt 28/09). Trước đó mỗi nhánh còn đòi thêm một hòm thư đã xác thực, nhưng yêu cầu đó không bảo vệ điều gì — địa chỉ chưa xác thực được giải phóng khi quét xoá, chỉ địa chỉ đã xác thực mới giữ chỗ — trong khi một tài khoản đăng ký nhầm địa chỉ thì không còn đường tự xoá.',
+      '**Quên mật khẩu là luồng riêng, đi bằng email:** gửi một **link đặt lại về hòm thư**, link sống **1 giờ** và **dùng một lần**; đặt lại xong thì quay lại thao tác xoá. Chính việc mở được link là bằng chứng kiểm soát hòm thư. Từ 29/10 một tài khoản đã xác thực điện thoại cũng được gửi mail — trước đó thì không.',
+      '⚠️ **Build chưa gỡ đường Zalo.** `/auth/delete/otp` và `/auth/delete/otp/verify` vẫn đang phục vụ, và `requireFreshProof` còn thử `otpTicket` **trước** cả hai yếu tố trên. Tài liệu FE của backend vẫn mô tả mã Zalo là đường chính. Cần gỡ endpoint và sửa tài liệu trước go-live 21/11, nếu không vẫn còn một đường xoá tài khoản mà rule đã bỏ.',
+      'Zalo **vẫn giữ ở bước đăng ký** — mọi ứng viên vẫn phải xác thực số điện thoại khi tạo tài khoản.',
     ]),
 
     rule('Rule — Migrate mật khẩu từ hệ thống cũ', [

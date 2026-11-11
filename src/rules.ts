@@ -412,12 +412,12 @@ export const RULE_CATS: RuleCat[] = [
         src: 'policy KH · BB rà soát 05/11',
       },
       {
-        title: 'Đổi mật khẩu và xoá tài khoản xác thực bằng mật khẩu, không dùng Zalo',
+        title: 'Xoá tài khoản xác thực bằng mật khẩu hoặc social login; quên mật khẩu thì qua email',
         summary:
-          '**Xoá tài khoản: xác nhận bằng mật khẩu.** Ai quên mật khẩu thì đi qua luồng **quên mật khẩu — link gửi về email**, đặt lại rồi quay lại xoá. Tài khoản chỉ đăng nhập bằng social (chưa từng đặt mật khẩu) thì **re-auth với nhà cung cấp**. **Luồng mã Zalo bị bỏ khỏi cả hai việc này.** Link đặt lại mật khẩu sống **1 giờ** và dùng một lần.',
+          '**Xoá tài khoản phải chứng minh lại danh tính — phiên đang đăng nhập không đủ.** Tài khoản **có mật khẩu** thì nhập lại mật khẩu; tài khoản **chỉ đăng nhập bằng social** thì **re-auth với nhà cung cấp**. **Chính tài khoản quyết định dùng yếu tố nào, không phải người dùng chọn** — đã có mật khẩu thì không được thay bằng social login. Không đưa yếu tố nào thì **403** và tài khoản không bị đụng tới. **Quên mật khẩu** là luồng riêng: **link đặt lại gửi về email**, sống **1 giờ**, dùng một lần. **Mã Zalo bỏ khỏi cả hai việc.**',
         kind: 'lech',
         conflict:
-          'Build đã có đường xác nhận bằng mật khẩu (`/auth/delete/password/verify`, SRM-1254 ngày 29/10) và đã đưa quên-mật-khẩu về link email cùng ngày — hai phần này khớp. Nhưng **đường mã Zalo vẫn còn nguyên trong build**: `/auth/delete/otp` và `/auth/delete/otp/verify` vẫn phục vụ, và tài liệu FE của backend vẫn ghi mã Zalo là “the normal path”. Cần gỡ hai endpoint đó và cập nhật tài liệu FE trước go-live 21/11.',
+          'Hai phần đã khớp build: đường xác nhận bằng mật khẩu (`/auth/delete/password/verify`, SRM-1254 ngày 29/10) và quên-mật-khẩu bằng link email (cùng ngày). Nhưng **đường mã Zalo vẫn còn nguyên**: `/auth/delete/otp` và `/auth/delete/otp/verify` vẫn phục vụ, và `requireFreshProof` vẫn thử `otpTicket` **trước tiên**, nên còn một đường xoá tài khoản mà rule đã bỏ. Tài liệu FE của backend cũng vẫn ghi mã Zalo là “the normal path”. Cần gỡ hai endpoint và sửa tài liệu trước go-live 21/11.',
         group: 'Users', heading: 'Rule — Xác thực khi đổi mật khẩu và xoá tài khoản',
         src: 'Chốt 11/11 · SRM-1254 29/10 · svn-be WebAuthController',
       },
