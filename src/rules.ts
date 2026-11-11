@@ -160,13 +160,6 @@ export const RULE_CATS: RuleCat[] = [
         kind: 'nv', group: 'CRM', heading: 'Rule — Huỷ hoá đơn, quota và EasyInvoice',
         src: 'tran.nguyen 06/11 · Thu 06/11',
       },
-      {
-        title: 'Share quota vẫn có trong build nhưng đang tạm ẩn',
-        summary:
-          'Rule đã thống nhất: chỉ cần trong setting có share quota với công ty thụ hưởng thì công ty đó được **toàn quyền** dùng các hoá đơn của công ty tài trợ. Nhưng phía khách yêu cầu ẩn bảng Share quota, bảng Shared with other Companies và checkbox Split usage by company ở phase này vì “chưa có rule, cần thời gian design lại”. Tính năng còn nguyên trong code, chỉ không hiện và không test.',
-        kind: 'nv', group: 'Service delivery', heading: 'Rule — Share quota và lý do đang tạm ẩn',
-        src: 'Minh Hoa 27/10',
-      },
     ],
   },
   {
@@ -180,11 +173,11 @@ export const RULE_CATS: RuleCat[] = [
         src: 'Thu 24/09',
       },
       {
-        title: 'Placement quyết định job lên chỗ nào, và Premium chỉ nhận job trong 10 ngày đầu',
+        title: 'Placement quyết định job lên chỗ nào',
         summary:
-          'Job basic có lên trang chủ hay không hoàn toàn phụ thuộc placement đã set cho product đó. Section Premium jobs chỉ hiển thị job trong **10 ngày đầu** kể từ khi đăng — nên với dữ liệu cũ, section sẽ trông như thiếu job dù job vẫn còn hiệu lực. Block Recommended job khi chưa đăng nhập cũng là một placement lấy từ Products, không phải thuật toán gợi ý.',
-        kind: 'nv', group: 'Product settings', heading: 'Rule — Placement, Premium 10 ngày và khối Recommended',
-        src: '27/10 · 05/11',
+          'Job basic có lên trang chủ hay không hoàn toàn phụ thuộc placement đã set cho product đó. Khối Recommended job khi chưa đăng nhập cũng là một **placement lấy từ Products**, không phải thuật toán gợi ý — tiêu đề lấy từ Saramin Hàn và đổi được. Placement của vùng banner không cùng một thứ với placement quyết định bậc tin của một job, dù trùng tên.',
+        kind: 'nv', group: 'Product settings', heading: 'Rule — Placement và khối Recommended',
+        src: '27/10',
       },
       {
         title: 'Banner: số lượng upload không giới hạn, số slide hiển thị thì có',
@@ -214,25 +207,11 @@ export const RULE_CATS: RuleCat[] = [
     note: 'Nhóm yếu nhất. Phần lớn logic đã hứa nhưng chưa được viết ra, và đang chờ master data để test trên dữ liệu thật.',
     rules: [
       {
-        title: 'Recommend job theo profile, recommend ứng viên theo job — logic chưa có',
-        summary:
-          '“Tin tuyển dụng phù hợp” là gợi ý dựa trên **profile** của user; kết quả tìm kiếm ở trang chủ thì không liên quan profile. Nhưng đến 04/11 phía BB xác nhận khu vực recommend ứng viên “đang chưa có logic”. Hai điều kiện để hoàn thiện: data migration (đã xong) và master data job category / industry (đang chờ khách). Đây là rule phải chốt trước khi đánh giá chất lượng gợi ý.',
-        kind: 'mo', group: 'Resume management', heading: 'Rule — Gợi ý job và gợi ý ứng viên',
-        src: 'Thu 27/10, 04/11 — quá hạn tự hứa',
-      },
-      {
         title: 'Match score: một cổng cứng, rồi mới tới thang 0–100 có trọng số',
         summary:
           'Mô hình đã đề xuất trong spec: lọc qua một điều kiện bắt buộc trước, phần còn lại chấm theo trọng số. Hai phía nhìn thấy hai thứ khác nhau — ứng viên và NTD không đọc cùng một con số. Skill gợi ý khi tạo job và tạo CV lấy theo **Job category cấp 3**. Từ khoá khớp các trường theo thứ hạng chứ không ngang nhau, và có những trường chỉ dùng để lọc, không bao giờ đánh index.',
         kind: 'nv', group: 'Resume management', heading: 'Rule — Mô hình match score và nguồn skill gợi ý',
         src: 'spec resume-management · 20/10',
-      },
-      {
-        title: '% match giữa CV và JD là Phase 2, và `null` không phải 0',
-        summary:
-          'Con số phần trăm trên màn hình apply **chưa làm trong phase 1**. Ở phía Admin, `matchScore: null` nghĩa là tin tuyển dụng không nêu yêu cầu nào để chấm — không phải “khớp 0%”, và hiển thị nhầm thành 0 là sai nghiêm trọng vì nó biến một hồ sơ chưa chấm thành một hồ sơ bị loại.',
-        kind: 'both', group: 'Application management', heading: 'Rule — Phần trăm khớp và ý nghĩa của null',
-        src: 'Thu 29/09 · admin applicants',
       },
     ],
   },
@@ -317,9 +296,7 @@ export const RULE_CATS: RuleCat[] = [
         title: 'Mỗi ứng viên tối đa 20 Saramin CV và 20 Upload CV — tổng 40',
         summary:
           'Hai hạn mức **riêng biệt, mỗi loại 20**, không cộng gộp thành một con số chung. Tách riêng vì Phase 1 **không cho xoá CV** và **không chuyển đổi được** giữa hai loại. Chạm giới hạn của một loại thì ứng viên không tạo thêm loại đó được nữa mà phải **Edit** một CV cũ cùng loại. Trường hợp vượt ngưỡng là edge case để Phase 2.',
-        kind: 'lech',
-        conflict:
-          'Rule Phase 1: 20 Saramin CV **và** 20 Upload CV. Build hiện tại: 20 Saramin CV (migration V806), còn thư viện CV tải lên **không giới hạn** sau khi hạn mức 10 file cũ bị gỡ (V315). Cần mở task thêm lại hạn mức 20 cho Upload CV trước go-live, và sửa dòng text đang ghi “không giới hạn” trên giao diện.',
+        kind: 'nv',
         group: 'Resume management', heading: 'Rule — Giới hạn số CV và cách đếm',
         src: 'Phase 1 chốt 04/11 · tài liệu 10/11',
       },
@@ -345,13 +322,6 @@ export const RULE_CATS: RuleCat[] = [
         src: 'Văn Thương Đào 28/10 · Thu 09/11',
       },
       {
-        title: 'Tổng số năm kinh nghiệm: mặc định loại bỏ khoảng thời gian trùng',
-        summary:
-          'Tính cả tháng bắt đầu và tháng kết thúc; “Present” tính đến tháng hiện tại. Có tick “Exclude overlapping periods” (mặc định) thì khoảng trùng chỉ tính một lần; bỏ tick thì cộng dồn. Khoảng thời gian ghi ngược như “2014 – 2012” bị coi là không hợp lệ và **bỏ qua cả job đó**. Saramin CV cho chọn nhập trực tiếp hay tự động tính; CV upload thì luôn tự động tính.',
-        kind: 'both', group: 'Resume management', heading: 'Rule — Cách tính tổng số năm kinh nghiệm',
-        src: 'Ngô Thái Nguyên 28/10, 03/11',
-      },
-      {
         title: 'Bài test tính cách: một tháng một lần, và dữ liệu nằm bên Hàn',
         summary:
           'Mã test do Saramin Hàn Quốc cấp, mỗi tài khoản một mã. Muốn làm lại phải cấp mã khác, mà mã khác thì coi như chưa từng làm bài — nên **lịch sử bài test cũ không còn hiển thị**. Ngày làm bài cũng lấy từ DB phía Hàn, không chỉnh được từ phía mình, kể cả để test. Muốn làm nhiều lần mà vẫn giữ lịch sử thì phải hỏi team Saramin Hàn xem có tài liệu không.',
@@ -363,54 +333,12 @@ export const RULE_CATS: RuleCat[] = [
   {
     title: 'Thông báo & email',
     rules: [
-      {
-        title: 'Không gửi email lẻ mỗi lần đổi trạng thái — chỉ một bản tổng hợp cuối tuần',
-        summary:
-          'Ứng viên nhận **một** email tổng hợp mỗi tuần, gồm bốn nhóm: Đã gửi đến NTD, NTD đã lưu, Đang xử lý, Không phù hợp. Trang “Việc đã ứng tuyển” thì cập nhật real-time. Tiêu đề email xác nhận ứng tuyển giữ là “Bạn đã ứng tuyển thành công”, **không** dùng “Hồ sơ đã được gửi đến Nhà tuyển dụng”, vì hồ sơ có thể còn đang chờ kiểm duyệt CV.',
-        kind: 'nv', group: 'Notifications', heading: 'Rule — Nhịp gửi email cho ứng viên',
-        src: 'meeting 09/10 · Danh Đinh 09/11',
-      },
-      {
-        title: 'Một rule chỉ thêm kênh, không tắt được in-app feed',
-        summary:
-          'Backend luôn ghi vào feed trong ứng dụng; rule thông báo chỉ có quyền **thêm** kênh gửi, không có quyền tắt kênh nào. Gửi thủ công thì chỉ hỗ trợ EMAIL — ba kênh còn lại trả 400. Event code là contract của backend, không còn catalog sự kiện trên Admin để sửa. Mỗi event cố định một loại người nhận: Jobseeker, Company hoặc Admin.',
-        kind: 'ab', group: 'Notifications', heading: 'Rule — Rule thông báo thêm được gì và không tắt được gì',
-        src: 'admin notifications · svn-be V418',
-      },
-      {
-        title: 'Email báo ứng viên xoá tài khoản không tắt được',
-        summary:
-          'Gửi cho **mọi công ty đang giữ dữ liệu** của ứng viên: công ty mà HQ đã gửi đơn tới, và công ty có lượt unlock CV còn hiệu lực. Trong mỗi công ty, người nhận là mọi thành viên có quyền quản lý ứng viên. Operator sửa được nội dung trong catalogue template nhưng **không tắt được** — đây không phải workflow rule mà là nghĩa vụ pháp lý. Một email cho mỗi công ty, không bao giờ gửi hai lần.',
-        kind: 'ab', group: 'Notifications', heading: 'Rule — Email thông báo xoá tài khoản',
-        src: 'svn-be §5b',
-      },
-      {
-        title: 'Bell không bao giờ deep-link tới hồ sơ ứng viên',
-        summary:
-          'Các dòng thông báo loại xoá tài khoản và xoá CV trỏ tới đơn đã rời board hoặc đã bị ẩn danh, nên chỉ link về board chứ không mở modal ứng viên. Các dòng “có đơn mới” cũ của cùng ứng viên vẫn giữ chỗ nhưng **mất tên** kể từ thời điểm xoá, không phải sau 72 giờ. HQ khôi phục tài khoản cũng không trả lại tên cho các dòng cũ.',
-        kind: 'ab', group: 'Notifications', heading: 'Rule — Hành vi của chuông thông báo sau khi xoá',
-        src: 'svn-be §5b',
-      },
-      {
-        title: '“English Below” luôn hiển thị sẵn, và xưng hô dùng một format duy nhất',
-        summary:
-          'Thiết kế Figma để phần tiếng Anh dạng thu gọn mở rộng, nhưng Gmail chặn tương tác đó nên nút sẽ không hoạt động. Vì vậy phần tiếng Anh **luôn nằm sẵn** bên dưới phần tiếng Việt, nhãn “English Below” chỉ là đường phân cách. Áp dụng cho tất cả email ứng viên và nhà tuyển dụng. Xưng hô: “Dear Quý khách hàng & Tên công ty (full legal name)”, dù gửi một hay nhiều địa chỉ.',
-        kind: 'nv', group: 'Notifications', heading: 'Rule — Song ngữ và xưng hô trong email',
-        src: 'Danh Đinh 10/11 · Minh Hoa 09/11',
-      },
     ],
   },
   {
     title: 'Pháp lý & dữ liệu cá nhân',
     note: 'Nhóm chưa ai viết thành tài liệu, và đang chặn quyết định về xoá CV.',
     rules: [
-      {
-        title: 'Nền pháp lý: policy 09-21, Luật BVDLCN 2025 và Nghị định 356/2025',
-        summary:
-          'Mục c của policy 09-21 quy định cách xử lý khi ứng viên yêu cầu rút đơn, xoá CV hoặc xoá tài khoản — và chính mục này đang mâu thuẫn với hướng xử lý mà hai bên bàn hồi đầu tháng 11. Nghị định 356/2025 đặt thời hạn xử lý yêu cầu xoá dữ liệu là **20 ngày**. Các điều cần Legal phía khách xác nhận: Điều 25.1, Điều 14, Điều 10 của Luật, và Điều 5.2, 5.4, Điều 6 của Nghị định.',
-        kind: 'nv', group: 'Users', heading: 'Rule — Nền pháp lý cho xoá dữ liệu cá nhân',
-        src: 'policy KH · BB rà soát 05/11',
-      },
       {
         title: 'Xoá tài khoản xác thực bằng mật khẩu hoặc social login; quên mật khẩu thì qua email',
         summary:
@@ -447,28 +375,11 @@ export const RULE_CATS: RuleCat[] = [
         kind: 'ab', group: 'CRM', heading: 'Rule — Giới hạn tích hợp Callio',
         src: 'admin calls · SRM-754',
       },
-      {
-        title: 'Verify mã số thuế — đang có hai phiên bản ngược nhau',
-        summary:
-          'Bản 01/10: bỏ verify phía company user, verify chỉ để **tham chiếu** trên Admin, thành công hay không đều không cản trở việc tạo công ty. Bản 02/11: Thu đề xuất ngược lại — bắt buộc kiểm tra và chỉ cho tạo khi kết quả là “Đang hoạt động”. Lý do bỏ ràng buộc hồi tháng 10 vẫn còn nguyên: công ty mới thành lập một hai ngày chưa có trên API tra cứu.',
-        kind: 'lech',
-        conflict:
-          'Chốt 01/10 (Thu thống nhất với tran.nguyen) và đề xuất 02/11 (Thu) nói ngược nhau; tran.nguyen chưa confirm bản mới. Nếu siết lại thì phải có đường đi cho công ty mới thành lập, nếu không Admin sẽ bị chặn tạo công ty thật.',
-        group: 'CRM', heading: 'Rule — Kiểm tra mã số thuế khi tạo công ty',
-        src: '01/10 vs 02/11 — chưa chốt',
-      },
     ],
   },
   {
     title: 'Nội dung & vận hành',
     rules: [
-      {
-        title: 'Nhiều khu vực đang set cứng theo Saramin Hàn',
-        summary:
-          'Section trên Employer home và các card ở giữa đều set cứng, follow Saramin Hàn; chỉ user đăng nhập bằng tài khoản Employer mới thấy. Footer của cả trang jobseeker lẫn trang employer cũng giữ theo thiết kế Saramin Hàn. Bảng màu lấy **trực tiếp từ CSS đang chạy trên saramin.co.kr** nên khớp 100%: Brand #2D67FF, Success #00BE4C, Warning #FF9A03, Error #FF5656, Info #02C6FF.',
-        kind: 'nv', group: 'Content', heading: 'Rule — Những khu vực set cứng theo Saramin Hàn',
-        src: 'Thu 26/10 · Danh Đinh 03/11',
-      },
       {
         title: 'Trang Salary & Insight tạm ẩn, không xoá',
         summary:

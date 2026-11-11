@@ -44,12 +44,6 @@ export const RULE_DETAIL: Record<string, DocBlock[]> = {
       'Đã mở khoá rồi thì dòng đó giữ `unlocked: true` kể cả khi ứng viên sau đó xoá tài khoản: credit đã tiêu, và nói ngược lại sẽ khiến giao diện mời mua lại lần nữa.',
     ]),
 
-    rule('Rule — Gợi ý job và gợi ý ứng viên', [
-      '“Tin tuyển dụng phù hợp” là gợi ý dựa trên **profile** của user. Kết quả tìm kiếm ở trang chủ thì hoàn toàn không liên quan profile — hai khối này hay bị so sánh với nhau và kết luận sai.',
-      'Ngày 04/11 phía BB xác nhận khối gợi ý ứng viên **đang chưa có logic** và sẽ phải sửa lại. Trước đó đã hứa chia sẻ rule vào 03/11 nhưng chưa gửi.',
-      'Hai điều kiện để hoàn thiện và test được: **data migration** (đã xong) và **master data** job category / industry (đang chờ phía khách). Sẽ test tổng thể trên Production.',
-      'Các case đã ghi nhận để kiểm lại: chọn UI/UX Designer nhưng gợi ý chuyên viên thủ tục hải quan; profile QA/QC nhưng màn Onboarding không hiện job QA/QC dù production có.',
-    ]),
 
     rule('Rule — Mô hình match score và nguồn skill gợi ý', [
       'Mô hình đã đề xuất: **một cổng cứng** lọc trước, phần còn lại chấm theo **thang 0–100 có trọng số**. Hai phía nhìn thấy hai thứ khác nhau — ứng viên và NTD không đọc cùng một con số.',
@@ -73,14 +67,6 @@ export const RULE_DETAIL: Record<string, DocBlock[]> = {
       'Dòng text trên giao diện Quản lý CV hiện còn ghi *“There is no limit on how many CVs you keep”* và *“preview, download or delete”* — cả hai đều sai với Phase 1, cần sửa.',
     ]),
 
-    rule('Rule — Cách tính tổng số năm kinh nghiệm', [
-      '**Saramin CV**: theo lựa chọn của ứng viên ở popup “Sửa tổng số kinh nghiệm” — *Nhập trực tiếp* thì lấy đúng số đã nhập, *Tự động tính* thì cộng từ lịch sử làm việc.',
-      '**CV tải lên**: **luôn** tự động tính từ lịch sử làm việc, không sửa tay được.',
-      'Cách cộng: tính cả tháng bắt đầu và tháng kết thúc, “Present” tính đến tháng hiện tại. Có tick **“Exclude overlapping periods”** (mặc định) thì khoảng trùng chỉ tính một lần; bỏ tick thì cộng dồn.',
-      'Khoảng thời gian ghi ngược — ví dụ “2014 – 2012” — bị coi là **không hợp lệ và bỏ qua cả job đó**, nên tổng sẽ thiếu đi đúng khoảng ấy. Đây là nguyên nhân của một bug đã báo: CV ra 12 năm 11 tháng thay vì 14 năm 11 tháng.',
-      'Số năm nhập ở **Onboarding** auto-fill vào tổng khi tạo CV đầu tiên; sau đó ứng viên sửa được. CV tiếp theo auto-fill từ CV được cập nhật gần nhất.',
-      'Thời gian hiển thị cạnh **từng công việc** chỉ là thời gian của công việc đó, không phải tổng — hay bị đọc nhầm.',
-    ]),
 
     rule('Rule — Bài test tính cách và giới hạn một tháng', [
       'Mỗi tài khoản được cấp **một mã** từ Saramin Hàn Quốc. Muốn làm lại thì phải cấp mã khác — và mã khác thì hệ thống coi như **chưa từng làm bài**, nên lịch sử bài test cũ không còn hiển thị.',
@@ -120,12 +106,6 @@ export const RULE_DETAIL: Record<string, DocBlock[]> = {
       'Màn Applications trên Admin gác bằng quyền **job**, không phải `application` — nên không có resource `application` trong cấu hình quyền và không nên thêm.',
     ]),
 
-    rule('Rule — Phần trăm khớp và ý nghĩa của null', [
-      'Con số phần trăm khớp giữa profile ứng viên và JD trên màn hình apply **chưa làm trong phase 1** — đã chốt là Phase 2.',
-      'Ở phía Admin, `matchScore: null` nghĩa là **tin tuyển dụng không nêu yêu cầu nào để chấm**, không phải “khớp 0%”. Hiển thị nhầm `null` thành `0` biến một hồ sơ chưa chấm thành một hồ sơ bị loại.',
-      '`coreSections` là mẫu số và nó do backend gửi xuống — không bao giờ hardcode ở phía giao diện.',
-      'Với dòng của ứng viên đã xoá tài khoản thì không gọi API chấm điểm: nó đọc từ CV, và CV đã bị khoá, nên sẽ trả về lỗi.',
-    ]),
 
     rule('Rule — Giới hạn ứng tuyển hàng loạt', [
       'Một lần **batch apply tối đa 5 job**, theo Saramin Hàn — không phải tất cả job có trong popup.',
@@ -195,13 +175,6 @@ export const RULE_DETAIL: Record<string, DocBlock[]> = {
       'Trạng thái độc lập với hiển thị CV: tắt hiển thị CV không làm tài khoản ngừng hoạt động, và ngược lại.',
     ]),
 
-    rule('Rule — Nền pháp lý cho xoá dữ liệu cá nhân', [
-      '**Policy 09-21**, mục c: “Xử lý khi có yêu cầu rút đơn ứng tuyển, xoá CV hoặc xoá tài khoản từ phía ứng viên”. Bản tiếng Anh có mục tương ứng là “CV Deletion”.',
-      '**Nghị định 356/2025** đặt thời hạn xử lý yêu cầu rút đồng ý và yêu cầu xoá dữ liệu là **20 ngày**.',
-      'Các điều cần Legal phía khách xác nhận: **Luật Bảo vệ dữ liệu cá nhân 2025** Điều 25 khoản 1 (dữ liệu trong tuyển dụng), Điều 14 (xoá, huỷ dữ liệu), Điều 10 (rút lại sự đồng ý); **Nghị định 356/2025** Điều 5 khoản 2 và 4, Điều 6 (cách thể hiện và lưu bằng chứng sự đồng ý).',
-      '❓ **Chưa chốt: thời hạn lưu CV đã nộp sau khi đơn kết thúc.** Luật yêu cầu xoá khi không còn tuyển dụng, trừ khi có thoả thuận khác. Saramin Hàn lưu **90 ngày kể từ ngày tin tuyển dụng hết hạn** — BB đề xuất lấy mốc này.',
-      'Điều kiện để giữ được bản CV đã nộp: cập nhật policy và pop-up để ứng viên được thông báo rõ, và ứng viên vẫn phải có đường yêu cầu xoá toàn bộ dữ liệu.',
-    ]),
 
     rule('Rule — Xoá tài khoản, cửa sổ khôi phục và lần quét xoá', [
       'Xác thực để xoá: **nhập lại mật khẩu**, hoặc **re-auth với nhà cung cấp** nếu tài khoản chỉ đăng nhập bằng social. Tài khoản quyết định dùng yếu tố nào, không phải người dùng chọn. Quên mật khẩu thì đặt lại qua link gửi về email rồi quay lại. Mã Zalo **không còn dùng** cho việc này (chốt 11/11).',
@@ -292,12 +265,6 @@ export const RULE_DETAIL: Record<string, DocBlock[]> = {
       'Số điện thoại trong cuộc gọi được **copy** để người dùng tự dán sang máy gọi; nếu một số khớp nhiều công ty thì nhân viên tự chọn.',
     ]),
 
-    rule('Rule — Kiểm tra mã số thuế khi tạo công ty', [
-      '**Bản 01/10 (đã thống nhất):** bỏ verify MST ở phía company user. Verify **chỉ để tham chiếu** trên Admin; thành công hay không **không cản trở** Admin tạo công ty hay company user tạo tài khoản. Nút Verify vẫn giữ trên Admin, verify không ra thì admin tự check lại trên trang tra cứu.',
-      'Lý do bỏ ràng buộc: **API tra MST cập nhật không kịp** — công ty thành lập hôm nay hoặc hôm qua sẽ verify không ra, nên ràng buộc theo kết quả sẽ chặn nhầm công ty thật.',
-      '**Bản 02/11 (đề xuất, chưa confirm):** bắt buộc kiểm tra MST trước khi tạo công ty, chỉ cho tạo khi kết quả là “Đang hoạt động”, và nếu API chưa cập nhật thì admin chờ thêm khoảng một ngày rồi kiểm lại.',
-      '⚠️ Hai bản nói **ngược nhau**, và lý do bỏ ràng buộc hồi tháng 10 vẫn còn nguyên. tran.nguyen chưa confirm bản mới. Nếu siết lại thì phải có đường đi cho công ty mới thành lập.',
-    ]),
 
     rule('Rule — Logo công ty và mục Quy định', [
       'Cách chỉnh logo sau khi upload đã đổi: phải **crop sát trên dưới trái phải** của logo, để khi hiển thị có thể canh giữa hay canh trái đều được.',
@@ -328,27 +295,14 @@ export const RULE_DETAIL: Record<string, DocBlock[]> = {
       '⚠️ Đang mở: hiện hệ thống **không có “Invoice expiration date”**, chỉ có “Activation expiration date” cho từng sản phẩm. Thu đã nêu cần rà lại điểm này, chưa có kết luận.',
     ]),
 
-    rule('Rule — Placement, Premium 10 ngày và khối Recommended', [
+    rule('Rule — Placement và khối Recommended', [
       'Job basic có lên trang chủ hay không **hoàn toàn phụ thuộc placement** đã set cho product đó.',
-      'Section **Premium jobs chỉ hiển thị job trong 10 ngày đầu** kể từ khi đăng. Với dữ liệu cũ, section sẽ trông như thiếu job dù job vẫn còn hiệu lực — đây là nguyên nhân chứ không phải thiếu job.',
       'Khối **Recommended job khi chưa đăng nhập** cũng là một **placement lấy từ Products**, không phải thuật toán gợi ý. Tiêu đề lấy từ Saramin Hàn và đổi được.',
       'Placement của vùng banner **không phải** cùng một thứ với placement quyết định bậc tin của một job cụ thể — hai khái niệm trùng tên.',
       '**Product đã lên một hoá đơn thì bị khoá** phần nó bán. Muốn bán khác đi thì tạo product mới và chuyển product cũ sang Inactive — nên các thay đổi placement thường đi kèm việc tạo lại sản phẩm và map lại.',
     ]),
   ],
 
-  'Service delivery': [
-    h('Rule chi tiết'),
-    { kind: 'p', text: INTRO },
-
-    rule('Rule — Share quota và lý do đang tạm ẩn', [
-      'Rule đã thống nhất: chỉ cần trong setting có **share quota với công ty thụ hưởng** thì công ty thụ hưởng được **toàn quyền** sử dụng các hoá đơn mà công ty tài trợ đang có.',
-      'Nếu công ty có **hoá đơn dùng riêng** thì ưu tiên hiển thị **trên** hoá đơn được chia sẻ. “Hoá đơn dùng riêng” nghĩa là hoá đơn được tạo tại thời điểm công ty có setting share với công ty khác.',
-      '**Đang tạm ẩn ở phase này** theo yêu cầu phía khách: ẩn bảng Share quota trên Products & Billing, ẩn bảng Shared with other Companies, và ẩn checkbox Split usage by company. Lý do khách đưa ra: “chưa có rule, cần thời gian design lại Rule”.',
-      '**Tính năng vẫn còn nguyên trong build** — chỉ không hiển thị và không test ở phase này. Phase tới nếu đổi requirement thì làm tiếp.',
-      '❓ Chưa chốt và sẽ cần khi mở lại: chi nhánh vừa có gói Search CV riêng vừa được công ty mẹ chia sẻ thì **trừ gói nào trước**. BB đề xuất trừ gói riêng trước, hết mới sang gói chia sẻ, và hiện rõ sẽ trừ gói nào trước khi mở CV. Hỏi 12/10, chưa có trả lời.',
-    ]),
-  ],
 
   Content: [
     h('Rule chi tiết'),
@@ -369,12 +323,6 @@ export const RULE_DETAIL: Record<string, DocBlock[]> = {
       '**Image gallery** là kho ảnh Admin upload sẵn theo Categories image. Khi post job có card artwork thì có **hai lựa chọn — chọn ảnh trong kho hoặc tự upload — không ràng buộc nhau**. Bắt buộc upload từ máy dù đã chọn từ gallery là bug. Gallery **chỉ dùng cho post job có card artwork**, không dùng chỗ nào khác.',
     ]),
 
-    rule('Rule — Những khu vực set cứng theo Saramin Hàn', [
-      'Section trên **Employer home** và các card ở giữa đều **set cứng**, follow Saramin Hàn. Chỉ user đăng nhập bằng tài khoản Employer mới thấy section này.',
-      '**Footer** của cả trang jobseeker lẫn trang employer giữ theo thiết kế hiện tại của Saramin Hàn.',
-      '**Bảng màu lấy trực tiếp từ CSS đang chạy trên saramin.co.kr** nên khớp 100%: Brand `#2D67FF`, Success `#00BE4C`, Warning `#FF9A03`, Error `#FF5656`, Info `#02C6FF`, cùng các dải gray / blue / coral 10–120. Tên biến giữ đúng như bên Hàn.',
-      'Muốn đổi những khu vực này — ví dụ chuyển Benefit section sang rich text — thì **phải được CEO confirm trước**, vì đó là cam kết đồng bộ giao diện với Saramin Hàn.',
-    ]),
 
     rule('Rule — Những trang đang tạm ẩn ở phase này', [
       '**Salary & Insight**: tạm ẩn, **không xoá**. Ẩn qua Content ▸ Navigation. Team phía khách sẽ thu thập dữ liệu rồi triển khai sau, và đã đề xuất vài event liên quan tới trang này.',
@@ -469,48 +417,4 @@ export const RULE_DETAIL: Record<string, DocBlock[]> = {
     ]),
   ],
 
-  Notifications: [
-    h('Rule chi tiết'),
-    { kind: 'p', text: INTRO },
-
-    rule('Rule — Nhịp gửi email cho ứng viên', [
-      '**Không gửi email lẻ mỗi lần đổi trạng thái.** Ứng viên nhận **một** email tổng hợp cuối tuần, gồm bốn nhóm: Đã gửi đến NTD, NTD đã lưu, Đang xử lý, Không phù hợp.',
-      'Trang **“Việc đã ứng tuyển”** thì cập nhật **real-time** — đó mới là nơi ứng viên theo dõi, email chỉ là bản tóm tắt.',
-      'Tiêu đề email xác nhận ứng tuyển giữ là **“Bạn đã ứng tuyển thành công”**, không dùng “Hồ sơ của bạn đã được gửi đến Nhà tuyển dụng” — vì hồ sơ có thể còn đang chờ kiểm duyệt CV, và câu sau sẽ gây hiểu nhầm khi CV bị từ chối.',
-      'Khối **“Bật trạng thái đang tìm việc”** trong email đổi thành **“Hiển thị CV với nhà tuyển dụng”** (hệ thống mới không còn Open to work), và **chỉ hiện cho ứng viên chưa bật hiển thị CV nào**.',
-      '❓ Chưa chốt: email **JS 7** (Mời ứng viên quay lại) và **JS 8** (Xoá tài khoản thành công) chưa có thiết kế mới.',
-    ]),
-
-    rule('Rule — Rule thông báo thêm được gì và không tắt được gì', [
-      'Backend **luôn** ghi vào feed trong ứng dụng; một rule thông báo chỉ có quyền **thêm kênh** gửi, **không có quyền tắt** kênh nào.',
-      '**Gửi thủ công chỉ hỗ trợ EMAIL** — ba kênh còn lại trả 400, vì in-app cần đổi schema trước.',
-      '**Event code là contract của backend.** Không còn catalog sự kiện trên Admin để sửa; backend tự validate.',
-      'Mỗi event **cố định một loại người nhận**: Jobseeker, Company hoặc Admin.',
-      '`active` là một boolean, thay cho bộ bốn trạng thái DRAFT / PAUSED / ARCHIVED trước đây.',
-    ]),
-
-    rule('Rule — Email thông báo xoá tài khoản', [
-      'Gửi cho **mọi công ty đang giữ dữ liệu** của ứng viên: công ty mà HQ **đã gửi đơn** tới (dù đơn nay ở trạng thái nào), và công ty có **lượt unlock CV còn hiệu lực**. Công ty mà HQ chưa bao giờ gửi đơn thì không được báo.',
-      'Trong mỗi công ty, người nhận là **mọi thành viên có quyền quản lý ứng viên** — tin tuyển dụng không có chủ sở hữu là company user nên không có người nào hẹp hơn để chọn.',
-      '**Một email cho mỗi công ty cho mỗi lần xoá, không bao giờ gửi hai lần.** Nếu HQ khôi phục rồi ứng viên xoá lại thì đó là một lần xoá mới và các công ty được báo lại.',
-      'Nội dung mang: tên và email ứng viên như công ty đã thấy, thời điểm yêu cầu, **căn cứ pháp lý**, bảng các đơn của chính công ty đó kèm kết quả, dòng riêng nếu công ty đã mở khoá CV qua CV Search, và yêu cầu ngừng dùng dữ liệu, ngừng liên hệ, **xoá mọi thứ đã nhận qua Saramin bao gồm cả CV**.',
-      '**Operator sửa được wording trong catalogue template nhưng không tắt được** — đây không phải workflow rule mà là nghĩa vụ pháp lý.',
-    ]),
-
-    rule('Rule — Hành vi của chuông thông báo sau khi xoá', [
-      'Các dòng thông báo loại **xoá tài khoản** và **xoá CV** trỏ tới đơn đã rời board hoặc đã bị ẩn danh, nên **chỉ link về board**, không deep-link vào modal ứng viên.',
-      'Mỗi người nhận có **một dòng cho mỗi đơn được liệt kê**, và tên ứng viên **luôn là rỗng** — tên chỉ nằm trong email.',
-      'Các dòng **“có đơn mới” cũ** của cùng ứng viên vẫn giữ chỗ nhưng **mất tên kể từ thời điểm xoá**, không phải sau 72 giờ.',
-      '**HQ khôi phục tài khoản không trả lại tên** cho các dòng cũ — tên đã bị bỏ khi ứng viên yêu cầu được quên, và khôi phục là hành động của HQ chứ không phải một sự đồng ý mới.',
-      'Công ty chỉ có lượt unlock mà chưa từng nhận đơn thì **chưa có dòng chuông nào** — feed hiện yêu cầu phải có job và đơn.',
-    ]),
-
-    rule('Rule — Song ngữ và xưng hô trong email', [
-      'Thiết kế Figma để phần tiếng Anh dạng **thu gọn / mở rộng**, nhưng **Gmail chặn tương tác đó** nên nút sẽ không hoạt động.',
-      'Vì vậy phần tiếng Anh **luôn hiển thị sẵn** bên dưới phần tiếng Việt, và nhãn “English Below” chỉ còn là **đường phân cách**, không bấm được. Áp dụng cho tất cả email ứng viên (JS) và nhà tuyển dụng (CO).',
-      'Xưng hô: **“Dear Quý khách hàng & Tên công ty (full legal name)”**, dù gửi một hay nhiều địa chỉ.',
-      'Giao diện chung — font, màu, header, footer — áp dụng cho toàn bộ template.',
-      'Trạng thái PO **không** hiện trong email gửi khách: Active, Invoice requested, Issued invoice, Expired, Draft invoice đều là trạng thái nội bộ. **Mã QR không nằm trong trình soạn email** — backend gắn vào lúc gửi — và **không in QR lên PO PDF** vì QR có thể hết hạn.',
-    ]),
-  ],
 }
