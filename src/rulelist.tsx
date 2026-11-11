@@ -22,10 +22,12 @@ import { md } from './md'
  * block at the top — navigation that exists at every width beats navigation
  * that is prettier at one.
  *
- * The one mark left on a row is `Lệch` — where the agreed rule and the running
- * code say different things. That is not decoration, it is the reason several
- * of these rules are on the page at all, so it stays visible and the
- * disagreement is printed in full rather than resolved by guesswork.
+ * NO ROW CARRIES A MARK at the moment. `Lệch` (agreed rule and running code
+ * disagree) and `Chưa chốt` still render, because a register that cannot say
+ * "this one is not settled" quietly turns every open question into a decision.
+ * But where a rule is settled, the disagreement with the build belongs on the
+ * module's Logic page next to what a reader would do about it, not as a badge
+ * on a list — which is where the last few went.
  */
 
 /** Number a group keeps wherever it is drawn, so the sidebar and the headings agree. */
@@ -222,8 +224,7 @@ export function RuleList({ onOpen }: { onOpen: (group: string, anchor: string) =
         <footer className="border-t border-line pt-4 text-[11.5px] leading-[1.7] text-faint">
           Rule nghiệp vụ lấy từ spec site và kênh Slack #saramin_testing (07/09–10/11/2026); rule as-built đối chiếu
           trực tiếp với mã nguồn <span className="font-mono">svn-be</span>, <span className="font-mono">svn-web</span>,{' '}
-          <span className="font-mono">saramin-vn-admin</span> nhánh <span className="font-mono">dev</span>. Mỗi rule
-          đánh dấu <strong>Lệch</strong> cần một câu trả lời bằng văn bản trước khi dev đi tiếp.
+          <span className="font-mono">saramin-vn-admin</span> nhánh <span className="font-mono">dev</span>.
           <br />
           <br />
           Rule <strong>hiển thị CV phía NTD theo từng trường hợp</strong> — rút đơn, thu hồi, xoá tài khoản, chặn công ty,

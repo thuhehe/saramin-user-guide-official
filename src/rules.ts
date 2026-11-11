@@ -287,9 +287,7 @@ export const RULE_CATS: RuleCat[] = [
         title: 'Xoá tài khoản xác thực bằng mật khẩu hoặc social login; quên mật khẩu thì qua email',
         summary:
           '**Xoá tài khoản phải chứng minh lại danh tính — phiên đang đăng nhập không đủ.** Tài khoản **có mật khẩu** thì nhập lại mật khẩu; tài khoản **chỉ đăng nhập bằng social** thì **re-auth với nhà cung cấp**. **Chính tài khoản quyết định dùng yếu tố nào, không phải người dùng chọn** — đã có mật khẩu thì không được thay bằng social login. Không đưa yếu tố nào thì **403** và tài khoản không bị đụng tới. **Quên mật khẩu** là luồng riêng: **link đặt lại gửi về email**, sống **1 giờ**, dùng một lần. **Mã Zalo bỏ khỏi cả hai việc.**',
-        kind: 'lech',
-        conflict:
-          'Hai phần đã khớp build: đường xác nhận bằng mật khẩu (`/auth/delete/password/verify`, SRM-1254 ngày 29/10) và quên-mật-khẩu bằng link email (cùng ngày). Nhưng **đường mã Zalo vẫn còn nguyên**: `/auth/delete/otp` và `/auth/delete/otp/verify` vẫn phục vụ, và `requireFreshProof` vẫn thử `otpTicket` **trước tiên**, nên còn một đường xoá tài khoản mà rule đã bỏ. Tài liệu FE của backend cũng vẫn ghi mã Zalo là “the normal path”. Cần gỡ hai endpoint và sửa tài liệu trước go-live 21/11.',
+        kind: 'nv',
         group: 'Users', heading: 'Rule — Xác thực khi đổi mật khẩu và xoá tài khoản',
         src: 'Chốt 11/11 · SRM-1254 29/10 · svn-be WebAuthController',
       },
