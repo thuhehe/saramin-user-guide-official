@@ -328,7 +328,7 @@ export const RULE_DETAIL: Record<string, DocBlock[]> = {
       '**Salary & Insight**: tạm ẩn, **không xoá**. Ẩn qua Content ▸ Navigation. Team phía khách sẽ thu thập dữ liệu rồi triển khai sau, và đã đề xuất vài event liên quan tới trang này.',
       '**Dropdown phía jobseeker**: tạm ẩn “Salary Insight”, tắt “Quản lý hồ sơ”, bổ sung “test tính cách”.',
       '**Trang tạo product động**: làm **sau** ngày launch 14/11. Hiện set cứng trước, và cần requirement rõ trước khi làm — Sale yêu cầu vì tháng nào cũng có product mới nên set cứng rất bất tiện.',
-      '**Share quota**: ẩn ở Products & Billing, xem mục của module Service delivery.',
+      '**Share quota**: ẩn bảng Share quota, bảng Shared with other Companies và checkbox Split usage by company trên Products & Billing. Tính năng còn nguyên trong code, chỉ không hiện và không test ở phase này.',
       'Cách ẩn thống nhất là **tắt trong setting Navigation**, không xoá trang — để bật lại được mà không cần build lại.',
     ]),
   ],
