@@ -219,34 +219,6 @@ export const RULE_CATS: RuleCat[] = [
     title: 'Phân quyền & phạm vi dữ liệu',
     rules: [
       {
-        title: 'Quyền cấp theo từng trang Admin, không phải cây checkbox',
-        summary:
-          'Một role là tập quyền trên các trang của console, dựng từ một bộ permission ngắn. Có thứ tự bắt buộc khi setup: phòng ban trước, người sau, role sau cùng. Role do team quản lý chứ không tập trung một đầu mối. Mã role bất biến sau khi tạo — sinh từ tên, cắt xuống 64 ký tự, hậu tố chống trùng nằm trong giới hạn đó.',
-        kind: 'both', group: 'Organisation', heading: 'Rule — Mô hình quyền theo trang',
-        src: 'spec admin-access · admin roles',
-      },
-      {
-        title: 'Không ai cấp được quyền mà chính mình không có',
-        summary:
-          'Kiểm theo từng tuple, vi phạm trả 403. Tương tự, không gán được role chứa quyền mình không có — nhưng chỉ xét trên các role **được thêm**, nên gỡ bớt role của người có quyền cao hơn mình vẫn làm được. Quyền phạm vi company hoặc own không gán được cho role GLOBAL. Xoá role thì cascade quyền của nó nhưng **không** cascade người đang giữ, nên còn người giữ là chặn.',
-        kind: 'ab', group: 'Organisation', heading: 'Rule — Trần quyền khi cấp và khi gán',
-        src: 'svn-be · admin roles · V101',
-      },
-      {
-        title: 'Không có quyền thì ẩn khỏi giao diện, không báo lỗi',
-        summary:
-          'Áp dụng cho cả nút lẫn cả trang: user được set quyền nào thì chỉ nhìn thấy quyền đó. Trước đây hệ thống vẫn hiện nút rồi báo lỗi permission khi bấm, gây nhầm lẫn — đã đổi và push lên dev ngày 23/10. Riêng màn Applications gác bằng quyền **job**, không phải `application`; Approve/Reject gác bằng `cv_review:decide`, Recall bằng `cv_review:recall` ở phạm vi all.',
-        kind: 'both', group: 'Organisation', heading: 'Rule — Ẩn thay vì báo lỗi, và quyền của màn Applications',
-        src: 'Minh Hoa 23/10 · admin applicants',
-      },
-      {
-        title: 'Data reach quyết định ai nhìn thấy công ty nào — và đang được đề xuất bỏ',
-        summary:
-          'Sale member chỉ thấy công ty của mình, Sale leader thấy cả team, Sale manager thấy tất cả. Phạm vi này quyết định luôn ai tạo được báo giá cho công ty nào. Thu đã đề xuất **bỏ hẳn Data reach** vì console nay đã có bộ lọc Mine / My team / All và quyền tạo báo giá thì luôn thuộc về Sales owner — nhưng đề xuất này chưa được chốt, nên cả hai cơ chế vẫn đang tồn tại song song.',
-        kind: 'nv', group: 'Organisation', heading: 'Rule — Data reach và đề xuất bỏ nó',
-        src: 'Thu 28/10 — đề xuất treo',
-      },
-      {
         title: 'Che thông tin liên hệ làm ở server, không ở client',
         summary:
           'Caller phạm vi global nhận dữ liệu thật; caller phạm vi company hoặc own bị che ở **server**, bất kể client làm gì — nên không có cách nào xem trộm bằng devtools. Khi CV chưa unlock thì `fullName` trả về `null` chứ không phải chuỗi che kiểu `N***** T** H**`; màn hình hiển thị `Ứng viên #{alias}`. Trạng thái khoá chỉ đọc từ cờ `unlocked`, không suy ra từ việc thiếu field.',
@@ -258,34 +230,6 @@ export const RULE_CATS: RuleCat[] = [
   {
     title: 'Master data',
     rules: [
-      {
-        title: 'Code chỉ cần không trùng trong cùng một cấp cha',
-        summary:
-          'Level 1 và Level 2 trùng code là hợp lệ, vì chúng là hai cấp khác nhau. Code là bắt buộc — nó là ID để map dữ liệu — nhưng hệ thống **tự sinh từ Name_EN**, nên màn hình bắt nhập tay là bug. Không phải tab nào trong Master data cũng có Import/Export Excel: tab ít giá trị hoặc nhiều cấp thì sửa trực tiếp nhanh hơn. Làm kỹ phần import cho Job Taxonomy và Industries.',
-        kind: 'nv', group: 'System', heading: 'Rule — Quy tắc Code và phạm vi trùng',
-        src: '19/10 · 22/10',
-      },
-      {
-        title: 'File import: để trống Code là tạo mới, điền Code là cập nhật bản cũ',
-        summary:
-          'Mục mới thì để trống cả Group Code lẫn Item Code, hệ thống tự tạo. Dùng code của Group cũ nhưng đổi tên thì hệ thống hiểu là **đổi tên Group cũ**, không phải tạo nhóm mới — đây là chỗ dễ làm hỏng dữ liệu nhất. Import dòng trùng với dữ liệu đã có thì không tạo bản trùng, chỉ nhận ra là mục cũ và báo số lượng bị coi là trùng.',
-        kind: 'nv', group: 'System', heading: 'Rule — Quy tắc file import Master data',
-        src: 'Ngô Thái Nguyên 19/10',
-      },
-      {
-        title: 'Chỉ còn tiếng Anh và tiếng Việt',
-        summary:
-          'Ngôn ngữ phía Jobseeker chỉ có hai, nên cột tiếng Hàn đã bỏ khỏi cả UI lẫn file import. Với mọi field nội dung: **VI bắt buộc, EN trống thì fallback về VI**. Riêng mô tả sản phẩm thì tiếng Việt bắt buộc, tiếng Anh không — nhưng mô tả EN lại là bắt buộc nếu muốn báo giá hiển thị song ngữ, nên thực tế vẫn nên điền.',
-        kind: 'nv', group: 'System', heading: 'Rule — Ngôn ngữ của master data và nội dung',
-        src: 'Thu 22/10 · 23/09',
-      },
-      {
-        title: 'Job taxonomy là master data, không phải chữ tự gõ',
-        summary:
-          'Mỗi Job category có nhiều Job group cấp 2 gồm Job roles, Specializations, Work tools. Onboarding và Work preference cho user chọn hết các mục cấp 2, theo cách Saramin Hàn làm. Skills quản lý theo từng dòng Job category **cấp 3** để gợi ý được skill liên quan. Benefits cũng là danh sách chọn chứ không phải đoạn văn, và working location là một văn phòng có tên, lưu trên công ty.',
-        kind: 'nv', group: 'System', heading: 'Rule — Cấu trúc taxonomy và các danh sách chọn',
-        src: 'Thu 20/10 · spec job-management',
-      },
     ],
   },
   {
@@ -394,13 +338,6 @@ export const RULE_CATS: RuleCat[] = [
         kind: 'nv', group: 'CRM', heading: 'Rule — Logo công ty và mục Quy định',
         src: 'Thu 01/11 · Danh Đinh 30/10',
       },
-      {
-        title: 'Nhiều màn hình của admin cũ cố tình không được port sang',
-        summary:
-          'Wizard 9 nhóm của AMS, bộ 52 field “meta wizard” của Saramin Hàn, pipeline AI giả, và các số liệu bịa ra từ hash — tất cả đã **bỏ hẳn chứ không stub**. Lý do ghi trong `docs/warnings.md` của repo admin. Hệ quả cần biết: sửa một job cũ qua form mới sẽ làm mất meta blob cũ mà job đó còn mang, và điều này được cảnh báo bằng banner trong drawer sửa chứ không giấu.',
-        kind: 'ab', group: 'System', heading: 'Rule — Những gì cố tình không port từ admin cũ',
-        src: 'admin docs/warnings.md · admin jobs',
-      },
     ],
   },
   {
@@ -427,13 +364,6 @@ export const RULE_CATS: RuleCat[] = [
           'Trên saramin.vn hiện tại, company có mật khẩu còn jobseeker đăng ký bằng social login nên không có mật khẩu. Nhưng trong database **vẫn có** một số user jobseeker đăng nhập bằng email và mật khẩu — số lượng ít, và vẫn phải test luồng reset password khi chuyển sang hệ thống mới. Cách tạo case test: đăng ký bằng social rồi dùng AMS set mật khẩu.',
         kind: 'nv', group: 'Users', heading: 'Rule — Migrate mật khẩu từ hệ thống cũ',
         src: 'Thu · Buu Pham 28/10',
-      },
-      {
-        title: 'Bản Job category v1.2 và Industry bản 29/10 là bản chốt',
-        summary:
-          'Bản Job category v1.2 đã được duyệt thì giữ nguyên. Skills hiển thị cả hai cách: ưu tiên related skill trước, bên dưới là các skill còn lại trong danh sách. File Industry phải sửa **15 tên tiếng Anh dịch máy sai** từ tiếng Hàn trước khi import — ví dụ 여신 (cấp tín dụng) bị dịch thành “goddess”, 제지 (sản xuất giấy) thành “restraint”.',
-        kind: 'nv', group: 'System', heading: 'Rule — Bản chốt của Job category và Industry',
-        src: 'Huyền Bùi 27/10 · Danh Đinh 29/10',
       },
     ],
   },
