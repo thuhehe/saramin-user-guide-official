@@ -752,24 +752,30 @@ export const USERS_ORG_PAGE_DOCS: Record<string, PageDoc> = {
   departments: {
     logic: [
       'Sơ đồ tổ chức nội bộ của Saramin: **cây hai tầng** — một phòng ban, và các team bên trong nó. **Một team đơn giản là một phòng ban có cha** — cùng trang, cùng quyền. **Không có tầng thứ ba.**',
-      'Phòng ban trả lời câu hỏi **“người này ngồi ở đâu”**. Nó là một trong ba mảnh ghép: *phòng ban* (ngồi ở đâu) × *vai trò* (được làm gì) × *phạm vi dữ liệu* (trên dữ liệu nào) — xem **Logic chung — Organisation**.',
+      'Phòng ban trả lời câu hỏi **“người này ngồi ở đâu”**. Nó là một trong ba mảnh ghép: *phòng ban* (ngồi ở đâu) × *vai trò* (được làm gì) × *Edit & sales reach* (sửa và bán được trên công ty nào) — xem **Logic chung — Organisation**.',
       'Trang này **chỉ nói về nhân viên Saramin (HQ operator)**. Người dùng phía công ty trên site nhà tuyển dụng có vai trò riêng và **không bao giờ xuất hiện ở đây**.',
-      '**Cây này được hệ thống đọc ở hai chỗ**: phạm vi *Their team only* (ai thấy bản ghi của ai) và **chuỗi duyệt chiết khấu** (yêu cầu đi lên leader team, rồi leader phòng ban). Sửa cây là sửa cả hai.',
+      '**Cây này được hệ thống đọc ở hai chỗ**: phạm vi *Their team’s companies* (ai thấy bản ghi của ai) và **chuỗi duyệt chiết khấu** (yêu cầu đi lên leader team, rồi leader phòng ban). Sửa cây là sửa cả hai.',
     ],
     how: [
       '**New department** để tạo phòng ban gốc; mở phòng ban đó rồi **Add team** để tạo team bên trong.',
-      'Bấm một nút để mở trang của nó (`/system/departments/:id`): danh sách thành viên (mỗi người link sang trang tài khoản), các team con, và hai nút *Add team* / *Delete*.',
+      'Mở trang của một nút (`/system/departments/:id`) bằng menu **⋮ → View detail**, hoặc bấm **tên nút** (là một link). ⚠️ **Bấm vào khoảng trống của dòng không còn mở trang nữa** — bản dựng đã bỏ hành vi đó, mọi thao tác dồn vào menu ⋮. Trang nút có danh sách thành viên (mỗi người link sang trang tài khoản), các team con, và hai nút *Add team* / *Delete*.',
+      'Menu **⋮** trên một dòng: **View detail · Add team** *(chỉ trên dòng phòng ban)* **· Edit · Delete**.',
       'Đặt **Leader** cho từng nút — **sau khi** đã có người, vì leader phải là một operator đang hoạt động.',
       'Tìm theo **tên nút hoặc tên leader**; tìm trúng một team thì phòng ban của nó vẫn hiện làm ngữ cảnh. Từ trang một nút, *Show these operators in Users* mở danh sách Users đã lọc theo nút đó.',
     ],
     watch: [
-      '**Leader một mình không cấp quyền mở trang nào — nhưng nó MỞ RỘNG phạm vi “Their team only”.** Người giữ một vai trò ở phạm vi *Their team only* thấy người ở **nút mình ngồi**, **cộng mọi nút mình làm leader và các team con của nút đó**. Không giữ vai trò phạm vi team thì làm leader không thêm gì. (Sửa lại câu cũ “làm leader không cấp thêm quyền gì cả” — xem hộp lưu ý bên dưới.)',
+      '**Leader một mình không cấp quyền mở trang nào — nhưng nó MỞ RỘNG phạm vi “Their team’s companies”.** Người giữ một vai trò ở phạm vi *Their team’s companies* thấy người ở **nút mình ngồi**, **cộng mọi nút mình làm leader và các team con của nút đó**. Không giữ vai trò phạm vi team thì làm leader không thêm gì. (Sửa lại câu cũ “làm leader không cấp thêm quyền gì cả” — xem hộp lưu ý bên dưới.)',
       '**Parent chỉ chọn được lúc tạo và không đổi được sau đó — không có thao tác “move”.** Muốn chuyển một team sang phòng ban khác: tạo team mới dưới phòng ban đúng → chuyển người sang → xoá team cũ.',
       '**Xoá một nút thì người vẫn còn.** Thành viên giữ nguyên tài khoản và chỉ đơn giản là **không thuộc phòng ban nào** — và vì thế, nếu họ giữ vai trò phạm vi team mà không làm leader nút nào, họ **không còn thấy gì** ở phạm vi đó. Hộp thoại xác nhận có nói rõ việc mất phòng ban.',
       '**Phòng ban còn team thì không xoá được.** Xoá hoặc làm rỗng các team trước — tái cơ cấu **không bao giờ là một thao tác dây chuyền**.',
       'Tên chỉ cần **duy nhất trong cùng một cấp** — hai phòng ban đều có thể có một team tên “Team A”.',
     ],
     blocks: [
+      {
+        kind: 'warn',
+        text:
+          '**Trên production (đọc 12/11/2026):** 7 phòng ban gốc đã được migrate sang — *Customer Service* (17 người) · *HCM Sales Team 1* (57) · *HCM Sales Team 2* (36) · *HN (Paused)* (10) · *KR Sales Team* (5) · *Talent Success* (14) · *Team Test* (3). **Chưa nút nào có team con và chưa nút nào có leader.** Hướng dẫn dựng tài khoản thật theo thứ tự nằm ở **Logic chung — Organisation, phần A**.',
+      },
       {
         kind: 'table',
         heading: 'Quyền cần có',
@@ -791,7 +797,7 @@ export const USERS_ORG_PAGE_DOCS: Record<string, PageDoc> = {
         rows: [
           ['**Người này ngồi ở đâu?**', '*Departments* → rồi chọn trên người dùng', 'Sales › Sales SVN 2'],
           ['**Họ được làm gì?**', '*Roles* → rồi gán trên người dùng', 'Sale member: đọc + sửa Companies, tạo báo giá…'],
-          ['**Trên dữ liệu nào?**', '**Phạm vi dữ liệu** chọn lúc gán vai trò', 'All data · Their team only · Only their own'],
+          ['**Sửa được trên dữ liệu nào?**', '**Edit & sales reach** chọn lúc gán vai trò', 'All companies · Their team’s companies · Only their own companies'],
         ],
       },
       {
@@ -855,7 +861,7 @@ export const USERS_ORG_PAGE_DOCS: Record<string, PageDoc> = {
         cols: ['Bạn làm', 'Hệ quả ngay', 'Hệ quả ở module khác'],
         rows: [
           ['**Tạo** một nút', 'Nút rỗng, chưa ai ngồi', 'Chưa gì — tới khi có người hoặc có leader'],
-          ['**Đặt Leader** cho một nút', 'Cột Leader đổi', '(1) Nếu leader giữ vai trò phạm vi *Their team only*: họ **thấy thêm** bản ghi của mọi người trong nút đó (và các team con nếu là phòng ban). (2) **Duyệt chiết khấu**: yêu cầu của người trong team đi tới leader team; team không có leader (hoặc leader chính là người xin) thì **leo lên** leader phòng ban'],
+          ['**Đặt Leader** cho một nút', 'Cột Leader đổi', '(1) Nếu leader giữ vai trò phạm vi *Their team’s companies*: họ **thấy thêm** bản ghi của mọi người trong nút đó (và các team con nếu là phòng ban). (2) **Duyệt chiết khấu**: yêu cầu của người trong team đi tới leader team; team không có leader (hoặc leader chính là người xin) thì **leo lên** leader phòng ban'],
           ['**Bỏ Leader**', 'Cột Leader → *No leader*', 'Người đó mất tầm nhìn team ở nút này; yêu cầu chiết khấu leo lên cấp trên — phòng ban gốc không có leader thì yêu cầu **không tạo được**'],
           ['**Đổi tên**', 'Tên mới ở mọi nơi hiển thị', 'Không đổi quyền gì'],
           ['**Xoá** một nút (không còn team)', 'Thành viên **mất phòng ban**', 'Người đó (nếu không làm leader nút nào) **mất toàn bộ tầm nhìn “team”**; cột phòng ban của họ ở Users đổi thành trống'],
@@ -865,7 +871,7 @@ export const USERS_ORG_PAGE_DOCS: Record<string, PageDoc> = {
       {
         kind: 'warn',
         text:
-          '**Sửa một điều trang này (và trang Logic chung — Organisation) từng nói.** Câu cũ: *“Làm leader của một nút không cấp thêm quyền gì cả”* và kịch bản test *“Đặt leader là người không phải thành viên → leader đó không có thêm tầm nhìn nào”*. Bản dựng (`DepartmentRepositoryAdapter.teamVisibleNodeIds`, svn-be `ee1db5ea9`): tầm nhìn phạm vi team = **nút người đó ngồi** + **mọi nút họ làm leader** + **các team con của nút họ làm leader**. Vậy leader **có** thêm tầm nhìn — **nếu** họ giữ một vai trò ở phạm vi *Their team only*. Điều vẫn đúng: leader **không mở thêm trang nào**, và người không giữ vai trò phạm vi team thì làm leader không đổi gì. Hệ quả thứ hai: **một thành viên thường ngồi ở phòng ban gốc không thấy các team bên dưới** — chỉ leader phòng ban mới thấy xuống team.',
+          '**Sửa một điều trang này (và trang Logic chung — Organisation) từng nói.** Câu cũ: *“Làm leader của một nút không cấp thêm quyền gì cả”* và kịch bản test *“Đặt leader là người không phải thành viên → leader đó không có thêm tầm nhìn nào”*. Bản dựng (`DepartmentRepositoryAdapter.teamVisibleNodeIds`, svn-be `ee1db5ea9`): tầm nhìn phạm vi team = **nút người đó ngồi** + **mọi nút họ làm leader** + **các team con của nút họ làm leader**. Vậy leader **có** thêm tầm nhìn — **nếu** họ giữ một vai trò ở phạm vi *Their team’s companies*. Điều vẫn đúng: leader **không mở thêm trang nào**, và người không giữ vai trò phạm vi team thì làm leader không đổi gì. Hệ quả thứ hai: **một thành viên thường ngồi ở phòng ban gốc không thấy các team bên dưới** — chỉ leader phòng ban mới thấy xuống team.',
       },
       {
         kind: 'example',
@@ -875,12 +881,12 @@ export const USERS_ORG_PAGE_DOCS: Record<string, PageDoc> = {
         rows: [
           ['1', 'Departments', 'Tạo **Sales**; bên trong thêm team **Sales SVN 1** và **Sales SVN 2**'],
           ['2', 'Roles', 'Tạo **Sale member** (Companies: Read + Update · Quotations: Create + Read + Update · **không** Export), rồi **Duplicate** thành **Sale leader** và thêm *Daily activity log: Read*, *Sales dashboard: Read*'],
-          ['3', 'Users', 'Mời **quản lý** vào *Sales* với vai trò *Sale leader* ở phạm vi **All data**'],
-          ['4', 'Users', 'Mời **từng leader** vào team của họ với *Sale leader* ở phạm vi **Their team only**'],
-          ['5', 'Users', 'Mời **từng nhân viên** vào team của họ với *Sale member* ở phạm vi **Only their own**'],
+          ['3', 'Users', 'Mời **quản lý** vào *Sales* với vai trò *Sale leader* ở phạm vi **All companies**'],
+          ['4', 'Users', 'Mời **từng leader** vào team của họ với *Sale leader* ở phạm vi **Their team’s companies**'],
+          ['5', 'Users', 'Mời **từng nhân viên** vào team của họ với *Sale member* ở phạm vi **Only their own companies**'],
           ['6', 'Departments', 'Mở Sales SVN 1 và 2 → đặt **Leader** cho mỗi team. Đặt quản lý làm **Leader của Sales** để yêu cầu chiết khấu của team không có leader leo lên được tới họ'],
         ],
-        note: 'Nếu quản lý ở bước 3 được gán *Their team only* thay vì *All data*, họ vẫn thấy cả hai team — **vì họ là leader của Sales** (bước 6). Không đặt leader thì họ chỉ thấy người ngồi trực tiếp ở *Sales*.',
+        note: 'Nếu quản lý ở bước 3 được gán *Their team’s companies* thay vì *All companies*, họ vẫn thấy cả hai team — **vì họ là leader của Sales** (bước 6). Không đặt leader thì họ chỉ thấy người ngồi trực tiếp ở *Sales*.',
       },
       {
         kind: 'table',
@@ -905,15 +911,15 @@ export const USERS_ORG_PAGE_DOCS: Record<string, PageDoc> = {
   users: {
     logic: [
       'Tài khoản **nhân viên Saramin (HQ operator)** — khác hẳn tài khoản ứng viên (*Users → Jobseeker users*) và tài khoản khách hàng (*Users → Company users*). Ba tập này **không bao giờ lẫn vào nhau**.',
-      'Người dùng là **nơi ba mảnh gặp nhau**: phòng ban (ngồi ở đâu) × vai trò (được làm gì) × **phạm vi dữ liệu** chọn lúc gán vai trò (trên dữ liệu nào). Luật chung ở **Logic chung — Organisation**; trang này nói về màn hình.',
+      'Người dùng là **nơi ba mảnh gặp nhau**: phòng ban (ngồi ở đâu) × vai trò (được làm gì) × **Edit & sales reach** chọn lúc gán vai trò (sửa và bán được trên công ty nào). Luật chung ở **Logic chung — Organisation**; trang này nói về màn hình.',
       '**Không có ô mật khẩu.** Tài khoản được tạo ra **không có mật khẩu** và người đó nhận một **link dùng một lần (sống 72 giờ)** để tự đặt. Không ai khác từng biết mật khẩu đó.',
       '**Trạng thái không được lưu, mà suy ra**: chưa đặt mật khẩu → *Pending*; đã đặt → *Active*; bị tắt → *Inactive*.',
     ],
     how: [
-      '**Invite user** → họ tên · email · số điện thoại · chức danh · **phòng ban** · **extension** (cho tổng đài) · **ít nhất một vai trò**, mỗi vai trò kèm **phạm vi dữ liệu** của nó.',
-      'Lọc danh sách (tìm theo tên hoặc email — **không phân biệt dấu**; lọc theo phòng ban — chọn một phòng ban **bao gồm cả các team của nó**; lọc theo vai trò; và các tab trạng thái có số đếm) rồi bấm một dòng.',
-      'Trang của một người (`/system/users/:id`): hồ sơ bên trái (phòng ban, chức danh, điện thoại, extension); bên phải là các hành động tài khoản, khối **Roles & data reach** có nút Save riêng, và **10 hành động gần nhất** của người đó lấy từ audit log.',
-      'Menu ⋮ trên dòng: *Edit* (mở trang người đó) · *Manage roles* · *Reset password* **hoặc** *Resend invite link* (tuỳ trạng thái) · *Activate* / *Deactivate* · *Delete user*.',
+      '**Invite user** → họ tên · email · số điện thoại · chức danh · **phòng ban** · **extension** (cho tổng đài) · **ít nhất một vai trò**, mỗi vai trò kèm **Edit & sales reach** của nó.',
+      'Lọc danh sách (tìm theo tên hoặc email — **không phân biệt dấu**; lọc theo phòng ban — chọn một phòng ban **bao gồm cả các team của nó**; lọc theo vai trò; và các tab trạng thái có số đếm), rồi mở một người bằng menu **⋮ → View detail** hoặc bấm **tên họ**. ⚠️ **Bấm vào khoảng trống của dòng không còn mở trang nữa.**',
+      'Trang của một người (`/system/users/:id`): hồ sơ bên trái (phòng ban, chức danh, điện thoại, extension); bên phải là các hành động tài khoản, khối **Roles & edit and sales reach** có nút Save riêng, và **10 hành động gần nhất** của người đó lấy từ audit log.',
+      'Menu ⋮ trên dòng: *View detail* · *Edit* · *Manage roles* · *Reset password* **hoặc** *Resend invite link* (tuỳ trạng thái) · *Activate* / *Deactivate* · *Delete user*.',
     ],
     watch: [
       '**Bạn không đổi được vai trò của chính mình** — phải nhờ một admin khác (403 *“You cannot change your own role assignments”*, kể cả khi lưu mà không đổi gì).',
@@ -921,10 +927,15 @@ export const USERS_ORG_PAGE_DOCS: Record<string, PageDoc> = {
       '**Không ai gõ mật khẩu hộ người khác.** Người được mời bấm link và tự đặt mật khẩu.',
       'Đổi vai trò của người đang đăng nhập thì họ phải đăng xuất vào lại (hoặc chờ phiên làm mới) mới thấy quyền mới.',
       '**Resend invite có cooldown 60 giây** cho mỗi người — bấm lại quá nhanh sẽ nhận “try again shortly”.',
-      '**Phạm vi phải chọn tường minh.** Nút *Add* trong khối vai trò khoá cho tới khi chọn phạm vi — không có mặc định *All data*. Chọn vai trò mà chưa bấm *Add* thì vai trò đó **không** nằm trong thứ được lưu (form có nhắc).',
+      '**Phạm vi phải chọn tường minh.** Nút *Add* trong khối vai trò khoá cho tới khi chọn phạm vi — không có mặc định *All companies*. Chọn vai trò mà chưa bấm *Add* thì vai trò đó **không** nằm trong thứ được lưu (form có nhắc).',
       '**Email không đổi được** sau khi mời — nó là định danh tài khoản. Gõ nhầm email thì *Delete user* (chưa làm gì nên xoá được) rồi mời lại.',
     ],
     blocks: [
+      {
+        kind: 'warn',
+        text:
+          '**Trên production (đọc 12/11/2026):** **214 tài khoản đã migrate** — **7 Active · 45 Pending · 162 Inactive**, gần như tất cả đang là **“No roles”**. Vậy nên việc chính **không phải là *Invite user***, mà là: mở từng người → gán **vai trò + Edit & sales reach** → **Activate** (tài khoản chưa có mật khẩu nên chuyển sang **Pending**) → **Resend invite link**. Hướng dẫn đầy đủ kèm ảnh ở **Logic chung — Organisation, phần A**.',
+      },
       {
         kind: 'table',
         heading: 'Quyền cần có',
@@ -937,7 +948,7 @@ export const USERS_ORG_PAGE_DOCS: Record<string, PageDoc> = {
           ['*Delete user*', '`user:delete`'],
           ['Ô **Department or team** (trên form mời và trang người đó)', '`user:move_department` — quyền riêng, để leader sắp lại team bên dưới mà **không** được đổi tên hay vô hiệu hoá đồng nghiệp'],
           ['Cột / ô **Extension**', '`telephony_call:assign`'],
-          ['Thẻ **Recent activity**', '`audit_log:read` ở phạm vi **All data** — thiếu thì thẻ không hiện'],
+          ['Thẻ **Recent activity**', '`audit_log:read` ở phạm vi **All companies** — thiếu thì thẻ không hiện'],
         ],
       },
 
@@ -979,7 +990,7 @@ export const USERS_ORG_PAGE_DOCS: Record<string, PageDoc> = {
           ['**Title**', 'Không', 'Tối đa 255 ký tự'],
           ['**Department or team**', 'Không', 'Chỉ hiện với `user:move_department`. Chọn **team** nếu người đó thuộc một team — team đã nằm trong phòng ban'],
           ['**Phone extension**', 'Không', 'Chỉ hiện với `telephony_call:assign`. Chọn máy lẻ đang thuộc người khác → *“Saving moves it here; their past calls stay theirs”*'],
-          ['**Roles & data reach**', '**Ít nhất một**', '*“Assign at least one role before sending the invite.”* Mỗi dòng = một vai trò + một phạm vi'],
+          ['**Roles & edit and sales reach**', '**Ít nhất một**', '*“Assign at least one role before sending the invite.”* Mỗi dòng = một vai trò + một phạm vi'],
         ],
       },
       {
@@ -1018,19 +1029,19 @@ export const USERS_ORG_PAGE_DOCS: Record<string, PageDoc> = {
       },
       {
         kind: 'table',
-        heading: 'Phạm vi dữ liệu — nơi Departments và Roles gặp nhau',
-        note: '**Phòng ban chọn trên người dùng + các nút họ làm leader** định nghĩa “team của họ”; **phạm vi chọn trên vai trò** là độ vươn của quyền đó. Đổi một trong ba thì tầm nhìn đổi theo. **Một người giữ được hai vai trò ở hai phạm vi khác nhau** — ví dụ Sales ở *Only their own* và Marketing ở *All data*. Một vai trò **tự giới hạn sẵn** thì giữ giới hạn của nó dù bạn chọn rộng hơn.',
+        heading: 'Edit & sales reach — nơi Departments và Roles gặp nhau',
+        note: '**Phòng ban chọn trên người dùng + các nút họ làm leader** định nghĩa “team của họ”; **phạm vi chọn trên vai trò** là độ vươn của quyền đó. Đổi một trong ba thì tầm nhìn đổi theo. **Một người giữ được hai vai trò ở hai phạm vi khác nhau** — ví dụ Sales ở *Only their own companies* và Marketing ở *All companies*. Một vai trò **tự giới hạn sẵn** thì giữ giới hạn của nó dù bạn chọn rộng hơn.',
         cols: ['Phạm vi', 'Người đó thấy', 'Ai thường giữ'],
         rows: [
-          ['**All data**', 'Mọi bản ghi mà các trang của vai trò đó hiện', 'HQ Admin, quản lý, vận hành'],
-          ['**Their team only**', 'Bản ghi của người **ngồi cùng nút** với họ, **cộng** người trong **mọi nút họ làm leader và các team con của nút đó**. Không ngồi đâu và không làm leader đâu → **không thấy gì**', 'Team leader'],
-          ['**Only their own**', 'Bản ghi được gán **cho đích danh họ** (công ty của họ, báo giá của họ)', 'Nhân viên sales'],
+          ['**All companies**', 'Mọi bản ghi mà các trang của vai trò đó hiện', 'HQ Admin, quản lý, vận hành'],
+          ['**Their team’s companies**', 'Bản ghi của người **ngồi cùng nút** với họ, **cộng** người trong **mọi nút họ làm leader và các team con của nút đó**. Không ngồi đâu và không làm leader đâu → **không thấy gì**', 'Team leader'],
+          ['**Only their own companies**', 'Bản ghi được gán **cho đích danh họ** (công ty của họ, báo giá của họ)', 'Nhân viên sales'],
         ],
       },
       {
         kind: 'warn',
         text:
-          '**Sửa lại dòng *Their team only*.** Trang này từng ghi “chính phòng ban / team của họ — **và các team bên dưới nó**”. Bản dựng (svn-be `DepartmentRepositoryAdapter.teamVisibleNodeIds`): các team bên dưới chỉ được tính khi người đó **là leader** của phòng ban. Một thành viên thường ngồi ở phòng ban gốc với phạm vi team **chỉ thấy người ngồi trực tiếp ở phòng ban đó**. Ngược lại, leader của một nút thấy nút đó **dù không ngồi ở đó**. Trang *Logic chung — Organisation* §5 còn câu cũ.',
+          '**Sửa lại dòng *Their team’s companies*.** Trang này từng ghi “chính phòng ban / team của họ — **và các team bên dưới nó**”. Bản dựng (svn-be `DepartmentRepositoryAdapter.teamVisibleNodeIds`): các team bên dưới chỉ được tính khi người đó **là leader** của phòng ban. Một thành viên thường ngồi ở phòng ban gốc với phạm vi team **chỉ thấy người ngồi trực tiếp ở phòng ban đó**. Ngược lại, leader của một nút thấy nút đó **dù không ngồi ở đó**. Trang *Logic chung — Organisation* §5 còn câu cũ.',
       },
 
       { kind: 'h', text: '§4 · Trang của một người', path: '/system/users/:id' },
@@ -1041,14 +1052,14 @@ export const USERS_ORG_PAGE_DOCS: Record<string, PageDoc> = {
           ['Đầu trang', 'Tên + trạng thái, email bên dưới, *Cancel* / *Save* (cần `user:update`, chỉ bật khi form đổi)'],
           ['**Profile**', 'Tên · email (**chỉ đọc**) · điện thoại · chức danh · phòng ban (cần `user:move_department`) · extension (cần `telephony_call:assign`)'],
           ['**Account**', 'Resend invite / Reset password · Deactivate / Activate · Delete — cùng xác nhận và cùng quyền như menu ⋮, kèm một dòng giải thích trạng thái'],
-          ['**Roles & data reach**', '**Save riêng**, ghi đè **toàn bộ** danh sách. Trên trang **của chính bạn** khối này chỉ đọc kèm lý do'],
+          ['**Roles & edit and sales reach**', '**Save riêng**, ghi đè **toàn bộ** danh sách. Trên trang **của chính bạn** khối này chỉ đọc kèm lý do'],
           ['**Recent activity**', '10 sự kiện audit gần nhất người này gây ra + link mở audit log đã lọc theo họ'],
         ],
       },
       {
         kind: 'list',
         items: [
-          '**Trên trang của chính mình, ô phòng ban cần phạm vi *All data*.** Leader phạm vi team không tự chuyển mình sang nút khác được (ô bị khoá kèm lý do; server trả *“You cannot move yourself to another org node”*); chuyển người khác thì được.',
+          '**Trên trang của chính mình, ô phòng ban cần phạm vi *All companies*.** Leader phạm vi team không tự chuyển mình sang nút khác được (ô bị khoá kèm lý do; server trả *“You cannot move yourself to another org node”*); chuyển người khác thì được.',
           '**Không có ngày tạo / lần đăng nhập cuối** — svn-be không trả các trường đó.',
           'Đăng nhập Admin: email + mật khẩu; **5 lần sai trong 15 phút → khoá 15 phút**. Mật khẩu: **8–128 ký tự, có chữ cái, số và ký hiệu**, không trùng email.',
         ],
@@ -1062,7 +1073,7 @@ export const USERS_ORG_PAGE_DOCS: Record<string, PageDoc> = {
           ['“N operators still hold this role”', 'Vai trò đang có người giữ', 'Gỡ vai trò khỏi những người đó trước'],
           ['Xoá vai trò toàn quyền cuối cùng bị từ chối', 'Nó sẽ khoá cả console', 'Cấp toàn quyền cho một vai trò khác trước'],
           ['“You cannot change your own role assignments”', 'Bảo vệ chống tự phong quyền', 'Nhờ một admin khác'],
-          ['“You cannot move yourself to another org node”', 'Leader phạm vi team tự chuyển mình', 'Nhờ người có phạm vi *All data*'],
+          ['“You cannot move yourself to another org node”', 'Leader phạm vi team tự chuyển mình', 'Nhờ người có phạm vi *All companies*'],
           ['Xoá user bị từ chối, có bản ghi tham chiếu tới họ', 'Họ đã từng làm việc trong hệ thống', '**Deactivate** thay vì xoá'],
           ['Deactivate bị từ chối', 'Chính bạn · super-admin gốc · HQ Admin hoạt động cuối cùng', 'Nhờ người khác / phong HQ Admin khác trước'],
           ['Xoá phòng ban bị từ chối', 'Nó vẫn còn team', 'Xoá hoặc làm rỗng các team trước'],
@@ -1077,7 +1088,7 @@ export const USERS_ORG_PAGE_DOCS: Record<string, PageDoc> = {
         cols: ['Ở đâu', 'Vì sao quan trọng ở đây'],
         rows: [
           ['**System → Audit log**', '**Mọi** lời mời, sửa hồ sơ, đổi vai trò, đặt lại mật khẩu, vô hiệu hoá và xoá đều được ghi kèm **ai đã làm** (`user.invite` · `user.update` · `user.assign_roles` · `user.reset_password` · `user.resend_invite` · `user.delete`)'],
-          ['**CRM → Customers**', '*Only their own* và *Their team only* quyết định nhân viên sales và leader thấy khách nào — **phạm vi cảm nhận rõ nhất ở đây**'],
+          ['**CRM → Customers**', '*Only their own companies* và *Their team’s companies* quyết định nhân viên sales và leader thấy khách nào — **phạm vi cảm nhận rõ nhất ở đây**'],
           ['**Call centre**', '**Extension** trên người dùng là thứ nối các cuộc gọi về đúng họ'],
           ['**Departments**', 'Nút người đó ngồi, và các nút họ làm leader, định nghĩa “team” của họ'],
           ['**Company users** (site nhà tuyển dụng)', 'Một tập tài khoản và vai trò **riêng**; không gì trên trang này chạm tới nó'],
@@ -1103,6 +1114,7 @@ export const USERS_ORG_PAGE_DOCS: Record<string, PageDoc> = {
       '**New role** (`/system/roles/new`) → đặt tên và mô tả → tick quyền trên lưới theo từng trang → **Create role** lưu tất cả một lần.',
       'Gần giống một vai trò có sẵn thì **Duplicate** — tạo “{tên} (copy)” với **toàn bộ** quyền; đổi tên rồi chỉnh.',
       'Dùng **dòng nhóm** và **Apply to all pages** để tick một hành động trên nhiều trang cùng lúc — khi đang tìm trang, nó chỉ áp cho **các trang khớp tìm kiếm**. Bộ đếm *X / N pages granted* cập nhật ngay, tổng và theo nhóm.',
+      'Mở một vai trò bằng menu **⋮ → View detail** hoặc bấm **tên vai trò**. ⚠️ **Bấm vào khoảng trống của dòng không còn mở vai trò nữa**; menu ⋮ có **View detail · Duplicate · Delete**.',
       'Bấm số ở cột **Operators** để xem ai đang giữ vai trò; gỡ vai trò khỏi một người làm ở **Users**, không làm ở đây.',
     ],
     watch: [
@@ -1115,6 +1127,11 @@ export const USERS_ORG_PAGE_DOCS: Record<string, PageDoc> = {
       '**Đổi tên an toàn** — mã nội bộ (sinh tự động từ tên lúc tạo) giữ nguyên, nên mọi chỗ tham chiếu vẫn chạy.',
     ],
     blocks: [
+      {
+        kind: 'warn',
+        text:
+          '**Trên production (đọc 12/11/2026):** 7 vai trò đã dựng sẵn — *HQ Admin* (315 quyền, **19 người giữ**) · *Sale manager* (95) · *VN Sales* (91) · *VN Operations* (81) · *Sale leader* (56) · *Sale member* (47) · *Team leader* (35). **Ngoài HQ Admin, chưa vai trò nào có người giữ.** Lưới hiện có **78 trang** chia theo **9 nhóm**. Hướng dẫn dựng tài khoản thật theo thứ tự nằm ở **Logic chung — Organisation, phần A**.',
+      },
       {
         kind: 'table',
         heading: 'Quyền cần có',
@@ -1205,7 +1222,7 @@ export const USERS_ORG_PAGE_DOCS: Record<string, PageDoc> = {
         rows: [
           ['Mời một người với đúng một vai trò', 'Họ hiện ở **Pending**; email tới; sau khi đặt mật khẩu họ thành **Active** và **chỉ thấy các trang vai trò đó mở ra**'],
           ['Bỏ tick *Companies: Read* trên vai trò của họ', 'Trang đó **biến khỏi menu của họ** ở lần tải trang kế tiếp'],
-          ['Một sales ở *Only their own*, một sales khác ở *Their team only*, cùng một team', 'Người đầu thấy khách của mình; người sau thấy khách của **cả hai**'],
+          ['Một sales ở *Only their own companies*, một sales khác ở *Their team’s companies*, cùng một team', 'Người đầu thấy khách của mình; người sau thấy khách của **cả hai**'],
           ['Chuyển một user từ Sales SVN 1 sang Sales SVN 2', 'Tầm nhìn “team” của họ **chuyển sang bản ghi của team mới**'],
           ['Thử xoá một vai trò 2 người đang giữ', '**Từ chối**, kèm con số'],
           ['Bỏ `role:update` khỏi vai trò toàn quyền duy nhất', '**Từ chối** (409)'],
@@ -1215,7 +1232,7 @@ export const USERS_ORG_PAGE_DOCS: Record<string, PageDoc> = {
           ['Thử xoá một user đã từng tạo một báo giá', '**Từ chối**; *Deactivate* thì được'],
           ['Thử sửa vai trò của chính mình', '**Từ chối** kèm thông báo'],
           ['Xoá một phòng ban còn team', '**Từ chối**; sau khi xoá hết team thì thành công và **thành viên của nó bị bỏ trống phòng ban**'],
-          ['Đặt leader phòng ban là người **không phải thành viên**, giữ vai trò ở *Their team only*', '**Cho phép**; leader đó **thấy bản ghi của người trong phòng ban và các team con** dù không ngồi ở đó (sửa từ kịch bản cũ — xem Departments)'],
+          ['Đặt leader phòng ban là người **không phải thành viên**, giữ vai trò ở *Their team’s companies*', '**Cho phép**; leader đó **thấy bản ghi của người trong phòng ban và các team con** dù không ngồi ở đó (sửa từ kịch bản cũ — xem Departments)'],
           ['Mở *Reset password* trên một user Active', 'Họ **bị đăng xuất ở mọi nơi** và nhận link mới; dòng chuyển về **Pending**'],
         ],
       },
@@ -1258,7 +1275,7 @@ export const USERS_ORG_MODULE_DOCS: Record<string, ModuleDoc> = {
           ['Quên mật khẩu', 'Mã 6 số qua Zalo hoặc email', 'Link qua email, sống **1 giờ**', 'Admin khác bấm *Reset password* (link 72 giờ)'],
           ['Link mời / đặt mật khẩu do HQ gửi', '*Send password reset*', '**72 giờ**, cooldown 60 giây', '**72 giờ**, cooldown 60 giây'],
           ['Trạng thái', '*Active* · *Chưa xác thực* · *Deactivated* · *Withdrawn* · *Deleted*', 'Chỗ ngồi: *Invited* · *Active* · *Disabled*; tài khoản: *Deleted*', '*Pending* · *Active* · *Inactive*'],
-          ['Vai trò', 'Không có', 'Theo **từng công ty**: *Super admin* cố định + vai trò tự đặt trên **7 quyền** cố định', '*Roles & permissions* — lưới theo trang + **phạm vi dữ liệu** khi gán'],
+          ['Vai trò', 'Không có', 'Theo **từng công ty**: *Super admin* cố định + vai trò tự đặt trên **7 quyền** cố định', '*Roles & permissions* — lưới theo trang + **Edit & sales reach** khi gán'],
           ['Ai khoá được', 'HQ; hoặc chính ứng viên tự tạm dừng (backend có, Jobseeker site chưa có nút)', 'HQ hoặc Super admin của công ty — **chính người đó thì không**', 'Admin có `user:update` — **không tự khoá mình**, không khoá HQ Admin hoạt động cuối cùng'],
           ['Xoá', 'Ứng viên tự xoá (OTP / mật khẩu) hoặc HQ → huỷ sau 72 giờ', 'Tự xoá (mật khẩu) hoặc HQ → huỷ sau 72 giờ', '**Xoá cứng ngay**, chỉ khi chưa có bản ghi nào tham chiếu'],
           ['Email sau khi xoá', '**Chặn vĩnh viễn** nếu đã xác thực (giữ mã băm); chưa xác thực thì được thả', '**Giữ 30 ngày** sau lần huỷ, rồi dùng lại được', 'Giải phóng ngay'],
@@ -1328,10 +1345,436 @@ export const USERS_ORG_MODULE_DOCS: Record<string, ModuleDoc> = {
       'Ba trang quản trị **người của Saramin (HQ operator)**: **Departments** (ngồi ở đâu), **Roles & permissions** (được làm gì) và **Users** (là ai). Mỗi thiết lập trên ba trang này trả lời đúng một trong ba câu hỏi đó — và **người dùng là nơi ba câu trả lời gặp nhau**.',
     headline: [
       '**Đây là nhân viên Saramin, không phải khách.** Người dùng phía công ty trên site nhà tuyển dụng có tài khoản và vai trò **riêng**, không bao giờ xuất hiện ở đây (họ ở *Users → Company users*; ứng viên ở *Users → Jobseeker users*).',
-      '**Cái một operator thấy = các trang vai trò của họ mở ra × các bản ghi phạm vi dữ liệu của họ cho phép.** Một phòng ban tự thân không cấp gì; một vai trò tự thân không với tới ai. **Làm leader không mở thêm trang nào — nhưng nới phạm vi *Their team only* ra các nút người đó làm leader (xem §5).**',
+      '**Cái một operator THẤY = các trang vai trò của họ mở ra. Cái họ SỬA ĐƯỢC = thêm *Edit & sales reach* chọn lúc gán vai trò.** Từ **SRM-994** (lên production 11/11/2026) hai câu này tách hẳn nhau: ai có *Companies \u25b8 Read* đều **xem được mọi công ty**, kể cả *Free data*; phạm vi chỉ chặn **sửa và bán hàng**. Một phòng ban tự thân không cấp gì; một vai trò tự thân không với tới ai. **Làm leader không mở thêm trang nào — nhưng nới phạm vi *Their team\u2019s companies* ra các nút người đó làm leader (xem \u00a75).**',
       '**Thứ tự dựng là bắt buộc: phòng ban → vai trò → mời người → đặt leader.** Không ai gõ mật khẩu hộ ai — lời mời gửi một link dùng một lần để người đó tự đặt.',
     ],
     blocks: [
+      /* ══ Phần A — hướng dẫn dựng tài khoản thật trên production (12/11/2026).
+         Viết cho khách, theo đúng thứ tự họ sẽ bấm, trên số liệu đọc thẳng từ
+         prod-admin.saramin.vn. Phần tham chiếu §0…§9 (theo trang Notion của
+         khách) nằm ngay bên dưới và không đổi vai trò. */
+      { kind: 'h', text: 'A · Dựng tài khoản thật trên Production — làm theo thứ tự này' },
+      {
+        kind: 'p',
+        text:
+          'Phần A viết cho người mở **`prod-admin.saramin.vn`** để bắt đầu cho nhân viên Saramin Việt Nam dùng thật. Mọi con số và ảnh dưới đây chụp thẳng từ **production ngày 12/11/2026**. Phần **§0 … §9** bên dưới là tham chiếu đầy đủ từng màn hình — phần A chỉ là đường đi ngắn nhất.',
+      },
+      {
+        kind: 'table',
+        heading: 'Production hiện đã có sẵn những gì',
+        note: 'Đọc lúc **12/11/2026** trên `prod-admin.saramin.vn`. Dữ liệu đã được **migrate** sang, nên việc của bạn **không phải tạo mới từ số không** — mà là *kiểm lại · gán vai trò · bật tài khoản*.',
+        cols: ['Màn hình', 'URL', 'Đang có gì'],
+        rows: [
+          [
+            '**Departments**',
+            '`/system/departments`',
+            '**7 nút**, tất cả là phòng ban gốc, **0 team**, **chưa nút nào có leader**: Customer Service (17 người) · HCM Sales Team 1 (57) · HCM Sales Team 2 (36) · HN (Paused) (10) · KR Sales Team (5) · Talent Success (14) · Team Test (3)',
+          ],
+          [
+            '**Roles & permissions**',
+            '`/system/roles`',
+            '**7 vai trò** đã dựng sẵn: *HQ Admin* (315 quyền — **19 người giữ**) · *Sale manager* (95) · *VN Sales* (91) · *VN Operations* (81) · *Sale leader* (56) · *Sale member* (47) · *Team leader* (35). **Ngoài HQ Admin, chưa vai trò nào có người giữ**',
+          ],
+          [
+            '**Users**',
+            '`/system/users`',
+            '**214 tài khoản** đã migrate — **7 Active · 45 Pending · 162 Inactive**. Gần như tất cả đang là **“No roles”**, và phần lớn đã có sẵn phòng ban từ dữ liệu cũ',
+          ],
+        ],
+      },
+      {
+        kind: 'table',
+        heading: 'Bốn bước, đúng thứ tự — mỗi bước cần bước trước',
+        note: '**Đúng là thứ tự bạn hỏi:** phòng ban → vai trò → người dùng. Chỉ thêm **bước 4** ở cuối, vì leader bắt buộc phải là một operator *đang hoạt động*, nên chỉ đặt được sau khi tài khoản đã bật.',
+        cols: ['#', 'Bước', 'Ở đâu', 'Vì sao phải đúng thứ tự này'],
+        rows: [
+          [
+            '1',
+            '**Phòng ban** — kiểm lại cây, thêm team nếu cần',
+            '*Departments*',
+            'Chỉ xếp người vào được một nút **đã tồn tại**. Trên production 7 nút đã có sẵn, nên bước này thường chỉ là *thêm team* hoặc *đổi tên*',
+          ],
+          [
+            '2',
+            '**Vai trò** — kiểm 7 vai trò sẵn có, sửa hoặc tạo thêm',
+            '*Roles & permissions*',
+            'Một tài khoản **bắt buộc** mang **ít nhất một vai trò** — không có vai trò thì không mời và không gán được',
+          ],
+          [
+            '3',
+            '**Người dùng** — gán **vai trò + phạm vi**, rồi bật tài khoản',
+            '*Users*',
+            'Phòng ban · vai trò · phạm vi được chọn **trong cùng một form**. Đây là bước chiếm gần hết thời gian (214 tài khoản)',
+          ],
+          [
+            '4',
+            '**Leader** — đặt trưởng cho từng phòng ban / team',
+            '*Departments*',
+            'Leader phải là operator **đang hoạt động**, nên chỉ đặt được **sau** bước 3. Hiện cả 7 nút đều là *No leader*',
+          ],
+        ],
+      },
+      {
+        kind: 'warn',
+        text:
+          '**Một điều nên biết trước khi bắt đầu: phạm vi KHÔNG còn chặn việc xem.** Từ SRM-994 (lên production 11/11/2026), ô phạm vi trong form người dùng đã đổi tên thành **“Edit & sales reach”**. Ai có quyền *Companies ▸ Read* đều **xem được mọi công ty**, kể cả *Free data*. Phạm vi chỉ giới hạn **sửa và bán hàng**: sửa công ty, báo giá, đơn hàng, hoá đơn, nhật ký bán hàng. Chi tiết và hai ví dụ cụ thể ở **mục A4** bên dưới.',
+      },
+
+      /* A1 */
+      { kind: 'h', text: 'A1 · Bước 1 — Departments (phòng ban)', path: '/system/departments' },
+      {
+        kind: 'p',
+        text:
+          '**Phòng ban dùng để làm gì.** Việc chính là **chia tầm nhìn của Sale**: trên *CRM → Companies → tab Assigned* có dải **Mine · My team’s · All**, và “team của tôi” được tính **đúng theo cây phòng ban này**. Ngoài ra cây còn được đọc ở hai chỗ nữa: **chuỗi duyệt chiết khấu** (yêu cầu đi lên leader team, rồi leader phòng ban) và **bộ lọc phòng ban** ở trang Users. Bạn **hoàn toàn có thể tạo phòng ban cho mục đích khác** (Customer Service, Talent Success… đã có sẵn trên production) — nó không bắt buộc phải là đơn vị bán hàng.',
+      },
+      {
+        kind: 'shot',
+        src: '/shots/org/01-departments-list.jpg',
+        where: 'Admin',
+        caption:
+          'Production ngày 12/11/2026: **7 phòng ban gốc**, cột *Teams* đều là **0 teams**, cột *Leader* đều là **No leader**. Cột *Members* đếm người **đặt trực tiếp** trên nút đó — không cộng thành viên của các team con.',
+      },
+      {
+        kind: 'table',
+        heading: 'Làm gì ở bước này',
+        cols: ['Việc', 'Bấm ở đâu', 'Lưu ý'],
+        rows: [
+          ['**Tạo phòng ban mới**', 'Nút **New department** góc trên phải', 'Chỉ hai ô: *Name* và *Leader*. Leader để trống lúc này cũng được — quay lại đặt ở bước 4'],
+          ['**Tạo team bên trong một phòng ban**', 'Menu **⋮** trên dòng → **Add team**', 'Cây **chỉ có hai tầng**: phòng ban, và team bên trong. **Không có tầng thứ ba** — một dòng team không có *Add team*'],
+          ['**Mở trang của một nút**', 'Menu **⋮** → **View detail**, hoặc bấm **tên nút** (là một link)', '⚠️ **Bấm vào khoảng trống của dòng không còn mở trang nữa** — khác với bản cũ'],
+          ['**Đổi tên / đặt Leader**', 'Menu **⋮** → **Edit**, hoặc sửa trên trang của nút rồi **Save**', '*Save* chỉ bật khi có thay đổi thật'],
+          ['**Xoá một nút**', 'Menu **⋮** → **Delete**', 'Còn team thì **không xoá được** — xoá team trước. Xoá nút thì **người vẫn còn**, chỉ là không thuộc phòng ban nào'],
+        ],
+      },
+      {
+        kind: 'shot',
+        src: '/shots/org/03-department-row-menu.jpg',
+        where: 'Admin',
+        caption:
+          'Menu **⋮** của một dòng phòng ban: **View detail · Add team · Edit · Delete**. Trên một dòng *team* sẽ **không có** *Add team*.',
+      },
+      {
+        kind: 'shot',
+        src: '/shots/org/02-new-department.jpg',
+        where: 'Admin',
+        caption:
+          'Hộp **New department** — chỉ **Name** (tối đa 255 ký tự) và **Leader**. Dòng dưới ô Leader nói thẳng điều hay bị hiểu nhầm: *“Any active operator can lead it. Assign the Team leader role to grant access.”* — **đặt làm leader không tự cấp quyền gì**; muốn leader xem được việc của team thì vẫn phải gán vai trò có phạm vi team.',
+      },
+      {
+        kind: 'shot',
+        src: '/shots/org/05-add-team.jpg',
+        where: 'Admin',
+        caption:
+          'Hộp **New team** mở từ ⋮ → *Add team*, kèm dòng **“This team will sit inside {phòng ban}”** — cha đã được chọn sẵn và **khoá**. **Parent chỉ chọn được lúc tạo và không đổi được sau đó**: muốn chuyển một team sang phòng ban khác thì tạo team mới dưới phòng ban đúng → chuyển người sang → xoá team cũ.',
+      },
+      {
+        kind: 'shot',
+        src: '/shots/org/04-department-detail.jpg',
+        where: 'Admin',
+        caption:
+          'Trang của **HCM Sales Team 1**. Bên trái **Details** (*Name*, *Leader*) là hai ô duy nhất sửa được; **Placement** (*Type*, *Inside*) **chỉ đọc**. Dưới là **Members** — 57 người, tất cả đang *Inactive* và *No roles*, đúng tình trạng sau migrate.',
+      },
+
+      /* A2 */
+      { kind: 'h', text: 'A2 · Bước 2 — Roles & permissions (vai trò)', path: '/system/roles' },
+      {
+        kind: 'p',
+        text:
+          '**Vai trò trả lời câu “người này được vào những trang nào, làm được những hành động nào”** — và **chỉ** câu đó. Nó **không** nói “trên dữ liệu của ai” (cái đó là phạm vi, chọn ở bước 3). Production đã có **7 vai trò dựng sẵn**; bạn nên **dùng lại** và chỉ sửa cho khớp, thay vì tạo mới từ đầu.',
+      },
+      {
+        kind: 'shot',
+        src: '/shots/org/10-roles-list.jpg',
+        where: 'Admin',
+        caption:
+          '7 vai trò trên production. Cột **Grants** = số quyền vai trò đó cấp; cột **Operators** = **bao nhiêu người đang giữ** — hiện chỉ *HQ Admin* có người (19). Vai trò đang có người giữ thì **không xoá được**.',
+      },
+      {
+        kind: 'table',
+        heading: '7 vai trò dựng sẵn — dùng vai trò nào cho ai',
+        note: 'Đây là **gợi ý theo mô tả của chính vai trò đó trên production**, không phải ràng buộc của hệ thống. Ma trận cuối cùng là quyết định của bạn — mở vai trò ra, đọc lưới quyền, sửa cho khớp cách làm việc thật.',
+        cols: ['Vai trò', 'Mô tả trên hệ thống', 'Thường dùng cho'],
+        rows: [
+          ['**HQ Admin** (315)', 'Toàn quyền trên mọi module', 'Quản trị hệ thống. **Chỉ HQ Admin mới phong được HQ Admin cho người khác**'],
+          ['**Sale manager** (95)', '*“Sees and works the whole pipeline — no ownership restriction.”*', 'Quản lý kinh doanh nhìn toàn bộ'],
+          ['**Sale leader** (56)', '*“Sees the accounts assigned to their own team, plus every team beneath them.”*', 'Trưởng nhóm kinh doanh'],
+          ['**Sale member** (47)', '*“Sees only the accounts assigned to them.”*', 'Nhân viên kinh doanh'],
+          ['**Team leader** (35)', '*“Sees the sales pipeline and activity of their own team…”*', 'Trưởng nhóm cần xem pipeline mà không cần quyền sửa của Sale leader'],
+          ['**VN Sales** (91) · **VN Operations** (81)', 'Bộ quyền cũ theo phòng ban', 'Kiểm lại trước khi dùng — hai vai trò này rộng hơn bộ Sale ở trên'],
+        ],
+      },
+      {
+        kind: 'shot',
+        src: '/shots/org/11-new-role.jpg',
+        where: 'Admin',
+        caption:
+          'Trang **Create a new role** — tên, mô tả, và **lưới quyền 78 trang** chia theo **9 nhóm đúng như sidebar**. Mỗi trang là một dòng với **None · Create · Read · Update · Delete · Export**, **độc lập với nhau** (Create **không** bao hàm Read). Dấu **—** nghĩa là hành động đó *không tồn tại* cho trang này. Ô **Search pages** và dải **Apply to all pages** dùng để tick hàng loạt; bộ đếm **X / 78 pages granted** chạy ngay.',
+      },
+      {
+        kind: 'list',
+        heading: 'Những thứ trên lưới dễ bị hiểu nhầm',
+        items: [
+          'Một dòng **thụt vào** kèm ký hiệu `└` là **một hành động nằm trên màn hình của trang cha**, không phải một trang riêng — ví dụ *Archive a company* nằm dưới *Companies*, *Move an operator’s team* nằm dưới *Operator accounts*.',
+          'Chip **Needs {trang} ▸ Read**: bạn đã tick dòng con nhưng trang cha chưa có Read. **Vẫn lưu được**, nhưng người giữ sẽ **không mở được màn hình** để bấm hành động đó.',
+          'Chip **Partial** (và banner *“Some actions are only partly granted”*): vai trò cũ đang giữ **một phần** các quyền sau một ô. **Lưu lại sẽ giữ nguyên** trừ khi bạn tự động vào ô đó.',
+          '**Export tách khỏi Read có chủ đích**: nhìn thấy danh sách và mang cả danh sách ra ngoài là hai quyết định khác nhau.',
+          '**Bạn không cấp được thứ chính bạn không có.** Một admin không phải HQ Admin chỉ tick được những quyền họ đang giữ.',
+          '**Duplicate** sao chép một vai trò cùng **toàn bộ** quyền — cách nhanh nhất để làm biến thể (ví dụ *Sale member* → *Sale member (miền Bắc)*).',
+        ],
+      },
+      {
+        kind: 'shot',
+        src: '/shots/org/13-role-sale-member.jpg',
+        where: 'Admin',
+        caption:
+          'Vai trò **Sale member** trên production, lọc lưới bằng ô tìm kiếm `compan`. Dòng **Companies** được tick *Create · Read · Update · Export*; nhưng các dòng con **Edit another sales owner’s accounts**, **Edit Free data companies**, **Assign the account owner**, **Archive a company** thì **không**. Đây chính là chỗ “sửa công ty của ai” được quyết định — **cùng với** phạm vi ở bước 3.',
+      },
+      {
+        kind: 'table',
+        heading: 'Hai dòng con mới dưới Companies — đáng để ý khi dựng vai trò Sale',
+        note: 'Cả hai chỉ có cột **Update**. Chúng trả lời câu *“có bắt buộc phải là chủ công ty mới sửa được không”*, còn phạm vi ở bước 3 trả lời câu *“nhìn xa tới đâu”*. Hai thứ **cộng vào nhau**.',
+        cols: ['Dòng', 'Bật thì được gì', 'Tắt thì sao'],
+        rows: [
+          ['**Edit another sales owner’s accounts**', 'Sửa được công ty **người khác đang làm chủ**', 'Chỉ sửa được công ty **mình là chủ**. Xem công ty của đồng nghiệp và ghi activity lên đó **vẫn bình thường**'],
+          ['**Edit Free data companies**', 'Sửa được công ty **chưa có chủ** trong tab *Free data*', 'Công ty *Free data* là **chỉ đọc**. Xin nhận công ty (*Ask for this company*) và ghi activity **vẫn bình thường**'],
+        ],
+      },
+      {
+        kind: 'shot',
+        src: '/shots/org/12-matrix-companies.jpg',
+        where: 'Admin',
+        caption:
+          'Lưới quyền của một vai trò mới, lọc bằng ô **Search pages** với chữ `compan`: dòng **Companies** và **13 dòng con** của nó. Khi đang lọc, dải tick hàng loạt đổi chữ thành *“Apply to the 14 pages matching the search”* — nó **chỉ áp cho các dòng đang hiện**, không áp cho cả 78 trang.',
+      },
+
+      /* A3 */
+      { kind: 'h', text: 'A3 · Bước 3 — Users: gán vai trò và phạm vi', path: '/system/users' },
+      {
+        kind: 'warn',
+        text:
+          '**Trên production có HAI việc khác nhau ở bước này — đừng nhầm.** (1) **214 tài khoản đã migrate sẵn** → **không mời lại**, mà mở từng người ra gán vai trò + phạm vi rồi **Activate**. (2) Người **chưa có trong danh sách** → dùng **Invite user**. Mời trùng email sẽ bị từ chối: *“An admin user with this email already exists”*.',
+      },
+      {
+        kind: 'shot',
+        src: '/shots/org/20-users-list.jpg',
+        where: 'Admin',
+        caption:
+          'Danh sách Users trên production: **214 tài khoản**, tab **All · Pending · Active · Inactive**, lọc theo **phòng ban** (chọn một phòng ban là **gồm cả các team của nó**) và theo **vai trò**. Ô tìm kiếm theo tên hoặc email **không phân biệt dấu**.',
+      },
+      {
+        kind: 'table',
+        heading: 'Ba trạng thái, và nút tương ứng trên dòng',
+        note: '**Trạng thái không được lưu, mà được suy ra**: bị tắt → *Inactive*; chưa đặt mật khẩu → *Pending*; đã đặt mật khẩu → *Active*. **Không có ô mật khẩu ở bất kỳ đâu** — không ai gõ mật khẩu hộ ai.',
+        cols: ['Trạng thái', 'Nghĩa', 'Nút có trên dòng'],
+        rows: [
+          ['**Inactive** (162 người)', 'Tài khoản đang bị tắt — **đây là tình trạng của gần hết người vừa migrate**', '*Activate* · *Reset password*'],
+          ['**Pending** (45 người)', 'Đã bật nhưng **chưa đặt mật khẩu** — chưa đăng nhập được', '*Resend invite link* · *Deactivate*'],
+          ['**Active** (7 người)', 'Đã đặt mật khẩu, đang dùng được', '*Reset password* — **xoá mật khẩu, gửi link mới, đăng xuất họ ở mọi nơi**'],
+        ],
+      },
+      {
+        kind: 'example',
+        heading: 'Mở một tài khoản đã migrate và cho người đó vào dùng — năm thao tác',
+        scenario:
+          'Lấy một nhân viên kinh doanh ở *HCM Sales Team 1*, đang **Inactive · No roles**. Xong năm bước này họ nhận email đặt mật khẩu và đăng nhập được với đúng quyền.',
+        cols: ['#', 'Làm gì', 'Ở đâu'],
+        rows: [
+          ['1', 'Tìm người đó (gõ tên hoặc email), mở menu **⋮** → **View detail**', 'Users'],
+          ['2', 'Kiểm **Department or team** trên hồ sơ — đúng nút họ ngồi thì mới có *My team’s*', 'Trang người đó'],
+          ['3', 'Khối **Roles & edit and sales reach**: chọn **vai trò** → chọn **phạm vi** → **Add** → **Save roles**', 'Trang người đó'],
+          ['4', 'Bấm **Activate**. Tài khoản chưa có mật khẩu nên chuyển sang **Pending**', 'Trang người đó, khối *Account*'],
+          ['5', 'Bấm **Resend invite link** để gửi link đặt mật khẩu', 'Trang người đó, khối *Account*'],
+        ],
+        note:
+          '**Khối vai trò có nút Save riêng** — nó được lưu **tách khỏi** hồ sơ bên trái, và được ghi theo kiểu **thay nguyên danh sách**. **Resend invite link có cooldown 60 giây** mỗi người; bấm lại quá nhanh sẽ nhận *“try again shortly”*.',
+      },
+      {
+        kind: 'shot',
+        src: '/shots/org/25-user-row-menu.jpg',
+        where: 'Admin',
+        caption:
+          'Menu **⋮** trên một dòng Users: **View detail · Edit · Manage roles · Reset password *(hoặc Resend invite link nếu đang Pending)* · Activate / Deactivate · Delete user**. ⚠️ **Bấm vào khoảng trống của dòng không còn mở trang nữa** — dùng *View detail* hoặc bấm tên người đó.',
+      },
+      {
+        kind: 'shot',
+        src: '/shots/org/27-user-detail.jpg',
+        where: 'Admin',
+        caption:
+          'Trang một tài khoản. Trái: **Profile** — *email là định danh, không đổi được*. Phải trên: **Account** với câu giải thích trạng thái và các nút *Resend invite link · Deactivate · Delete user*. Phải dưới: **Roles & edit and sales reach**, có **nút Save riêng**.',
+      },
+      {
+        kind: 'shot',
+        src: '/shots/org/26-manage-roles.jpg',
+        where: 'Admin',
+        caption:
+          'Hộp **Manage roles** mở thẳng từ menu ⋮ — cùng khối vai trò như trên trang chi tiết, dùng khi chỉ cần sửa vai trò mà không cần mở cả trang. Dòng cảnh báo cuối: *“Changes replace the full assignment list”* — danh sách được **ghi đè nguyên khối**, không cộng dồn.',
+      },
+      {
+        kind: 'shot',
+        src: '/shots/org/21-invite-user.jpg',
+        where: 'Admin',
+        caption:
+          'Hộp **Invite user** cho người chưa có trong hệ thống: *Full name* và *Email* bắt buộc; *Phone*, *Title*, *Department or team*, *Phone extension* tuỳ chọn; bên dưới là khối **Roles & edit and sales reach** bắt buộc ít nhất một vai trò. **Không có ô mật khẩu** — người được mời nhận một **link dùng một lần (sống 72 giờ)** để tự đặt.',
+        note:
+          'Hai ô cần quyền riêng mới hiện: **Department or team** cần *Move an operator’s team* (`user:move_department`), **Phone extension** cần quyền gán máy lẻ tổng đài.',
+      },
+
+      /* A3b — reach */
+      { kind: 'h', text: 'A4 · Edit & sales reach — chọn phạm vi nào cho ai' },
+      {
+        kind: 'p',
+        text:
+          '**Đây là thay đổi mới nhất, lên production ngày 11/11/2026 (SRM-994).** Ô trước đây gọi là *Data reach* giờ tên là **“Roles & edit and sales reach”**, và ba lựa chọn đã đổi chữ để nói đúng việc nó làm:',
+      },
+      {
+        kind: 'table',
+        heading: 'Tên cũ → tên mới trên màn hình',
+        note: '**Chữ “companies” trong cả ba lựa chọn là có chủ đích**: phạm vi này nói về **công ty nào người đó được đụng vào**, không phải về việc họ nhìn thấy gì.',
+        cols: ['Trước (tới 10/11/2026)', 'Trên production bây giờ'],
+        rows: [
+          ['Mục *Roles & data reach*', '**Roles & edit and sales reach**'],
+          ['*All data*', '**All companies**'],
+          ['*Their team only*', '**Their team’s companies**'],
+          ['*Only their own*', '**Only their own companies**'],
+        ],
+      },
+      {
+        kind: 'warn',
+        text:
+          '**Điều quan trọng nhất phải nói với người dùng: phạm vi KHÔNG giới hạn việc XEM nữa.** Chính dòng hướng dẫn trong form nói vậy: *“It does not limit viewing — anyone with Companies ▸ Read sees every company.”* Ai có **Companies ▸ Read** đều **xem được mọi công ty**, kể cả **Free data**. Phạm vi chỉ chặn **sửa và bán hàng**: sửa công ty, tạo/sửa **báo giá · đơn hàng · hoá đơn**, và **nhật ký bán hàng**. Mở một công ty ngoài phạm vi sẽ thấy dòng *“outside your edit and sales reach — you can view it but not change it”* và **không có** nút *Edit / Archive / Create quotation*.',
+      },
+      {
+        kind: 'shot',
+        src: '/shots/org/22-reach-options.jpg',
+        where: 'Admin',
+        caption:
+          'Ba lựa chọn trong ô **Pick an edit & sales reach…** trên production: **All companies · Their team’s companies · Only their own companies**. **Không có giá trị mặc định** — nút *Add* bị khoá cho tới khi bạn chọn một cái. Chọn vai trò mà quên bấm *Add* thì vai trò đó **không** nằm trong thứ được lưu (form có dòng nhắc màu vàng).',
+      },
+      {
+        kind: 'table',
+        heading: 'Chọn phạm vi nào — quy tắc gọn',
+        cols: ['Phạm vi', 'Người đó sửa và bán được cho', 'Gán cho ai'],
+        rows: [
+          [
+            '**All companies**',
+            'Mọi công ty, kể cả **Free data**',
+            'HQ Admin · **Sale manager** · vận hành · marketing',
+          ],
+          [
+            '**Their team’s companies**',
+            'Công ty của **những người ngồi cùng nút** với họ, **cộng** mọi nút họ **làm leader** và các **team con** của nút đó',
+            '**Sale leader / trưởng nhóm kinh doanh**',
+          ],
+          [
+            '**Only their own companies**',
+            'Chỉ công ty **họ đứng tên chủ**',
+            '**Sale member / nhân viên kinh doanh**',
+          ],
+        ],
+        note:
+          '**Một người giữ được nhiều vai trò, mỗi vai trò một phạm vi khác nhau** — ví dụ *Sale member* ở *Only their own companies* và *Marketing* ở *All companies*.',
+      },
+      {
+        kind: 'example',
+        heading: 'Ví dụ 1 — tạo một **Sale member** (nhân viên kinh doanh)',
+        scenario:
+          'Chị Lan là nhân viên kinh doanh của *HCM Sales Team 1*. Chị chỉ được sửa và xuất báo giá cho **những công ty chị đang làm chủ**; công ty của đồng nghiệp chị **vẫn xem được** nhưng không sửa được.',
+        cols: ['Ô', 'Chọn'],
+        rows: [
+          ['**Department or team**', 'HCM Sales Team 1'],
+          ['**Role**', '**Sale member**'],
+          ['**Edit & sales reach**', '**Only their own companies**'],
+        ],
+        note: 'Bấm **Add** rồi **Save roles** (hoặc **Send invite** nếu đang ở form mời).',
+      },
+      {
+        kind: 'shot',
+        src: '/shots/org/23-grant-sale-member-own.jpg',
+        where: 'Admin',
+        caption:
+          'Kết quả của ví dụ 1 trên production: thẻ **Sale member** — **Edits & sells for: Only their own companies**. Bấm biểu tượng ↗ cạnh tên vai trò để mở lưới quyền của vai trò đó ở tab mới; biểu tượng thùng rác để gỡ.',
+      },
+      {
+        kind: 'example',
+        heading: 'Ví dụ 2 — tạo một **Sale leader** (trưởng nhóm kinh doanh)',
+        scenario:
+          'Anh Nam là trưởng nhóm *HCM Sales Team 1*. Anh được sửa và bán trên **công ty của cả nhóm**, không chỉ của riêng mình.',
+        cols: ['Ô', 'Chọn'],
+        rows: [
+          ['**Department or team**', 'HCM Sales Team 1'],
+          ['**Role**', '**Sale leader**'],
+          ['**Edit & sales reach**', '**Their team’s companies**'],
+        ],
+        note:
+          '**Chưa xong ở đây.** Phải quay lại *Departments* → mở **HCM Sales Team 1** → đặt **Leader = Nam** (bước 4). Không đặt leader thì “team” của anh Nam chỉ là **những người ngồi trực tiếp cùng nút**, và anh **không thấy xuống các team con**.',
+      },
+      {
+        kind: 'shot',
+        src: '/shots/org/24-grant-sale-leader-team.jpg',
+        where: 'Admin',
+        caption:
+          'Kết quả của ví dụ 2: thẻ **Sale leader** — **Edits & sells for: Their team’s companies**.',
+      },
+      {
+        kind: 'table',
+        heading: 'Dải Mine · My team’s · All trên CRM → Companies — chính là lý do phải có phòng ban',
+        note: 'Dải này **chỉ hiện khi có từ 2 lựa chọn trở lên** — một lựa chọn duy nhất là một cái nhãn chứ không phải một lựa chọn, nên hệ thống **ẩn hẳn dải đó đi**.',
+        cols: ['Tab', 'Hiện khi nào'],
+        rows: [
+          ['**Mine**', 'Người đó **đang làm chủ ít nhất một công ty**'],
+          ['**My team’s**', 'Người đó **thuộc một phòng ban / team**, **hoặc** đang **làm leader** của một nút'],
+          ['**All**', '**Luôn luôn** — mọi người có *Companies ▸ Read* đều có tab này'],
+        ],
+      },
+      {
+        kind: 'shot',
+        src: '/shots/org/30-companies-tabs.jpg',
+        where: 'Admin',
+        caption:
+          '*CRM → Companies* trên production, nhìn bằng tài khoản **HQ Admin không thuộc phòng ban nào và không làm chủ công ty nào**: chỉ còn ba tab **Assigned · Free data · Archived**, **không có** dải *Mine · My team’s · All* — vì với tài khoản này chỉ còn đúng một lựa chọn (*All*). Xếp tài khoản vào một phòng ban là dải đó hiện ra.',
+      },
+
+      /* A5 */
+      { kind: 'h', text: 'A5 · Bước 4 — đặt Leader cho từng phòng ban và team', path: '/system/departments' },
+      {
+        kind: 'table',
+        heading: 'Đặt leader làm được hai việc — và không làm việc thứ ba',
+        cols: ['', 'Chi tiết'],
+        rows: [
+          ['**Mở rộng phạm vi “Their team’s companies”**', 'Người giữ vai trò ở phạm vi team sẽ thấy thêm **nút họ làm leader** và **các team con** của nút đó — **kể cả khi họ không ngồi ở nút đó**'],
+          ['**Nhận yêu cầu duyệt chiết khấu**', 'Yêu cầu của người trong team đi tới **leader của team**; team không có leader (hoặc leader chính là người xin) thì **leo lên leader của phòng ban**. Phòng ban gốc cũng không có leader thì **yêu cầu không tạo được**'],
+          ['❌ **Không** mở thêm trang nào', 'Leader không tự có thêm quyền. Người **không** giữ vai trò nào ở phạm vi team thì làm leader **không đổi gì cả**'],
+        ],
+      },
+      {
+        kind: 'p',
+        text:
+          'Cách làm: *Departments* → menu **⋮** của nút → **Edit** (hoặc **View detail**) → ô **Leader** → chọn người → **Save**. Leader bắt buộc là operator **đang hoạt động** — chọn người đang *Inactive* sẽ bị từ chối với *“Department leader must be an active admin user”*. Leader **không bắt buộc phải là thành viên** của chính nút đó.',
+      },
+
+      /* A6 */
+      {
+        kind: 'table',
+        heading: 'Checklist trước khi bàn giao cho người dùng thật',
+        cols: ['☐', 'Kiểm gì', 'Đạt khi'],
+        rows: [
+          ['1', 'Cây phòng ban khớp với tổ chức thật', 'Mỗi người sẽ ngồi vào được đúng một nút đã tồn tại'],
+          ['2', 'Mỗi vai trò sắp dùng đã được mở ra đọc lại lưới quyền', 'Không còn vai trò nào “để nguyên vì có sẵn”'],
+          ['3', 'Mỗi tài khoản sắp dùng có **ít nhất một vai trò** và **một phạm vi**', 'Cột *Roles* trên danh sách không còn “No roles”'],
+          ['4', 'Nhân viên kinh doanh → **Only their own companies**; trưởng nhóm → **Their team’s companies**', 'Mở trang từng người, đọc dòng *Edits & sells for*'],
+          ['5', 'Mỗi phòng ban và mỗi team đã có **Leader**', 'Cột *Leader* không còn *No leader*'],
+          ['6', 'Tài khoản đã **Activate** và đã **gửi link đặt mật khẩu**', 'Trạng thái chuyển **Inactive → Pending**, và người đó nhận được email'],
+          ['7', 'Đăng nhập thử bằng một tài khoản Sale thật', 'Thấy dải **Mine · My team’s · All**; mở công ty của đồng nghiệp thì **xem được, không sửa được**'],
+          ['8', 'Còn **ít nhất một** tài khoản HQ Admin đang hoạt động', 'Hệ thống **từ chối** tắt hoặc xoá HQ Admin đang hoạt động cuối cùng'],
+        ],
+      },
+      {
+        kind: 'open',
+        text:
+          '**Chưa chốt:** ma trận “vai trò nào cho chức danh nào” là quyết định của Saramin Việt Nam, không nằm trong code. 7 vai trò dựng sẵn trên production là **điểm xuất phát**, không phải kết luận — đặc biệt là *VN Sales* (91 quyền) và *VN Operations* (81 quyền), hai bộ quyền cũ rộng hơn hẳn bộ *Sale manager / leader / member*. Nên mở từng vai trò ra, đọc lưới, và sửa trước khi gán cho người thật.',
+      },
+
+      { kind: 'h', text: 'B · Tham chiếu đầy đủ — theo trang Notion của khách' },
       /* ── The client's Notion page "Roles, Users & Departments", section by
          section — same numbering (§0 … §9) so a tester holding both finds §3 in
          either. Notion was written 29/09/2026 from saramin-vn-admin dev; every
@@ -1351,13 +1794,13 @@ export const USERS_ORG_MODULE_DOCS: Record<string, ModuleDoc> = {
         rows: [
           ['**Departments**', '`/system/departments`', 'Operator **ngồi ở đâu** — sơ đồ tổ chức nội bộ của Saramin: phòng ban và các team bên trong'],
           ['**Roles & permissions**', '`/system/roles`', 'Operator **được làm gì** — một tập quyền có tên, theo từng trang'],
-          ['**Users**', '`/system/users`', 'Operator **là ai** — tài khoản, phòng ban của họ, và các vai trò họ giữ kèm phạm vi dữ liệu'],
+          ['**Users**', '`/system/users`', 'Operator **là ai** — tài khoản, phòng ban của họ, và các vai trò họ giữ kèm **Edit & sales reach**'],
         ],
       },
       {
         kind: 'warn',
         text:
-          '**Từ 29/09 tới 08/10 lưới quyền (§3) đã đổi — Notion chưa theo kịp.** Lưới giờ **gom nhóm theo đúng sidebar** (9 nhóm; *Organisation* là một nhóm riêng). **Mọi dòng đều tick được** — tag *Not grantable* và *Limited* đã bỏ, cùng với các dòng chỉ đi nhờ quyền trang khác (*Applications*, *Job approval*, *Posting ladder*, *Quota usage*…). Mới có: **dòng con thụt vào** dưới trang cha kèm chip **Needs {trang} ▸ Read** · chip **Team / Own reach only** · mỗi dòng có mô tả và link tới màn hình của nó · tiêu đề cột **đứng yên khi cuộn**. Notion cũng **không nhắc** quyền riêng **Move an operator’s team** (§4).',
+          '**Từ 29/09 tới 08/10 lưới quyền (§3) đã đổi — Notion chưa theo kịp.** Lưới giờ **gom nhóm theo đúng sidebar** (9 nhóm; *Organisation* là một nhóm riêng). **Mọi dòng đều tick được** — tag *Not grantable* và *Limited* đã bỏ, cùng với các dòng chỉ đi nhờ quyền trang khác (*Applications*, *Job approval*, *Posting ladder*, *Quota usage*…). Mới có: **dòng con thụt vào** dưới trang cha kèm chip **Needs {trang} ▸ Read** · chip **Team / Own reach only** · mỗi dòng có mô tả và link tới màn hình của nó · tiêu đề cột **đứng yên khi cuộn**. Notion cũng **không nhắc** quyền riêng **Move an operator’s team** (§4). **Thêm một lớp nữa từ 11/11/2026 (SRM-994):** dòng chú thích của lưới đã đổi thành *“Which companies it can change and sell to is chosen per operator when the role is assigned. Companies ▸ Read always covers every company.”*, lưới có thêm ô **Search pages**, và dưới *Companies* có hai dòng con mới **Edit another sales owner’s accounts** và **Edit Free data companies**.',
       },
 
       /* §0 */
@@ -1370,7 +1813,7 @@ export const USERS_ORG_MODULE_DOCS: Record<string, ModuleDoc> = {
         rows: [
           ['**Người này ngồi ở đâu?**', '*Departments* → rồi chọn trên người dùng', 'Sales › Sales SVN 2'],
           ['**Họ được làm gì?**', '*Roles* → rồi gán trên người dùng', 'Sale member: đọc + sửa Companies, tạo báo giá…'],
-          ['**Trên dữ liệu nào?**', '**Phạm vi dữ liệu** chọn lúc gán vai trò', 'All data · Their team only · Only their own'],
+          ['**Sửa được trên dữ liệu nào?**', '**Edit & sales reach** chọn lúc gán vai trò', 'All companies · Their team\u2019s companies · Only their own companies'],
         ],
       },
       {
@@ -1425,7 +1868,7 @@ export const USERS_ORG_MODULE_DOCS: Record<string, ModuleDoc> = {
         kind: 'list',
         heading: 'Luật đáng biết',
         items: [
-          '**Làm leader không mở thêm trang nào — nhưng nới phạm vi “Their team only”.** Người giữ một vai trò ở phạm vi *Their team only* thấy người ở nút mình ngồi **cộng mọi nút mình làm leader và các team con của nút đó** (§5). Không giữ vai trò phạm vi team thì làm leader không đổi gì. Leader còn là người nhận **yêu cầu duyệt chiết khấu** của team (team không có leader thì leo lên leader phòng ban).',
+          '**Làm leader không mở thêm trang nào — nhưng nới phạm vi “Their team’s companies”.** Người giữ một vai trò ở phạm vi *Their team’s companies* thấy người ở nút mình ngồi **cộng mọi nút mình làm leader và các team con của nút đó** (§5). Không giữ vai trò phạm vi team thì làm leader không đổi gì. Leader còn là người nhận **yêu cầu duyệt chiết khấu** của team (team không có leader thì leo lên leader phòng ban).',
           '**Xoá một nút thì người vẫn còn.** Thành viên giữ nguyên tài khoản và chỉ đơn giản là **không thuộc phòng ban nào** — hộp thoại xác nhận nói rõ điều đó.',
           '**Phòng ban còn team thì không xoá được.** Xoá hoặc làm rỗng các team trước — tái cơ cấu **không bao giờ là một thao tác dây chuyền**.',
           '**Chuyển một team sang phòng ban khác:** tạo team mới dưới phòng ban đúng → chuyển người sang → xoá team cũ.',
@@ -1448,7 +1891,7 @@ export const USERS_ORG_MODULE_DOCS: Record<string, ModuleDoc> = {
       {
         kind: 'table',
         heading: 'Lưới quyền — mỗi trang admin là một dòng, gom theo nhóm sidebar',
-        note: 'Phạm vi dữ liệu **không** đặt ở đây — lưới ghi rõ: *“How far its data reaches is chosen per operator when the role is assigned.”* (xem §5).',
+        note: 'Phạm vi **không** đặt ở đây — lưới ghi rõ (bản production, SRM-994): *\u201cSets which pages and actions a role can use. Which companies it can change and sell to is chosen per operator when the role is assigned. Companies \u25b8 Read always covers every company.\u201d* (xem \u00a75). Lưới còn có ô **Search pages** để lọc, và dải **Apply to all pages** đổi thành *\u201cApply to the N pages matching the search\u201d* khi đang lọc.',
         cols: ['Cột', 'Nghĩa'],
         rows: [
           ['**None**', 'Trạng thái rỗng — tick vào đây là **xoá sạch cả dòng**'],
@@ -1500,7 +1943,7 @@ export const USERS_ORG_MODULE_DOCS: Record<string, ModuleDoc> = {
       {
         kind: 'p',
         text:
-          '**Mời một người.** *Invite user* hỏi: họ tên · email · số điện thoại · chức danh · **phòng ban** · **extension** (cho tổng đài) · **ít nhất một vai trò**, mỗi vai trò kèm **phạm vi dữ liệu** của nó. **Không có ô mật khẩu** — tài khoản được tạo ra không có mật khẩu và người đó nhận một **link dùng một lần** để tự đặt. Không ai khác từng biết mật khẩu đó.',
+          '**Mời một người.** *Invite user* hỏi: họ tên · email · số điện thoại · chức danh · **phòng ban** · **extension** (cho tổng đài) · **ít nhất một vai trò**, mỗi vai trò kèm **Edit & sales reach** của nó (khối trên form tên là **\u201cRoles & edit and sales reach\u201d**). **Không có ô mật khẩu** — tài khoản được tạo ra không có mật khẩu và người đó nhận một **link dùng một lần** để tự đặt. Không ai khác từng biết mật khẩu đó.',
       },
       {
         kind: 'warn',
@@ -1531,7 +1974,7 @@ export const USERS_ORG_MODULE_DOCS: Record<string, ModuleDoc> = {
       {
         kind: 'p',
         text:
-          '**Trang riêng của một người** (`/system/users/:id`): hồ sơ bên trái (phòng ban, chức danh, điện thoại, extension); bên phải là các hành động tài khoản, khối **Roles & data reach** có nút *Save* riêng, và **10 hành động gần nhất** của người đó lấy từ audit log.',
+          '**Trang riêng của một người** (`/system/users/:id`): hồ sơ bên trái (phòng ban, chức danh, điện thoại, extension); bên phải là các hành động tài khoản, khối **Roles & edit and sales reach** có nút *Save* riêng, và **10 hành động gần nhất** của người đó lấy từ audit log.',
       },
       {
         kind: 'list',
@@ -1540,28 +1983,33 @@ export const USERS_ORG_MODULE_DOCS: Record<string, ModuleDoc> = {
           '**Bạn không đổi được vai trò của chính mình** — nhờ một admin khác.',
           '**Chỉ HQ Admin mới phong được HQ Admin** cho người khác.',
           'Một admin không phải HQ **không gán được vai trò mang quyền mà chính họ không có**.',
-          '**Trên trang của chính mình, ô phòng ban cần phạm vi *All data*.** Leader ở phạm vi team không tự chuyển mình sang nút khác được (ô bị khoá kèm lý do); chuyển người khác thì được.',
+          '**Trên trang của chính mình, ô phòng ban cần phạm vi *All companies*.** Leader ở phạm vi team không tự chuyển mình sang nút khác được (ô bị khoá kèm lý do); chuyển người khác thì được.',
           '**Bộ lọc:** tìm theo tên hoặc email (**không phân biệt dấu**), phòng ban (chọn một phòng ban **bao gồm cả các team của nó**), vai trò, và các tab trạng thái.',
         ],
       },
 
       /* §5 */
-      { kind: 'h', text: '§5 · Phạm vi dữ liệu — nơi Departments và Roles gặp nhau' },
+      { kind: 'h', text: '\u00a75 \u00b7 Edit & sales reach \u2014 nơi Departments và Roles gặp nhau' },
       {
         kind: 'table',
         heading: 'Mỗi vai trò một người giữ được gán kèm một phạm vi',
-        note: 'Vậy **phòng ban chọn trên người dùng, cộng các nút họ làm leader, là thứ định nghĩa “team của họ”**, còn **phạm vi chọn trên vai trò là độ vươn của quyền đó**. Đổi một trong hai thì tầm nhìn của người đó đổi theo. **Một người giữ được hai vai trò ở hai phạm vi khác nhau** — ví dụ Sales ở *Only their own* và Marketing ở *All data*.',
-        cols: ['Phạm vi', 'Người đó thấy', 'Ai thường giữ'],
+        note: 'Vậy **phòng ban chọn trên người dùng, cộng các nút họ làm leader, là thứ định nghĩa \u201cteam của họ\u201d**, còn **phạm vi chọn trên vai trò là độ vươn của quyền đó**. Đổi một trong hai thì phạm vi của người đó đổi theo. **Một người giữ được hai vai trò ở hai phạm vi khác nhau** \u2014 ví dụ Sales ở *Only their own companies* và Marketing ở *All companies*. **Phạm vi không chặn việc xem**: ai có *Companies \u25b8 Read* đều thấy mọi công ty.',
+        cols: ['Phạm vi (tên trên màn hình)', 'Người đó **sửa và bán** được trên', 'Ai thường giữ'],
         rows: [
-          ['**All data**', 'Mọi bản ghi mà các trang của vai trò đó hiện', 'HQ Admin, quản lý, vận hành'],
-          ['**Their team only**', 'Bản ghi thuộc về người **ngồi cùng nút** với họ, **cộng** người trong **mọi nút họ làm leader và các team con của nút đó**. Không ngồi đâu và không làm leader đâu → **không thấy gì**', 'Team leader'],
-          ['**Only their own**', 'Bản ghi được gán **cho đích danh họ** (công ty của họ, báo giá của họ)', 'Nhân viên sales'],
+          ['**All companies** *(trước: All data)*', 'Mọi bản ghi mà các trang của vai trò đó hiện, kể cả **Free data**', 'HQ Admin, quản lý, vận hành'],
+          ['**Their team\u2019s companies** *(trước: Their team only)*', 'Bản ghi thuộc về người **ngồi cùng nút** với họ, **cộng** người trong **mọi nút họ làm leader và các team con của nút đó**. Không ngồi đâu và không làm leader đâu \u2192 **chỉ còn của chính mình**', 'Team leader'],
+          ['**Only their own companies** *(trước: Only their own)*', 'Bản ghi được gán **cho đích danh họ** (công ty của họ, báo giá của họ)', 'Nhân viên sales'],
         ],
       },
       {
         kind: 'warn',
         text:
-          '**Sửa theo bản dựng** (svn-be `ee1db5ea9`, `DepartmentRepositoryAdapter.teamVisibleNodeIds`): trang này từng ghi *Their team only* = “chính phòng ban / team của họ **và các team bên dưới nó**”. Các team bên dưới chỉ được tính khi người đó **là leader** của phòng ban; một thành viên thường ngồi ở phòng ban gốc chỉ thấy người ngồi trực tiếp ở phòng ban đó.',
+          '**Sửa theo bản dựng** (svn-be `ee1db5ea9`, `DepartmentRepositoryAdapter.teamVisibleNodeIds`): trang này từng ghi *Their team’s companies* = “chính phòng ban / team của họ **và các team bên dưới nó**”. Các team bên dưới chỉ được tính khi người đó **là leader** của phòng ban; một thành viên thường ngồi ở phòng ban gốc chỉ thấy người ngồi trực tiếp ở phòng ban đó.',
+      },
+      {
+        kind: 'warn',
+        text:
+          '**Tên ô nói “companies”, nhưng nó chặn rộng hơn thế.** Dòng hướng dẫn trong form chỉ kể công ty, báo giá, đơn hàng, hoá đơn và nhật ký bán hàng — đó là chỗ người dùng cảm nhận rõ nhất. Nhưng về cơ chế (svn-be `V295`), phạm vi này là một **nắp trần đặt lên MỌI quyền trong cùng dòng gán đó**, kể cả những quyền không dính gì tới công ty (ví dụ thẻ *Recent activity* trên trang một operator cần `audit_log:read` ở **All companies**). **Một vai trò tự giới hạn sẵn thì giữ giới hạn của nó** dù bạn chọn rộng hơn — chọn *All companies* không nới được một vai trò đã bị bó ở mức Team / Own trên lưới quyền.',
       },
 
       /* §6 */
@@ -1574,9 +2022,9 @@ export const USERS_ORG_MODULE_DOCS: Record<string, ModuleDoc> = {
         rows: [
           ['1', 'Departments', 'Tạo **Sales**; bên trong thêm team **Sales SVN 1** và **Sales SVN 2**'],
           ['2', 'Roles', 'Tạo **Sale member** (Companies: Read + Update · Quotations: Create + Read + Update · **không** Export), rồi **Duplicate** thành **Sale leader** và thêm *Daily activity log: Read*, *Sales dashboard: Read*'],
-          ['3', 'Users', 'Mời **quản lý** vào *Sales* với *Sale leader* ở phạm vi **All data**'],
-          ['4', 'Users', 'Mời **từng leader** vào team của họ với *Sale leader* ở phạm vi **Their team only**'],
-          ['5', 'Users', 'Mời **từng nhân viên** vào team của họ với *Sale member* ở phạm vi **Only their own**'],
+          ['3', 'Users', 'Mời **quản lý** vào *Sales* với *Sale leader* ở phạm vi **All companies**'],
+          ['4', 'Users', 'Mời **từng leader** vào team của họ với *Sale leader* ở phạm vi **Their team’s companies**'],
+          ['5', 'Users', 'Mời **từng nhân viên** vào team của họ với *Sale member* ở phạm vi **Only their own companies**'],
           ['6', 'Departments', 'Mở Sales SVN 1 và 2 → đặt **Leader** cho mỗi team'],
         ],
         note: 'Tên dòng trên lưới theo build hiện tại: Notion ghi *Company accounts*, *Quotes*, *Daily activities*, *Dashboards ▸ Sales* — là cùng các dòng đó trước khi lưới đổi tên theo sidebar.',
@@ -1591,7 +2039,7 @@ export const USERS_ORG_MODULE_DOCS: Record<string, ModuleDoc> = {
           ['“N operators still hold this role — reassign them first.”', 'Vai trò đang có người giữ', 'Gỡ vai trò khỏi những người đó trước'],
           ['Xoá vai trò toàn quyền cuối cùng bị từ chối', 'Nó sẽ khoá cả console', 'Cấp toàn quyền cho một vai trò khác trước'],
           ['“You cannot change your own role assignments”', 'Bảo vệ chống tự phong quyền', 'Nhờ một admin khác'],
-          ['“You cannot move yourself to another org node”', 'Leader phạm vi team tự chuyển mình', 'Nhờ người có phạm vi *All data*'],
+          ['“You cannot move yourself to another org node”', 'Leader phạm vi team tự chuyển mình', 'Nhờ người có phạm vi *All companies*'],
           ['Xoá user bị từ chối, có bản ghi tham chiếu tới họ', 'Họ đã từng làm việc trong hệ thống', '**Deactivate** thay vì xoá'],
           ['Xoá phòng ban bị từ chối', 'Nó vẫn còn team', 'Xoá hoặc làm rỗng các team trước'],
           ['“An admin user with this email already exists”', 'Lời mời đã gửi rồi', 'Tìm dòng **Pending** → *Resend invite link*'],
@@ -1606,7 +2054,7 @@ export const USERS_ORG_MODULE_DOCS: Record<string, ModuleDoc> = {
         cols: ['Ở đâu', 'Vì sao quan trọng ở đây'],
         rows: [
           ['**System → Audit log**', '**Mọi** thay đổi vai trò, thay đổi quyền, lời mời, vô hiệu hoá và xoá đều được ghi kèm **ai đã làm** — trang người dùng hiện 10 cái gần nhất'],
-          ['**CRM → Customers**', '*Only their own* và *Their team only* quyết định nhân viên sales và leader thấy khách nào — **phạm vi cảm nhận rõ nhất ở đây**'],
+          ['**CRM → Customers**', '*Only their own companies* và *Their team’s companies* quyết định nhân viên sales và leader thấy khách nào — **phạm vi cảm nhận rõ nhất ở đây**'],
           ['**Call centre**', '**Extension** trên người dùng là thứ nối các cuộc gọi về đúng họ'],
           ['**Company users** (site nhà tuyển dụng)', 'Một tập tài khoản và vai trò **riêng**; không gì trên ba trang này chạm tới nó'],
         ],
@@ -1620,13 +2068,13 @@ export const USERS_ORG_MODULE_DOCS: Record<string, ModuleDoc> = {
         rows: [
           ['Mời một người với đúng một vai trò', 'Họ hiện ở **Pending**; email tới; sau khi đặt mật khẩu họ thành **Active** và **chỉ thấy các trang vai trò đó mở ra**'],
           ['Bỏ tick *Companies: Read* trên vai trò của họ', 'Trang đó **biến khỏi menu của họ** ở lần tải trang kế tiếp'],
-          ['Một sales ở *Only their own*, một sales khác ở *Their team only*, cùng một team', 'Người đầu thấy khách của mình; người sau thấy khách của **cả hai**'],
+          ['Một sales ở *Only their own companies*, một sales khác ở *Their team’s companies*, cùng một team', 'Người đầu thấy khách của mình; người sau thấy khách của **cả hai**'],
           ['Chuyển một user từ Sales SVN 1 sang Sales SVN 2', 'Tầm nhìn “team” của họ **chuyển sang bản ghi của team mới**'],
           ['Thử xoá một vai trò 2 người đang giữ', '**Từ chối**, kèm con số'],
           ['Thử xoá một user đã từng tạo một báo giá', '**Từ chối**; *Deactivate* thì được'],
           ['Thử sửa vai trò của chính mình', '**Từ chối** kèm thông báo'],
           ['Xoá một phòng ban còn team', '**Từ chối**; sau khi xoá hết team thì thành công và **thành viên của nó bị bỏ trống phòng ban**'],
-          ['Đặt leader phòng ban là người **không phải thành viên**, giữ vai trò ở *Their team only*', '**Cho phép**; leader đó **thấy bản ghi của người trong phòng ban và các team con** dù không ngồi ở đó'],
+          ['Đặt leader phòng ban là người **không phải thành viên**, giữ vai trò ở *Their team’s companies*', '**Cho phép**; leader đó **thấy bản ghi của người trong phòng ban và các team con** dù không ngồi ở đó'],
           ['Mở *Reset password* trên một user Active', 'Họ **bị đăng xuất ở mọi nơi** và nhận link mới; dòng chuyển về **Pending**'],
           ['*(thêm, theo build)* Vai trò chỉ có **Move an operator’s team**, không có *Operator accounts: Update*', 'Trên trang một operator, **chỉ ô phòng ban sửa được**; phần còn lại chỉ đọc'],
         ],
