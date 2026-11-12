@@ -309,7 +309,7 @@ export const WORKFLOW: Workflow = {
           table: {
             cols: ['Vai trò', 'Phạm vi xem', 'Được làm', 'Không được làm / cần chuyển người khác'],
             rows: [
-              ['Sales Member', 'Khách hàng mình phụ trách; dữ liệu team khác ở chế độ chỉ xem', 'Call, meeting, tạo báo giá trong phạm vi được giao', 'Không sửa Company info, không xoá Contact. Thiếu quyền thì chuyển Sales Leader hoặc Sales Admin.'],
+              ['Sales Member', '**Xem được mọi công ty** (SRM-994); chỉ **sửa và bán** trên khách mình phụ trách', 'Call, meeting, tạo báo giá trong phạm vi được giao', 'Không sửa Company info, không xoá Contact. Thiếu quyền thì chuyển Sales Leader hoặc Sales Admin.'],
               ['Sales Leader', 'Dữ liệu của team và từng thành viên', 'Theo dõi team, duyệt chiết khấu trong hạn mức', 'Chiết khấu vượt hạn mức phải chuyển Sales Manager.'],
               ['Sales Admin', 'Phạm vi quản trị Sales', 'Verify company, xử lý Sign-up, duyệt claim', 'Không đụng các quyền chỉ dành cho System Admin.'],
               ['Accountant / Kế toán', 'Chứng từ tài chính', '**Phát hành hoá đơn (Issued)** — bước cấp quota', 'Không sửa nội dung tin tuyển dụng.'],

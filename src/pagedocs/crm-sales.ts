@@ -63,8 +63,25 @@ export const CRM_SALES_PAGE_DOCS: Record<string, PageDoc> = {
             '**Archived**',
             'Công ty đã nghỉ — sổ đăng ký, luôn là tab cuối và không bao giờ mở mặc định',
             'Name · Company ID · Reason · Note · Archived on · Archived by · Owner · Total revenue',
-            'Lọc lý do, owner. **Không giới hạn theo sổ của bạn**: “công ty này bị archive vì sao” thường được hỏi về công ty không phải của mình',
+            'Lọc lý do, owner. Như hai tab kia, **không giới hạn theo sổ của bạn** — từ SRM-994 mọi người có `company:read` đều thấy cả ba tab đầy đủ',
           ],
+        ],
+      },
+      {
+        kind: 'warn',
+        text:
+          '**Ba tab này không còn lọc theo phạm vi của bạn nữa (SRM-994, lên production 11/11/2026).** Ai có `company:read` đều thấy **mọi công ty** — Assigned, Free data lẫn Archived — dù *Edit & sales reach* của họ là gì. **Mine / My team’s / All** là bộ lọc bạn tự chọn, không phải hàng rào quyền. Phạm vi giờ chỉ quyết định **sửa và bán** — chi tiết ở *Logic chung — Organisation*.',
+      },
+      {
+        kind: 'table',
+        heading: 'SRM-994 mở những gì — và không mở những gì',
+        note: 'Bảng này là chỗ hay bị đoán sai nhất sau đợt đổi. **Mọi thao tác GHI đều giữ nguyên phạm vi** — không có ngoại lệ nào. Đối chiếu: svn-be `CompanyAccess.readScopeOf`, changelog 19/10/2026.',
+        cols: ['Chỗ nào', 'Ngoài phạm vi thì sao'],
+        rows: [
+          ['**Mở được hết** — danh sách công ty (cả ba tab), trang chi tiết, *Contacts*, *Owner history*, *Company documents*, *Claim requests*, tab *Users* (danh bạ tài khoản khách), *Company page*, khung hoạt động, và **file Export** (xuất đúng những gì danh sách đang hiện)', '**Xem bình thường**, chỉ là không sửa được'],
+          ['**Vẫn khoá theo phạm vi** — tab **Products & billing**, danh bạ ghế (seat directory), **Sales activity log**, và việc **xếp một sign-up vào công ty**', 'Báo *outside your reach* hoặc hiện câu khoá — nhờ người có phạm vi rộng hơn'],
+          ['**Không đổi gì cả** — **Jobs**, **Quotations**, **Purchase orders**, **Invoices**', 'Vẫn lọc theo phạm vi như cũ: tin của công ty ngoài phạm vi **không hiện trong danh sách Jobs**, mở thẳng link thì 403'],
+          ['**Ghi thì luôn theo phạm vi** — sửa / archive / verify công ty, gán owner, thêm contact, mời ghế, sửa Company page, ghi activity, tạo báo giá', 'Nút **biến mất**; mở thẳng link thì lúc lưu bị từ chối'],
         ],
       },
       {
@@ -149,7 +166,7 @@ export const CRM_SALES_PAGE_DOCS: Record<string, PageDoc> = {
           'Nhãn cạnh tên: **trạng thái khách** (*New · Existing · Churn*) — hoặc với dòng Free data là *Not claimed / Waiting for approval* · trạng thái công ty (chỉ hiện khi khác *Active*) · **xác minh** (*Unverified · Waiting to verify · Verified*, luôn hiện) · **hạng thành viên** (chỉ khi có hạng thật).',
           '**Không còn chip chặng pipeline trên đầu hồ sơ**: một công ty có thể có nhiều báo giá đang mở, mỗi cái một chặng. Chặng xem trên từng báo giá hoặc trên bảng Pipeline.',
           '**Hàng số liệu** (không hiện với dòng Free data) tóm tắt tài khoản: hạng, khách từ ngày nào, tin đang mở, quota tin còn lại, lượt mở CV (lượt mở CV chỉ hiện với ai có `credit:read`), sales owner.',
-          'Banner xanh *read-only* = công ty của rep khác; banner vàng gạch = Free data; banner cam/đỏ = đã archive (đỏ khi lý do là *Violation*), kèm ai archive, khi nào.',
+          'Banner xanh *read-only* = công ty ngoài **Edit & sales reach** của bạn — nguyên văn *“{owner}’s account is outside your edit and sales reach. You can view it but not change it.”*; banner vàng gạch = Free data; banner cam/đỏ = đã archive (đỏ khi lý do là *Violation*), kèm ai archive, khi nào.',
         ],
       },
       {
@@ -160,7 +177,7 @@ export const CRM_SALES_PAGE_DOCS: Record<string, PageDoc> = {
           ['**Overview**', 'Hồ sơ (Company ID, loại công ty, tên pháp lý, MST, địa chỉ đăng ký, tên ngắn) · thông tin xuất hoá đơn · ngành/quy mô/quốc gia/tỉnh/tag/website/điện thoại · liên hệ chính · khối Sales (owner, Idle, nguồn lead, sản phẩm quan tâm, giá trị ước tính) · *Affiliated companies* · *Shared quota* · *Company documents* · **bảng Activity** bên phải', 'Nút *Edit* sửa tại chỗ. Đổi owner nằm trong form sửa và cần `company:assign`'],
           ['**Contacts**', 'Người liên hệ (vai trò: Company owner · HR manager · HR staff). Biểu tượng điện thoại gọi qua Callio', '**Liên hệ ≠ tài khoản đăng nhập** — xem *Logic chung*'],
           ['**Users**', 'Tài khoản đăng nhập của chính khách: mời qua email (link đặt mật khẩu dùng một lần), *Resend invite* (chờ 60 giây giữa hai lần), đổi vai trò, bật/tắt', 'Trạng thái *Invited* vẫn là *active* — tắt người đang được mời sẽ làm hỏng chính link của họ'],
-          ['**Products & billing**', 'Khách **đang giữ** gì theo từng product: số slot còn, đã dùng, hạn. Đơn đã tạo nhưng chưa có hoá đơn đếm riêng', 'Nơi xác nhận quota đã về sau khi hoá đơn Issued'],
+          ['**Products & billing**', 'Khách **đang giữ** gì theo từng product: số slot còn, đã dùng, hạn. Đơn đã tạo nhưng chưa có hoá đơn đếm riêng. ⚠️ **Tab duy nhất vẫn bị khoá ngoài phạm vi** — *“Products & billing for this company is outside your edit and sales reach.”*', 'Nơi xác nhận quota đã về sau khi hoá đơn Issued'],
           ['**Company page**', 'Trình sửa trang tuyển dụng công khai + danh sách việc còn thiếu để publish. Mục cuối (số 8) là **Company image source** — kho ảnh riêng của công ty để làm ảnh thẻ tin và banner, **không hiện trên trang công ty** (xem bên dưới)', 'Sửa cần `company_page:update`; publish cần `company_page:publish` — hai quyền riêng'],
           ['**Jobs**', 'Số tin đang mở + 5 tin gần nhất', '—'],
           ['**Claim requests**', 'Lịch sử xin công ty này từ Free data; nơi Admin / Sales lead duyệt', 'Xem *Logic chung — CRM* và trang *Claim requests*'],

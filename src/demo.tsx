@@ -264,10 +264,10 @@ const FLOWS: Flow[] = [
     steps: [
       { at: 'A', do: 'Tạo phòng ban và team bên trong', ok: 'Cây **hai tầng**, không có tầng ba', page: 'departments' },
       { at: 'A', do: 'Tạo vai trò, tick quyền theo từng trang', ok: '**Create không bao hàm Read**; **Export tách khỏi Read**', page: 'roles' },
-      { at: 'A', do: 'Mời một người: phòng ban + vai trò + **phạm vi dữ liệu**', ok: 'Ba lựa chọn: tất cả / team của họ / chỉ của riêng họ', page: 'users' },
-      { at: 'A', do: 'Đăng nhập bằng tài khoản đó', ok: 'Chỉ thấy các trang vai trò mở ra, và chỉ các bản ghi phạm vi cho phép', page: 'users' },
+      { at: 'A', do: 'Mời một người: phòng ban + vai trò + **Edit & sales reach**', ok: 'Ba lựa chọn: *All companies* / *Their team’s companies* / *Only their own companies*', page: 'users' },
+      { at: 'A', do: 'Đăng nhập bằng tài khoản đó', ok: 'Chỉ thấy các trang vai trò mở ra. Công ty thì **thấy hết**, nhưng ngoài phạm vi chỉ **xem**, không sửa', page: 'users' },
     ],
-    key: 'Ba câu hỏi tách bạch: **ngồi ở đâu** (phòng ban) × **được làm gì** (vai trò) × **trên dữ liệu nào** (phạm vi). Làm leader **không** tự cấp thêm quyền nào.',
+    key: 'Ba câu hỏi tách bạch: **ngồi ở đâu** (phòng ban) × **được làm gì** (vai trò) × **sửa được công ty nào** (Edit & sales reach). Từ SRM-994 phạm vi **không chặn việc xem** công ty nữa. Làm leader không mở thêm trang nào — nhưng nới phạm vi *Their team’s companies* ra các nút người đó làm leader.',
     subs: [
       { what: 'Tự sửa vai trò của chính mình', ok: 'Không được', page: 'users' },
       { what: 'Gửi lại lời mời liên tục', ok: 'Có thời gian chờ 60 giây giữa hai lần gửi', page: 'users' },

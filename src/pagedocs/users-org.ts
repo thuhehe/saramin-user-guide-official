@@ -1030,7 +1030,7 @@ export const USERS_ORG_PAGE_DOCS: Record<string, PageDoc> = {
       {
         kind: 'table',
         heading: 'Edit & sales reach — nơi Departments và Roles gặp nhau',
-        note: '**Phòng ban chọn trên người dùng + các nút họ làm leader** định nghĩa “team của họ”; **phạm vi chọn trên vai trò** là độ vươn của quyền đó. Đổi một trong ba thì tầm nhìn đổi theo. **Một người giữ được hai vai trò ở hai phạm vi khác nhau** — ví dụ Sales ở *Only their own companies* và Marketing ở *All companies*. Một vai trò **tự giới hạn sẵn** thì giữ giới hạn của nó dù bạn chọn rộng hơn.',
+        note: '**Phòng ban chọn trên người dùng + các nút họ làm leader** định nghĩa “team của họ”; **phạm vi chọn trên vai trò** là độ vươn của quyền đó. Đổi một trong ba thì phạm vi **sửa và bán** đổi theo (việc xem công ty thì không). **Một người giữ được hai vai trò ở hai phạm vi khác nhau** — ví dụ Sales ở *Only their own companies* và Marketing ở *All companies*. Một vai trò **tự giới hạn sẵn** thì giữ giới hạn của nó dù bạn chọn rộng hơn.',
         cols: ['Phạm vi', 'Người đó thấy', 'Ai thường giữ'],
         rows: [
           ['**All companies**', 'Mọi bản ghi mà các trang của vai trò đó hiện', 'HQ Admin, quản lý, vận hành'],
@@ -1088,7 +1088,7 @@ export const USERS_ORG_PAGE_DOCS: Record<string, PageDoc> = {
         cols: ['Ở đâu', 'Vì sao quan trọng ở đây'],
         rows: [
           ['**System → Audit log**', '**Mọi** lời mời, sửa hồ sơ, đổi vai trò, đặt lại mật khẩu, vô hiệu hoá và xoá đều được ghi kèm **ai đã làm** (`user.invite` · `user.update` · `user.assign_roles` · `user.reset_password` · `user.resend_invite` · `user.delete`)'],
-          ['**CRM → Customers**', '*Only their own companies* và *Their team’s companies* quyết định nhân viên sales và leader thấy khách nào — **phạm vi cảm nhận rõ nhất ở đây**'],
+          ['**CRM → Companies**', '*Only their own companies* và *Their team’s companies* quyết định nhân viên sales và leader **sửa và bán** được cho khách nào — **phạm vi cảm nhận rõ nhất ở đây**. Việc *thấy* thì không còn bị chặn (SRM-994)'],
           ['**Call centre**', '**Extension** trên người dùng là thứ nối các cuộc gọi về đúng họ'],
           ['**Departments**', 'Nút người đó ngồi, và các nút họ làm leader, định nghĩa “team” của họ'],
           ['**Company users** (site nhà tuyển dụng)', 'Một tập tài khoản và vai trò **riêng**; không gì trên trang này chạm tới nó'],
@@ -1222,7 +1222,7 @@ export const USERS_ORG_PAGE_DOCS: Record<string, PageDoc> = {
         rows: [
           ['Mời một người với đúng một vai trò', 'Họ hiện ở **Pending**; email tới; sau khi đặt mật khẩu họ thành **Active** và **chỉ thấy các trang vai trò đó mở ra**'],
           ['Bỏ tick *Companies: Read* trên vai trò của họ', 'Trang đó **biến khỏi menu của họ** ở lần tải trang kế tiếp'],
-          ['Một sales ở *Only their own companies*, một sales khác ở *Their team’s companies*, cùng một team', 'Người đầu thấy khách của mình; người sau thấy khách của **cả hai**'],
+          ['Một sales ở *Only their own companies*, một sales khác ở *Their team’s companies*, cùng một team', '**Cả hai đều THẤY mọi công ty** (SRM-994). Khác nhau ở: tab *My team’s* của người sau liệt kê công ty của cả team, và người đầu **không sửa được** công ty của đồng nghiệp (không có nút *Edit / Create quotation*, tab *Products & billing* khoá)'],
           ['Chuyển một user từ Sales SVN 1 sang Sales SVN 2', 'Tầm nhìn “team” của họ **chuyển sang bản ghi của team mới**'],
           ['Thử xoá một vai trò 2 người đang giữ', '**Từ chối**, kèm con số'],
           ['Bỏ `role:update` khỏi vai trò toàn quyền duy nhất', '**Từ chối** (409)'],
@@ -1641,7 +1641,7 @@ export const USERS_ORG_MODULE_DOCS: Record<string, ModuleDoc> = {
       {
         kind: 'warn',
         text:
-          '**Điều quan trọng nhất phải nói với người dùng: phạm vi KHÔNG giới hạn việc XEM nữa.** Chính dòng hướng dẫn trong form nói vậy: *“It does not limit viewing — anyone with Companies ▸ Read sees every company.”* Ai có **Companies ▸ Read** đều **xem được mọi công ty**, kể cả **Free data**. Phạm vi chỉ chặn **sửa và bán hàng**: sửa công ty, tạo/sửa **báo giá · đơn hàng · hoá đơn**, và **nhật ký bán hàng**. Mở một công ty ngoài phạm vi sẽ thấy dòng *“outside your edit and sales reach — you can view it but not change it”* và **không có** nút *Edit / Archive / Create quotation*.',
+          '**Điều quan trọng nhất phải nói với người dùng: phạm vi KHÔNG giới hạn việc XEM nữa.** Chính dòng hướng dẫn trong form nói vậy: *“It does not limit viewing — anyone with Companies ▸ Read sees every company.”* Ai có **Companies ▸ Read** đều **xem được mọi công ty**, kể cả **Free data**. Phạm vi chỉ chặn **sửa và bán hàng**: sửa công ty, tạo/sửa **báo giá · đơn hàng · hoá đơn**, và **nhật ký bán hàng**. Mở một công ty ngoài phạm vi sẽ thấy dòng *“outside your edit and sales reach — you can view it but not change it”* và **không có** nút *Edit / Archive / Create quotation*. ⚠️ **“Xem được hết” chỉ đúng với *CRM → Companies*.** Tab **Products & billing**, **Sales activity log** và việc xếp sign-up vẫn khoá theo phạm vi; **Jobs, Quotations, Purchase orders, Invoices không đổi gì** — vẫn lọc theo phạm vi như cũ. Bảng đầy đủ ở trang *Companies*.',
       },
       {
         kind: 'shot',
@@ -2054,7 +2054,7 @@ export const USERS_ORG_MODULE_DOCS: Record<string, ModuleDoc> = {
         cols: ['Ở đâu', 'Vì sao quan trọng ở đây'],
         rows: [
           ['**System → Audit log**', '**Mọi** thay đổi vai trò, thay đổi quyền, lời mời, vô hiệu hoá và xoá đều được ghi kèm **ai đã làm** — trang người dùng hiện 10 cái gần nhất'],
-          ['**CRM → Customers**', '*Only their own companies* và *Their team’s companies* quyết định nhân viên sales và leader thấy khách nào — **phạm vi cảm nhận rõ nhất ở đây**'],
+          ['**CRM → Companies**', '*Only their own companies* và *Their team’s companies* quyết định nhân viên sales và leader **sửa và bán** được cho khách nào — **phạm vi cảm nhận rõ nhất ở đây**. Việc *thấy* thì không còn bị chặn (SRM-994)'],
           ['**Call centre**', '**Extension** trên người dùng là thứ nối các cuộc gọi về đúng họ'],
           ['**Company users** (site nhà tuyển dụng)', 'Một tập tài khoản và vai trò **riêng**; không gì trên ba trang này chạm tới nó'],
         ],
@@ -2068,7 +2068,7 @@ export const USERS_ORG_MODULE_DOCS: Record<string, ModuleDoc> = {
         rows: [
           ['Mời một người với đúng một vai trò', 'Họ hiện ở **Pending**; email tới; sau khi đặt mật khẩu họ thành **Active** và **chỉ thấy các trang vai trò đó mở ra**'],
           ['Bỏ tick *Companies: Read* trên vai trò của họ', 'Trang đó **biến khỏi menu của họ** ở lần tải trang kế tiếp'],
-          ['Một sales ở *Only their own companies*, một sales khác ở *Their team’s companies*, cùng một team', 'Người đầu thấy khách của mình; người sau thấy khách của **cả hai**'],
+          ['Một sales ở *Only their own companies*, một sales khác ở *Their team’s companies*, cùng một team', '**Cả hai đều THẤY mọi công ty** (SRM-994). Khác nhau ở: tab *My team’s* của người sau liệt kê công ty của cả team, và người đầu **không sửa được** công ty của đồng nghiệp (không có nút *Edit / Create quotation*, tab *Products & billing* khoá)'],
           ['Chuyển một user từ Sales SVN 1 sang Sales SVN 2', 'Tầm nhìn “team” của họ **chuyển sang bản ghi của team mới**'],
           ['Thử xoá một vai trò 2 người đang giữ', '**Từ chối**, kèm con số'],
           ['Thử xoá một user đã từng tạo một báo giá', '**Từ chối**; *Deactivate* thì được'],

@@ -597,7 +597,7 @@ export const JOBS_APPS_PAGE_DOCS: Record<string, PageDoc> = {
       {
         kind: 'p',
         text:
-          '**Phạm vi dữ liệu.** Admin có phạm vi hẹp hơn *all* (theo *Departments*) chỉ thấy tin của các công ty trong phạm vi; đọc hay sửa một tin ngoài phạm vi đều bị từ chối. **Luồng duyệt tin đã bỏ (svn-be V468):** giá trị `REVIEW` còn trong từ điển chỉ để đọc tin cũ — không đường nào tạo ra nó nữa, tin của công ty lên thẳng *Open*.',
+          '**Edit & sales reach — ở đây vẫn chặn cả việc XEM.** Admin có phạm vi hẹp hơn *All companies* (theo *Departments*) chỉ thấy tin của các công ty trong phạm vi; đọc hay sửa một tin ngoài phạm vi đều bị từ chối (403), và phạm vi không gắn công ty nào thì danh sách **rỗng**. **Đây là chỗ khác với Companies:** SRM-994 chỉ mở việc xem cho *CRM → Companies*, **không** cho Jobs. **Luồng duyệt tin đã bỏ (svn-be V468):** giá trị `REVIEW` còn trong từ điển chỉ để đọc tin cũ — không đường nào tạo ra nó nữa, tin của công ty lên thẳng *Open*.',
       },
 
       { kind: 'h', text: '§9 · Hệ thống tự làm gì — bốn việc chạy theo lịch' },
