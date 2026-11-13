@@ -269,6 +269,10 @@ export const RULE_DETAIL: Record<string, DocBlock[]> = {
     rule('Rule — Logo công ty và mục Quy định', [
       'Cách chỉnh logo sau khi upload đã đổi: phải **crop sát trên dưới trái phải** của logo, để khi hiển thị có thể canh giữa hay canh trái đều được.',
       'Một file, **hai khung cố định**, kích thước đã tinh chỉnh để đứng cạnh logo của công ty khác không bị lệch.',
+      'Chọn logo để upload: ưu tiên **nền trắng hoặc trong suốt** — đặt trên thẻ tin và trang công ty nhìn sạch hơn. Hạn chế logo có nền màu.',
+      'Ưu tiên **logo chất lượng cao**. Khung hiển thị là **160 × 40 px**, nên file cần **tối thiểu 320 × 80 px**, tốt nhất **640 × 160 px** (PNG nền trong). Nhận PNG, JPG, WEBP, tối đa 5 MB.',
+      'Kiểm tra bằng **kích thước pixel**, không bằng dung lượng: chuột phải vào file → *Get Info* (Mac) / *Properties → Details* (Windows) → *Dimensions*. Chiều ngang dưới 320 px thì logo gần như chắc chắn bị mờ. Dung lượng (MB) không nói lên độ nét: logo mờ lưu JPG có thể 1–2 MB, còn logo nét 640 × 160 PNG thường chỉ 20–50 KB.',
+      'Hai điều trên là **khuyến nghị, không bắt buộc**: khách không có logo đẹp thì vẫn nhận. BB đã crop sẵn logo cho toàn bộ **3.000+ công ty** migrate sang (13/11), team SVN kiểm lại.',
       'Mục **“Quy định”** của doanh nghiệp: **email tuyển dụng là trường bắt buộc** để employer điền và hiển thị ở đó.',
       '**Không hiển thị contact person và số điện thoại** — chỉ hiện tên công ty và email công ty. Field contact person đã **bỏ hẳn**, chỉ còn “Human Resources Department”.',
       'Thông tin công ty ở trang settings chỉ hiển thị ở **Báo giá và Invoice**, không ở đâu khác.',

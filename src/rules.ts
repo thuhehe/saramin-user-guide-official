@@ -330,11 +330,11 @@ export const RULE_CATS: RuleCat[] = [
         src: 'Danh Đinh 02/11, 10/11 · Thu 26/10',
       },
       {
-        title: 'Logo công ty phải crop sát bốn cạnh',
+        title: 'Logo công ty: crop sát bốn cạnh, nền trắng, đủ nét',
         summary:
-          'Cách chỉnh logo sau khi upload đã đổi: phải crop sát trên dưới trái phải của logo, để khi hiển thị có thể canh giữa hay canh trái đều được. Một file, hai khung cố định, kích thước đã tinh chỉnh để đứng cạnh logo của công ty khác không bị lệch. Mục “Quy định” của doanh nghiệp chỉ hiện tên công ty và email tuyển dụng — field contact person và số điện thoại đã bỏ hẳn.',
+          'Cách chỉnh logo sau khi upload đã đổi: phải crop sát trên dưới trái phải của logo, để khi hiển thị có thể canh giữa hay canh trái đều được. Một file, hai khung cố định, kích thước đã tinh chỉnh để đứng cạnh logo của công ty khác không bị lệch. Khi chọn logo: ưu tiên nền trắng hoặc trong suốt, và file tối thiểu 320 × 80 px (tốt nhất 640 × 160 px) — đo bằng pixel, không bằng MB. Mục “Quy định” của doanh nghiệp chỉ hiện tên công ty và email tuyển dụng — field contact person và số điện thoại đã bỏ hẳn.',
         kind: 'nv', group: 'CRM', heading: 'Rule — Logo công ty và mục Quy định',
-        src: 'Thu 01/11 · Danh Đinh 30/10',
+        src: 'Thu 13/11, 01/11 · Danh Đinh 30/10',
       },
     ],
   },
