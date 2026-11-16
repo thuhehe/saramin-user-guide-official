@@ -638,49 +638,167 @@ export const MATCHING_PAGE_DOCS: Record<string, PageDoc> = {
   /* ────────────────────────────────────────────────────────────────────────── */
   'onboarding-job-count': {
     logic: [
-      '**Đây là một phép đếm, không phải một phép chấm điểm.** Không có trọng số, không có xếp hạng, không có thẻ việc làm — chỉ một con số trên câu dẫn của wizard.',
-      '**Chạy cho khách chưa có tài khoản.** Người dùng đang làm wizard thì chưa đăng nhập, nên API này là public và không đọc hồ sơ ai cả.',
-      '**Mọi điều kiện đều GIỮ LẠI tin không khai trường đó.** Một tin không ghi loại hợp đồng vẫn được tính — không có thông tin không có nghĩa là không phù hợp.',
-      '**Chỉ hai bước có số: bước 3 và bước 4.** Bước 3 đếm trên lựa chọn của bước 1 + 2; bước 4 đếm trên bước 1 + 2 + 3.',
-      '**Con số này cố ý không khớp trang tìm việc.** Mục đích của nó là cho người dùng thấy có việc để đi tiếp, không phải trả về kết quả tìm kiếm.',
+      '**Đây là một phép đếm, không phải một phép chấm điểm.** Không trọng số, không xếp hạng, không ngưỡng, không thẻ việc làm — chỉ một con số trên câu dẫn của wizard.',
+      '**Hai câu hỏi khác nhau.** *Recommended jobs* trả lời “tin nào hợp với **người này**” — nó đọc CV, hồ sơ, trọng số. Con số trong wizard trả lời “có bao nhiêu tin hợp với **bộ câu trả lời này**”. Lúc đó ứng viên chưa có CV, chưa lưu hồ sơ, nên câu hỏi thứ nhất chưa trả lời được.',
+      '**Vì không đọc hồ sơ ai cả nên API là public** — chạy được cho khách chưa đăng nhập, và không ghi log hiển thị nào.',
+      '**Luật cốt lõi: tin bỏ trống một trường thì không bao giờ bị loại vì trường đó.** Chỉ loại khi tin **ghi rõ** một điều trái với câu trả lời.',
+      '**Chỉ hai bước có số: bước 3 và bước 4.** Bước 3 đếm trên lựa chọn của bước 1 + 2; bước 4 đếm trên bước 1 + 2 + 3. Học vấn và mức lương **không làm đổi con số nào**.',
     ],
     how: [
       'Chạy wizard onboarding trên site ứng viên (`/welcome`) và đọc câu dẫn ở **bước 3** rồi **bước 4**.',
-      'Muốn kiểm con số: đếm trực tiếp trên dữ liệu theo bảng điều kiện ở §1 — **không** đối chiếu với trang tìm việc.',
+      'Muốn kiểm con số: đếm trực tiếp trên dữ liệu theo bảng điều kiện ở §3 — **không** đối chiếu với trang tìm việc (§6).',
+      'Muốn thử nhanh: gọi thẳng `GET /onboarding/job-count?roleIds=…&regionIds=…&years=…` — không cần token.',
     ],
     watch: [
       '**Số ở bước 4 bằng số ở bước 3 thì không in lại.** In lại cùng một con số làm người dùng tưởng hệ thống đứng im. Các bước khác không có số.',
       '**Bằng 0 thì không in số 0** — chỉ in câu “toàn quốc có X” nếu có. API lỗi thì in câu không có số.',
       '**Quá 500 tin thì in “500+”**, không in con số thật.',
-      '**Khác trang tìm việc là đúng thiết kế** (§3), không phải lỗi. Test case yêu cầu hai con số phải khớp đã được bỏ ngày 12/11.',
+      '**Thừa kinh nghiệm không bao giờ bị loại.** Giới hạn trên trong tin tuyển dụng VN là đỉnh dải quảng cáo, không phải trần — người 10 năm vẫn đếm được tin ghi cấp “Nhân viên”.',
+      '**Khác trang tìm việc là đúng thiết kế** (§6), không phải lỗi. Test case yêu cầu hai con số phải khớp đã được bỏ ngày 12/11.',
     ],
     blocks: [
       { kind: 'p', text: STAMP },
 
-      { kind: 'h', text: '§1 · Điều kiện đếm' },
+      /* ── §1 ─────────────────────────────────────────────────────────────── */
+      { kind: 'h', text: '§1 · Vì sao đếm chứ không chấm điểm' },
+      {
+        kind: 'p',
+        text: 'Bản dựng đầu tiên gọi chính engine chấm điểm của *Recommended jobs* rồi đếm số tin đạt **≥ 50/100 điểm**. Cách đó sai bản chất câu hỏi, chứ không phải sai ngưỡng.',
+      },
       {
         kind: 'table',
-        note: 'Đọc cột phải cho kỹ: mỗi dòng đều có nhánh **“hoặc tin không khai trường đó”**. Đó là điều làm con số này rộng hơn trang tìm việc.',
-        cols: ['Ứng viên chọn', 'Tin được tính khi'],
+        cols: ['', 'Recommended jobs', 'Con số trong wizard'],
         rows: [
-          ['Luôn luôn', 'Tin **đang mở** · đã đăng · còn bật hiển thị · công ty công khai'],
-          ['**Vị trí**', 'Tin thuộc **ngành nghề** của vị trí đó, **hoặc** tin không gắn ngành nghề nào. Đếm ở mức ngành nghề nên một vị trí hẹp vẫn ra con số có ý nghĩa'],
-          ['**Ngành**', 'Trùng ngành, **hoặc** tin không có ngành — tin công ty tự đăng không có ô ngành nên luôn qua'],
-          ['**Loại hợp đồng**', 'Nằm trong tập đã chọn, **hoặc** tin không khai'],
-          ['**Địa điểm**', 'Tin **remote**, **hoặc** tỉnh của tin / của công ty nằm trong tập, **hoặc** tin không có địa điểm'],
-          ['**Số năm kinh nghiệm**', 'Tin khai **dải năm** → chỉ cần mức tối thiểu ≤ số năm của ứng viên. Tin chỉ khai **cấp bậc** → giữ tin có bậc không cao hơn ứng viên quá **1 bậc**. Tin không khai gì → giữ'],
-          ['Học vấn', '**Không** là điều kiện đếm'],
+          ['Trả lời câu hỏi', 'Tin nào hợp với **người này**?', 'Có bao nhiêu tin hợp với **bộ câu trả lời này**?'],
+          ['Đọc gì', 'CV · hồ sơ · hành vi · trọng số', 'Chỉ các trường trên **tin tuyển dụng**'],
+          ['Cần đăng nhập', 'Có', '**Không** — endpoint public'],
+          ['Người dùng lúc đó', 'Đã có hồ sơ và CV', 'Vừa mở wizard, **chưa có gì cả**'],
+        ],
+      },
+      {
+        kind: 'list',
+        heading: 'Ba hệ quả của việc tách ra',
+        items: [
+          '**Không cần đăng nhập** — bộ đếm chạy trên trường của tin, không đọc candidate id nào.',
+          '**Không ghi log hiển thị.** Đây không phải một lượt hiện tin, nên không có dòng impression nào được ghi.',
+          '**Không phụ thuộc feature flag của Recommended jobs.** Hai thuật toán tách hẳn; bật tắt bên kia không làm mất con số bên này.',
         ],
       },
 
-      { kind: 'h', text: '§2 · Con số in ra như thế nào' },
+      /* ── §2 ─────────────────────────────────────────────────────────────── */
+      { kind: 'h', text: '§2 · Hai con số đếm gì' },
+      {
+        kind: 'table',
+        note: 'Mỗi banner tính trên những câu trả lời **đã xong trước bước đó** — nên con số đứng yên trong lúc ứng viên đang gõ ở bước hiện tại.',
+        cols: ['Con số', 'Hiện ở', 'Đếm tin khớp với'],
+        rows: [
+          ['**N₃**', 'Bước 3 — số năm kinh nghiệm', 'Vị trí · ngành · loại hợp đồng · nơi làm việc — tức **bước 1 + 2**'],
+          ['**N₄**', 'Bước 4 — trình độ học vấn', 'Như trên, **cộng số năm kinh nghiệm** — bước 1 + 2 + **3**'],
+        ],
+      },
       {
         kind: 'list',
         items: [
-          '**Cap 500** — hơn 500 tin thì in **“500+”**.',
-          '**Có chọn tỉnh mà dưới 5 tin** thì đếm thêm một lần **không có điều kiện tỉnh**, và câu chữ nói rõ con số **toàn quốc** — để một tỉnh ít tin không làm người dùng bỏ dở wizard.',
-          '**Bước 4 bằng bước 3 thì không in số.**',
-          '**Bằng 0 thì không in số 0.** API lỗi thì câu dẫn hiện không kèm số.',
+          '**Bước 4 ghi công cho kinh nghiệm, không phải học vấn** — câu chữ của nó nói vậy, và học vấn đang được trả lời *tại* bước 4 nên chưa thể tính vào.',
+          '**Học vấn và mức lương không làm đổi con số nào.** Chúng được trả lời ở bước 4 và 5, sau đó không còn banner nào nữa. Đây là hệ quả của việc chỉ có hai banner, không phải thiếu sót.',
+          '**Không có luật “đã ứng tuyển”** như ở Recommended jobs — ứng viên vừa đăng ký vài phút trước, chưa nộp đơn vào đâu cả.',
+          'Tin được đếm phải: **đang mở** · đã publish · chưa hết hạn · còn bật hiển thị · công ty active và công khai.',
+        ],
+      },
+
+      /* ── §3 ─────────────────────────────────────────────────────────────── */
+      { kind: 'h', text: '§3 · Luật cốt lõi — bỏ trống thì không loại' },
+      {
+        kind: 'warn',
+        text: '**Tin nào bỏ trống một trường thì KHÔNG BAO GIỜ bị loại vì trường đó. Chỉ loại khi tin GHI RÕ một điều trái với câu trả lời.**',
+      },
+      {
+        kind: 'p',
+        text: 'Phần lớn tin tuyển dụng ở VN bỏ trống ngành, loại hợp đồng và dải kinh nghiệm. Nếu so khớp kiểu bằng-nhau, tất cả những tin đó biến mất ngay khi ứng viên trả lời bước 3, và **N₄ = 0 với gần như mọi người** — một con số vừa sai vừa làm nản lòng đúng lúc người dùng cần được khuyến khích đi tiếp.',
+      },
+      {
+        kind: 'table',
+        note: '**AND giữa các tiêu chí, OR bên trong một tiêu chí** — chọn 3 thành phố nghĩa là tin ở bất kỳ thành phố nào trong ba.',
+        cols: ['Ứng viên chọn', 'Tin được tính khi', 'Chỉ bị loại khi'],
+        rows: [
+          ['Luôn luôn', 'Tin **đang mở** · đã đăng · còn bật hiển thị · công ty công khai', '—'],
+          ['**Vị trí** (≤3)', 'Tin thuộc **ngành nghề** của vị trí đó, **hoặc** tin không gắn ngành nghề nào', 'Ngành nghề của tin không nằm trong ngành nghề của các vị trí đã chọn'],
+          ['**Ngành** (≤3)', 'Trùng ngành, **hoặc** tin không ghi ngành — tin công ty tự đăng không có ô ngành nên luôn qua', 'Tin **có ghi** ngành và không nằm trong danh sách đã chọn'],
+          ['**Loại hợp đồng**', 'Nằm trong tập đã chọn, **hoặc** tin không khai', 'Tin **có ghi** và không trùng'],
+          ['**Nơi làm việc** (≤3)', 'Tin **remote** (qua từ mọi nơi), **hoặc** tỉnh của tin / của công ty nằm trong tập, **hoặc** tin không ghi địa điểm', 'Tin **có ghi** tỉnh và không tỉnh nào được chọn'],
+          ['**Số năm kinh nghiệm** (chỉ N₄)', 'Xem §4 — đọc hai nguồn', 'Ứng viên thấp hơn mức tin yêu cầu'],
+          ['Học vấn', 'Luôn được tính', '**Không** là điều kiện đếm'],
+        ],
+      },
+      {
+        kind: 'list',
+        heading: 'Hai chi tiết quyết định con số',
+        items: [
+          '**Vị trí so ở mức ngành nghề, KHÔNG so đúng vị trí.** So đúng vị trí thì một vị trí hẹp ra con số kiểu “2 tin”, và wizard biến thành một lời từ chối.',
+          '**Thừa kinh nghiệm hoặc thừa cấp bậc không bao giờ bị loại.** Giới hạn trên trong tin VN là đỉnh dải quảng cáo, không phải trần tuyển dụng.',
+        ],
+      },
+
+      /* ── §4 ─────────────────────────────────────────────────────────────── */
+      { kind: 'h', text: '§4 · Kinh nghiệm đọc hai nguồn, không phải một' },
+      {
+        kind: 'p',
+        text: 'Dải năm kinh nghiệm **không bắt buộc** trên form đăng tin và bị bỏ trống ở hầu hết tin tự đăng. Nếu chỉ đọc cột đó thì **N₄ = N₃ gần như mọi lần** — bước 4 in lại con số của bước 3 trong khi câu chữ hứa “khớp chính xác hơn”. Nên bộ đếm đọc hai nguồn, theo thứ tự.',
+      },
+      {
+        kind: 'table',
+        cols: ['Thứ tự', 'Nguồn trên tin', 'Loại tin khi'],
+        rows: [
+          ['**1**', 'Dải năm kinh nghiệm', 'Ứng viên **thấp hơn** mức tối thiểu tin ghi'],
+          ['**2 — dự phòng**', 'Cấp bậc của tin', 'Bậc ứng viên thấp hơn **từ 2 bậc trở lên** so với cấp thấp nhất tin ghi. **Lệch 1 bậc thì giữ**'],
+          ['—', 'Tin không ghi cả hai', '**Không bao giờ loại.** Form quy ước **để trống cấp bậc = “Mọi cấp bậc”**'],
+        ],
+      },
+      {
+        kind: 'list',
+        items: [
+          '**Một tin chỉ thoát khỏi tiêu chí kinh nghiệm khi NTD không nói gì ở cả hai trường** — tập đó nhỏ hơn nhiều so với “bỏ trống dải năm”. Đó chính là thứ làm N₄ khác được N₃.',
+          '**Tin ghi nhiều cấp bậc thì so với cấp thấp nhất** — tin mở cho cả Junior lẫn Senior vẫn đếm cho người ở bậc Junior.',
+          '**Dung sai 1 bậc trùng đúng với dung sai của phần chấm điểm**, để hai chỗ không mâu thuẫn về việc ai “chưa đủ”. Bảng quy đổi năm → bậc nằm ở **một chỗ duy nhất**, dùng chung với Recommended jobs và Recommended candidates (xem trang *Logic chung*).',
+        ],
+      },
+      {
+        kind: 'example',
+        heading: 'Ba trường hợp kinh nghiệm',
+        scenario: 'Tin chỉ ghi **cấp bậc**, không ghi dải năm — nên bộ đếm rơi xuống nguồn dự phòng.',
+        cols: ['Ứng viên', 'Tin ghi cấp', 'Chênh', 'Kết quả'],
+        rows: [
+          ['3 năm → bậc **mid (4)**', 'Senior (5)', 'Lệch 1', '**Vẫn đếm** — với tới được'],
+          ['1 năm → bậc **junior (3)**', 'Senior (5)', 'Lệch 2', '**Bị loại**'],
+          ['10 năm → bậc **lead (6)**', 'Intern (1)', 'Thừa 5 bậc', '**Vẫn đếm** — thừa không bao giờ loại'],
+        ],
+      },
+
+      /* ── §5 ─────────────────────────────────────────────────────────────── */
+      { kind: 'h', text: '§5 · Con số in ra như thế nào' },
+      {
+        kind: 'p',
+        text: '**N₄ không bao giờ lớn hơn N₃.** Lọc kiểu AND thì thêm một tiêu chí chỉ có thể **bớt** tin đi. “Khớp chính xác hơn” nghĩa là *chính xác hơn*, không phải *nhiều hơn* — bản Figma vẽ con số tăng từ 2 lên 20 chỉ là **số minh hoạ**, và không có luật nào được cài để con số tăng lên.',
+      },
+      {
+        kind: 'table',
+        cols: ['Tình huống', 'Banner hiện gì'],
+        rows: [
+          ['N₄ < N₃', 'Con số, như thiết kế'],
+          ['**N₄ = N₃**', '**Câu không có số.** Bước 4 thôi không nhận công nữa'],
+          ['Dưới **5** tin tại tỉnh đã chọn', 'Bỏ bộ lọc **nơi làm việc**, đếm toàn quốc, và **nói rõ trong câu**: “Chỉ có 3 tin ở Đà Nẵng — **128** tin trên cả nước”'],
+          ['Nới rồi vẫn không có gì', 'Câu không có số'],
+          ['Hơn **500** tin', 'In **“500+”**, không in con số thật'],
+          ['Chưa chọn gì · API lỗi', 'Câu không có số — không spinner, không `0`'],
+        ],
+      },
+      {
+        kind: 'list',
+        heading: 'Ba luật dễ bị bỏ qua',
+        items: [
+          '**N₄ = N₃ → bước 4 hiện câu không có số.** Trông như một edge case nhưng chính nó làm cho trường hợp dữ liệu xấu trở nên **vô hình thay vì nói dối**.',
+          '**Chỉ được nới lỏng khi câu chữ nói ra điều đó**, và chỉ nới **một lần**, chỉ nới **nơi làm việc**. Âm thầm bỏ bộ lọc rồi báo một con số to hơn là nói dối về chính thứ vừa đo.',
+          '**Không bao giờ in `0`.** Ở màn hình thứ hai mà ứng viên nhìn thấy, số 0 đọc như một lời phán về con người chứ không phải về dữ liệu.',
         ],
       },
       {
@@ -697,7 +815,8 @@ export const MATCHING_PAGE_DOCS: Record<string, PageDoc> = {
           'Bước 4 ra đúng bằng bước 3 vì cả ba tin đều hoặc khai Fulltime, hoặc **không khai loại hợp đồng** (vẫn được giữ), và đều có dải năm bắt đầu từ ≤ 4. Đây là trường hợp bình thường, không phải lỗi đếm.',
       },
 
-      { kind: 'h', text: '§3 · Vì sao không khớp trang tìm việc' },
+      /* ── §6 ─────────────────────────────────────────────────────────────── */
+      { kind: 'h', text: '§6 · Vì sao không khớp trang tìm việc' },
       {
         kind: 'table',
         note: 'Bốn khác biệt có chủ đích. Onboarding rộng hơn vì mục đích của nó là khuyến khích đi tiếp; trang tìm việc hẹp hơn vì người dùng ở đó đang thật sự tìm việc.',
@@ -710,8 +829,20 @@ export const MATCHING_PAGE_DOCS: Record<string, PageDoc> = {
         ],
       },
       {
-        kind: 'p',
-        text: 'Quyết định của BA ngày **12/11**: QA kiểm con số này **bằng dữ liệu trực tiếp**, không bằng trang tìm việc; test case số 13 của SRM-1347 (yêu cầu hai con số phải khớp) đã được bỏ.',
+        kind: 'warn',
+        text: 'Ticket gốc SRM-1347 từng yêu cầu con số này **kiểm chứng được bằng trang tìm việc** (test case #13). **Quyết định của BA ngày 12/11 đã bỏ yêu cầu đó** — QA kiểm bằng dữ liệu trực tiếp. Bốn khác biệt ở trên là lý do: hai bộ lọc không bao giờ ra cùng một con số.',
+      },
+
+      /* ── §7 ─────────────────────────────────────────────────────────────── */
+      { kind: 'h', text: '§7 · Giao diện gọi bộ đếm như thế nào' },
+      {
+        kind: 'list',
+        items: [
+          '**Gửi cả 3 vị trí** ứng viên đã chọn, không chỉ vị trí đầu tiên. Tham số đi dạng danh sách: `roleIds` · `industryIds` · `contractTypeIds` · `regionIds` · `years`, tất cả optional.',
+          '**Debounce ~300 ms** và **bỏ qua response về trễ** (sai thứ tự) — bộ đếm bắn theo từng lượt chọn, nên chọn/bỏ chọn liên tục chỉ sinh một hai request thực sự.',
+          '**Gọi lại khi bất kỳ câu trả lời nào ở bước 1–3 đổi, và không cache** (`cache: "no-store"`).',
+          '**Lỗi thì rơi êm về câu không có số** — không vỡ wizard, không spinner ở chỗ con số.',
+        ],
       },
     ],
   },
