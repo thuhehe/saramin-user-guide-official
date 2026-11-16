@@ -655,7 +655,7 @@ function DocBlockView({ b }: { b: DocBlock }) {
               {b.rows.map((r, i) => (
                 <tr key={i} className="border-b border-line-soft last:border-0">
                   {r.map((cell, j) => (
-                    <td key={j} className={cx('py-2 pr-5 align-top text-[12.5px] leading-[1.55] last:pr-0', j === 0 ? 'font-semibold text-ink' : 'text-ink/75')}>{md(cell)}</td>
+                    <td key={j} className={cx('whitespace-pre-line py-2 pr-5 align-top text-[12.5px] leading-[1.55] last:pr-0', j === 0 ? 'font-semibold text-ink' : 'text-ink/75')}>{md(cell)}</td>
                   ))}
                 </tr>
               ))}
@@ -684,7 +684,7 @@ function DocBlockView({ b }: { b: DocBlock }) {
             {b.rows.map((r, i) => (
               <tr key={i} className="border-b border-line-soft last:border-0">
                 {r.map((cell, j) => (
-                  <td key={j} className={cx('py-2.5 pr-5 align-top text-[12.5px] leading-[1.6] last:pr-0', j === 0 ? 'font-semibold text-ink' : 'text-ink/75')}>{md(cell)}</td>
+                  <td key={j} className={cx('whitespace-pre-line py-2.5 pr-5 align-top text-[12.5px] leading-[1.6] last:pr-0', j === 0 ? 'font-semibold text-ink' : 'text-ink/75')}>{md(cell)}</td>
                 ))}
               </tr>
             ))}
@@ -752,7 +752,7 @@ function Block({ b }: { b: WfBlock }) {
               {b.table.rows.map((r, i) => (
                 <tr key={i} className="border-b border-line-soft last:border-0">
                   {r.map((cell, j) => (
-                    <td key={j} className={cx('py-2 pr-5 align-top text-[12.5px] leading-[1.6] last:pr-0', j === 0 ? 'font-medium text-ink' : 'text-ink/75')}>{md(cell)}</td>
+                    <td key={j} className={cx('whitespace-pre-line py-2 pr-5 align-top text-[12.5px] leading-[1.6] last:pr-0', j === 0 ? 'font-medium text-ink' : 'text-ink/75')}>{md(cell)}</td>
                   ))}
                 </tr>
               ))}

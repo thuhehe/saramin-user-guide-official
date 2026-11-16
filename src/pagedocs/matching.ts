@@ -37,7 +37,8 @@ export const MATCHING_PAGE_DOCS: Record<string, PageDoc> = {
     how: [
       'Xem nhanh nhất ở **trang cá nhân** của ứng viên (`/ho-so-ca-nhan`), khối *Việc làm phù hợp với bạn* — 6 thẻ, cố định suốt cả ngày.',
       'Xem bản **đúng thứ tự điểm** (không xáo trộn) ở **popup sau khi nộp đơn** (Batch apply) hoặc ở **màn kết quả onboarding** ngay sau khi hoàn tất wizard.',
-      'Muốn biết vì sao một tin hiện ra: đối chiếu hồ sơ ứng viên với **§3 Điều kiện lọc** trước (tin có bị loại không), rồi mới tới **§4 Bảy tín hiệu**.',
+      'Muốn biết **vì sao một tin hiện ra**, đọc theo đúng thứ tự: **§3** (tin có bị cổng lọc loại không) → **§4** (tin ăn bao nhiêu điểm) → **§5** (tin có lọt vào rổ 50 và được rải ra màn hình này không).',
+      'Muốn biết **vì sao một tin KHÔNG hiện ra**, gần như luôn là một trong ba lý do ở **§3**: ứng viên đã nộp đơn tin đó, tin khác ngành nghề đã khai, hoặc tin khác tỉnh đã khai.',
     ],
     watch: [
       '**Tin đã nộp đơn biến mất vĩnh viễn khỏi mọi gợi ý** — tính cả đơn đã bị từ chối và đơn đã thu hồi. Đây là nguyên nhân số một của câu hỏi “sao tin này không còn hiện nữa”.',
@@ -48,6 +49,33 @@ export const MATCHING_PAGE_DOCS: Record<string, PageDoc> = {
     ],
     blocks: [
       { kind: 'p', text: STAMP },
+
+      /* ── §0 ─────────────────────────────────────────────────────────────── */
+      { kind: 'h', text: '§0 · Ý tưởng trong một phút' },
+      {
+        kind: 'p',
+        text: 'Hệ thống biết hai điều về một ứng viên: **những gì họ khai** (hồ sơ, Work preference, CV) và **những gì họ thực sự làm** (tin họ mở, lưu, nộp đơn). Ghép hai thứ đó lại thành một *chân dung công việc họ muốn*. Rồi chấm mọi tin đang tuyển so với chân dung đó, giữ lại **50 tin gần nhất**, bỏ những tin họ đã nộp đơn, và rải số tin đó ra các màn hình có khối gợi ý.',
+      },
+      {
+        kind: 'table',
+        note: 'Nếu chỉ cần hiểu ý tưởng thì đọc bảng này rồi dừng. Phần còn lại của trang là chi tiết của bốn bước đó.',
+        cols: ['Bước', 'Một dòng', 'Chi tiết ở'],
+        rows: [
+          ['**1 · Người này là ai?**', 'Những gì họ **khai** cộng với những gì **hành vi** của họ nói. Ra một tập vị trí, ngành nghề và tỉnh rộng hơn phần họ tự gõ.', '§2'],
+          ['**2 · Tin nào được dự thi?**', 'Cổng lọc cắt bỏ tin đã nộp đơn, tin khác ngành nghề đã khai, tin khác tỉnh đã khai.', '§3'],
+          ['**3 · Tin nào hợp?**', 'Chấm từng tin còn lại trên **thang 100 điểm, 7 tín hiệu**.', '§4'],
+          ['**4 · Hiện ra sao?**', 'Giữ **50 tin điểm cao nhất** làm rổ, rồi mỗi màn hình rút ra 6 thẻ theo cách riêng của nó.', '§5'],
+        ],
+      },
+      {
+        kind: 'list',
+        heading: 'Vì sao phải có một “rổ” rồi mới rải ra, thay vì in top 6 ở mọi nơi',
+        items: [
+          'In đúng top 6 ở cả sáu màn hình thì **năm màn hình kia thành thừa** — ứng viên gặp lại đúng sáu tấm thẻ vừa lướt qua.',
+          'Rải từ một rổ chung thì mỗi màn hình đưa ra thứ họ **chưa lướt qua**, mà vẫn nằm trong 50 tin tốt nhất của chính họ — nên không có tin kém nào lọt ra.',
+          'Riêng **popup sau khi nộp đơn** thì **không xáo**: đó là màn hình duy nhất mà thứ tự quyết định ứng viên thật sự nộp vào tin nào, nên thứ hạng ở đó phải trung thực.',
+        ],
+      },
 
       /* ── §1 ─────────────────────────────────────────────────────────────── */
       { kind: 'h', text: '§1 · Sáu nơi dùng bộ máy này' },
@@ -123,16 +151,40 @@ export const MATCHING_PAGE_DOCS: Record<string, PageDoc> = {
       { kind: 'h', text: '§4 · Bảy tín hiệu, thang 100' },
       {
         kind: 'table',
-        note: 'Trọng số **phiên bản v4**, cố định trong code. Admin **không chỉnh được** — tab chỉnh trọng số đã bỏ khỏi console ngày 05/11. Mỗi điểm số ghi log kèm số phiên bản.',
-        cols: ['Tín hiệu', 'Tối đa', 'Các bậc'],
+        note: 'Đọc **theo hàng ngang**: cột giữa là hệ thống lấy thông tin của ứng viên ở đâu, cột phải là tin tuyển dụng khớp thì ăn bao nhiêu điểm. Trọng số **phiên bản v4**, cố định trong code; admin **không chỉnh được** — tab chỉnh đã bỏ khỏi console ngày 05/11. Mỗi điểm số ghi log kèm số phiên bản.',
+        cols: ['Tín hiệu', 'Điểm', 'Lấy từ ứng viên', 'Tin ăn bao nhiêu'],
         rows: [
-          ['**Vị trí & ngành nghề**', '**42**', 'Cùng vị trí 42 · cùng nhóm vị trí 30 · cùng ngành nghề 17 · khác 0. Lấy **một** bậc cao nhất, **không cộng dồn**'],
-          ['**Địa điểm & hình thức**', '**20**', 'Đúng tỉnh + đúng hình thức 20 · tin remote 20 · đúng tỉnh khác hình thức 14 · khác 0. Ứng viên **không khai tỉnh thì không so**, tin remote cũng 0'],
-          ['**Kinh nghiệm**', '**14**', 'Trong dải, hoặc tin ghi “không yêu cầu” 14 · thừa ≤ 2 năm 10 · thiếu ≤ 1 năm 7 · thừa > 2 năm 5 · thiếu > 1 năm 0. Tin **chỉ khai cấp bậc** thì quy năm của ứng viên ra bậc (bảng ở trang *Logic chung*): cùng bậc 14 · lệch 1 bậc 7 · còn lại 0'],
-          ['**Lương**', '**12**', 'Trong dải, hoặc tin trả cao hơn mong muốn 12 · ứng viên đòi hơn ≤ 10 % 8 · ≤ 20 % 4 · một bên để “Thỏa thuận” 6 · hơn 20 % 0'],
-          ['**Ngành**', '**5**', 'Trùng ngành 5 · cùng ngành cha 3 · khác 0'],
-          ['**Kỹ năng**', '**4**', '4 × (số kỹ năng khớp ÷ số kỹ năng tin yêu cầu). Kỹ năng tin đánh dấu **bắt buộc** tính đôi ở cả hai vế'],
-          ['**Học vấn**', '**3**', 'Đạt, hoặc tin ghi “không yêu cầu” 3 · thấp hơn 1 bậc 1 · còn lại 0'],
+          ['**Vị trí & ngành nghề**', '**42**',
+           '**Khai:** vị trí mong muốn (≤3) + ngành nghề mong muốn.\n**Hành vi:** vị trí / ngành nghề của tin đã nộp, đã lưu, hoặc xem ≥ 3 tin — dùng **cùng lúc** với phần khai.\n**Chỉ khi cả hai rỗng:** vị trí đọc từ tiêu đề CV.',
+           'Cùng **vị trí** → **42** khai / **34** suy ra\nCùng **nhóm vị trí**, khác vị trí → **30** / **24**\nCùng **ngành nghề**, khác nhóm → **17** / **14**\nKhác ngành nghề → **0**'],
+          ['**Địa điểm & hình thức**', '**20**',
+           '**Khai:** tỉnh mong muốn + hình thức làm việc.\n**Hành vi:** tỉnh của tin đã nộp, đã lưu, hoặc xem ≥ 3 tin.\n**Không khai gì:** không so.',
+           'Đúng tỉnh **và** đúng hình thức → **20** khai / **16** suy ra\nTin **remote** → **20**, từ mọi nơi\nĐúng tỉnh, khác hình thức → **14**\nTỉnh khác → **0**'],
+          ['**Kinh nghiệm**', '**14**',
+           'Số năm kinh nghiệm trên **Hồ sơ**.\n**Nếu trống:** tính từ lịch sử làm việc trong CV.',
+           'Trong dải tin yêu cầu → **14**\nTin ghi “không yêu cầu” → **14**\nThừa ≤ 2 năm → **10**\nThiếu ≤ 1 năm → **7**\nThừa > 2 năm → **5**\nThiếu > 1 năm → **0**\n\n**Tin không khai dải năm nhưng khai CẤP BẬC:** quy số năm ra bậc — cùng bậc **14** · lệch 1 bậc **7** · xa hơn **0**'],
+          ['**Lương**', '**12**',
+           'Lương mong muốn + tiền tệ trong Work preference.\n**Không có đường dự phòng** — không ai đoán được con số này.',
+           'Trong dải, hoặc dải tin nằm hoàn toàn cao hơn → **12**\nĐòi hơn ≤ 10 % → **8**\nĐòi hơn 10–20 % → **4**\nMột bên ghi “Thỏa thuận” → **6**\nĐòi hơn > 20 % → **0**\nKhác tiền tệ → quy đổi dải của **tin** theo tỷ giá admin rồi mới so; không có tỷ giá → **0**'],
+          ['**Ngành**', '**5**',
+           'Trường **Ngành mong muốn** trong Work preference.\n**Không có đường dự phòng** — không suy từ công ty trong CV.',
+           'Trùng ngành → **5**\nCùng ngành cha → **3**\nKhác → **0**'],
+          ['**Kỹ năng**', '**4**',
+           'Kỹ năng trên CV — phải là **id trong master data**, không nhận chữ gõ tay.\n**Không có đường dự phòng.**',
+           'Khớp hết kỹ năng tin yêu cầu → **4**\nKhớp một phần → 4 × (khớp ÷ yêu cầu); kỹ năng **bắt buộc** tính đôi ở cả hai vế\nKhông có kỹ năng nào chung → **0**'],
+          ['**Học vấn**', '**3**',
+           'Học vấn trên CV.\n**Không có đường dự phòng.**',
+           'Đạt hoặc hơn yêu cầu → **3**\nTin ghi “không yêu cầu” → **3**\nThấp hơn 1 bậc → **1**\nThấp hơn từ 2 bậc → **0**'],
+          ['**Tổng**', '**100**', '', ''],
+        ],
+      },
+      {
+        kind: 'list',
+        heading: 'Thứ tự đọc của mỗi tín hiệu — ba bước',
+        items: [
+          '**① Gộp khai và hành vi lại với nhau** thành một tập. Hai nguồn này luôn dùng **cùng lúc**, không phải cái này thay cái kia.',
+          '**② Chỉ khi tập đó rỗng** mới đọc tới dòng dự phòng — tiêu đề CV cho vị trí, CV cho số năm kinh nghiệm.',
+          '**③ Vẫn không có gì** thì tín hiệu đó **0 điểm** (§4a). Lương, ngành, kỹ năng, học vấn **không có dòng dự phòng nào** — không ai đoán được những thứ đó.',
         ],
       },
       {
@@ -148,6 +200,87 @@ export const MATCHING_PAGE_DOCS: Record<string, PageDoc> = {
       {
         kind: 'warn',
         text: '**Kỹ năng ứng viên gõ tay mà không khớp master data được tính là “không có kỹ năng”** — mất điểm tín hiệu kỹ năng, và vẫn tính là một tín hiệu đã so được. Trường hợp này khá phổ biến với CV tải lên.',
+      },
+
+      /* ── §4a ────────────────────────────────────────────────────────────── */
+      { kind: 'h', text: '§4a · Thiếu dữ liệu là 0 điểm — và không bao giờ chia lại thang' },
+      {
+        kind: 'p',
+        text: 'Đây là luật quan trọng nhất của trang này. Một tín hiệu **không có gì để so** thì **0 điểm**, và tổng vẫn trên thang 100. Số điểm đó **không** được chia sang các tín hiệu khác.',
+      },
+      {
+        kind: 'table',
+        heading: 'Vì sao — hai tin cùng ăn 53 điểm',
+        note: 'Tin A khai đủ mọi trường. Tin B bỏ trống kinh nghiệm, ngành và học vấn. Cả hai ăn **đúng 53 điểm** từ **đúng những phép so giống nhau**, nên phải bằng điểm nhau.',
+        cols: ['Tín hiệu', 'Tin A — khai đủ', 'Tin B — bỏ trống 3 trường'],
+        rows: [
+          ['Vị trí & ngành nghề', '17 / 42 — cùng ngành nghề, khác nhóm', '17 / 42'],
+          ['Địa điểm & hình thức', '20 / 20', '20 / 20'],
+          ['Kinh nghiệm', '0 / 14 — có khai, nhưng không khớp', '— không khai'],
+          ['Lương', '12 / 12', '12 / 12'],
+          ['Ngành', '0 / 5 — có khai, nhưng không khớp', '— không khai'],
+          ['Kỹ năng', '4 / 4', '4 / 4'],
+          ['Học vấn', '0 / 3 — có khai, nhưng không khớp', '— không khai'],
+          ['**Điểm thực sự ăn được**', '**53**', '**53**'],
+          ['**Luật hiện tại — thiếu là 0**', '53 / 100 = **53 %**', '53 / 100 = **53 %**'],
+          ['Nếu chia lại thang (KHÔNG làm)', '53 / 100 = 53 %', '53 / 78 = **68 %** — sai'],
+        ],
+      },
+      {
+        kind: 'list',
+        items: [
+          '**Chia lại thang là thưởng cho tin giấu thông tin.** Tin B sẽ vượt tin A **15 điểm** — không phải vì hợp hơn, mà vì nó tự cho mình ít cơ hội mất điểm hơn.',
+          '**Luật này chủ yếu bảo vệ trước tin migrate.** Mọi trường trên form đăng tin đều bắt buộc, nên tin tạo trên site luôn khai đủ. Tin cũ migrate sang mới có lỗ hổng — không có luật này, chúng lặng lẽ nổi lên đầu mọi danh sách mà không ai thấy lý do.',
+          '**Ô trống bên phía ỨNG VIÊN cũng 0 điểm, và điều đó không gây hại gì.** Một ô trống trong hồ sơ trừ đúng số điểm đó của **mọi tin như nhau**, nên **thứ tự không đổi chút nào** — mà ứng viên lại không bao giờ nhìn thấy con số.',
+          '**Ngoại lệ duy nhất là bảng ứng viên của nhà tuyển dụng**, vì ở đó con số được in cạnh tên một con người: so được **dưới 4 trong 7** tín hiệu thì **không in %**. Ở feed ta xếp hạng **tin** cho một người — lỗ hổng của người ảnh hưởng mọi thẻ như nhau nên thứ tự không đổi. Ở bảng ứng viên ta xếp hạng **người** cho một tin — lỗ hổng của một người đẩy họ tụt so với người khác.',
+        ],
+      },
+
+      /* ── §4b ────────────────────────────────────────────────────────────── */
+      { kind: 'h', text: '§4b · Nếu ứng viên chưa khai đầy đủ' },
+      {
+        kind: 'table',
+        note: 'Phép tính **không đổi** — chỉ là có ít thứ để so hơn, nên kết quả kém chính xác hơn. **Tiêu đề khối cũng không đổi:** mỗi màn hình một tiêu đề cố định, không đổi theo lượng thông tin hệ thống có.',
+        cols: ['Ứng viên có…', 'Feed đánh giá được gì', 'Cái gì gánh thứ hạng'],
+        rows: [
+          ['Chỉ có hồ sơ', 'Gần như không gì — phần lớn tín hiệu bằng 0', 'Tin mới nhất, trong tỉnh nếu hồ sơ có ghi tỉnh'],
+          ['Hồ sơ + Work preference', 'Những gì họ **muốn** — đúng tỉnh, đúng ngành nghề, đúng lương', 'Vị trí, địa điểm, ngành nghề, lương'],
+          ['Hồ sơ + CV', 'Những gì họ **làm được**, cộng vị trí đọc từ tiêu đề CV', 'Vị trí (từ tiêu đề CV), kinh nghiệm, kỹ năng, học vấn'],
+          ['Hồ sơ + Work preference + CV', 'Đầy đủ — chạm được cả 100 điểm', 'Cả bảy tín hiệu'],
+          ['Bất kỳ dòng nào ở trên, **cộng 90 ngày hành vi**', 'Rộng hơn và chính xác hơn mà họ không phải gõ thêm gì', 'Vị trí, ngành nghề, tỉnh học được từ tin họ mở, lưu, nộp'],
+        ],
+      },
+      {
+        kind: 'list',
+        items: [
+          '**CV làm dở vẫn dùng được.** Ít kỹ năng chỉ đơn giản là ăn ít hơn trong 4 điểm kỹ năng; không có gì vỡ và không có gì bị ẩn.',
+          '**Cách đúng để xin thêm thông tin là một dòng mời dưới danh sách**, không phải đổi tiêu đề — và đó là lời thật, không phải câu chào hàng: khai thêm thì điểm thật sự chính xác hơn, và Work preference còn nuôi cả tìm kiếm của nhà tuyển dụng lẫn email gợi ý.',
+          '**Vì sao chỉ một tiêu đề:** tiêu đề đổi theo từng người là tiêu đề phải dịch ba kiểu, test ba kiểu, và phải giải thích khi có người hỏi sao trang của bạn mình ghi khác. Chênh lệch chất lượng đã nhìn thấy ngay trên các thẻ rồi.',
+        ],
+      },
+
+      /* ── §4c ────────────────────────────────────────────────────────────── */
+      { kind: 'h', text: '§4c · Ứng viên có nhiều CV' },
+      {
+        kind: 'table',
+        note: 'Dấu *“cho nhà tuyển dụng thấy CV này”* **chỉ liên quan tìm kiếm của nhà tuyển dụng**, không liên quan gì tới gợi ý việc làm.',
+        cols: ['Tình huống', 'Feed gợi ý làm gì'],
+        rows: [
+          ['3 CV, một CV đang bật cho NTD thấy', 'Dùng **cả 3 CV**. Dấu bật/tắt bị bỏ qua ở đây.'],
+          ['3 CV, không CV nào bật', 'Dùng cả 3 CV. Chạy y hệt — không thiếu gì cả.'],
+          ['1 CV', 'Dùng CV đó.'],
+          ['Không có CV nào', 'Chỉ dùng hồ sơ — xem dòng đầu của §4b.'],
+        ],
+      },
+      {
+        kind: 'list',
+        heading: 'Phép tính, vì chỗ này rất dễ hình dung sai',
+        items: [
+          '**3 CV × 100 tin = 300 lần chấm.** Rồi **gộp lại**: mỗi tin chỉ giữ **điểm cao nhất** trong các CV — còn lại 100 tin, mỗi tin một điểm. Danh sách ứng viên thấy có **tối đa 100 dòng, không bao giờ 300**: một tin xuất hiện **một lần**, mang điểm của CV hợp với nó nhất.',
+          '**Ví dụ:** ứng viên có một CV Developer và một CV Sales. Tin React ăn 88 với CV Developer và 31 với CV Sales → tin đó nằm trong danh sách **một lần, ở 88**. Tin Account Manager ăn 24 và 79 → nằm một lần, ở 79. Cả hai cùng lên cao trong một danh sách, mỗi tin được chấm bởi CV nói hộ nó tốt nhất.',
+          '**Không gộp các CV lại thành một trước khi chấm.** Trộn CV Developer với CV Sales ra một chân dung không phải cái nào cả, và tin gợi ý sẽ không hợp cái nào cả.',
+          '**Work preference là MỘT bản ghi cho cả tài khoản**, không phải mỗi CV một bản. Nên mọi CV dùng chung vị trí, tỉnh và lương mong muốn; các CV chỉ khác nhau ở kỹ năng, kinh nghiệm và học vấn.',
+        ],
       },
 
       /* ── §5 ─────────────────────────────────────────────────────────────── */
@@ -187,25 +320,25 @@ export const MATCHING_PAGE_DOCS: Record<string, PageDoc> = {
       },
 
       /* ── §6 ─────────────────────────────────────────────────────────────── */
-      { kind: 'h', text: '§6 · Một ví dụ chạy thật' },
+      { kind: 'h', text: '§6 · Ví dụ chạy thật — Linh và ba tin' },
       {
         kind: 'example',
-        heading: 'Linh xem một tin QA Engineer ở Hà Nội',
+        heading: 'Linh và ba tin — đọc theo hàng ngang',
         scenario:
-          'Ứng viên **Linh**: khai vị trí mong muốn *QA Engineer*, địa điểm *Hà Nội* (không tick sẵn sàng chuyển chỗ), hình thức *Fulltime*, **4 năm** kinh nghiệm, mong muốn **20–25 triệu**, ngành mong muốn *Phần mềm*, học vấn *Đại học*, kỹ năng khai trong CV: *Selenium*, *Jira*. — Tin: **QA Engineer**, Hà Nội, Fulltime, yêu cầu **3–5 năm**, **18–25 triệu**, ngành *Phần mềm*, yêu cầu *Selenium* (bắt buộc) và *Postman*, học vấn *Đại học*.',
-        cols: ['Tín hiệu', 'So sánh', 'Điểm'],
+          '**Linh** gõ vào Work preference: **Marketing Executive · Marketing · Hồ Chí Minh · 20 triệu**. Hồ sơ ghi **3 năm**. CV có *Facebook Ads · Google Analytics · Content Writing*, bằng **Đại học**, và một công ty thương mại điện tử — nhưng cô **chưa bao giờ khai Ngành mong muốn**. Trong 90 ngày qua cô **nộp đơn 1 tin** (Chuyên viên Marketing · Shopee), **lưu 1 tin** (Content Marketing) và **mở 6 tin**, trong đó 4 tin ở Bình Dương.',
+        cols: ['Tín hiệu', 'Linh có gì', 'A · Content Marketing · Lazada · HCM', 'B · Chuyên viên MKT · Lazada · Bình Dương', 'C · Marketing Executive · VNG · HCM'],
         rows: [
-          ['Vị trí & ngành nghề', 'Cùng vị trí *QA Engineer* — bậc cao nhất', '42 / 42'],
-          ['Địa điểm & hình thức', 'Đúng tỉnh Hà Nội **và** đúng hình thức Fulltime', '20 / 20'],
-          ['Kinh nghiệm', '4 năm nằm trong dải 3–5', '14 / 14'],
-          ['Lương', 'Dải tin 18–25 chạm dải mong muốn 20–25', '12 / 12'],
-          ['Ngành', 'Trùng ngành *Phần mềm*', '5 / 5'],
-          ['Kỹ năng', '*Selenium* là kỹ năng bắt buộc nên tính đôi → khớp 2 trên 3 phần yêu cầu; *Postman* không có', '2,7 / 4'],
-          ['Học vấn', 'Đại học — đạt yêu cầu', '3 / 3'],
-          ['**Tổng**', 'Làm tròn **một lần** ở tổng', '**99 / 100**'],
+          ['Vị trí & ngành nghề · 42', 'Gõ: **Marketing Executive**. Hành vi: Chuyên viên Marketing (đã nộp), Content Marketing (đã lưu)', 'Content Marketing — đúng vị trí, nhưng **suy ra** → **34**', 'Chuyên viên MKT — đúng vị trí, **suy ra** → **34**', 'Marketing Executive — đúng vị trí cô **tự gõ** → **42**'],
+          ['Địa điểm · 20', 'Gõ: **Hồ Chí Minh**. Hành vi: Bình Dương (mở 4 tin ở đó)', 'HCM, tự khai → **20**', 'Bình Dương, suy ra → 80 % → **16**', 'HCM, tự khai → **20**'],
+          ['Kinh nghiệm · 14', '3 năm (Hồ sơ)', 'Tin cần 2–4 → **14**', 'Tin cần 3–5 → **14**', 'Tin cần 1–2, cô thừa 1 năm → **10**'],
+          ['Lương · 12', '20 triệu', '18–25 → **12**', '20–28 → **12**', 'Trần 16 — cô đòi cao hơn 25 % → **0**'],
+          ['Ngành · 5', '**Không khai Ngành mong muốn.** Build **không** suy ngành từ công ty trong CV', '**0**', '**0**', '**0**'],
+          ['Kỹ năng · 4', 'Facebook Ads · Google Analytics · Content Writing (CV)', 'Khớp 2 trong 3 tin đòi → **2,7**', 'Khớp cả hai tin đòi → **4**', 'Tin đòi Google Ads → **0**'],
+          ['Học vấn · 3', 'Đại học (CV)', 'Tin cần Đại học → **3**', 'Tin **không khai** → **0**, không chia lại', 'Tin cần Đại học → **3**'],
+          ['**Tổng**', '', '**85,7 → 86**', '**80**', '**75**'],
         ],
         note:
-          'Ba điều cần rút ra: **(1)** Linh **không bao giờ nhìn thấy con số 99** — ứng viên không được hiển thị %. **(2)** Nếu tin này **không ghi lương**, tín hiệu lương bằng 0 và tổng còn 87 — 12 điểm đó không được chia lại cho các tín hiệu khác. **(3)** Nếu Linh **đã từng nộp đơn** vào tin này, dù đơn đã bị từ chối, tin bị loại ở **§3** và không bao giờ được chấm.',
+          '**Năm điều rút ra.** **(1) Tin C giữ 42 trong 75 điểm chỉ nhờ một sự thật** — Marketing Executive là vị trí Linh **tự gõ**. Trả lương hụt 25 %, không một kỹ năng chung, vậy mà vẫn 75: thứ ứng viên nói mình muốn thắng gần như mọi thứ khác. **(2) Tin A và B ăn 34 chứ không phải 42** — đúng vị trí, nhưng học được từ một tin đã nộp và một tin đã lưu, nên chỉ 80 %. Tin B có mặt trong danh sách **chỉ nhờ hành vi**: Bình Dương không nằm ở đâu trong hồ sơ của Linh. **(3) Cả ba tin đều 0 điểm ngành** vì Linh bỏ trống Ngành mong muốn — một ô trống **bên phía ứng viên** trừ điểm **mọi tin như nhau**, nên **thứ tự không hề đổi**. **(4) Tin B mất 3 điểm vì một ô nhà tuyển dụng bỏ trống**, và 3 điểm đó **không** được chia cho tín hiệu khác — chia thì B đọc ra 80 ÷ 97 = 82 % và vượt A, tức là điểm cao hơn nhờ khai ít hơn (§4a). **(5) Linh không bao giờ thấy con số nào.** Cả ba tin vào rổ của cô; popup sau khi nộp đơn liệt kê A, B, C đúng thứ tự đó; trang cá nhân và chi tiết tin rút thẻ xáo trộn từ cùng rổ ấy — và vì A với B cùng là Lazada nên **một hàng không bao giờ hiện cả hai**. Tin Shopee cô đã nộp đơn không có mặt ở cột nào vì **đã nộp là mất hẳn** (§3) — nhưng chính nó là lý do A và B được 34 điểm vị trí.',
       },
 
       /* ── §7 ─────────────────────────────────────────────────────────────── */
