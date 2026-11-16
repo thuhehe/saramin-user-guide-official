@@ -61,7 +61,7 @@ export const MATCHING_PAGE_DOCS: Record<string, PageDoc> = {
           ['**Chi tiết tin** — *Gợi ý việc làm cho bạn*', 'Đã đăng nhập', '6', 'Xáo trộn trong từng bậc vị trí; **neo** theo ngành nghề của tin đang xem'],
           ['**Popup sau khi nộp đơn** (Batch apply)', 'Người vừa nộp đơn', '30', '**Đúng thứ tự điểm**, không xáo, không neo ngành nghề'],
           ['**Email JS 3** — gợi ý hằng tuần, thứ Hai 07:00', 'Mọi ứng viên đang hoạt động chưa tắt công tắc nhận mail', '6', '**Đúng thứ tự điểm**, một công ty một hàng'],
-          ['**Trang tìm kiếm** — strip gợi ý', '—', '—', 'Backend có sẵn nhưng **giao diện không gọi**; hiện không có strip nào trên trang search'],
+          ['**Trang tìm kiếm** — không có khối gợi ý', '—', '—', 'Backend có sẵn một `surface=SEARCH` nhưng **giao diện không bao giờ gọi nó** — hiện **không có strip gợi ý nào** trên trang tìm việc. Chữ `SEARCH` trong code của trang này là **nhãn analytics** cho kết quả tìm kiếm thường, không phải một khối gợi ý'],
         ],
       },
       {
@@ -167,7 +167,7 @@ export const MATCHING_PAGE_DOCS: Record<string, PageDoc> = {
         cols: ['Màn hình', 'Thứ tự'],
         rows: [
           ['Popup sau khi nộp đơn', '**Đúng thứ tự điểm**, không gom theo công ty (đây là danh sách, không phải hàng thẻ)'],
-          ['Onboarding · Email JS 3 · Trang tìm kiếm', '**Điểm cao nhất trước**, một công ty một hàng'],
+          ['Onboarding · Email JS 3', '**Điểm cao nhất trước**, một công ty một hàng'],
           ['Trang cá nhân · Chi tiết tin', '**Xáo trộn trong từng bậc vị trí** — xem dưới'],
         ],
       },
