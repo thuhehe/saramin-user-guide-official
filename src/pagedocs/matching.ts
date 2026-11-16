@@ -227,19 +227,20 @@ export const MATCHING_PAGE_DOCS: Record<string, PageDoc> = {
       '**So tin với tin, không đọc hồ sơ người xem.** Vì vậy **mọi người đều thấy cùng một danh sách** cho cùng một tin — khách chưa đăng nhập cũng thấy y hệt người đã đăng nhập.',
       '**Đây là bảng điểm riêng**, khác bảng của *Recommended jobs*: 45 / 15 / 15 / 10 / 8 / 4 / 3, trên cùng thang 100. Đừng dùng bảng của bên kia để giải thích kết quả bên này.',
       '**Kết quả được cache 1 giờ cho mỗi tin** và chỉ tính lại ở lượt xem đầu tiên sau khi cache hết hạn — thực tế làm mới chậm nhất khoảng **75 phút**.',
-      '**Không có cổng lọc ngành nghề.** Mọi tin đang sống đều được chấm rồi mới xếp hạng, nên một tin khác ngành vẫn lọt vào nếu cùng tỉnh, cùng cấp bậc, cùng dải lương.',
+      '**Không có cổng lọc ngành nghề — và đó là cả mục đích của thiết kế này.** Bản nháp cũ bắt buộc cùng ngành nghề rồi bỏ hết phần còn lại; làm vậy sẽ có những tin **không có việc tương tự nào để hiện**, và một khối rỗng là kết cục mà tính năng này không được phép tạo ra. Chấm hết mọi tin thì không bao giờ rỗng, và phần dự phòng tự nó hợp lý: một tin không có gì cùng ngành nghề vẫn ăn điểm địa điểm, cấp bậc, lương và hình thức — thành ra *cùng thành phố, cùng cấp bậc, lương tương đương*.',
       '**Hệ thống không hứa “tương tự” khi nó không tương tự:** điểm cao nhất dưới 40 thì giao diện đổi tiêu đề thành *Việc làm khác tại {tỉnh}* — nhưng vẫn hiện đủ 6 thẻ.',
     ],
     how: [
       'Mở bất kỳ **trang chi tiết tin** nào trên site ứng viên và kéo xuống carousel *Việc làm tương tự*.',
       'Ngay dưới carousel là khối thứ hai. **Đã đăng nhập** thì khối đó là *Gợi ý việc làm cho bạn* (bộ máy **Recommended jobs**, đọc hồ sơ). **Chưa đăng nhập** thì khối đó lấy **dòng 7–12 của chính danh sách này** và mang tiêu đề *Có thể bạn quan tâm*.',
-      'Muốn biết vì sao một tin lọt vào: so hai tin với nhau theo bảng ở §2 — không cần biết người xem là ai.',
+      'Muốn biết vì sao một tin lọt vào: so hai tin với nhau theo bảng ở §2 — không cần biết người xem là ai. Có ví dụ chạy đủ số ở §7.',
     ],
     watch: [
       '**Hai khối cạnh nhau, hai bộ máy khác nhau.** *Việc làm tương tự* so tin với tin; *Gợi ý việc làm cho bạn* so hồ sơ với tin. Hai khối **không bao giờ trùng tin**: carousel lấy trước, khối dưới bỏ các id đã hiện.',
-      '**Tin đã nộp đơn vẫn nằm trong danh sách dùng chung** — giao diện mới là chỗ ẩn nó đi cho người đã đăng nhập. Nên danh sách gốc không đổi theo từng người.',
+      '**Tin đã nộp đơn vẫn nằm trong danh sách dùng chung** — giao diện mới là chỗ ẩn nó đi cho người đã đăng nhập (§6). Nên danh sách gốc không đổi theo từng người.',
       '**Từ 16/11, tin đã rút đơn hiện lại trên carousel này** và nộp lại được, trong khi ở *Recommended jobs* và các email thì vẫn bị ẩn. Cùng một tin có thể thấy ở chỗ này mà không thấy ở chỗ kia — đây là hệ quả cố ý của quyết định “rút đơn là dứt khoát và giải phóng tin”.',
       '**Sửa nội dung một tin không làm danh sách đổi ngay** — phải chờ cache hết hạn.',
+      '**Tuổi tin không ăn điểm**, chỉ dùng để phá hoà cuối cùng. Một tin cũ nhưng giống hệt vẫn đứng trên một tin mới nhưng khác ngành.',
     ],
     blocks: [
       { kind: 'p', text: STAMP },
@@ -252,13 +253,16 @@ export const MATCHING_PAGE_DOCS: Record<string, PageDoc> = {
           'Đọc **một câu truy vấn** lấy thông tin tin gốc và **mọi tin đang sống** — không có cổng ngành nghề, không giới hạn theo ngày đăng.',
           'Chấm điểm trong bộ nhớ → **bỏ tin trùng** (cùng công ty + tiêu đề + tỉnh) và bỏ bản trùng của chính tin gốc → **tối đa 2 tin mỗi công ty** → sắp **điểm ↓ → ngày đăng ↓ → id ↓** → giữ **20 id** → dựng thẻ và kiểm tra lại tin còn sống.',
           'Giao diện xin khoảng **12 dòng**: 6 cho carousel, dòng 7–12 cho khối thứ hai của khách chưa đăng nhập.',
+          '**Luôn loại:** chính tin đang xem · tin đã đóng hoặc hết hạn · tin tắt hiển thị · công ty không còn hoạt động.',
+          '**Không có điểm sàn.** Danh sách luôn đủ 6 thẻ chừng nào thị trường còn 6 tin để đưa — một danh sách điểm thấp vẫn là 6 tin liên quan nhất đang tồn tại, và như vậy vẫn hơn một khối rỗng.',
+          '**Cùng công ty bị giới hạn, không bị loại.** Hai tin là đủ để một nhà tuyển dụng không chiếm hết hàng; loại hẳn sẽ vứt đi những tin thật sự phù hợp khi công ty đó là đơn vị tuyển chính trong một ngách hẹp.',
         ],
       },
 
       { kind: 'h', text: '§2 · Bảng điểm tin ↔ tin' },
       {
         kind: 'table',
-        note: 'Trọng số **phiên bản v3**, cố định trong code. Thiếu dữ liệu ở **bất kỳ phía nào** là 0 điểm, không chia lại thang.',
+        note: 'Trọng số **phiên bản v3**, cố định trong code. Thiếu dữ liệu ở **bất kỳ phía nào** là 0 điểm, không chia lại thang (§4).',
         cols: ['Tín hiệu', 'Tối đa', 'Các bậc'],
         rows: [
           ['**Ngành nghề**', '**45**', 'Cùng vị trí 45 · cùng nhóm vị trí 32 · cùng ngành nghề 18. Lấy quan hệ **mạnh nhất** giữa mọi cặp vị trí của hai tin'],
@@ -272,17 +276,114 @@ export const MATCHING_PAGE_DOCS: Record<string, PageDoc> = {
       },
       {
         kind: 'warn',
-        text: '**Bậc “cùng nhóm vị trí” (32 điểm) chưa bao giờ đạt được** — dữ liệu taxonomy ba tầng chưa có (SRM-1315). Thực tế thang ngành nghề chạy hai bậc: 45 hoặc 18.',
+        text: '**Bậc “cùng nhóm vị trí” (32 điểm) chưa bao giờ đạt được** — dữ liệu taxonomy ba tầng chưa có (SRM-1315). Thực tế thang ngành nghề chạy hai bậc: 45 hoặc 18. Xem §7 để thấy điều này đổi thứ hạng như thế nào.',
       },
 
-      { kind: 'h', text: '§3 · Khi không tìm được tin nào thật sự giống' },
+      { kind: 'h', text: '§3 · Vì sao các con số như vậy' },
+      {
+        kind: 'list',
+        items: [
+          '**Ngành nghề là xương sống, và tầng giữa mới là chỗ quan trọng.** Với 21 ngành nghề và 477 vị trí, nhảy thẳng từ “cùng vị trí” xuống “cùng ngành nghề” là bước quá dài — 42 vị trí cùng nằm trong *IT Development · Data*, mà một Frontend Developer không phải một Data Engineer. **Nhóm vị trí** là nấc thang còn thiếu.',
+          '**Tin đăng nhiều vị trí lấy quan hệ mạnh nhất, không lấy trung bình.** So mọi cặp vị trí của hai tin rồi giữ cặp gần nhau nhất. Nhờ vậy một tin liệt kê năm vị trí **không bị phạt vì đăng rộng**, và cũng **không tự nâng điểm** bằng cách liệt kê thêm vị trí.',
+          '**Địa điểm ăn điểm thật, không phải chỉ để phá hoà.** Một tin Senior ở Hà Nội không thay thế được cho người đang đọc một tin ở Hồ Chí Minh, dù tiêu đề giống nhau đến đâu. Ứng viên lọc theo địa điểm gắt hơn mọi tiêu chí khác. **Đây là nút vặn đầu tiên** nếu danh sách chạy ra sai cảm giác: nâng từ 15 lên 20 là “cùng thành phố, nghề gần” thắng “cùng nghề, ở xa”.',
+          '**Kỹ năng cố ý nhỏ — 8 trên 100.** Hai bên đều chọn từ một danh mục chung nên so sánh là chính xác, nhưng độ chồng lấn thực tế rất mỏng: một tin thường khai 5–6 kỹ năng và hai tin liên quan chỉ chung hai ba cái. Ở mức 8 điểm, chồng lấn mạnh đủ để tách hai tin xấp xỉ nhau nhưng **không đủ lật ngược quan hệ ngành nghề** — và nó hỏng an toàn trong lúc danh mục kỹ năng đang được xây lại: một ngành nghề có ít kỹ năng chỉ đơn giản gần 0 ở tiêu chí này, chứ không hành xử khác phần còn lại.',
+          '**Những gì KHÔNG vào điểm:** quy mô công ty · phúc lợi · học vấn · loại hợp đồng · **tuổi tin**. Tuổi tin chỉ là phá hoà cuối cùng. Những thứ này hoặc lặp lại một tín hiệu đã tính, hoặc không đổi việc một tin có thay thế được tin kia hay không.',
+        ],
+      },
+
+      { kind: 'h', text: '§4 · Thiếu dữ liệu — ai bị trừ, ai không' },
+      {
+        kind: 'table',
+        note: 'Hai tin hiếm khi khai cùng một bộ trường. **Một luật duy nhất**, giống hệt hai bộ máy chấm điểm còn lại: tín hiệu nào không so được thì 0 điểm, tổng vẫn trên thang 100.',
+        cols: ['Trường hợp', 'Làm gì', 'Vì sao'],
+        rows: [
+          ['**Tin đang xem không khai** trường đó', 'Mọi tin ứng viên đều **0** ở tín hiệu đó. Tổng vẫn trên thang 100, **không chia lại**', 'Thứ tự không đổi dù chia lại hay không — mọi dòng đều mất đúng số điểm ấy. Chia lại chỉ đẻ thêm một luật thứ hai'],
+          ['Tin đang xem có khai, **tin kia không**', 'Tin kia **0** ở tín hiệu đó. Không chia lại', 'Tin gốc đặt ra một câu hỏi mà tin kia không trả lời, nên nó thật sự kém so sánh hơn'],
+          ['**Cả hai đều không khai**', '**0**, như dòng đầu', 'Không có gì để so'],
+        ],
+      },
+      {
+        kind: 'list',
+        items: [
+          '**Cái giá phải trả:** một tin khai càng ít thì **trần điểm của nó càng thấp**, nên danh sách của nó hay rơi vào tiêu đề *Việc làm khác tại {tỉnh}* hơn (§5). Đó là sự thật chứ không phải lỗi — những tin đó thật sự được gắn với nhau bằng ít thông tin hơn.',
+          '**Lương khác tiền tệ** được quy đổi theo tỷ giá admin **trước khi** so, không bao giờ so số thô. Không có tỷ giá thì tín hiệu lương bằng 0.',
+        ],
+      },
+
+      { kind: 'h', text: '§5 · Khi không tìm được tin nào thật sự giống' },
       {
         kind: 'list',
         items: [
           'API trả về danh sách thẻ **kèm một cờ `weak`**, và **không trả điểm**.',
           '`weak` bật khi **tin cao điểm nhất vẫn dưới 40**. Giao diện khi đó đổi tiêu đề thành **“Việc làm khác tại {tỉnh}”**.',
           '**Vẫn hiện đủ 6 thẻ** — không ẩn khối, không giảm số thẻ. Chỉ lời hứa trong tiêu đề là thay đổi.',
+          'Dưới 40 điểm nghĩa là **ngành nghề gần như không đóng góp gì** và các thẻ chỉ còn được gắn với nhau bằng địa điểm và cấp bậc. Đổi tiêu đề thay vì giấu danh sách là cách trung thực hơn.',
         ],
+      },
+
+      { kind: 'h', text: '§6 · Người đã đăng nhập thấy gì' },
+      {
+        kind: 'p',
+        text: 'Người đã đăng nhập không nên được mời một việc họ đã nộp đơn — mở ra cũng chỉ thấy nút ứng tuyển từ chối. Nên hệ thống **bớt các dòng đó đi**. Không đổi gì khác: cùng điểm, cùng thứ tự, cùng thẻ.',
+      },
+      {
+        kind: 'table',
+        cols: ['Người đọc', 'Thấy gì'],
+        rows: [
+          ['Chưa đăng nhập', 'Toàn bộ danh sách, đúng như bản cache. Không giấu gì — hệ thống không biết họ là ai'],
+          ['Đã đăng nhập, chưa nộp tin nào trong đó', 'Giống hệt mọi người'],
+          ['Đã đăng nhập, đã nộp một vài tin trong đó', 'Cùng danh sách, trừ những tin đó. Phần còn lại giữ nguyên vị trí'],
+        ],
+      },
+      {
+        kind: 'list',
+        items: [
+          '**Server gửi MỘT danh sách cache cho tất cả mọi người; trình duyệt mới là chỗ bỏ các dòng của riêng người đọc.** Trang chi tiết tin vốn đã phải hỏi “tôi nộp tin này chưa” để vẽ nút Apply, nên câu trả lời đang trên đường tới rồi — không tốn thêm lượt gọi nào. Lọc ở server sẽ biến mỗi trang chi tiết tin thành một trang riêng cho từng người và **mất sạch cache**.',
+          '**Xin nhiều dòng hơn số thẻ hiện ra** — khoảng 12 dòng cho một hàng 6 thẻ. Bỏ hai ba dòng trong mười hai thì hàng vẫn đầy; bỏ hai ba dòng trong đúng sáu thì hàng ngắn thấy rõ.',
+          '**Không để thẻ biến mất trước mắt người đọc.** Vẽ hàng sau khi đã biết họ nộp những tin nào — trang vốn đã chờ câu trả lời đó. Hiện 6 thẻ rồi xoá đi 2 làm trang nhảy và trông y như một lỗi.',
+        ],
+      },
+
+      { kind: 'h', text: '§7 · Ví dụ chạy thật' },
+      {
+        kind: 'example',
+        heading: 'Người đọc đang xem một tin Senior Frontend Engineer',
+        scenario:
+          'Tin đang xem: **Senior Frontend Engineer · FPT Software · Hồ Chí Minh · Senior · IT/Phần mềm · 30–45 triệu**, khai **5 kỹ năng**: React · TypeScript · Git · Docker · AWS. Con số 5 này là mẫu số của tín hiệu kỹ năng.',
+        cols: ['Tin ứng viên', 'Ngành nghề 45', 'Cấp bậc 15', 'Địa điểm 15', 'Lương 10', 'Kỹ năng 8', 'Ngành 4 + HT 3', 'Tổng'],
+        rows: [
+          ['**React Developer** · Tiki · HCM · Senior · 32–48tr · chung React, TypeScript, Git', 'cùng vị trí **45**', '**15**', '**15**', '**10**', '3/5 → **4,8**', '**7**', '**97**'],
+          ['**Backend Engineer** · Shopee · HCM · Senior · 30–45tr · chung Docker', 'cùng nhóm **32**', '**15**', '**15**', '**10**', '1/5 → **1,6**', '**7**', '**81**'],
+          ['**Frontend Engineer** · VNG · **Hà Nội** · Senior · 30–45tr · chung React, TypeScript', 'cùng vị trí **45**', '**15**', 'khác tỉnh **0**', '**10**', '2/5 → **3,2**', '**7**', '**80**'],
+          ['**Frontend Intern** · Base.vn · HCM · **Intern** · 8–12tr · chung React', 'cùng vị trí **45**', 'lệch 3 bậc **0**', '**15**', 'không giao **0**', '1/5 → **1,6**', '**7**', '**69**'],
+          ['**Data Engineer** · MoMo · HCM · Senior · 35–50tr · chung AWS', 'cùng ngành nghề **18**', '**15**', '**15**', '**10**', '1/5 → **1,6**', '**7**', '**67**'],
+          ['**Kế toán trưởng** · VNG · HCM · Manager · 30–45tr · không chung gì', 'khác ngành nghề **0**', 'lệch 1 bậc **9**', '**15**', '**10**', '**0**', '**3**', '**37**'],
+        ],
+        note:
+          '**Thứ tự theo tài liệu:** Tiki 97 · Shopee 81 · VNG 80 · Base.vn 69 · MoMo 67 · Kế toán 37. — ⚠ **Trên build hôm nay thì khác**: bậc *cùng nhóm vị trí* chưa chạy, nên Shopee chỉ được **18** chứ không phải 32, tổng còn **67** — **bằng đúng MoMo**, và hai tin phải phá hoà bằng ngày đăng. Đây chính là cái giá của việc thiếu tầng taxonomy giữa (§2). — Ba điều khác đáng rút ra: **(1)** Shopee 81 nhỉnh hơn VNG 80 **một điểm** là thiết kế đang chạy đúng — “khác vị trí, cùng thành phố” và “cùng vị trí, khác vùng” thật sự xấp xỉ nhau. **(2)** Tin **Intern** (69) vượt Data Engineer (67) dù lương bằng một phần năm: cùng vị trí và cùng thành phố thắng cùng ngành nghề. Nếu thấy sai thì vặn **Cấp bậc** từ 15 lên 20, **đừng lọc bỏ cấp bậc** — làm vậy là đem khối rỗng quay lại. **(3)** Tin **Kế toán trưởng** vẫn nằm đó ở 37 điểm, và đó là cố ý: nếu thị trường chỉ có sáu tin này thì người đọc vẫn thấy sáu thẻ. Khi có năm chục tin IT thì nó không bao giờ xuất hiện.',
+      },
+
+      { kind: 'h', text: '§8 · Phase 2, và chỗ build khác tài liệu' },
+      {
+        kind: 'table',
+        heading: 'Hai thay đổi đã lên kế hoạch — chưa làm',
+        cols: ['Khi nào', 'Đổi gì', 'Vì sao phải chờ'],
+        rows: [
+          ['Danh mục kỹ năng xây lại xong và các tin thường xuyên khai từ 5 kỹ năng trở lên', 'Nâng **Kỹ năng** từ 8 lên khoảng **15**, lấy điểm từ **Ngành nghề** (45 → 38)', 'Chồng lấn kỹ năng chỉ đáng tin khi cả hai bên đều thật sự có kỹ năng. Nâng sớm sẽ khiến vài ngành nghề đã soạn kỹ năng hành xử khác hẳn phần còn lại'],
+          ['Log gợi ý đã đủ dữ liệu click', 'Tinh chỉnh **toàn bộ trọng số** theo dữ liệu đó, cùng cách làm với bên Recommended jobs', 'Các con số hiện nay là điểm khởi đầu có lý lẽ, không phải kết quả nghiên cứu. Chúng là cấu hình và chỉ nên đổi theo bằng chứng'],
+        ],
+      },
+      {
+        kind: 'warn',
+        text: '**Trọng số: tài liệu nói một đằng, build làm một nẻo.** Tài liệu yêu cầu coi trọng số là **cấu hình** — đổi được mà không cần deploy, có ghi phiên bản để trả lời được “vì sao danh sách này đổi”. Build đang để **cố định trong code** (`RelevantJobsWeights`, phiên bản `v3`), nên đổi một con số là một lần deploy. Giống hệt bên Recommended jobs.',
+      },
+      {
+        kind: 'warn',
+        text: '**Bậc “tỉnh lân cận” (9 điểm)** vẫn còn trong tài liệu và còn cả hằng số trong code, nhưng **chưa bao giờ đạt được** vì chưa có bảng tỉnh lân cận trong master data. BA chốt **bỏ hẳn** ngày 12/11 — khác tỉnh là 0. Thứ hạng thực tế không đổi.',
+      },
+      {
+        kind: 'p',
+        text: '**Điểm số không bao giờ rời khỏi backend.** Không có % trên thẻ, không có trường điểm trong response, và điểm cũng không được lưu lại. Người đọc so hai tin không cần một con số, còn in nó ra chỉ mời thêm tranh cãi về một mô hình vốn đã là ước lượng.',
       },
     ],
   },
