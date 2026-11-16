@@ -159,6 +159,62 @@
   ]
  },
  {
+  "group": "Matching",
+  "key": "recommended-jobs",
+  "label": "Recommended jobs",
+  "path": "/ho-so-ca-nhan",
+  "perm": "",
+  "flag": "",
+  "site": "Jobseeker site",
+  "what": "Gợi ý việc làm cho **một ứng viên cụ thể**: đọc hồ sơ, chấm từng tin trên **thang 100 điểm / 7 tín hiệu**, hiện ở sáu chỗ trên site ứng viên.",
+  "sub": [
+   "/welcome",
+   "/jobs/:slug",
+   "/ho-so-ca-nhan"
+  ]
+ },
+ {
+  "group": "Matching",
+  "key": "similar-jobs",
+  "label": "Similar jobs",
+  "path": "/jobs/phien-dich-tieng-han-93e7247c",
+  "perm": "",
+  "flag": "",
+  "site": "Jobseeker site",
+  "what": "Carousel **Việc làm tương tự** dưới trang chi tiết tin: so **tin với tin**, không đọc hồ sơ người xem, cache 1 giờ — ai cũng thấy cùng một danh sách.",
+  "sub": [
+   "/jobs/:slug"
+  ]
+ },
+ {
+  "group": "Matching",
+  "key": "recommended-candidates",
+  "label": "Recommended candidates",
+  "path": "/hiring",
+  "perm": "",
+  "flag": "",
+  "site": "Company site",
+  "what": "Khối **Recommended talent** trên Company Home: từ một tin tuyển dụng tìm ứng viên, **chỉ dữ liệu tự khai**, sàn 40 điểm, mỗi ngày bốc 3 hồ sơ.",
+  "sub": [
+   "/hiring",
+   "/search",
+   "/applicants"
+  ]
+ },
+ {
+  "group": "Matching",
+  "key": "onboarding-job-count",
+  "label": "Onboarding job count",
+  "path": "/welcome",
+  "perm": "",
+  "flag": "",
+  "site": "Jobseeker site",
+  "what": "Con số *“hiện có N việc phù hợp”* ở **bước 3 và bước 4** của wizard onboarding — một phép **đếm theo bộ lọc**, không chấm điểm, chạy cho cả khách.",
+  "sub": [
+   "/welcome"
+  ]
+ },
+ {
   "group": "Users",
   "key": "jobseeker-users",
   "label": "Jobseeker users",

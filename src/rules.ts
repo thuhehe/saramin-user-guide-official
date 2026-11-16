@@ -204,14 +204,49 @@ export const RULE_CATS: RuleCat[] = [
   },
   {
     title: 'Matching & gợi ý',
-    note: 'Nhóm yếu nhất. Phần lớn logic đã hứa nhưng chưa được viết ra, và đang chờ master data để test trên dữ liệu thật.',
+    note: 'Từ 05/11 nhóm này đã có logic chạy thật, và đã được viết ra: xem nhóm **Matching** trong thanh bên — bốn trang, một trang Logic chung, viết theo code đang chạy ngày 16/11.',
     rules: [
       {
-        title: 'Match score: một cổng cứng, rồi mới tới thang 0–100 có trọng số',
+        title: 'Năm bộ máy gợi ý riêng biệt, không phải một thuật toán',
         summary:
-          'Mô hình đã đề xuất trong spec: lọc qua một điều kiện bắt buộc trước, phần còn lại chấm theo trọng số. Hai phía nhìn thấy hai thứ khác nhau — ứng viên và NTD không đọc cùng một con số. Skill gợi ý khi tạo job và tạo CV lấy theo **Job category cấp 3**. Từ khoá khớp các trường theo thứ hạng chứ không ngang nhau, và có những trường chỉ dùng để lọc, không bao giờ đánh index.',
+          'Nhầm hai bộ với nhau là nguyên nhân của gần như mọi câu hỏi “sao chỗ này khác chỗ kia”. **Recommended jobs** so người ↔ tin (bảng 42/20/14/12/5/4/3). **Similar jobs** so tin ↔ tin (bảng 45/15/15/10/8/4/3, không đọc hồ sơ, cache 1 giờ). **Recommended candidates** so tin ↔ người, chỉ dữ liệu tự khai. **Onboarding job count** chỉ là một phép đếm. **Khối gợi ý trong mail sau khi nộp đơn** chạy trên Elasticsearch với công thức riêng. Hai khối cạnh nhau trên trang chi tiết tin là hai bộ máy khác nhau và không bao giờ trùng tin.',
+        kind: 'ab', group: 'Matching', heading: 'Rule — Năm bộ máy gợi ý và ranh giới giữa chúng',
+        src: 'as-built 16/11 · SRM-1330 (1338 · 1331 · 1345 · 1347)',
+      },
+      {
+        title: 'Thang 100 điểm, trọng số cố định trong code, thiếu dữ liệu là 0',
+        summary:
+          'Điều kiện **ứng viên tự khai** là cổng lọc — không qua thì không bao giờ hiện. Mọi thứ còn lại chỉ đổi thứ tự. **Thiếu dữ liệu là 0 điểm và không chia lại thang**, ở cả ba bộ máy có chấm điểm. Trọng số nằm trong code, có đánh số phiên bản (v4 người ↔ tin, v3 tin ↔ tin); **tab chỉnh trọng số đã bỏ khỏi admin ngày 05/11**. Thứ duy nhất admin còn chỉnh được là **tỷ giá USD/VND**, dùng hai chiều — thiếu tỷ giá thì tín hiệu lương bằng 0.',
+        kind: 'both', group: 'Matching', heading: 'Rule — Thang điểm 100 và luật thiếu dữ liệu',
+        src: 'SRM-1330 · Thu chốt 12/11 và 16/11',
+      },
+      {
+        title: '“Đã ứng tuyển” là có bất kỳ dòng đơn nào — đơn đã rút là ngoại lệ từ 16/11',
+        summary:
+          'Có **bất kỳ** dòng đơn nào cho cặp (ứng viên, tin), **mọi trạng thái kể cả đã bị từ chối**, là tin đó biến mất khỏi gợi ý và khỏi cả ba loại email. Từ 16/11 rút đơn là dứt khoát và **giải phóng tin**: tin đã rút hiện lại trên carousel *Việc làm tương tự* và nộp lại được, trong khi ở Recommended jobs và các email thì vẫn ẩn. Cùng một tin thấy ở chỗ này mà không thấy ở chỗ kia là **hệ quả cố ý**, không phải lỗi.',
+        kind: 'both', group: 'Matching', heading: 'Rule — “Đã ứng tuyển” và ngoại lệ của đơn đã rút',
+        src: 'SRM-1551 · chốt của BA 16/11',
+      },
+      {
+        title: 'Ứng viên không thấy %, NTD thấy % nhưng ô trống không phải 0',
+        summary:
+          '**Ứng viên không bao giờ nhìn thấy %** — không có con số trên thẻ gợi ý, không có điểm sàn, mỗi màn hình một tiêu đề cố định. **NTD thấy %** trên bảng ứng viên của một tin, nhưng **so được dưới 4 trong 7 tín hiệu thì không in** — ô trống nghĩa là “chưa đủ dữ liệu để chấm”, **không phải “khớp 0 %”**. Hiển thị nhầm thành 0 biến một hồ sơ chưa chấm được thành một hồ sơ bị loại.',
+        kind: 'both', group: 'Matching', heading: 'Rule — Ai thấy % và khi nào không in',
+        src: 'Thu 29/09 · as-built 16/11',
+      },
+      {
+        title: 'Số việc ở onboarding cố ý không khớp trang tìm việc',
+        summary:
+          'Bốn khác biệt có chủ đích: tin để trống loại hợp đồng (onboarding **giữ**, trang tìm việc loại) · lọc ngành theo ngành của **tin** chứ không của **công ty** · tin remote **luôn được tính ở mọi tỉnh** · kinh nghiệm được quy từ số năm ra **cấp bậc**. Onboarding rộng hơn vì mục đích là cho người dùng thấy có việc để đi tiếp. **QA kiểm con số bằng dữ liệu trực tiếp**, không bằng trang tìm việc.',
+        kind: 'nv', group: 'Matching', heading: 'Rule — Con số onboarding và trang tìm việc',
+        src: 'Thu chốt 12/11 — bỏ test #13 của SRM-1347',
+      },
+      {
+        title: 'Nguồn skill gợi ý khi tạo job và tạo CV',
+        summary:
+          'Skill gợi ý khi NTD tạo job và khi ứng viên tạo CV lấy theo **Job category cấp 3**; ưu tiên related skill trước, bên dưới là các skill còn lại. Parse CV giữ **tối đa 20 skill** mỗi CV — cắt bớt chứ không từ chối. Đây là nguồn dữ liệu nuôi tín hiệu kỹ năng của cả ba bộ máy có chấm điểm, nên **kỹ năng ứng viên gõ tay không khớp master data sẽ không được tính**.',
         kind: 'nv', group: 'Resume management', heading: 'Rule — Mô hình match score và nguồn skill gợi ý',
-        src: 'spec resume-management · 20/10',
+        src: 'spec resume-management · 20/10 · as-built 16/11',
       },
     ],
   },

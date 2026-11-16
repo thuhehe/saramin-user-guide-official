@@ -46,7 +46,7 @@ export const RULE_DETAIL: Record<string, DocBlock[]> = {
 
 
     rule('Rule — Mô hình match score và nguồn skill gợi ý', [
-      'Mô hình đã đề xuất: **một cổng cứng** lọc trước, phần còn lại chấm theo **thang 0–100 có trọng số**. Hai phía nhìn thấy hai thứ khác nhau — ứng viên và NTD không đọc cùng một con số.',
+      'Mô hình đã **chạy thật từ 05/11**: một **cổng lọc** cứng trước, phần còn lại chấm theo **thang 0–100 có trọng số**. Hai phía nhìn thấy hai thứ khác nhau — ứng viên không bao giờ thấy %, NTD thấy % trên bảng ứng viên. Chi tiết ở nhóm **Matching**.',
       'Skill gợi ý khi NTD tạo job và khi ứng viên tạo CV lấy theo **Job category cấp 3**. Skills hiển thị cả hai cách: ưu tiên related skill trước, bên dưới là các skill còn lại trong danh sách.',
       'Từ khoá khớp các trường **theo thứ hạng**, không ngang nhau. Có những trường chỉ dùng để lọc và không bao giờ được đánh index.',
       'Parse CV lấy **tối đa 20 skill** mỗi CV — cắt bớt chứ không từ chối, nên một CV parse ra bốn mươi skill vẫn vào được, chỉ giữ hai mươi.',
@@ -112,6 +112,56 @@ export const RULE_DETAIL: Record<string, DocBlock[]> = {
       'Email gợi ý việc làm gửi sau khi ứng tuyển hàng loạt lấy theo **job cuối cùng được chọn**, vì mỗi job có skill và khu vực khác nhau nên phải chọn một job gốc.',
       'Khối gợi ý trong email: **tối đa 4 job**, **có loại trừ** job ứng viên đã ứng tuyển và tin đã hết hạn, và **không đủ việc phù hợp thì ẩn cả khối** chứ không hiện số ít hơn.',
       'Tiêu đề email giữ là **“Bạn đã ứng tuyển thành công”**, không dùng “Hồ sơ của bạn đã được gửi đến Nhà tuyển dụng” — vì hồ sơ có thể còn đang chờ kiểm duyệt CV, và câu sau sẽ gây hiểu nhầm khi CV bị từ chối.',
+    ]),
+  ],
+
+  Matching: [
+    h('Rule chi tiết'),
+    { kind: 'p', text: INTRO },
+
+    rule('Rule — Năm bộ máy gợi ý và ranh giới giữa chúng', [
+      '**Recommended jobs** (người ↔ tin) đọc hồ sơ ứng viên và chấm trên thang 42/20/14/12/5/4/3. Dùng ở onboarding, trang cá nhân, chi tiết tin, popup sau khi nộp đơn và email gợi ý hằng tuần.',
+      '**Similar jobs** (tin ↔ tin) **không đọc hồ sơ người xem** — mọi người thấy cùng một danh sách cho cùng một tin, cache **1 giờ** (làm mới chậm nhất ~75 phút). Bảng riêng 45/15/15/10/8/4/3.',
+      '**Hai khối nằm cạnh nhau trên trang chi tiết tin là hai bộ máy khác nhau**, và **không bao giờ trùng tin**: carousel *Việc làm tương tự* lấy trước, khối *Gợi ý việc làm cho bạn* bỏ các id đã hiện. Khách chưa đăng nhập thấy dòng 7–12 của chính danh sách Similar jobs, dưới tiêu đề *Có thể bạn quan tâm*.',
+      '**Recommended candidates** (tin ↔ người) dùng cùng bảng điểm của Recommended jobs nhưng **chỉ đọc dữ liệu ứng viên tự khai** — hành vi xem tin, lưu tin, nộp đơn **không bao giờ** sang phía nhà tuyển dụng.',
+      '**Onboarding job count** không chấm điểm gì cả, chỉ là một phép **đếm theo bộ lọc** chạy cho khách chưa có tài khoản.',
+      '**Khối gợi ý trong email sau khi nộp đơn** (JS 4 / JS 5) là bộ máy thứ năm: chạy trên **Elasticsearch**, **không đọc hồ sơ**, chỉ tìm tin giống **tin vừa nộp** (chung ≥ 1 kỹ năng và ≥ 1 tỉnh), tối đa 4 tin, không đủ thì ẩn cả khối.',
+      '**Trang chủ không có khối gợi ý cá nhân nào.** Component cũ còn trong code nhưng không trang nào render; placement `placement_home_hot_jobs` đã bỏ.',
+    ]),
+
+    rule('Rule — Thang điểm 100 và luật thiếu dữ liệu', [
+      '**Cổng lọc và chấm điểm là hai việc khác nhau.** Điều kiện ứng viên **tự khai** (ngành nghề, địa điểm) là cổng lọc — tin không qua thì **không bao giờ** hiện. Ngành, hình thức, lương, kinh nghiệm, học vấn, kỹ năng **không bao giờ lọc**, chỉ đổi thứ tự.',
+      '**Thiếu dữ liệu là 0 điểm và không chia lại thang** — ở cả ba bộ máy có chấm điểm, cả phía tin lẫn phía ứng viên. Tin không ghi lương thì 12 điểm đó mất hẳn, không được chia sang tín hiệu khác. Ngoại lệ duy nhất là **cách in** % trên bảng ứng viên của NTD.',
+      '**Trọng số nằm trong code, có đánh số phiên bản** (`v4` người ↔ tin, `v3` tin ↔ tin) và được ghi vào log cùng mỗi điểm số. **Tab chỉnh trọng số đã gỡ khỏi admin ngày 05/11**; endpoint ghi trọng số đã xoá, màn hình System → General settings chỉ đọc lại.',
+      '**Tỷ giá USD/VND do admin nhập là thứ duy nhất chỉnh được**, dùng **hai chiều**. Không có tỷ giá thì tín hiệu lương bằng 0 ở cả ba bộ máy.',
+      '**Ứng viên có nhiều CV:** chấm từng CV, mỗi tin giữ **điểm cao nhất**. Tổng luôn trên thang 100 và chỉ làm tròn **một lần** ở tổng.',
+      '**Bậc “cùng nhóm vị trí” (30 điểm ở người ↔ tin, 32 ở tin ↔ tin) chưa bao giờ đạt được** — dữ liệu taxonomy ba tầng chưa có (SRM-1315). Thực tế thang chạy hai bậc.',
+      '**Rổ chốt ở 50 tin** (16/11 — 80 quá rộng, lọt nhiều tin không liên quan). Code trên `dev` lúc kiểm tra tối 16/11 vẫn là 80; bản sửa chưa lên dev.',
+    ]),
+
+    rule('Rule — “Đã ứng tuyển” và ngoại lệ của đơn đã rút', [
+      '**“Đã ứng tuyển” = có bất kỳ dòng đơn nào** cho cặp (ứng viên, tin), **mọi trạng thái** kể cả đã bị từ chối hay thu hồi. Tin đó biến mất khỏi Recommended jobs ở **mọi** màn hình (kể cả popup Batch apply) và khỏi email JS 3 / JS 4 / JS 5.',
+      '**Ngoại lệ từ 16/11 (SRM-1551):** rút đơn là dứt khoát và **giải phóng tin** — tin đã rút **hiện lại trên carousel *Việc làm tương tự*** và nộp lại được, thành một đơn mới với snapshot mới. Ở Recommended jobs và các email thì vẫn ẩn.',
+      '**Hệ quả cố ý:** cùng một tin có thể thấy ở carousel mà không thấy ở khối gợi ý ngay bên dưới. Đây không phải lỗi hiển thị.',
+      '**Đơn đã rút cũng không còn trên bảng ứng viên** của nhà tuyển dụng.',
+      '**Tin ứng viên bấm “bỏ qua”** bị xử lý y như tin đã nộp đơn: loại vĩnh viễn khỏi mọi danh sách gợi ý.',
+    ]),
+
+    rule('Rule — Ai thấy % và khi nào không in', [
+      '**Ứng viên không bao giờ nhìn thấy %.** API trả `matchPercent = null` cho mọi thẻ gợi ý; không có điểm sàn, và mỗi màn hình chỉ có **một tiêu đề cố định** — hệ thống không đổi tiêu đề theo chất lượng kết quả.',
+      '**NTD thấy %** trên bảng ứng viên của một tin, tính bằng cùng bảng 7 tín hiệu nhưng **chỉ trên dữ liệu ứng viên tự khai**.',
+      '**So được dưới 4 trong 7 tín hiệu thì không in %** — một con số dựng trên hai ba tín hiệu gây hiểu nhầm nặng hơn là để trống. Đây là **ngoại lệ duy nhất** của luật “thiếu dữ liệu là 0”.',
+      '**Ô trống không có nghĩa là 0 %.** Hiển thị nhầm thành 0 biến một hồ sơ chưa chấm được thành một hồ sơ bị loại.',
+      '**Kỹ năng ứng viên gõ tay không khớp master data được tính là “không có kỹ năng”** — mất điểm, và vẫn tính là một tín hiệu đã so được. Nếu tính là “chưa biết” thì ứng viên vẫn mất đúng số điểm đó (thiếu dữ liệu = 0, không chia lại) nhưng lại dễ tụt xuống dưới mốc 4/7 và **mất luôn cả con số %**.',
+      '**Chế độ *Hồ sơ mới cập nhật* trên Company Home không in %** — đó là danh sách CV mới, không phải kết quả chấm điểm.',
+    ]),
+
+    rule('Rule — Con số onboarding và trang tìm việc', [
+      '**Mọi điều kiện đếm đều GIỮ LẠI tin không khai trường đó.** Tin không ghi loại hợp đồng, không ghi ngành, không ghi địa điểm vẫn được tính — không có thông tin không có nghĩa là không phù hợp.',
+      '**Bốn khác biệt có chủ đích so với trang tìm việc:** tin để trống loại hợp đồng (onboarding giữ, trang tìm việc loại) · lọc ngành theo ngành của **tin** chứ không của **công ty** · tin **remote** luôn được tính ở mọi tỉnh · kinh nghiệm quy từ **số năm ra cấp bậc**.',
+      '**Chỉ bước 3 và bước 4 có số.** Bước 3 đếm trên lựa chọn của bước 1 + 2; bước 4 đếm trên bước 1 + 2 + 3. **Bước 4 bằng bước 3 thì không in lại** — in lại cùng một con số làm người dùng tưởng hệ thống đứng im.',
+      '**Cap 500 → in “500+”.** Có chọn tỉnh mà **dưới 5 tin** thì câu chữ thêm con số **toàn quốc**. Bằng 0 thì không in số 0; API lỗi thì câu dẫn không kèm số.',
+      '**QA kiểm con số bằng dữ liệu trực tiếp**, không bằng trang tìm việc — test case #13 của SRM-1347 đã bỏ ngày 12/11.',
     ]),
   ],
 
