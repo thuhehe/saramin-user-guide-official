@@ -391,69 +391,246 @@ export const MATCHING_PAGE_DOCS: Record<string, PageDoc> = {
   /* ────────────────────────────────────────────────────────────────────────── */
   'recommended-candidates': {
     logic: [
-      '**Chiều ngược lại của Recommended jobs:** từ một tin tuyển dụng, tìm ứng viên phù hợp. Dùng **cùng bảng điểm 100 điểm (v4)**, đọc ngược từ phía tin.',
-      '**Chỉ đọc dữ liệu ứng viên tự khai** — hồ sơ và CV. Hành vi xem tin, lưu tin, nộp đơn của ứng viên **không bao giờ** được dùng ở phía nhà tuyển dụng, vì đó là dữ liệu cá nhân.',
-      '**Có điểm sàn 40**, khác phía ứng viên (không có sàn). Không ai đạt 40 thì khối **đổi hẳn chế độ** sang *Hồ sơ mới cập nhật* thay vì hiện danh sách kém.',
-      '**Mỗi ngày một “ván bài”:** từ 30 người đạt sàn, hệ thống bốc **3 người** theo hạt giống công ty + ngày. Cùng 3 người suốt cả ngày, hôm sau mới khác.',
-      '**Bấm vào thẻ có trừ một lượt mở CV miễn phí** (chốt 16/11) — y như mọi lần mở CV khác trên Search talent.',
+      '**Khối này neo vào MỘT TIN TUYỂN DỤNG, không neo vào thư mục.** Thư mục talent pool chỉ có tên và ngày tạo — không có vị trí, không cấp bậc, không địa điểm, nên không có gì để so. Thư mục là nơi **lưu** kết quả, không phải đề bài sinh ra kết quả.',
+      '**Một phép tính duy nhất — tin nháp không phải trường hợp riêng.** Không có cổng “tin nháp đủ thông tin chưa”. Tin khai thiếu thì **tự khắc điểm thấp**, vì tín hiệu tin không khai được 0 điểm.',
+      '**Chỉ đọc dữ liệu ứng viên tự khai** — hồ sơ và CV. Hành vi xem tin, lưu tin, nộp đơn **không bao giờ** sang phía nhà tuyển dụng; đó là dữ liệu cá nhân, đọc để xếp feed của chính người đó chứ không cho việc gì khác.',
+      '**Có điểm sàn 40 đặt trên KẾT QUẢ.** Người cao điểm nhất dưới 40 nghĩa là tin này không sinh ra được gì dùng được → đổi hẳn sang chế độ *Hồ sơ mới cập nhật*. Phía ứng viên không có sàn nào.',
+      '**Điểm chọn ra rổ, phép xáo trộn gieo theo ngày chọn ai hiện hôm nay.** Áp dụng cho **cả hai** chế độ, không phải mẹo riêng của chế độ dự phòng.',
     ],
     how: [
       'Vào **Company Home** của site nhà tuyển dụng (`/hiring`), khối *Recommended talent*. Cần quyền tìm kiếm ứng viên.',
-      'Dropdown ở đầu khối chọn **tin tuyển dụng** để so. Không chọn thì hệ thống tự lấy tin **đang mở** chưa quá hạn, rồi tin **hẹn đăng**, rồi tin **nháp** — trong mỗi loại lấy tin sửa gần nhất.',
-      'Tiêu đề khối in **tên tin** đang so, để NTD biết 3 hồ sơ này được chọn cho tin nào.',
+      'Dropdown ở đầu khối chọn tin để so. Không chọn thì hệ thống tự lấy theo thứ tự ở §1. Tiêu đề khối **in tên tin** — NTD phải thấy được danh sách này đang trả lời cho tin nào mà không cần bấm gì.',
+      'Muốn biết vì sao một người lọt vào: xem **§3** trước (họ có qua được bước lọc không), rồi mới tới **§4** (họ ăn bao nhiêu điểm).',
     ],
     watch: [
-      '**Bấm thẻ là tốn một lượt mở CV.** Hết lượt thì NTD vẫn thấy thẻ, nhưng mở ra là CV che hết chi tiết. Thẻ **không bao giờ bị ẩn** vì hết lượt.',
-      '**Một hồ sơ hiện 3 lần mà không ai bấm thì bị loại** khỏi danh sách gợi ý của công ty đó.',
-      '**Người đã nằm trong talent pool của công ty không xuất hiện** — họ đã được lưu rồi, gợi ý lại là thừa.',
-      '**Chế độ *Hồ sơ mới cập nhật* không in %.** Đó là danh sách CV mới, không phải kết quả chấm điểm — in % ở đó sẽ là một con số vô nghĩa.',
-      '**Trên bảng ứng viên của một tin, % không in ra khi so được dưới 4 trong 7 tín hiệu.** Ô trống ở đó nghĩa là “chưa đủ dữ liệu để chấm”, **không phải “khớp 0 %”**.',
+      '**Bấm thẻ là tốn một lượt mở CV miễn phí** (chốt 16/11). Hết lượt thì thẻ **vẫn hiện**, nhưng mở ra là CV che hết chi tiết.',
+      '**Một hồ sơ hiện 3 lần mà không ai bấm thì bị loại** khỏi gợi ý của công ty đó — và bị loại **trước** khi xáo trộn, không phải sau.',
+      '**Rổ nhỏ hơn một hàng thẻ không phải lỗi.** Chỉ 2 người qua sàn thì hiện 2 người, mỗi ngày, cho tới khi dữ liệu đổi. **Không bù** bằng người dưới sàn — đó đúng là thứ mà điểm sàn sinh ra để chặn.',
+      '**Chế độ *Hồ sơ mới cập nhật* không in % và không gắn nhãn Top pick.** Ở đó không có điểm, nên một nhãn tự tin là một lời nói dối.',
+      '**Cờ `exposure` không liên quan ở đây.** Nó ẩn tin khỏi *ứng viên*; đây là dashboard của chính công ty, nên tin tắt hiển thị vẫn neo bình thường — họ vẫn đang tuyển, chỉ là không quảng cáo.',
     ],
     blocks: [
       { kind: 'p', text: STAMP },
 
-      { kind: 'h', text: '§1 · Từ một tin tới ba thẻ' },
+      /* ── §1 ─────────────────────────────────────────────────────────────── */
+      { kind: 'h', text: '§1 · Khối neo vào đâu — một tin, chọn theo trạng thái rồi tới lần sửa cuối' },
+      {
+        kind: 'p',
+        text: 'NTD chọn tin từ dropdown. Không chọn thì hệ thống lấy **tin thật nhất**, không phải tin mới nhất: **trạng thái quyết định bậc, trong cùng một bậc thì tin sửa gần nhất thắng**.',
+      },
+      {
+        kind: 'table',
+        cols: ['Ưu tiên', 'Trạng thái tin', 'Vì sao nằm ở bậc này'],
+        rows: [
+          ['**1**', '**Đang mở**, chưa quá hạn', 'Đang tuyển thật. Ai hiện ra cho tin này thì liên hệ được ngay hôm nay.'],
+          ['**2**', '**Hẹn đăng**', 'Đã chốt và duyệt xong, chỉ còn chờ tới ngày.'],
+          ['**3**', '**Nháp**', 'Có thể không bao giờ đăng, nhưng vẫn hơn là không có gì để neo.'],
+          ['—', '**Đã đóng**', '**Không bao giờ neo.** Tin đã đóng thì không còn tuyển.'],
+          ['—', 'Không có tin nào ở cả ba bậc', 'Tiêu đề đổi thành **Hồ sơ mới cập nhật** — xem §6.'],
+        ],
+      },
+      {
+        kind: 'list',
+        items: [
+          '**TRONG CÙNG MỘT BẬC, SẮP THEO LẦN SỬA CUỐI — KHÔNG PHẢI NGÀY TẠO.** Việc này quan trọng hơn vẻ ngoài của nó: công ty có hai mươi tin đang mở sẽ không hiểu vì sao “tin mới nhất” được chọn, còn “tin bạn vừa sửa” thì tự giải thích trong một câu. Nó cũng chặn một tin nháp bỏ quên sáu tháng trước vượt lên trên tin NTD vừa động vào sáng nay.',
+          '**TIN ĐANG MỞ NHƯNG QUÁ HẠN BỊ COI NHƯ ĐÃ ĐÓNG** và rơi khỏi bậc 1 — nếu không thì Home đi mời ứng viên cho một tin không ai nộp đơn được nữa.',
+          '**TIÊU ĐỀ IN TÊN TIN.** NTD phải nhìn ra danh sách này đang trả lời cho tin nào mà không phải bấm gì cả.',
+          '**THƯ MỤC KHÔNG BIẾN MẤT — NÓ ĐỔI VAI.** Trước là đề bài, giờ là đích đến: nút “Lưu vào thư mục…” nằm trên từng thẻ.',
+        ],
+      },
+
+      /* ── §2 ─────────────────────────────────────────────────────────────── */
+      { kind: 'h', text: '§2 · Một phép tính duy nhất — tin nháp không phải trường hợp riêng' },
+      {
+        kind: 'p',
+        text: 'Tin nháp và tin đã đăng đi qua **đúng cùng một phép chấm**. Không có bước kiểm “tin nháp này đủ thông tin chưa”, không có nhánh code thứ hai. Tin nháp khai nửa vời **không bị loại** — nó chỉ **tự khắc điểm thấp**, nhờ luật ở §4. Toàn bộ cơ chế chỉ có thế.',
+      },
+      {
+        kind: 'list',
+        items: [
+          '**VÌ SAO KHÔNG ĐẶT CỔNG.** Một cái cổng là luật thứ hai phải nuôi, phải cãi nhau và phải giữ cho khớp với luật thứ nhất — và nó buộc phải trả lời câu “bao nhiêu thông tin thì đủ?”, câu mà không ai trả lời được. Để điểm tự tụt thì không cần trả lời gì, cũng không cần thêm dòng code nào.',
+          '**TIN NHÁP ĐÁNG ĐỂ NEO.** Lúc NTD đang viết tin là thời điểm tốt nhất trong cả phễu để cho họ thấy người phù hợp. Không lộ gì cả: đó là tin nháp của chính công ty họ.',
+          '**CÙNG MỘT BỘ CHẤM ĐIỂM VỚI PHÍA ỨNG VIÊN** — bảy tín hiệu đó, số điểm đó, các bậc đó, chỉ đọc ngược từ đầu kia. Nó không quan tâm tin đã đăng hay chưa.',
+        ],
+      },
+
+      /* ── §3 ─────────────────────────────────────────────────────────────── */
+      { kind: 'h', text: '§3 · Ai được coi là ứng viên của tin này — bước mang toàn bộ logic' },
+      {
+        kind: 'p',
+        text: 'Trước khi chấm bất cứ thứ gì, tập người được thu về những ai **có khả năng là ứng viên CỦA TIN NÀY**. Đây không phải mẹo tối ưu tốc độ — đây là định nghĩa. Lấy một người khi **BẤT KỲ** điều nào sau đây đúng, rồi cắt còn **500 người** trước khi chấm.',
+      },
+      {
+        kind: 'table',
+        cols: ['Đọc từ tin', 'So với ứng viên'],
+        rows: [
+          ['Mọi **vị trí** gắn trên tin', '**Vị trí mong muốn** của ứng viên (tối đa 3)'],
+          ['**Ngành nghề** của tin', '**Ngành nghề mong muốn** trên hồ sơ'],
+          ['**Kỹ năng** của tin', '**Kỹ năng trên CV** của ứng viên'],
+        ],
+      },
+      {
+        kind: 'list',
+        items: [
+          '**KHÔNG CÓ BƯỚC NÀY THÌ ĐIỂM SỐ CHO NGƯỜI LẠ LỌT QUA.** Địa điểm 20 + kinh nghiệm 14 + lương 12 là **46** — đã trên sàn 40 ở §5. Nghĩa là một người cùng thành phố, đúng số năm, đúng mức lương sẽ đủ điểm cho một tin thuộc ngành hoàn toàn không liên quan. Điểm sàn không bắt được chuyện đó; chỉ bước này bắt được.',
+          '**LÀ “HOẶC”, KHÔNG PHẢI “VÀ”.** Đây là gợi ý, không phải tìm kiếm: quăng lưới rộng ở đây rồi để điểm số ở §4 xếp hạng. Dùng “và” thì trên một cơ sở dữ liệu cỡ Việt Nam sẽ gần như không ra ai.',
+          '**ĐÂY CŨNG LÀ THỨ LÀM TIN NHÁP SƠ SÀI TỰ GIẢI QUYẾT.** Tin nháp không vị trí, không ngành nghề, không kỹ năng thì không khớp ai ở bước này → danh sách rỗng → khối rơi xuống chế độ ở §6. Không cần một luật riêng nào cho tin nháp, đúng như §2.',
+          '**KHỚP CẢ THỨ HỌ MUỐN LẪN THỨ HỌ LÀM ĐƯỢC.** Vị trí và ngành nghề mong muốn nói họ đang tìm gì; kỹ năng trên CV nói họ làm được gì. NTD cần cả hai đúng, nên cả hai đều được quyền đưa một người vào vòng chấm, và cả hai đều được chấm ở bước sau.',
+          '**NGƯỜI ĐÃ BỊ “LỜ ĐI” 3 LẦN RỜI TẬP TRƯỚC KHI CẮT 500**, không phải sau — nếu không thì họ vẫn chiếm chỗ trong 500 người được chấm.',
+          '⚠ **MẶT TRÁI CỦA NHÁNH KỸ NĂNG:** ứng viên gõ tay kỹ năng không khớp master data thì nhánh thứ ba **không bao giờ chạy** cho họ. Họ phải khai vị trí hoặc ngành nghề mới vào được vòng chấm — mất nhiều hơn hẳn 4 điểm kỹ năng.',
+        ],
+      },
+
+      /* ── §4 ─────────────────────────────────────────────────────────────── */
+      { kind: 'h', text: '§4 · Tín hiệu tin không khai được 0 điểm — không bị loại khỏi mẫu số' },
+      {
+        kind: 'p',
+        text: 'Đây là chỗ dễ hiểu sai nhất, và mọi thứ ở trên dựa vào nó. Phép chấm **không chia lại thang**: tín hiệu tin không khai **không** bị bỏ ra để kéo các trọng số còn lại lên 100. Mỗi tín hiệu giữ nguyên trọng số của nó, tin không khai thì ăn **0** của phần đó, và tổng **luôn trên cùng một thang 100**. Trọng số dùng **chung một bảng** với *Recommended jobs*.',
+      },
+      {
+        kind: 'table',
+        note: 'Cột cuối đọc một tin nháp chỉ khai mỗi địa điểm — để thấy vì sao không cần cổng kiểm tin nháp.',
+        cols: ['Tín hiệu', 'Điểm', 'Đọc từ tin', 'Đọc từ ứng viên — chỉ dữ liệu tự khai', 'Nháp chỉ khai địa điểm'],
+        rows: [
+          ['Vị trí & ngành nghề', '**42**', 'Vị trí gắn trên tin + ngành nghề', 'Vị trí mong muốn (≤3) + ngành nghề mong muốn. Trống cả hai → **tiêu đề CV** (suy ra → 34). **Không đọc hành vi**', '0'],
+          ['Địa điểm & hình thức', '**20**', 'Tỉnh + hình thức làm việc', 'Địa điểm mong muốn + hình thức', '**20**'],
+          ['Kinh nghiệm', '**14**', 'Dải năm, không có thì cấp bậc', 'Số năm trên hồ sơ; trống thì tính từ CV', '0'],
+          ['Lương', '**12**', 'Dải lương + tiền tệ', 'Lương mong muốn + tiền tệ — quy đổi trước khi so', '0'],
+          ['Ngành', '**5**', 'Ngành của công ty', 'Ngành mong muốn', '0'],
+          ['Kỹ năng', '**4**', 'Kỹ năng của tin', 'Kỹ năng trên CV', '0'],
+          ['Học vấn', '**3**', 'Mức yêu cầu', 'Học vấn trên CV', '0'],
+          ['**Tổng**', '**100**', '', '', '**20**'],
+        ],
+      },
+      {
+        kind: 'list',
+        items: [
+          '**ĐÓ CHÍNH LÀ MỤC ĐÍCH:** một tin nháp chỉ có mỗi thành phố thì **không bao giờ** sinh ra được thẻ trên 20 %, nên nó không bao giờ trông giống một kết quả chắc chắn. Con số tự nói thật, không cần ai gác.',
+          '**CÁC BẬC NẰM Ở TRANG *Recommended jobs*** — cùng vị trí 42, cùng ngành nghề 17, trong dải năm 14, lệch một bậc 7… Một bảng, một chỗ; đừng chép lại ở đây. Luật trừ 20 % cho giá trị suy ra cũng áp dụng y như vậy.',
+          '**CHỈ DỮ LIỆU TỰ KHAI.** Feed của ứng viên có mở rộng tập vị trí và tỉnh từ những gì họ xem, lưu, nộp đơn. Hành vi đó **không bao giờ** được nối vào bất cứ thứ gì phía nhà tuyển dụng, nên phép chấm ở đây chỉ đọc trường tự khai và các đường dự phòng từ CV.',
+          '**NÓ CÒN SỬA MỘT LỖI THẬT.** Nếu chia lại thang, hai thẻ nằm cạnh nhau trong cùng một hàng **không cùng một thang**: một thẻ chấm trên 4 tín hiệu, thẻ kia trên 7, mà cả hai đều in ra phần trăm. **Tin khai ÍT hơn lại được điểm CAO hơn.** Chấm tuyệt đối đặt mọi thẻ lên cùng một thang 100.',
+        ],
+      },
+
+      /* ── §5 ─────────────────────────────────────────────────────────────── */
+      { kind: 'h', text: '§5 · Một điểm sàn, đặt trên kết quả — không đặt trên tin nháp' },
+      {
+        kind: 'p',
+        text: 'Vì tin sơ sài **cố ý** bị điểm thấp, phải có một mốc mà dưới đó thì hàng thẻ không đáng hiện. Đây là sàn đặt trên **kết quả**, và nó áp dụng cho tin đã đăng y hệt như cho tin nháp — **không phải luật riêng của tin nháp**. LUẬT: người cao điểm nhất dưới **40** nghĩa là tin này không sinh ra được gì dùng được → rơi xuống §6 và đổi tiêu đề.',
+      },
+      {
+        kind: 'list',
+        items: [
+          '**VÌ SAO CẦN SÀN:** ở mức 15 % các thẻ không sai, chúng **vô nghĩa** — và một hàng thẻ vô nghĩa nằm dưới một tiêu đề tự tin chính là cách NTD học được thói quen bỏ qua khu vực đó của trang.',
+          '**40 NẰM TRONG CẤU HÌNH, KHÔNG PHẢI HẰNG SỐ CỨNG** (`svn.recruitment.recommended-candidates.floor`, mặc định 40) — đổi được mà không phải sửa code. Nhưng **không có màn hình admin** cho nó; đổi vẫn cần một lần triển khai.',
+          '**MỘT LUẬT, HAI TRƯỜNG HỢP.** Tin đã đăng mà không khai gì bị đối xử y như tin nháp sơ sài. Không nhánh, không ngoại lệ.',
+        ],
+      },
+
+      /* ── §6 ─────────────────────────────────────────────────────────────── */
+      { kind: 'h', text: '§6 · Khi không có tin dùng được — “Hồ sơ mới cập nhật”' },
+      {
+        kind: 'p',
+        text: 'Khối **vẫn hiện**. Nó không để trống và cũng không hiện trạng thái rỗng — nhưng **tiêu đề đổi**, vì nội dung đã đổi. Vấn đề gốc chưa bao giờ là “hiện người trong khi không có tin”; vấn đề là **hứa một kết quả khớp mà thực ra không có**. Đổi tên khối là vấn đề biến mất.',
+      },
       {
         kind: 'table',
         cols: ['Bước', 'Luật'],
         rows: [
-          ['**Chọn tin**', 'NTD chọn từ dropdown. Không chọn thì mặc định: tin **đang mở** chưa quá hạn → tin **hẹn đăng** → tin **nháp**; trong mỗi loại lấy tin sửa gần nhất'],
-          ['**Ai được đem ra chấm**', 'Ứng viên **mong muốn đúng vị trí hoặc ngành nghề của tin**, **hoặc** CV **có ít nhất một kỹ năng** của tin. Bắt buộc thêm: cho phép NTD tìm thấy mình · CV **Đạt** (có kinh nghiệm và học vấn) · **chưa nằm trong talent pool** của công ty'],
-          ['**Cắt tập**', 'Giữ tối đa **500 người** trước khi chấm. Người đã bị “lờ đi” 3 lần rời tập **trước** khi cắt'],
-          ['**Chấm điểm**', 'Cùng bảng 7 tín hiệu của *Recommended jobs*, nhưng **chỉ dữ liệu tự khai**. Không khai vị trí thì suy từ **tiêu đề CV** (ăn 80 % bậc)'],
-          ['**Rổ của ngày**', '**Top 30** người có điểm **≥ 40**'],
-          ['**Hiển thị**', 'Bốc **3 người** theo hạt giống (công ty + ngày), **điểm cao nhất trước**. Thẻ đầu tiên gắn nhãn **Top pick**'],
-          ['**Không ai đạt 40**', 'Chuyển chế độ **Hồ sơ mới cập nhật**: CV mới nhất, ưu tiên **ngành của công ty**, **mỗi ngành nghề một người**, **không in %**'],
+          ['1 · Lọc', 'Các bộ lọc cứng ở §8. Ngoài những người đó ra, không ai được hiện.'],
+          ['2 · Ưu tiên', 'Người có ngành hoặc ngành nghề mong muốn trùng **ngành của chính công ty** lên trước. Không có tin nào thì ít nhất ta vẫn biết họ làm nghề gì.'],
+          ['3 · Sắp xếp', 'CV cập nhật gần nhất trước — CV mới nghĩa là người đang thật sự tìm việc.'],
+          ['4 · Dàn đều', '**Mỗi ngành nghề một người**, không thì cả hàng ra ba bạn QA tester.'],
+          ['5 · Xoay vòng', 'Hằng ngày, theo luật chung ở §7 — không phải hành vi riêng của chế độ dự phòng.'],
+        ],
+      },
+      {
+        kind: 'list',
+        items: [
+          '**KHÔNG NHÃN “TOP PICK”, KHÔNG PHẦN TRĂM Ở CHẾ ĐỘ NÀY.** Ở đây không có điểm, nên một nhãn thể hiện độ tự tin sẽ là một lời nói dối. Nhãn đó chỉ thuộc về §1–§5.',
+          '**ĐỪNG DÙNG SỐ NĂM KINH NGHIỆM LÀM THƯỚC ĐO CHẤT LƯỢNG**, và tuyệt đối không dùng tuổi hay giới tính. Nhiều năm hơn không phải là tốt hơn, chỉ là khác, và nó phụ thuộc hoàn toàn vào vị trí.',
+        ],
+      },
+
+      /* ── §7 ─────────────────────────────────────────────────────────────── */
+      { kind: 'h', text: '§7 · Danh sách đổi mỗi ngày — luật chung cho CẢ HAI chế độ' },
+      {
+        kind: 'p',
+        text: 'NTD mở Home gần như mỗi sáng. Nếu ba gương mặt đó ngồi nguyên cả tuần thì khối trở thành giấy dán tường, và tới đúng ngày nó có người đáng xem thì không ai nhìn nữa. LUẬT, cùng hình dạng với feed của ứng viên: **điểm chọn ra RỔ, phép xáo trộn gieo theo ngày hôm nay chọn AI được hiện từ rổ đó**.',
+      },
+      {
+        kind: 'table',
+        cols: ['', 'Chế độ chấm điểm', 'Chế độ Hồ sơ mới cập nhật'],
+        rows: [
+          ['**Rổ**', 'Mọi người trên sàn 40, cắt còn **top 30**', 'Mọi người qua §8, sắp theo CV mới nhất, cắt còn **top 30**'],
+          ['**Hôm nay hiện ai**', 'Một phép xáo trộn trên rổ đó, gieo theo **công ty + ngày hôm nay**', 'Cùng cơ chế, cùng hạt giống'],
+          ['**Mở lại lúc trưa**', 'Vẫn đúng những người đó — hạt giống chưa đổi', 'Vẫn đúng những người đó'],
+          ['**Ngày mai**', 'Một lượt bốc khác từ cùng cái rổ', 'Một lượt bốc khác'],
+        ],
+      },
+      {
+        kind: 'list',
+        items: [
+          '**GIEO HẠT, KHÔNG BAO GIỜ RANDOM THUẦN.** Hai lý do, đều rất thực tế: NTD nhìn thấy một người sáng nay thì chiều phải tìm lại được, và khi họ hỏi “thứ Ba các anh hiện ai cho chúng tôi?” thì phải trả lời được. Random làm cả hai thành bất khả. Gieo theo công ty + ngày thì câu trả lời tái lập được mãi mãi.',
+          '**TRONG TẬP ĐÃ BỐC, VẪN SẮP THEO ĐIỂM.** Phép xáo trộn quyết định **ai** xuất hiện; nó không quyết định **thứ tự** xuất hiện. Đây là chỗ duy nhất khối này khác hàng thẻ của ứng viên, và là cố ý: bên kia là một hàng dài nên vị trí ít quan trọng, bên này chỉ có ba thẻ nên người khớp nhất phải đọc được trước.',
+          '**NÓ GHÉP VỚI LUẬT “LỜ ĐI”, VÀ THỨ TỰ QUAN TRỌNG:** loại người đã hiện 3 lần mà không ai bấm **TRƯỚC**, rồi mới xáo phần còn lại. Xáo trước thì hệ thống cứ chia đi chia lại đúng những người NTD đã bỏ qua.',
+          '**RỔ NHỎ HƠN MỘT HÀNG THẺ KHÔNG PHẢI LỖI.** Chỉ hai người qua sàn thì hiện hai người, mỗi ngày, cho tới khi dữ liệu đổi. **Không bù thêm người dưới sàn** cho đủ hàng — đó đúng là thất bại mà điểm sàn sinh ra để chặn.',
+          '**VÌ SAO 30 MÀ KHÔNG PHẢI 50 NHƯ PHÍA ỨNG VIÊN.** Feed ứng viên giữ 50 vì nhiều màn hình cùng rút từ đó. Ở đây chỉ có một màn hình hiện ba thẻ, nên 30 cho khoảng mười ngày đa dạng trước khi có người lặp lại, mà không phải với tay quá sâu xuống dưới bảng xếp hạng tới mức hàng thẻ thôi còn là gợi ý.',
+        ],
+      },
+
+      /* ── §8 ─────────────────────────────────────────────────────────────── */
+      { kind: 'h', text: '§8 · Ai được phép xuất hiện' },
+      {
+        kind: 'p',
+        text: 'Các bộ lọc này chạy **TRƯỚC** mọi phép chấm và mọi phép sắp xếp, ở **cả hai** chế độ. Trượt bất kỳ dòng nào là không có mặt trong rổ.',
+      },
+      {
+        kind: 'table',
+        cols: ['Bộ lọc', 'Vì sao'],
+        rows: [
+          ['Ứng viên đã **bật** cho NTD tìm thấy mình', 'Ta không có quyền hiện một người chưa đồng ý cho người khác tìm ra. Không thương lượng.'],
+          ['CV ở trạng thái **Đạt**', 'Cổng chất lượng CV đã có sẵn. Một CV hệ thống còn không đọc được thì không bao giờ được lên Company Home.'],
+          ['CV có **kinh nghiệm và học vấn**', 'Dưới mức đó thì NTD chẳng có gì để đánh giá, điểm cao tới đâu cũng vậy. **Kỹ năng KHÔNG bắt buộc** ở đây — chỉ 26 % vị trí có kỹ năng được biên soạn, đòi kỹ năng là làm rỗng rổ cho ba phần tư danh mục.'],
+          ['**Chưa nằm trong talent pool** của công ty', 'Người công ty đã lưu rồi thì không còn là một khám phá. Hiện lại là phí mất một chỗ.'],
+        ],
+      },
+      {
+        kind: 'list',
+        items: [
+          '**THẺ HIỂN THỊ NHỮNG GÌ KHÔNG PHẢI VIỆC CỦA TRANG NÀY.** Trang này quyết định **ai** xuất hiện và theo thứ tự nào; bố cục thẻ là việc của thiết kế. Không có dòng nào ở đây thêm, bớt hay đổi tên một trường trên thẻ.',
+        ],
+      },
+
+      /* ── §9 ─────────────────────────────────────────────────────────────── */
+      { kind: 'h', text: '§9 · Bấm vào thẻ — có trừ một lượt mở CV' },
+      {
+        kind: 'list',
+        items: [
+          '**MỞ ĐÚNG TRANG CV CHE THÔNG TIN CÁ NHÂN CỦA SEARCH TALENT**, không phải một trang riêng. Thông tin liên hệ che y như trang `/search`.',
+          '**CÓ TRỪ MỘT LƯỢT MỞ CV MIỄN PHÍ** (chốt 16/11), cùng luật với mọi lần mở CV khác. Hết lượt thì thẻ vẫn hiện, mở ra là CV che hết chi tiết — **thẻ không bao giờ bị ẩn vì hết lượt**.',
+          '**LƯỢT BẤM ĐƯỢC GHI LẠI** và nuôi luật “3 lần không bấm thì loại” ở §7. NTD không có quyền tìm ứng viên thì lượt bấm không được ghi.',
+        ],
+      },
+
+      /* ── §10 ────────────────────────────────────────────────────────────── */
+      { kind: 'h', text: '§10 · % trên bảng ứng viên của một tin — chỗ duy nhất con số được in ra' },
+      {
+        kind: 'p',
+        text: 'Bảng ứng viên của một tin dùng **cùng phép chấm** này, cũng **chỉ trên dữ liệu tự khai**. Đây là màn hình duy nhất in phần trăm ra cho người đọc; ứng viên thì không bao giờ thấy.',
+      },
+      {
+        kind: 'list',
+        items: [
+          '**SO ĐƯỢC DƯỚI 4 TRONG 7 TÍN HIỆU THÌ KHÔNG IN %.** Một con số dựng trên hai ba tín hiệu gây hiểu nhầm nặng hơn là để trống. Đây là **ngoại lệ duy nhất** của luật “thiếu dữ liệu là 0”.',
+          '**Ô TRỐNG KHÔNG CÓ NGHĨA LÀ 0 %.** In nhầm thành 0 là sai nghiêm trọng: nó biến một hồ sơ chưa chấm được thành một hồ sơ bị loại.',
+          '**THỨ TỰ TRÊN BẢNG KHÔNG ĐỔI** vì luật “thiếu dữ liệu là 0”: mọi ứng viên của cùng một tin đều chia cho cùng một số. Chỉ **con số in ra** thấp đi, và chỉ với tin khai ít.',
+          '**ĐƠN ĐÃ RÚT KHÔNG CÒN TRÊN BẢNG** (SRM-1551, 16/11).',
         ],
       },
       {
         kind: 'warn',
-        text: '**Nhánh “CV có một kỹ năng của tin” mở rộng tập được chấm** so với tài liệu yêu cầu (chỉ nói theo vị trí / ngành nghề). Nó **không đổi cách chấm điểm**, chỉ đưa thêm người vào vòng chấm. Mặt trái: ứng viên gõ tay kỹ năng không khớp master data thì nhánh này **không bao giờ chạy** — họ phải khai vị trí hoặc ngành nghề mới vào được vòng chấm.',
-      },
-
-      { kind: 'h', text: '§2 · Bấm vào thẻ' },
-      {
-        kind: 'list',
-        items: [
-          'Mở **đúng trang CV che thông tin cá nhân của Search talent** — không phải một trang riêng. Thông tin liên hệ che y như trang `/search`.',
-          '**Có trừ một lượt mở CV miễn phí** (chốt 16/11), cùng luật với mọi lần mở CV khác.',
-          'Lượt bấm được ghi lại và dùng cho luật **“3 lần không bấm thì loại”**. NTD không có quyền tìm ứng viên thì lượt bấm không được ghi.',
-        ],
-      },
-
-      { kind: 'h', text: '§3 · % phù hợp trên bảng ứng viên của một tin' },
-      {
-        kind: 'list',
-        items: [
-          'Dùng **cùng phép chấm** này, cũng **chỉ trên dữ liệu tự khai**.',
-          '**So được dưới 4 trong 7 tín hiệu thì không in %.** Một con số dựng trên hai ba tín hiệu sẽ gây hiểu nhầm nặng hơn là để trống.',
-          '**Ô trống không có nghĩa là 0 %.** Hiển thị nhầm thành 0 là sai nghiêm trọng: nó biến một hồ sơ chưa chấm được thành một hồ sơ bị loại.',
-          '**Đơn đã rút không còn trên bảng** (SRM-1551, 16/11).',
-        ],
-      },
-      {
-        kind: 'warn',
-        text: '**Kỹ năng trong CV không khớp master data được tính là “không có kỹ năng”** — mất điểm tín hiệu kỹ năng, **và vẫn tính là một tín hiệu đã so được**. Đây là lựa chọn có chủ đích: nếu tính là “chưa biết”, ứng viên vẫn mất đúng số điểm đó (thiếu dữ liệu = 0, không chia lại) nhưng lại dễ tụt xuống dưới mốc 4/7 và **mất luôn cả con số %** — một bảng đầy ô trống khó đọc hơn một % thấp hơn 4 điểm.',
+        text: '**Kỹ năng trong CV không khớp master data được tính là “không có kỹ năng”** — mất điểm tín hiệu kỹ năng, **và vẫn tính là một tín hiệu đã so được**. Tài liệu yêu cầu nói nên tính là “chưa biết” và chia lại. Build giữ cách hiện tại: nếu tính là “chưa biết”, ứng viên vẫn mất đúng số điểm đó (thiếu dữ liệu = 0, không chia lại) nhưng lại dễ tụt xuống dưới mốc 4/7 và **mất luôn cả con số %** — một bảng đầy ô trống khó đọc hơn một % thấp hơn 4 điểm. **Chưa chốt.**',
       },
     ],
   },
