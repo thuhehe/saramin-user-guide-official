@@ -789,7 +789,7 @@ export const MATCHING_MODULE_DOCS: Record<string, ModuleDoc> = {
   Matching: {
     title: 'Matching & gợi ý — năm chỗ, năm cách tính',
     lead:
-      'Saramin gợi ý việc làm ở **năm chỗ**, và **không chỗ nào tính giống chỗ nào**. Cùng một ứng viên, cùng một lúc, năm chỗ đó có thể ra năm danh sách khác nhau — **đúng thiết kế**, không phải lỗi.\n\nNên câu hỏi “sao chỗ này hiện khác chỗ kia” hầu như luôn là đang so nhầm hai chỗ với nhau. Trang này để tra đúng một việc: **chỗ nào là chỗ nào**, và chỗ đó so **cái gì với cái gì**. Bốn trong năm chỗ có trang riêng — danh sách ở cuối trang; chỗ thứ năm, khối gợi ý trong email sau khi nộp đơn, không có trang riêng nên viết luôn ở đây.',
+      'Saramin gợi ý việc làm ở **năm chỗ**, và **không chỗ nào tính giống chỗ nào**. Cùng một ứng viên, cùng một lúc, năm chỗ đó có thể ra năm danh sách khác nhau — **đúng thiết kế**, không phải lỗi.\n\nNên câu hỏi “sao chỗ này hiện khác chỗ kia” hầu như luôn là đang so nhầm hai chỗ với nhau. Trang này để tra đúng một việc: **chỗ nào là chỗ nào**, và chỗ đó so **cái gì với cái gì**. Bốn trong năm chỗ có trang riêng — danh sách ở cuối trang; chỗ thứ năm, khối gợi ý trong email sau khi nộp đơn, chưa có trang riêng.',
     headline: [],
     blocks: [
       { kind: 'h', text: 'Năm chỗ gợi ý việc làm' },
@@ -847,23 +847,6 @@ export const MATCHING_MODULE_DOCS: Record<string, ModuleDoc> = {
           ['12 – 14 năm', '7'],
           ['Từ 15 năm', '8'],
           ['Không khai', 'Không có bậc → không so được tiêu chí kinh nghiệm'],
-        ],
-      },
-
-      { kind: 'h', text: 'Việc gợi ý trong email sau khi nộp đơn' },
-      {
-        kind: 'p',
-        text: 'Khối bốn việc nằm dưới dòng “Bạn đã ứng tuyển thành công”. Nó **không đọc hồ sơ ứng viên** — chỉ tìm job **giống job họ vừa nộp**. Vì không có trang riêng nên mô tả ở đây.',
-      },
-      {
-        kind: 'list',
-        items: [
-          '**Job gốc** là job vừa nộp. Nếu nộp hàng loạt thì lấy job **chọn cuối cùng** trong lượt đó — mỗi job có kỹ năng và khu vực khác nhau nên phải chọn một job làm gốc.',
-          '**Chỉ xét job chung ít nhất 1 kỹ năng và ít nhất 1 tỉnh** với job gốc.',
-          '**Xếp theo bốn yếu tố**, nặng nhất là độ giống job gốc, rồi **độ công bằng giữa các công ty** — công ty đang mở càng nhiều job thì mỗi job càng nhẹ điểm, để một công ty lớn không chiếm hết bốn chỗ — rồi hạng gói dịch vụ, cuối cùng là job mới hơn.',
-          '**Giữ 4 job**, sau khi bỏ mọi job ứng viên đã từng nộp và job đã đóng.',
-          '**Có 1–3 job thì in đúng số đó; không có job nào thì ẩn cả khối** — phần xác nhận ứng tuyển vẫn gửi bình thường. Không có cơ chế bù cho đủ 4.',
-          '**Tắt công tắc *Nhận email thông báo từ hệ thống*** (mặc định bật) là không có khối này, và cũng không có email gợi ý hằng tuần.',
         ],
       },
 
