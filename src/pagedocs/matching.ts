@@ -37,7 +37,7 @@ export const MATCHING_PAGE_DOCS: Record<string, PageDoc> = {
     how: [
       'Xem nhanh nhất ở **trang cá nhân** của ứng viên (`/ho-so-ca-nhan`), khối *Việc làm phù hợp với bạn* — 6 thẻ, cố định suốt cả ngày.',
       'Xem bản **đúng thứ tự điểm** (không xáo trộn) ở **popup sau khi nộp đơn** (Batch apply) hoặc ở **màn kết quả onboarding** ngay sau khi hoàn tất wizard.',
-      'Muốn biết **vì sao một tin hiện ra**, đọc theo đúng thứ tự: **§3** (tin có bị cổng lọc loại không) → **§4** (tin ăn bao nhiêu điểm) → **§5** (tin có lọt vào rổ 50 và được rải ra màn hình này không).',
+      'Muốn biết **vì sao một tin hiện ra**, đọc theo đúng thứ tự: **§3** (tin có bị cổng lọc loại không) → **§4** (tin ăn bao nhiêu điểm) → **§5** (tin có lọt vào rổ 30 và được rải ra màn hình này không).',
       'Muốn biết **vì sao một tin KHÔNG hiện ra**, gần như luôn là một trong ba lý do ở **§3**: ứng viên đã nộp đơn tin đó, tin khác ngành nghề đã khai, hoặc tin khác tỉnh đã khai.',
     ],
     watch: [
@@ -54,7 +54,7 @@ export const MATCHING_PAGE_DOCS: Record<string, PageDoc> = {
       { kind: 'h', text: '§0 · Ý tưởng trong một phút' },
       {
         kind: 'p',
-        text: 'Hệ thống biết hai điều về một ứng viên: **những gì họ khai** (hồ sơ, Work preference, CV) và **những gì họ thực sự làm** (tin họ mở, lưu, nộp đơn). Ghép hai thứ đó lại thành một *chân dung công việc họ muốn*. Rồi chấm mọi tin đang tuyển so với chân dung đó, giữ lại **50 tin gần nhất**, bỏ những tin họ đã nộp đơn, và rải số tin đó ra các màn hình có khối gợi ý.',
+        text: 'Hệ thống biết hai điều về một ứng viên: **những gì họ khai** (hồ sơ, Work preference, CV) và **những gì họ thực sự làm** (tin họ mở, lưu, nộp đơn). Ghép hai thứ đó lại thành một *chân dung công việc họ muốn*. Rồi **bỏ trước** những tin họ đã nộp đơn, đã bấm bỏ qua, hoặc đã đóng / hết hạn — việc loại này nằm **ngay trong câu truy vấn thu hẹp**, không phải một bước sau khi chấm. Phần còn lại mới đem ra chấm so với chân dung đó, giữ lại **30 tin gần nhất** (tối đa 3 tin một công ty), rồi rải ra các màn hình có khối gợi ý.',
       },
       {
         kind: 'table',
@@ -88,7 +88,7 @@ export const MATCHING_PAGE_DOCS: Record<string, PageDoc> = {
           ['**Trang cá nhân** — *Việc làm phù hợp với bạn*', 'Đã đăng nhập', '6', 'Xáo trộn **trong từng bậc vị trí** (§5)'],
           ['**Chi tiết tin** — *Gợi ý việc làm cho bạn*', 'Đã đăng nhập', '6', 'Xáo trộn trong từng bậc vị trí; **neo** theo ngành nghề của tin đang xem'],
           ['**Popup sau khi nộp đơn** (Batch apply)', 'Người vừa nộp đơn', '30', '**Đúng thứ tự điểm**, không xáo, không neo ngành nghề'],
-          ['**Email JS 3** — gợi ý hằng tuần, thứ Hai 07:00', 'Mọi ứng viên đang hoạt động chưa tắt công tắc nhận mail', '6', '**Đúng thứ tự điểm**, một công ty một hàng'],
+          ['**Email JS 3** — gợi ý hằng tuần, thứ Hai 07:00', 'Mọi ứng viên đang hoạt động chưa tắt công tắc nhận mail', '6', '**Đúng thứ tự điểm**, cap 3 tin/công ty, cách nhau ≥ 6 vị trí'],
           ['**Trang tìm kiếm** — không có khối gợi ý', '—', '—', 'Backend có sẵn một `surface=SEARCH` nhưng **giao diện không bao giờ gọi nó** — hiện **không có strip gợi ý nào** trên trang tìm việc. Chữ `SEARCH` trong code của trang này là **nhãn analytics** cho kết quả tìm kiếm thường, không phải một khối gợi ý'],
         ],
       },
@@ -243,7 +243,7 @@ export const MATCHING_PAGE_DOCS: Record<string, PageDoc> = {
         note: 'Phép tính **không đổi** — chỉ là có ít thứ để so hơn, nên kết quả kém chính xác hơn. **Tiêu đề khối cũng không đổi:** mỗi màn hình một tiêu đề cố định, không đổi theo lượng thông tin hệ thống có.',
         cols: ['Ứng viên có…', 'Feed đánh giá được gì', 'Cái gì gánh thứ hạng'],
         rows: [
-          ['Chỉ có hồ sơ', 'Gần như không gì — phần lớn tín hiệu bằng 0', 'Tin mới nhất, trong tỉnh nếu hồ sơ có ghi tỉnh'],
+          ['Chỉ có hồ sơ', 'Gần như không gì — phần lớn tín hiệu bằng 0', 'Tin mới nhất. **Không** lọc theo tỉnh: địa điểm chỉ lấy từ Work preference, tỉnh cư trú trong Profile không được dùng (chốt 16/11)'],
           ['Hồ sơ + Work preference', 'Những gì họ **muốn** — đúng tỉnh, đúng ngành nghề, đúng lương', 'Vị trí, địa điểm, ngành nghề, lương'],
           ['Hồ sơ + CV', 'Những gì họ **làm được**, cộng vị trí đọc từ tiêu đề CV', 'Vị trí (từ tiêu đề CV), kinh nghiệm, kỹ năng, học vấn'],
           ['Hồ sơ + Work preference + CV', 'Đầy đủ — chạm được cả 100 điểm', 'Cả bảy tín hiệu'],
@@ -330,7 +330,7 @@ export const MATCHING_PAGE_DOCS: Record<string, PageDoc> = {
       },
       {
         kind: 'warn',
-        text: '**Rổ 50 là con số đã chốt ngày 16/11.** Code trên `dev` lúc kiểm tra tối 16/11 vẫn đang là **80**; bản sửa xuống 50 chưa lên `dev`. Trong lúc chờ, danh sách xáo trộn trên dev sẽ đa dạng hơn (và lẫn nhiều tin xa hơn) so với mô tả ở đây.',
+        text: '**Ba con số ở §5 đều là quyết định, chưa phải code.** Rổ **30** (Thu chốt 17/11; 16/11 chốt 50, trước đó là 80), **cap 3 tin một công ty** và **khoảng cách 6 vị trí** (cả hai chốt 17/11) đều **chưa có trên `dev`** — code ở đó vẫn là rổ **80**, không cap, và luật cũ “một công ty một hàng”. Trong lúc chờ, danh sách trên dev đa dạng hơn, lẫn nhiều tin xa hơn, và **một nhà tuyển dụng vẫn có thể chiếm gần hết màn onboarding** — đúng cái ảnh production 17/11 cho thấy. Ticket: SRM-1338.',
       },
 
       /* ── §6 ─────────────────────────────────────────────────────────────── */
