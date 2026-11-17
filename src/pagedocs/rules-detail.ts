@@ -119,21 +119,21 @@ export const RULE_DETAIL: Record<string, DocBlock[]> = {
     h('Rule chi tiết'),
     { kind: 'p', text: INTRO },
 
-    rule('Rule — Năm bộ máy gợi ý và ranh giới giữa chúng', [
+    rule('Rule — Năm chỗ gợi ý và ranh giới giữa chúng', [
       '**Recommended jobs** (người ↔ tin) đọc hồ sơ ứng viên và chấm trên thang 42/20/14/12/5/4/3. Dùng ở onboarding, trang cá nhân, chi tiết tin, popup sau khi nộp đơn và email gợi ý hằng tuần.',
       '**Similar jobs** (tin ↔ tin) **không đọc hồ sơ người xem** — mọi người thấy cùng một danh sách cho cùng một tin, cache **1 giờ** (làm mới chậm nhất ~75 phút). Bảng riêng 45/15/15/10/8/4/3.',
-      '**Hai khối nằm cạnh nhau trên trang chi tiết tin là hai bộ máy khác nhau**, và **không bao giờ trùng tin**: carousel *Việc làm tương tự* lấy trước, khối *Gợi ý việc làm cho bạn* bỏ các id đã hiện. Khách chưa đăng nhập thấy dòng 7–12 của chính danh sách Similar jobs, dưới tiêu đề *Có thể bạn quan tâm*.',
+      '**Hai khối nằm cạnh nhau trên trang chi tiết tin là hai cách tính khác nhau**, và **không bao giờ trùng tin**: carousel *Việc làm tương tự* lấy trước, khối *Gợi ý việc làm cho bạn* bỏ các id đã hiện. Khách chưa đăng nhập thấy dòng 7–12 của chính danh sách Similar jobs, dưới tiêu đề *Có thể bạn quan tâm*.',
       '**Recommended candidates** (tin ↔ người) dùng cùng bảng điểm của Recommended jobs nhưng **chỉ đọc dữ liệu ứng viên tự khai** — hành vi xem tin, lưu tin, nộp đơn **không bao giờ** sang phía nhà tuyển dụng.',
       '**Onboarding job count** không chấm điểm gì cả, chỉ là một phép **đếm theo bộ lọc** chạy cho khách chưa có tài khoản.',
-      '**Khối gợi ý trong email sau khi nộp đơn** (JS 4 / JS 5) là bộ máy thứ năm: chạy trên **Elasticsearch**, **không đọc hồ sơ**, chỉ tìm tin giống **tin vừa nộp** (chung ≥ 1 kỹ năng và ≥ 1 tỉnh), tối đa 4 tin, không đủ thì ẩn cả khối.',
+      '**Khối gợi ý trong email sau khi nộp đơn** (JS 4 / JS 5) là chỗ thứ năm: chạy trên **Elasticsearch**, **không đọc hồ sơ**, chỉ tìm tin giống **tin vừa nộp** (chung ≥ 1 kỹ năng và ≥ 1 tỉnh), tối đa 4 tin, không đủ thì ẩn cả khối.',
       '**Trang chủ không có khối gợi ý cá nhân nào.** Component cũ còn trong code nhưng không trang nào render; placement `placement_home_hot_jobs` đã bỏ.',
     ]),
 
     rule('Rule — Thang điểm 100 và luật thiếu dữ liệu', [
       '**Cổng lọc và chấm điểm là hai việc khác nhau.** Điều kiện ứng viên **tự khai** (ngành nghề, địa điểm) là cổng lọc — tin không qua thì **không bao giờ** hiện. Ngành, hình thức, lương, kinh nghiệm, học vấn, kỹ năng **không bao giờ lọc**, chỉ đổi thứ tự.',
-      '**Thiếu dữ liệu là 0 điểm và không chia lại thang** — ở cả ba bộ máy có chấm điểm, cả phía tin lẫn phía ứng viên. Tin không ghi lương thì 12 điểm đó mất hẳn, không được chia sang tín hiệu khác. Ngoại lệ duy nhất là **cách in** % trên bảng ứng viên của NTD.',
+      '**Thiếu dữ liệu là 0 điểm và không chia lại thang** — ở cả ba chỗ có chấm điểm, cả phía tin lẫn phía ứng viên. Tin không ghi lương thì 12 điểm đó mất hẳn, không được chia sang tín hiệu khác. Ngoại lệ duy nhất là **cách in** % trên bảng ứng viên của NTD.',
       '**Trọng số nằm trong code, có đánh số phiên bản** (`v4` người ↔ tin, `v3` tin ↔ tin) và được ghi vào log cùng mỗi điểm số. **Tab chỉnh trọng số đã gỡ khỏi admin ngày 05/11**; endpoint ghi trọng số đã xoá, màn hình System → General settings chỉ đọc lại.',
-      '**Tỷ giá USD/VND do admin nhập là thứ duy nhất chỉnh được**, dùng **hai chiều**. Không có tỷ giá thì tín hiệu lương bằng 0 ở cả ba bộ máy.',
+      '**Tỷ giá USD/VND do admin nhập là thứ duy nhất chỉnh được**, dùng **hai chiều**. Không có tỷ giá thì tín hiệu lương bằng 0 ở cả ba chỗ.',
       '**Ứng viên có nhiều CV:** chấm từng CV, mỗi tin giữ **điểm cao nhất**. Tổng luôn trên thang 100 và chỉ làm tròn **một lần** ở tổng.',
       '**Bậc “cùng nhóm vị trí” (30 điểm ở người ↔ tin, 32 ở tin ↔ tin) chưa bao giờ đạt được** — dữ liệu taxonomy ba tầng chưa có (SRM-1315). Thực tế thang chạy hai bậc.',
       '**Rổ chốt ở 50 tin** (16/11 — 80 quá rộng, lọt nhiều tin không liên quan). Code trên `dev` lúc kiểm tra tối 16/11 vẫn là 80; bản sửa chưa lên dev.',

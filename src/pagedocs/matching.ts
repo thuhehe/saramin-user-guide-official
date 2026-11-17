@@ -28,7 +28,7 @@ export const MATCHING_PAGE_DOCS: Record<string, PageDoc> = {
   /* ────────────────────────────────────────────────────────────────────────── */
   'recommended-jobs': {
     logic: [
-      '**Gợi ý việc làm cho một ứng viên cụ thể.** Hệ thống đọc hồ sơ của ứng viên, chấm từng tin tuyển dụng trên **thang 100 điểm** gồm **7 tín hiệu**, rồi chọn thẻ để hiện. Đây là bộ máy dùng ở **sáu** chỗ khác nhau trên site ứng viên.',
+      '**Gợi ý việc làm cho một ứng viên cụ thể.** Hệ thống đọc hồ sơ của ứng viên, chấm từng tin tuyển dụng trên **thang 100 điểm** gồm **7 tín hiệu**, rồi chọn thẻ để hiện. Cùng một cách tính đó chạy ở **sáu** chỗ khác nhau trên site ứng viên.',
       '**Lọc và chấm điểm là hai việc khác nhau — đừng nhầm.** Điều kiện ứng viên **tự khai** là *cổng lọc*: tin không qua thì **không bao giờ** xuất hiện, dù điểm cao đến đâu. Mọi thứ còn lại chỉ **đổi thứ tự**, không loại tin nào.',
       '**Tính mới mỗi lần mở trang.** Không có danh sách gợi ý nào được lưu sẵn cho từng người. Đổi Work preference là lần tải trang sau đã khác.',
       '**Ứng viên không bao giờ nhìn thấy điểm.** Không có % trên thẻ, không có điểm sàn, và mỗi màn hình chỉ có **một tiêu đề cố định** — hệ thống không đổi tiêu đề theo chất lượng kết quả.',
@@ -78,7 +78,7 @@ export const MATCHING_PAGE_DOCS: Record<string, PageDoc> = {
       },
 
       /* ── §1 ─────────────────────────────────────────────────────────────── */
-      { kind: 'h', text: '§1 · Sáu nơi dùng bộ máy này' },
+      { kind: 'h', text: '§1 · Sáu nơi dùng cùng một cách tính' },
       {
         kind: 'table',
         note: 'Cùng một phép tính, khác tham số `surface` — nên thứ tự hiển thị và số thẻ khác nhau, còn cách chấm điểm thì giống hệt.',
@@ -379,11 +379,11 @@ export const MATCHING_PAGE_DOCS: Record<string, PageDoc> = {
     ],
     how: [
       'Mở bất kỳ **trang chi tiết tin** nào trên site ứng viên và kéo xuống carousel *Việc làm tương tự*.',
-      'Ngay dưới carousel là khối thứ hai. **Đã đăng nhập** thì khối đó là *Gợi ý việc làm cho bạn* (bộ máy **Recommended jobs**, đọc hồ sơ). **Chưa đăng nhập** thì khối đó lấy **dòng 7–12 của chính danh sách này** và mang tiêu đề *Có thể bạn quan tâm*.',
+      'Ngay dưới carousel là khối thứ hai. **Đã đăng nhập** thì khối đó là *Gợi ý việc làm cho bạn* (**Gợi ý việc làm cho bạn**, có đọc hồ sơ). **Chưa đăng nhập** thì khối đó lấy **dòng 7–12 của chính danh sách này** và mang tiêu đề *Có thể bạn quan tâm*.',
       'Muốn biết vì sao một tin lọt vào: so hai tin với nhau theo bảng ở §2 — không cần biết người xem là ai. Có ví dụ chạy đủ số ở §7.',
     ],
     watch: [
-      '**Hai khối cạnh nhau, hai bộ máy khác nhau.** *Việc làm tương tự* so tin với tin; *Gợi ý việc làm cho bạn* so hồ sơ với tin. Hai khối **không bao giờ trùng tin**: carousel lấy trước, khối dưới bỏ các id đã hiện.',
+      '**Hai khối cạnh nhau, hai cách tính khác nhau.** *Việc làm tương tự* so tin với tin; *Gợi ý việc làm cho bạn* so hồ sơ với tin. Hai khối **không bao giờ trùng tin**: carousel lấy trước, khối dưới bỏ các id đã hiện.',
       '**Tin đã nộp đơn vẫn nằm trong danh sách dùng chung** — giao diện mới là chỗ ẩn nó đi cho người đã đăng nhập (§6). Nên danh sách gốc không đổi theo từng người.',
       '**Từ 16/11, tin đã rút đơn hiện lại trên carousel này** và nộp lại được, trong khi ở *Recommended jobs* và các email thì vẫn bị ẩn. Cùng một tin có thể thấy ở chỗ này mà không thấy ở chỗ kia — đây là hệ quả cố ý của quyết định “rút đơn là dứt khoát và giải phóng tin”.',
       '**Sửa nội dung một tin không làm danh sách đổi ngay** — phải chờ cache hết hạn.',
@@ -441,7 +441,7 @@ export const MATCHING_PAGE_DOCS: Record<string, PageDoc> = {
       { kind: 'h', text: '§4 · Thiếu dữ liệu — ai bị trừ, ai không' },
       {
         kind: 'table',
-        note: 'Hai tin hiếm khi khai cùng một bộ trường. **Một luật duy nhất**, giống hệt hai bộ máy chấm điểm còn lại: tín hiệu nào không so được thì 0 điểm, tổng vẫn trên thang 100.',
+        note: 'Hai tin hiếm khi khai cùng một bộ trường. **Một luật duy nhất**, giống hệt hai chỗ chấm điểm còn lại: tín hiệu nào không so được thì 0 điểm, tổng vẫn trên thang 100.',
         cols: ['Trường hợp', 'Làm gì', 'Vì sao'],
         rows: [
           ['**Tin đang xem không khai** trường đó', 'Mọi tin ứng viên đều **0** ở tín hiệu đó. Tổng vẫn trên thang 100, **không chia lại**', 'Thứ tự không đổi dù chia lại hay không — mọi dòng đều mất đúng số điểm ấy. Chia lại chỉ đẻ thêm một luật thứ hai'],
@@ -1117,117 +1117,72 @@ export const MATCHING_PAGE_DOCS: Record<string, PageDoc> = {
 
 export const MATCHING_MODULE_DOCS: Record<string, ModuleDoc> = {
   Matching: {
-    title: 'Matching & gợi ý — năm bộ máy, không phải một',
+    title: 'Matching & gợi ý — năm chỗ, năm cách tính',
     lead:
-      'Không có **một** thuật toán gợi ý. Có **năm bộ máy riêng biệt**, mỗi bộ trả lời một câu hỏi khác nhau, và **không bộ nào nuôi hai chỗ cùng một câu trả lời**. Nhầm hai bộ với nhau là nguyên nhân của gần như mọi câu hỏi “sao chỗ này hiện thế này mà chỗ kia hiện thế kia”. Trang này giữ những luật dùng chung; bốn trang con mô tả từng bộ máy.',
+      'Trang này mô tả **cách hệ thống đang chạy trên bản build**, không phải bản yêu cầu.\n\nSaramin có **năm chỗ gợi ý việc làm**, và mỗi chỗ tính theo một cách riêng. Phần lớn câu hỏi “sao chỗ này hiện khác chỗ kia” là do nhầm hai chỗ với nhau. Bốn chỗ đầu có trang riêng; chỗ thứ năm — khối gợi ý trong email sau khi nộp đơn — mô tả ở cuối trang này.',
     headline: [
-      '**Hai khối nằm cạnh nhau trên trang chi tiết tin là hai bộ máy khác nhau.** *Việc làm tương tự* so **tin với tin** (không đọc hồ sơ, cache 1 giờ, bảng 45/15/15/10/8/4/3). *Gợi ý việc làm cho bạn* so **hồ sơ với tin** (bảng 42/20/14/12/5/4/3). Hai khối không bao giờ trùng tin.',
-      '**“Đã ứng tuyển” nghĩa là có BẤT KỲ dòng đơn nào** cho cặp (ứng viên, tin) — mọi trạng thái, kể cả đã bị từ chối. Tin đó biến mất khỏi gợi ý và khỏi cả ba loại email. Một ngoại lệ từ 16/11: **đơn đã rút** không còn khoá carousel *Việc làm tương tự*.',
-      '**Thiếu dữ liệu là 0 điểm, không chia lại thang** — ở cả ba bộ máy có chấm điểm. Ngoại lệ duy nhất là **cách in %** trên bảng ứng viên của nhà tuyển dụng.',
-      '**Trọng số nằm trong code và admin không chỉnh được.** Tab chỉnh trọng số đã bỏ khỏi console ngày 05/11; màn hình System → General settings chỉ **đọc** lại trọng số. Thứ duy nhất chỉnh được là **tỷ giá USD/VND**.',
+      '**Trang chi tiết tin có hai khối gợi ý nằm cạnh nhau, và chúng tính theo hai cách khác nhau.** Khối trên (*Việc làm tương tự*) so **tin với tin**. Khối dưới (*Gợi ý việc làm cho bạn*) so **hồ sơ ứng viên với tin**.',
+      '**Tin ứng viên đã nộp đơn thì không bao giờ hiện lại trong gợi ý** — kể cả khi đơn đã bị từ chối. Đây là lý do phổ biến nhất của câu hỏi “sao tin này biến mất”.',
     ],
     blocks: [
-      { kind: 'p', text: STAMP },
-
-      /* ── §0 ─────────────────────────────────────────────────────────────── */
-      { kind: 'h', text: '§0 · Bản đồ năm bộ máy' },
+      { kind: 'h', text: 'Năm chỗ gợi ý việc làm' },
       {
         kind: 'table',
-        cols: ['Bộ máy', 'So cái gì với cái gì', 'Hiện ở đâu', 'Có đọc hồ sơ không'],
+        cols: ['Chỗ gợi ý', 'Người dùng thấy ở đâu', 'So cái gì với cái gì', 'Đọc hồ sơ?'],
         rows: [
-          ['**A — Recommended jobs**', 'Người ↔ tin', 'Onboarding · trang cá nhân · chi tiết tin · popup sau khi nộp đơn · email gợi ý hằng tuần', 'Có — khai **và** hành vi'],
-          ['**B — Similar jobs**', 'Tin ↔ tin', 'Carousel *Việc làm tương tự* dưới trang chi tiết tin', 'Không'],
-          ['**C — Recommended candidates**', 'Tin ↔ người', 'Company Home của NTD · % trên bảng ứng viên của một tin', 'Có — **chỉ dữ liệu tự khai**'],
-          ['**D — Onboarding job count**', 'Bộ lọc, không chấm điểm', 'Con số ở bước 3 và bước 4 của wizard', 'Không — chạy cho cả khách'],
-          ['**E — Việc làm giống tin vừa nộp**', 'Tin ↔ tin, chạy trên Elasticsearch', 'Khối 4 việc trong email *đã ứng tuyển thành công* (JS 4 / JS 5)', 'Không'],
+          ['**Gợi ý việc làm cho bạn**', 'Trang cá nhân · trang chi tiết tin · màn kết quả onboarding · popup sau khi nộp đơn · email hằng tuần', 'Hồ sơ ứng viên ↔ tin', 'Có'],
+          ['**Việc làm tương tự**', 'Carousel dưới trang chi tiết tin', 'Tin ↔ tin', 'Không'],
+          ['**Recommended talent**', 'Company Home của nhà tuyển dụng · % trên bảng ứng viên', 'Tin ↔ hồ sơ ứng viên', 'Có — chỉ phần ứng viên tự khai'],
+          ['**Số việc ở onboarding**', 'Câu dẫn ở bước 3 và bước 4 của wizard', 'Chỉ đếm theo bộ lọc, không chấm điểm', 'Không'],
+          ['**Việc gợi ý trong email sau khi nộp đơn**', 'Email *Bạn đã ứng tuyển thành công*', 'Tin ↔ tin', 'Không'],
         ],
       },
       {
-        kind: 'warn',
-        text: '**Bộ máy E không phải bộ máy A.** Khối gợi ý trong email sau khi nộp đơn có công thức riêng, chạy trên Elasticsearch, **không đọc hồ sơ ứng viên** và không ghi log impression. Nó chỉ tìm tin **giống tin vừa nộp**.',
+        kind: 'p',
+        text: '**Trang chủ và trang tìm việc không có khối gợi ý cá nhân nào.**',
       },
 
-      /* ── §1 ─────────────────────────────────────────────────────────────── */
-      { kind: 'h', text: '§1 · Mười luật dùng chung' },
+      { kind: 'h', text: 'Quy số năm kinh nghiệm ra cấp bậc' },
       {
-        kind: 'list',
-        items: [
-          '**“Đã ứng tuyển” = có bất kỳ dòng đơn nào** cho cặp (ứng viên, tin), mọi trạng thái. Tin biến mất khỏi bộ máy A ở **mọi** màn hình và khỏi email JS 3 / JS 4 / JS 5.',
-          '**Ngoại lệ từ 16/11 (SRM-1551):** rút đơn là dứt khoát và **giải phóng tin** — tin đã rút hiện lại trên carousel *Việc làm tương tự* và nộp lại được (thành một đơn mới, snapshot mới). Đơn bị **thu hồi** hoặc bị **từ chối** thì vẫn khoá.',
-          '**Tin ứng viên bấm “bỏ qua”** bị xử lý y như tin đã nộp đơn: loại vĩnh viễn khỏi mọi danh sách gợi ý.',
-          '**Thiếu dữ liệu là 0 điểm, không chia lại thang** — ở A, B và C. Ngoại lệ duy nhất là cách **in** % trên bảng ứng viên của NTD (dưới 4/7 tín hiệu thì không in).',
-          '**Trọng số nằm trong code, có đánh số phiên bản** — `v4` cho người ↔ tin, `v3` cho tin ↔ tin. Mỗi điểm số và mỗi lần hiển thị đều ghi log kèm phiên bản, để sau này trả lời được “vì sao hôm đó tin này hiện ra”.',
-          '**Tỷ giá USD/VND do admin nhập** là thứ duy nhất liên quan matching mà chỉnh được từ giao diện. Dùng **hai chiều**; thiếu tỷ giá thì tín hiệu lương bằng 0 ở cả A, B và C.',
-          '**Ứng viên không bao giờ thấy %.** NTD thấy % trên bảng ứng viên của một tin, và **không** thấy % ở chế độ *Hồ sơ mới cập nhật*.',
-          '**Một bảng quy đổi năm kinh nghiệm ra cấp bậc** dùng chung cho A, C và D (§2).',
-          '**Tối đa 3 tin một công ty** và **hai tin cùng công ty cách nhau ≥ 6 vị trí**, ở trang cá nhân, chi tiết tin và onboarding (chốt 17/11). Popup Batch apply **không cap** — chỉ không cho hai tin cùng công ty đứng liền nhau. Similar jobs đã có luật tương đương từ đầu: **2 tin một công ty** trong 20 tin giữ lại.',
-          '**Một công tắc email duy nhất** — *Nhận email thông báo từ hệ thống* trong trang Thông tin tài khoản, **mặc định bật** — chi phối cả email gợi ý hằng tuần lẫn khối gợi ý trong email sau khi nộp đơn.',
-        ],
+        kind: 'p',
+        text: 'Nhiều tin tự đăng chỉ khai **cấp bậc**, không khai số năm. Khi đó hệ thống quy số năm của ứng viên ra cấp bậc rồi mới so. Một bảng duy nhất, dùng chung cho cả ba chỗ có so kinh nghiệm.',
       },
-
-      /* ── §2 ─────────────────────────────────────────────────────────────── */
-      { kind: 'h', text: '§2 · Bảng quy đổi năm kinh nghiệm ra cấp bậc' },
       {
         kind: 'table',
-        note: 'Dùng chung cho Recommended jobs, Recommended candidates và Onboarding job count. **Lệch 1 bậc** là “với tới được”; **lệch từ 2 bậc** là không hợp.',
+        note: '**Lệch 1 bậc** là “với tới được”; **lệch từ 2 bậc** là không hợp.',
         cols: ['Số năm kinh nghiệm', 'Cấp bậc'],
         rows: [
-          ['Dưới 1 năm (kể cả fresher, 0 năm)', '2'],
+          ['Dưới 1 năm (kể cả fresher)', '2'],
           ['1 – 2 năm', '3'],
           ['3 – 4 năm', '4'],
           ['5 – 7 năm', '5'],
           ['8 – 11 năm', '6'],
           ['12 – 14 năm', '7'],
           ['Từ 15 năm', '8'],
-          ['Không khai', 'Không có bậc → không so (A, C) · không lọc (D)'],
+          ['Không khai', 'Không có bậc → không so được tiêu chí kinh nghiệm'],
         ],
       },
 
-      /* ── §3 ─────────────────────────────────────────────────────────────── */
-      { kind: 'h', text: '§3 · Bộ máy E — khối gợi ý trong email sau khi nộp đơn' },
+      { kind: 'h', text: 'Việc gợi ý trong email sau khi nộp đơn' },
       {
         kind: 'p',
-        text: 'Khối *việc làm gợi ý* nằm dưới dòng “Bạn đã ứng tuyển thành công” trong email **JS 4** và **JS 5** (SRM-1433, 10/11). Vì không có trang riêng nên nó được mô tả ở đây.',
+        text: 'Khối bốn việc nằm dưới dòng “Bạn đã ứng tuyển thành công”. Nó **không đọc hồ sơ ứng viên** — chỉ tìm tin **giống tin họ vừa nộp**. Vì không có trang riêng nên mô tả ở đây.',
       },
-      {
-        kind: 'table',
-        cols: ['Bước', 'Luật'],
-        rows: [
-          ['**Khi nào có khối**', 'Ứng viên chưa tắt công tắc *Nhận email thông báo từ hệ thống*. Môi trường không chạy Elasticsearch thì **không có khối** — không có bản thay thế'],
-          ['**Tin gốc**', 'JS 4: tin vừa nộp. JS 5 (nộp hàng loạt): tin **chọn cuối cùng** trong lượt đó'],
-          ['**Tin nào được xét**', 'Tin đang sống, và phải **chung ≥ 1 kỹ năng VÀ ≥ 1 tỉnh** với tin gốc. Lấy **50** tin khớp nhất'],
-          ['**Điểm xếp hạng**', '**0,5 × Liên quan + 0,25 × Công bằng + 0,15 × Hạng gói + 0,1 × Độ mới**'],
-          ['Công bằng', 'Công ty đang mở càng nhiều tin thì mỗi tin càng nhẹ điểm — để một công ty lớn không chiếm hết bốn chỗ'],
-          ['Hạng gói', 'Distinction / Top job / Hero cao nhất → Basic plus → Basic → tin miễn phí'],
-          ['Độ mới', 'Gần như phẳng, chỉ dùng để phá hoà'],
-          ['**Lọc cuối**', 'Bỏ mọi tin ứng viên **đã từng nộp** (mọi trạng thái, kể cả đã rút) và tin đã đóng, rồi giữ **4 tin đầu**'],
-          ['**Không đủ tin**', 'Có 1–3 tin thì in đúng số đó. **Không có tin nào thì ẩn cả khối** — phần xác nhận ứng tuyển vẫn gửi bình thường. **Không có cơ chế bù tin**'],
-        ],
-      },
-
-      /* ── §4 ─────────────────────────────────────────────────────────────── */
-      { kind: 'h', text: '§4 · Những gì KHÔNG còn nữa' },
       {
         kind: 'list',
-        heading: 'Có trong bản v3 cũ, đã bỏ ở v4 (05/11)',
         items: [
-          '**Ngưỡng điểm 50 / 60** để một tin được phép hiện — không còn ngưỡng nào ở phía ứng viên.',
-          '**Bốn cấp tiêu đề** đổi theo chất lượng kết quả — mỗi màn hình nay chỉ có **một tiêu đề cố định**.',
-          '**Xoay vòng trong dải 5 điểm** và **giáng hạng sau 3 lần hiện** ở phía ứng viên (luật “3 lần không bấm” chỉ còn ở phía nhà tuyển dụng).',
-          '**Chia lại thang khi thiếu dữ liệu** — nay thiếu là 0, dứt khoát.',
-          '**Tab chỉnh trọng số trong admin** — đã gỡ; endpoint ghi trọng số đã xoá. Link cũ `?tab=recommended-jobs` rơi về tab đầu tiên.',
+          '**Tin gốc** là tin vừa nộp. Nếu nộp hàng loạt thì lấy tin **chọn cuối cùng** trong lượt đó — mỗi tin có kỹ năng và khu vực khác nhau nên phải chọn một tin làm gốc.',
+          '**Chỉ xét tin chung ít nhất 1 kỹ năng và ít nhất 1 tỉnh** với tin gốc.',
+          '**Xếp theo bốn yếu tố**, nặng nhất là độ giống tin gốc, rồi **độ công bằng giữa các công ty** — công ty đang mở càng nhiều tin thì mỗi tin càng nhẹ điểm, để một công ty lớn không chiếm hết bốn chỗ — rồi hạng gói dịch vụ, cuối cùng là tin mới hơn.',
+          '**Giữ 4 tin**, sau khi bỏ mọi tin ứng viên đã từng nộp và tin đã đóng.',
+          '**Có 1–3 tin thì in đúng số đó; không có tin nào thì ẩn cả khối** — phần xác nhận ứng tuyển vẫn gửi bình thường. Không có cơ chế bù cho đủ 4.',
+          '**Tắt công tắc *Nhận email thông báo từ hệ thống*** (mặc định bật) là không có khối này, và cũng không có email gợi ý hằng tuần.',
         ],
       },
 
-      /* ── §5 ─────────────────────────────────────────────────────────────── */
-      { kind: 'h', text: '§5 · Thang ngành nghề ba tầng' },
       {
         kind: 'p',
-        text: 'Cả ba bộ máy có chấm điểm đều viết sẵn thang **Vị trí › Nhóm vị trí › Ngành nghề**. Tầng giữa — *nhóm vị trí* — **chưa có dữ liệu** trong hệ thống (SRM-1315), nên bậc 30 điểm (bộ máy A) và 32 điểm (bộ máy B) **chưa bao giờ đạt được**. Thực tế thang chạy hai bậc: cùng vị trí, hoặc cùng ngành nghề.',
-      },
-      {
-        kind: 'open',
-        text: '**Còn chờ quyết định:** kỹ năng ứng viên gõ tay mà không khớp master data hiện được tính là “không có kỹ năng”. Hướng xử lý gốc không nằm ở cách chấm mà ở chỗ **nhận dạng kỹ năng** — khớp theo tên gọi khác trước khi bỏ qua, và một màn hình admin liệt kê các kỹ năng ứng viên gõ nhiều nhất nhưng chưa có trong master data.',
+        text: '*Viết theo code đang chạy trên bản dev, đọc ngày 16/11/2026.*',
       },
     ],
   },

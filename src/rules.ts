@@ -207,16 +207,16 @@ export const RULE_CATS: RuleCat[] = [
     note: 'Từ 05/11 nhóm này đã có logic chạy thật, và đã được viết ra: xem nhóm **Matching** trong thanh bên — bốn trang, một trang Logic chung, viết theo code đang chạy ngày 16/11.',
     rules: [
       {
-        title: 'Năm bộ máy gợi ý riêng biệt, không phải một thuật toán',
+        title: 'Năm chỗ gợi ý riêng biệt, không phải một thuật toán',
         summary:
-          'Nhầm hai bộ với nhau là nguyên nhân của gần như mọi câu hỏi “sao chỗ này khác chỗ kia”. **Recommended jobs** so người ↔ tin (bảng 42/20/14/12/5/4/3). **Similar jobs** so tin ↔ tin (bảng 45/15/15/10/8/4/3, không đọc hồ sơ, cache 1 giờ). **Recommended candidates** so tin ↔ người, chỉ dữ liệu tự khai. **Onboarding job count** chỉ là một phép đếm. **Khối gợi ý trong mail sau khi nộp đơn** chạy trên Elasticsearch với công thức riêng. Hai khối cạnh nhau trên trang chi tiết tin là hai bộ máy khác nhau và không bao giờ trùng tin.',
-        kind: 'ab', group: 'Matching', heading: 'Rule — Năm bộ máy gợi ý và ranh giới giữa chúng',
+          'Nhầm hai bộ với nhau là nguyên nhân của gần như mọi câu hỏi “sao chỗ này khác chỗ kia”. **Recommended jobs** so người ↔ tin (bảng 42/20/14/12/5/4/3). **Similar jobs** so tin ↔ tin (bảng 45/15/15/10/8/4/3, không đọc hồ sơ, cache 1 giờ). **Recommended candidates** so tin ↔ người, chỉ dữ liệu tự khai. **Onboarding job count** chỉ là một phép đếm. **Khối gợi ý trong mail sau khi nộp đơn** chạy trên Elasticsearch với công thức riêng. Hai khối cạnh nhau trên trang chi tiết tin là hai cách tính khác nhau và không bao giờ trùng tin.',
+        kind: 'ab', group: 'Matching', heading: 'Rule — Năm chỗ gợi ý và ranh giới giữa chúng',
         src: 'as-built 16/11 · SRM-1330 (1338 · 1331 · 1345 · 1347)',
       },
       {
         title: 'Thang 100 điểm, trọng số cố định trong code, thiếu dữ liệu là 0',
         summary:
-          'Điều kiện **ứng viên tự khai** là cổng lọc — không qua thì không bao giờ hiện. Mọi thứ còn lại chỉ đổi thứ tự. **Thiếu dữ liệu là 0 điểm và không chia lại thang**, ở cả ba bộ máy có chấm điểm. Trọng số nằm trong code, có đánh số phiên bản (v4 người ↔ tin, v3 tin ↔ tin); **tab chỉnh trọng số đã bỏ khỏi admin ngày 05/11**. Thứ duy nhất admin còn chỉnh được là **tỷ giá USD/VND**, dùng hai chiều — thiếu tỷ giá thì tín hiệu lương bằng 0.',
+          'Điều kiện **ứng viên tự khai** là cổng lọc — không qua thì không bao giờ hiện. Mọi thứ còn lại chỉ đổi thứ tự. **Thiếu dữ liệu là 0 điểm và không chia lại thang**, ở cả ba chỗ có chấm điểm. Trọng số nằm trong code, có đánh số phiên bản (v4 người ↔ tin, v3 tin ↔ tin); **tab chỉnh trọng số đã bỏ khỏi admin ngày 05/11**. Thứ duy nhất admin còn chỉnh được là **tỷ giá USD/VND**, dùng hai chiều — thiếu tỷ giá thì tín hiệu lương bằng 0.',
         kind: 'both', group: 'Matching', heading: 'Rule — Thang điểm 100 và luật thiếu dữ liệu',
         src: 'SRM-1330 · Thu chốt 12/11 và 16/11',
       },
@@ -244,7 +244,7 @@ export const RULE_CATS: RuleCat[] = [
       {
         title: 'Nguồn skill gợi ý khi tạo job và tạo CV',
         summary:
-          'Skill gợi ý khi NTD tạo job và khi ứng viên tạo CV lấy theo **Job category cấp 3**; ưu tiên related skill trước, bên dưới là các skill còn lại. Parse CV giữ **tối đa 20 skill** mỗi CV — cắt bớt chứ không từ chối. Đây là nguồn dữ liệu nuôi tín hiệu kỹ năng của cả ba bộ máy có chấm điểm, nên **kỹ năng ứng viên gõ tay không khớp master data sẽ không được tính**.',
+          'Skill gợi ý khi NTD tạo job và khi ứng viên tạo CV lấy theo **Job category cấp 3**; ưu tiên related skill trước, bên dưới là các skill còn lại. Parse CV giữ **tối đa 20 skill** mỗi CV — cắt bớt chứ không từ chối. Đây là nguồn dữ liệu nuôi tín hiệu kỹ năng của cả ba chỗ có chấm điểm, nên **kỹ năng ứng viên gõ tay không khớp master data sẽ không được tính**.',
         kind: 'nv', group: 'Resume management', heading: 'Rule — Mô hình match score và nguồn skill gợi ý',
         src: 'spec resume-management · 20/10 · as-built 16/11',
       },
