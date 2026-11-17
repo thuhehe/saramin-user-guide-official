@@ -48,17 +48,17 @@ export const MATCHING_PAGE_DOCS: Record<string, PageDoc> = {
       { kind: 'h', text: '§1 · Ý tưởng trong một phút' },
       {
         kind: 'p',
-        text: 'Hệ thống biết hai điều về một ứng viên: **những gì họ khai** (hồ sơ, Work preference, CV) và **những gì họ thực sự làm** (job họ mở, lưu, nộp đơn). Ghép lại thành một *chân dung công việc họ muốn*.\n\nTừ chân dung đó, bốn việc theo đúng thứ tự này: **loại** những job họ đã nộp đơn, đã bấm bỏ qua hoặc đã đóng → **chấm** những job còn lại trên thang 100 điểm → **giữ 30 job cao nhất** làm pool, tối đa 3 job một công ty → **rải** pool đó ra các màn hình có khối gợi ý.',
+        text: 'Chỉ cần hiểu ý thì đọc hết mục này rồi dừng cũng được.\n\nVề một ứng viên, hệ thống có hai nguồn: **những gì họ tự khai** — hồ sơ, Work preference, CV — và **những gì họ thực sự bấm vào** — job họ mở, job họ lưu, job họ nộp đơn. Ghép hai nguồn lại thành một *chân dung công việc mà người này đang tìm*.\n\nTừ chân dung đó, hệ thống làm bốn việc, đúng thứ tự này: **bỏ** những job họ đã nộp đơn, đã bấm bỏ qua hoặc đã hết hạn → **chấm** những job còn lại so với chân dung đó → **giữ lại 30 job gần nhất**, mỗi công ty nhiều nhất 3 job → **rải** 30 job đó ra các màn hình có khối gợi ý.',
       },
       {
         kind: 'table',
-        note: 'Nếu chỉ cần hiểu ý tưởng thì đọc bảng này rồi dừng. Phần còn lại của trang là chi tiết của bốn bước đó.',
-        cols: ['Bước', 'Một dòng', 'Chi tiết ở'],
+        note: 'Bốn bước này là toàn bộ bộ máy. Phần còn lại của trang chỉ là chi tiết của từng bước.',
+        cols: ['Bước', 'Một dòng tóm tắt', 'Đọc chi tiết ở'],
         rows: [
-          ['**1 · Người này là ai?**', 'Những gì họ **khai** cộng với những gì **hành vi** của họ nói. Ra một tập vị trí, ngành nghề và tỉnh rộng hơn phần họ tự gõ.', '§3'],
-          ['**2 · Job nào được dự thi?**', 'Cổng lọc cắt bỏ job đã nộp đơn, job khác ngành nghề đã khai, job khác tỉnh đã khai.', '§4'],
-          ['**3 · Job nào hợp?**', 'Chấm từng job còn lại trên **thang 100 điểm, 7 tín hiệu**.', '§5'],
-          ['**4 · Hiện ra sao?**', 'Giữ **30 job điểm cao nhất** làm pool, **tối đa 3 job một công ty**, rồi mỗi màn hình rút thẻ ra theo cách riêng của nó.', '§6'],
+          ['**1 · Ứng viên này đang tìm việc gì?**', 'Những gì họ **tự khai**, cộng những gì **hành vi** của họ cho thấy. Kết quả là một tập vị trí, ngành nghề và tỉnh rộng hơn phần họ tự gõ.', '§3'],
+          ['**2 · Job nào được đem ra chấm?**', '**Một câu truy vấn duy nhất** vừa **bỏ** vừa **giữ**: bỏ job họ đã nộp đơn, đã bấm bỏ qua hoặc đã hết hạn; giữ job khớp với tập ở bước 1. Job đằng nào cũng bị bỏ thì **không bao giờ được chấm điểm**.', '§4'],
+          ['**3 · Job nào hợp nhất?**', 'Chấm từng job còn lại trên **thang 100 điểm**, giữ **30 job cao điểm nhất**, mỗi công ty nhiều nhất **3 job**.', '§5'],
+          ['**4 · Hiện lên màn hình thế nào?**', 'Mỗi màn hình rút thẻ từ pool 30 job đó theo cách riêng: **trang cá nhân** và **chi tiết job** xáo trộn, còn **onboarding**, **popup Batch apply** và **email hằng tuần** giữ nguyên thứ tự điểm.', '§6'],
         ],
       },
       {
