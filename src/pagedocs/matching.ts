@@ -823,7 +823,19 @@ export const MATCHING_MODULE_DOCS: Record<string, ModuleDoc> = {
       { kind: 'h', text: 'Quy số năm kinh nghiệm ra cấp bậc' },
       {
         kind: 'p',
-        text: 'Nhiều job tự đăng chỉ khai **cấp bậc**, không khai số năm. Khi đó hệ thống quy số năm của ứng viên ra cấp bậc rồi mới so. Một bảng duy nhất, dùng chung cho cả ba chỗ có so kinh nghiệm.',
+        text: 'Form tạo job trong admin **bắt buộc** nhập số năm kinh nghiệm (hoặc tick *No experience required*) trước khi đăng — vậy sao vẫn cần quy ra cấp bậc? Vì hai chỗ dưới đây không đọc số năm của job.',
+      },
+      {
+        kind: 'table',
+        cols: ['Chỗ dùng bảng này', 'Khi nào', 'Để làm gì'],
+        rows: [
+          ['**Số việc ở onboarding**', '**Luôn luôn**', 'Chỗ này không xét số năm của job. Nó quy số năm ứng viên ra bậc, rồi chỉ giữ job có **cấp bậc cao hơn tối đa 1 bậc**.'],
+          ['**Chấm điểm kinh nghiệm** — *Gợi ý việc làm cho bạn*, *Recommended talent*, % trên bảng ứng viên', 'Chỉ khi job **không** khai số năm', 'So cấp bậc của job với bậc của ứng viên.'],
+        ],
+      },
+      {
+        kind: 'p',
+        text: 'Job không khai số năm vẫn tồn tại vì **chỉ form admin mới bắt buộc**: trên trang nhà tuyển dụng tự đăng job, cả khối kinh nghiệm là tuỳ chọn, và API cũng không chặn. Job vừa không có số năm vừa không có cấp bậc thì tiêu chí kinh nghiệm **tính 0 điểm**.',
       },
       {
         kind: 'table',
