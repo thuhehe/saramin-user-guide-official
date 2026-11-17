@@ -789,11 +789,8 @@ export const MATCHING_MODULE_DOCS: Record<string, ModuleDoc> = {
   Matching: {
     title: 'Matching & gợi ý — năm chỗ, năm cách tính',
     lead:
-      'Trang này mô tả **cách hệ thống đang chạy trên bản build**, không phải bản yêu cầu.\n\nSaramin có **năm chỗ gợi ý việc làm**, và mỗi chỗ tính theo một cách riêng. Phần lớn câu hỏi “sao chỗ này hiện khác chỗ kia” là do nhầm hai chỗ với nhau. Bốn chỗ đầu có trang riêng; chỗ thứ năm — khối gợi ý trong email sau khi nộp đơn — mô tả ở cuối trang này.',
-    headline: [
-      '**Trang chi tiết job có hai khối gợi ý nằm cạnh nhau, và chúng tính theo hai cách khác nhau.** Khối trên (*Các công việc tương tự*) so **job với job**. Khối dưới (*Gợi ý việc làm cho bạn*) so **hồ sơ ứng viên với job**.',
-      '**Job ứng viên đã nộp đơn thì không bao giờ hiện lại trong gợi ý** — kể cả khi đơn đã bị từ chối. Đây là lý do phổ biến nhất của câu hỏi “sao job này biến mất”.',
-    ],
+      'Saramin gợi ý việc làm ở **năm chỗ**, và **không chỗ nào tính giống chỗ nào**. Cùng một ứng viên, cùng một lúc, năm chỗ đó có thể ra năm danh sách khác nhau — **đúng thiết kế**, không phải lỗi.\n\nNên câu hỏi “sao chỗ này hiện khác chỗ kia” hầu như luôn là đang so nhầm hai chỗ với nhau. Trang này để tra đúng một việc: **chỗ nào là chỗ nào**, và chỗ đó so **cái gì với cái gì**. Bốn trong năm chỗ có trang riêng — danh sách ở cuối trang; chỗ thứ năm, khối gợi ý trong email sau khi nộp đơn, không có trang riêng nên viết luôn ở đây.',
+    headline: [],
     blocks: [
       { kind: 'h', text: 'Năm chỗ gợi ý việc làm' },
       {

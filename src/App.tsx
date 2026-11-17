@@ -478,6 +478,7 @@ function ModuleView({ group, onPick }: { group: string; onPick: (key: string) =>
       {/* The two or three facts that, unknown, produce a wrong outcome. They sit
           above everything because a reader who stops after this box has still got
           the part that costs money. */}
+      {mod.headline.length > 0 && (
       <div className="mt-5 border-l-2 border-brand bg-brand-soft/45 py-3 pl-4 pr-4">
         <p className="font-mono text-[9.5px] uppercase tracking-[0.14em] text-brand">Đọc trước</p>
         <ul className="mt-1.5 max-w-[78ch] space-y-1.5">
@@ -486,6 +487,7 @@ function ModuleView({ group, onPick }: { group: string; onPick: (key: string) =>
           ))}
         </ul>
       </div>
+      )}
 
       <div className="mt-7 space-y-7">
         {mod.blocks.map((b, i) => <DocBlockView key={i} b={b} />)}
