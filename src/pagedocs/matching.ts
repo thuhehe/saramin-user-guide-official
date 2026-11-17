@@ -64,7 +64,7 @@ export const MATCHING_PAGE_DOCS: Record<string, PageDoc> = {
           ['**1 · Người này là ai?**', 'Những gì họ **khai** cộng với những gì **hành vi** của họ nói. Ra một tập vị trí, ngành nghề và tỉnh rộng hơn phần họ tự gõ.', '§2'],
           ['**2 · Tin nào được dự thi?**', 'Cổng lọc cắt bỏ tin đã nộp đơn, tin khác ngành nghề đã khai, tin khác tỉnh đã khai.', '§3'],
           ['**3 · Tin nào hợp?**', 'Chấm từng tin còn lại trên **thang 100 điểm, 7 tín hiệu**.', '§4'],
-          ['**4 · Hiện ra sao?**', 'Giữ **50 tin điểm cao nhất** làm rổ, rồi mỗi màn hình rút ra 6 thẻ theo cách riêng của nó.', '§5'],
+          ['**4 · Hiện ra sao?**', 'Giữ **30 tin điểm cao nhất** làm rổ, **tối đa 3 tin một công ty**, rồi mỗi màn hình rút thẻ ra theo cách riêng của nó.', '§5'],
         ],
       },
       {
@@ -72,7 +72,7 @@ export const MATCHING_PAGE_DOCS: Record<string, PageDoc> = {
         heading: 'Vì sao phải có một “rổ” rồi mới rải ra, thay vì in top 6 ở mọi nơi',
         items: [
           'In đúng top 6 ở cả sáu màn hình thì **năm màn hình kia thành thừa** — ứng viên gặp lại đúng sáu tấm thẻ vừa lướt qua.',
-          'Rải từ một rổ chung thì mỗi màn hình đưa ra thứ họ **chưa lướt qua**, mà vẫn nằm trong 50 tin tốt nhất của chính họ — nên không có tin kém nào lọt ra.',
+          'Rải từ một rổ chung thì mỗi màn hình đưa ra thứ họ **chưa lướt qua**, mà vẫn nằm trong 30 tin tốt nhất của chính họ — nên không có tin kém nào lọt ra.',
           'Riêng **popup sau khi nộp đơn** thì **không xáo**: đó là màn hình duy nhất mà thứ tự quyết định ứng viên thật sự nộp vào tin nào, nên thứ hạng ở đó phải trung thực.',
         ],
       },
@@ -84,7 +84,7 @@ export const MATCHING_PAGE_DOCS: Record<string, PageDoc> = {
         note: 'Cùng một phép tính, khác tham số `surface` — nên thứ tự hiển thị và số thẻ khác nhau, còn cách chấm điểm thì giống hệt.',
         cols: ['Nơi hiển thị', 'Ai thấy', 'Số thẻ', 'Thứ tự'],
         rows: [
-          ['**Onboarding** — khối “những việc phù hợp nhất”', 'Ứng viên vừa xong wizard', '30 tin, giao diện chia 6/trang (tối đa 5 trang)', '**Đúng thứ tự điểm**, một công ty một hàng'],
+          ['**Onboarding** — khối “những việc phù hợp nhất”', 'Ứng viên vừa xong wizard', 'tối đa 30 thẻ, giao diện chia 6/trang (tối đa 5 trang)', '**Đúng thứ tự điểm**, cap 3 tin/công ty, cách nhau ≥ 6 vị trí'],
           ['**Trang cá nhân** — *Việc làm phù hợp với bạn*', 'Đã đăng nhập', '6', 'Xáo trộn **trong từng bậc vị trí** (§5)'],
           ['**Chi tiết tin** — *Gợi ý việc làm cho bạn*', 'Đã đăng nhập', '6', 'Xáo trộn trong từng bậc vị trí; **neo** theo ngành nghề của tin đang xem'],
           ['**Popup sau khi nộp đơn** (Batch apply)', 'Người vừa nộp đơn', '30', '**Đúng thứ tự điểm**, không xáo, không neo ngành nghề'],
@@ -289,8 +289,9 @@ export const MATCHING_PAGE_DOCS: Record<string, PageDoc> = {
         kind: 'list',
         items: [
           '**Bỏ tin trùng** — cùng công ty + cùng tiêu đề + cùng tỉnh thì giữ tin mới nhất.',
-          '**Lấy 50 tin điểm cao nhất làm “rổ”** (chốt 16/11: 80 quá rộng, lọt nhiều tin không liên quan). **Không có điểm sàn** — rổ luôn đầy nếu có đủ tin.',
-          '**Một công ty một hàng.** Mỗi hàng 6 thẻ, gặp công ty đã có trong hàng thì lấy thẻ kế tiếp. Hết công ty khác nhau thì **vẫn lấp đủ 6** (chấp nhận lặp công ty) để các hàng sau không lệch vị trí.',
+          '**Lấy 30 tin điểm cao nhất làm “rổ”.** Con số này đổi hai lần trong hai ngày: 80 → **50** (16/11 — 80 quá rộng, lọt nhiều tin không liên quan) → **30** (17/11). **Không có điểm sàn** — rổ luôn đầy nếu có đủ tin.',
+          '**Tối đa 3 tin một công ty trong rổ** (chốt 17/11) — áp cho trang cá nhân, chi tiết tin và onboarding. Đi từ trên xuống, gặp tin **thứ 4** của cùng một công ty thì bỏ qua: không xếp lại, không đổi điểm, không giữ chỗ cho ai. **Popup Batch apply không áp luật này.**\n\n3 ≈ **10% của rổ 30** — đó là cách *chọn* con số, không phải cách *tính* nó: trong code nó là hằng số `3`, rổ đổi thì chốt lại bằng tay. Nếu để code tự nhân 10% thì lúc rổ mỏng (còn 8 tin) cap tự tụt xuống 1, và mỗi màn hình rút số thẻ khác nhau nên mỗi nơi lại ra một con số khác.',
+          '**Hai tin cùng công ty cách nhau ít nhất 6 vị trí** (chốt 17/11). Luật này **thay cho** “một công ty một hàng” trước đây — một *hàng* là bố cục chứ không phải luật: trên điện thoại một hàng là một thẻ, nên luật cũ không bảo vệ được gì ở đó. Đếm theo **vị trí** trong danh sách thì không phụ thuộc bề ngang màn hình.\n\nDựng danh sách từng vị trí một: lấy tin xếp cao nhất còn lại mà công ty của nó **chưa xuất hiện trong 5 vị trí gần nhất**. Không còn tin nào hợp lệ thì **vẫn lấp** (và ghi cờ vào log) — bỏ trống một vị trí sẽ đẩy lệch mọi thẻ phía sau. Có cap ở trên thì gần như không bao giờ chạy tới đường lùi này.',
           '**Tin đang xem và bản trùng của nó** bị loại khỏi rổ ở trang chi tiết tin và ở popup sau khi nộp đơn — không bao giờ gợi ý lại đúng tin vừa nộp.',
         ],
       },
@@ -299,10 +300,23 @@ export const MATCHING_PAGE_DOCS: Record<string, PageDoc> = {
         heading: 'Thứ tự theo từng màn hình',
         cols: ['Màn hình', 'Thứ tự'],
         rows: [
-          ['Popup sau khi nộp đơn', '**Đúng thứ tự điểm**, không gom theo công ty (đây là danh sách, không phải hàng thẻ)'],
-          ['Onboarding · Email JS 3', '**Điểm cao nhất trước**, một công ty một hàng'],
+          ['Popup sau khi nộp đơn', '**Đúng thứ tự điểm**, **không cap công ty** — nhưng không để hai tin cùng công ty đứng liền nhau: gặp tin trùng công ty với tin vừa đặt thì nhìn xuống **tối đa 3 dòng** để đổi chỗ, cả 3 cũng trùng thì chấp nhận lặp. Không thẻ nào xê dịch quá 3 bậc so với hạng của nó, nên thứ tự vẫn trung thực với điểm'],
+          ['Onboarding · Email JS 3', '**Điểm cao nhất trước**, cap 3 tin/công ty, cách nhau ≥ 6 vị trí'],
           ['Trang cá nhân · Chi tiết tin', '**Xáo trộn trong từng bậc vị trí** — xem dưới'],
         ],
+      },
+      {
+        kind: 'table',
+        heading: 'Ứng viên thấy tối đa bao nhiêu tin của cùng một công ty',
+        cols: ['Màn hình', 'Số thẻ hiện ra', 'Tối đa / công ty'],
+        rows: [
+          ['**Onboarding** — khối “những việc phù hợp nhất”', 'tối đa 30 thẻ (6/trang × 5 trang)', '**3** — và chắc chắn không hai thẻ cùng một trang'],
+          ['**Chi tiết tin** — “Recommended jobs”', '6 thẻ', '**1**'],
+          ['**Trang cá nhân** — “Việc làm phù hợp với bạn”', '6 thẻ (carousel hiện 3)', '**1**'],
+          ['**Email JS 3** — gợi ý hằng tuần', '6 thẻ', '**1**'],
+          ['**Popup Batch apply**', 'tối đa 30 dòng', 'không giới hạn — chỉ không đứng liền nhau'],
+        ],
+        note: 'Ba màn 6 thẻ ra **1** là hệ quả tự động của luật khoảng cách, không phải một luật riêng: 6 vị trí không lọt vừa trong 6 thẻ. Cap 3 vì thế chỉ thực sự có hiệu lực ở **onboarding** — màn duy nhất hiện đủ 30 thẻ. Và 3 thẻ cách nhau ≥ 6 vị trí trong 30 vị trí thì rơi vào 3 trang khác nhau.',
       },
       {
         kind: 'list',
@@ -1030,7 +1044,7 @@ export const MATCHING_MODULE_DOCS: Record<string, ModuleDoc> = {
           '**Tỷ giá USD/VND do admin nhập** là thứ duy nhất liên quan matching mà chỉnh được từ giao diện. Dùng **hai chiều**; thiếu tỷ giá thì tín hiệu lương bằng 0 ở cả A, B và C.',
           '**Ứng viên không bao giờ thấy %.** NTD thấy % trên bảng ứng viên của một tin, và **không** thấy % ở chế độ *Hồ sơ mới cập nhật*.',
           '**Một bảng quy đổi năm kinh nghiệm ra cấp bậc** dùng chung cho A, C và D (§2).',
-          '**Một công ty một hàng 6 thẻ** ở mọi màn hình có hàng thẻ — trừ popup Batch apply, vì đó là một danh sách dài chứ không phải hàng thẻ.',
+          '**Tối đa 3 tin một công ty** và **hai tin cùng công ty cách nhau ≥ 6 vị trí**, ở trang cá nhân, chi tiết tin và onboarding (chốt 17/11). Popup Batch apply **không cap** — chỉ không cho hai tin cùng công ty đứng liền nhau. Similar jobs đã có luật tương đương từ đầu: **2 tin một công ty** trong 20 tin giữ lại.',
           '**Một công tắc email duy nhất** — *Nhận email thông báo từ hệ thống* trong trang Thông tin tài khoản, **mặc định bật** — chi phối cả email gợi ý hằng tuần lẫn khối gợi ý trong email sau khi nộp đơn.',
         ],
       },
