@@ -710,27 +710,23 @@ export const MATCHING_PAGE_DOCS: Record<string, PageDoc> = {
      ───────────────────────────────────────────────────────────────── */
   'onboarding-role-strip': {
     logic: [
-      '**Đây KHÔNG phải bộ máy gợi ý.** Một lượt **tìm kiếm thuần** trên `/jobs/search` — không đọc CV, không đọc hồ sơ, không trọng số, không xáo trộn, không ghi log hiển thị. Khối ngay phía trên nó (*“những việc phù hợp nhất”*) mới là bộ máy chấm điểm.',
-      '**Chỉ lấy job đúng vị trí in trên tiêu đề.** Tiêu đề viết *“Việc làm cho Hành chính marketing”* thì mọi thẻ bên dưới phải là **Hành chính marketing**. Không có nhánh “phần còn lại của ngành nghề”.',
-      '**Dưới 3 job thì ẩn cả khối** — không tiêu đề, không đường kẻ, không lưới, không nút chuyển trang.',
-      '**Thứ tự: mới nhất trước.** Không điểm, không xáo trộn, không ưu tiên gói job.',
-      '**Trừ trước, đếm sau.** Bỏ mọi id khối 1 đang hiện (cả ≤30 job, không chỉ trang đang xem) **rồi mới** đếm xem có đủ 3 không và chia trang.',
-    ],
-    how: [
-      'Chạy wizard onboarding trên site ứng viên (`/welcome`, bản tiếng Việt là `/chao-mung`) tới màn kết quả, rồi cuộn xuống **dưới** lưới “những việc phù hợp nhất”.',
-      'Muốn kiểm: đọc tên vị trí in trên tiêu đề, mở trang tìm việc lọc đúng vị trí đó, so hai danh sách. Mọi thẻ trong dải phải có mặt trong kết quả lọc.',
-      'Không thấy khối: kiểm xem bước 1 của wizard có chọn vị trí nào không, và vị trí đó còn lại mấy job sau khi trừ các job khối 1 đang hiện.',
+      '**Khối này không chấm điểm.** Nó là một lượt **tìm kiếm thuần** trên `/jobs/search`: không đọc CV, không đọc hồ sơ, không trọng số, không xáo trộn, không ghi log hiển thị. Khối ngay phía trên — *“những việc phù hợp nhất”* — mới là bộ máy gợi ý.',
+      '**Tiêu đề in tên vị trí nào thì mọi thẻ phải là vị trí đó.** *“Việc làm cho Hành chính marketing”* → bên dưới chỉ có job **Hành chính marketing**. Không nới sang các vị trí khác cùng ngành nghề.',
+      '**Dưới 3 job thì ẩn cả khối** — đếm **sau khi** đã bỏ những job khối 1 đang hiện.',
+      '**Mới nhất trước.** Không điểm, không xáo trộn, không ưu tiên gói job.',
     ],
     watch: [
-      '**Thẻ không đúng vị trí in trên tiêu đề là lỗi.** Ảnh production 17/11: tiêu đề *“Việc làm cho Hành chính marketing”*, bên dưới một thẻ *“Platform Operations Specialist — ANTSOMI”*. Thẻ mâu thuẫn với dòng chữ ngay trên nó.',
-      '**Một hoặc hai thẻ dưới tiêu đề cũng là lỗi.** Lưới 3 cột với 1 thẻ trông như trang hỏng — đúng ngưỡng thì phải ẩn cả khối.',
-      '**Con số ở bước 3 / bước 4 của wizard đếm theo NGÀNH NGHỀ, dải này lọc theo VỊ TRÍ.** Hai con số khác nhau là **đúng thiết kế**, không phải lỗi — xem trang *Số việc ở onboarding*.',
-      '**Ẩn khối này không ảnh hưởng gì khác:** khối 1 vẫn render, nút “Hoàn tất CV và ứng tuyển” vẫn ở nguyên chỗ. Ẩn thì ẩn cả khoảng trắng phía trên, không để lại lỗ hổng.',
+      '**Thẻ không đúng vị trí in trên tiêu đề là lỗi** — xem ảnh ngay dưới đây.',
+      '**Một hoặc hai thẻ cũng là lỗi.** Lưới ba cột đứng một thẻ trông như trang hỏng; dưới 3 là ẩn cả khối.',
+      '**Con số ở bước 3 / bước 4 của wizard đếm theo NGÀNH NGHỀ, dải này lọc theo VỊ TRÍ.** Hai con số khác nhau là **đúng thiết kế** — xem trang *Số việc ở onboarding*.',
     ],
     blocks: [
       {
-        kind: 'warn',
-        text: '**Luật dưới đây Thu chốt ngày 17/11/2026 và CHƯA có trong code** (SRM-1596, tách ra từ SRM-1338 T5). Bản đang chạy làm khác ở hai chỗ: nó đọc **hai** lượt rồi ghép (job đúng vị trí, xong job của các vị trí anh em cùng ngành nghề), và nó vẽ khối ngay khi còn **≥ 1** job.',
+        kind: 'shot',
+        src: '/shots/matching/onboarding-role-strip.jpg',
+        where: 'Jobseeker site',
+        caption: 'Màn kết quả onboarding (`/chao-mung`). Khối trong khung đỏ chính là dải *“Việc làm cho {vị trí}”* — nằm dưới lưới “những việc phù hợp nhất” và trên nút *Hoàn tất CV và ứng tuyển*.',
+        note: 'Ảnh production ngày 17/11, và nó đang sai hai chỗ: tiêu đề in *Hành chính marketing* nhưng thẻ bên dưới là *Platform Operations Specialist*, và chỉ một thẻ thì lẽ ra phải ẩn cả khối.',
       },
 
       /* ───────────────────────────────────────────────────────────────── */
@@ -743,26 +739,23 @@ export const MATCHING_PAGE_DOCS: Record<string, PageDoc> = {
           ['Đọc gì của ứng viên', 'CV · hồ sơ · hành vi · trọng số', '**Đúng một thứ**: vị trí đã chọn ở bước 1'],
           ['Thứ tự', 'Điểm cao nhất trước', '**Mới nhất trước**'],
           ['Số thẻ', 'tối đa 30 (6/trang)', '3 thẻ một hàng, phân trang'],
-          ['Ghi log hiển thị', 'Có', '**Không**'],
           ['Ticket', 'SRM-1338', '**SRM-1596**'],
         ],
-        note: 'Hai khối này nằm sát nhau trên cùng một màn hình nên rất dễ bị đọc là một. Chúng **không** chia sẻ luật nào cả — ngoài việc khối 2 phải bỏ những job khối 1 đang hiện.',
+        note: 'Hai khối nằm sát nhau nên rất dễ bị đọc là một. Chúng **không** chia sẻ luật nào — ngoài việc khối 2 phải bỏ những job khối 1 đang hiện.',
       },
 
       /* ───────────────────────────────────────────────────────────────── */
       { kind: 'h', text: '§2 · Chỉ job đúng vị trí — không bao giờ nới lên ngành nghề' },
       {
         kind: 'p',
-        text: 'Danh sách chỉ chứa job có vị trí **đúng bằng** cái tên in trên tiêu đề. Hết. Bản đang chạy có thêm một lượt đọc thứ hai lấy job của các vị trí **anh em cùng ngành nghề** rồi ghép vào — lượt đó bị bỏ.',
+        text: 'Danh sách chỉ chứa job có vị trí **đúng bằng** tên in trên tiêu đề. Bản đang chạy còn đọc thêm một lượt nữa, lấy job của các vị trí **anh em cùng ngành nghề** rồi ghép vào — lượt đó bỏ.',
       },
       {
         kind: 'list',
-        heading: 'Bốn lý do',
+        heading: 'Vì sao không nới lên ngành nghề',
         items: [
-          '**Tiêu đề in tên vị trí**, nên mọi thẻ dưới nó phải là vị trí đó. Nới ra là tự mâu thuẫn với chính dòng chữ phía trên — đúng cái ảnh production cho thấy.',
-          '**Bảng phân loại chỉ có hai tầng:** ngành nghề (tầng 1) → vị trí (tầng 2). Một ngành nghề chứa **khoảng 50 vị trí** — *Kinh doanh & Thương mại* có 52, *Tài chính & Bảo hiểm* có 58. “Phần còn lại của ngành nghề” cạnh *Bán dịch vụ tài chính* là *Bán bất động sản*, *Vận hành Livestream*… Đó không phải một bước nới nhẹ, đó là cả một ngành.',
-          '**Nấc giữa (nhóm vị trí) đáng ra để làm việc nới nhẹ này, nhưng chưa có dữ liệu** — SRM-1315. Khi nào có mới bàn lại.',
-          '**Ứng viên không mất gì.** Khối 1 ngay phía trên đã là một danh sách rộng hơn nhiều, có chấm điểm và có cơ chế nới riêng.',
+          '**Ngành nghề là một cái rổ rất rộng.** Bảng phân loại chỉ có hai tầng — ngành nghề → vị trí — và một ngành nghề chứa khoảng **50 vị trí** (*Kinh doanh & Thương mại* 52, *Tài chính & Bảo hiểm* 58). Cạnh *Bán dịch vụ tài chính* là *Bán bất động sản*, *Vận hành Livestream*… Nới lên ngành nghề không phải nới nhẹ, là đổi hẳn nghề. Nấc giữa (nhóm vị trí) sinh ra để làm đúng việc nới nhẹ này, nhưng chưa có dữ liệu — SRM-1315.',
+          '**Ứng viên không mất gì.** Khối 1 ngay phía trên đã rộng hơn nhiều, có chấm điểm và có cách nới riêng.',
         ],
       },
 
@@ -770,38 +763,25 @@ export const MATCHING_PAGE_DOCS: Record<string, PageDoc> = {
       { kind: 'h', text: '§3 · Dưới 3 job thì ẩn cả khối' },
       {
         kind: 'p',
-        text: 'Đếm **sau khi** đã trừ id của khối 1. Còn 0, 1 hoặc 2 job thì không vẽ gì cả: không tiêu đề, không đường kẻ, không lưới, không nút chuyển trang.',
-      },
-      {
-        kind: 'table',
-        heading: 'Khi nào hiện, khi nào ẩn',
-        cols: ['Tình huống', 'Kết quả'],
-        rows: [
-          ['Vị trí có 12 job mở, khối 1 không trùng job nào', 'Hiện 12 job, 4 trang × 3 thẻ — **tất cả đều đúng vị trí đó**'],
-          ['Vị trí có 8 job, khối 1 đang hiện 6 trong số đó', 'Còn 2 → **ẩn cả khối**'],
-          ['Vị trí có đúng 3 job', 'Hiện đúng 3 thẻ, **không** có nút chuyển trang'],
-          ['Vị trí có 2 job / 0 job', '**Ẩn cả khối**'],
-          ['Bước 1 không chọn vị trí nào', '**Không có khối 2**; khối 1 vẫn render bình thường'],
-          ['`/jobs/search` lỗi', 'Ẩn khối 2, màn kết quả vẫn lên bình thường'],
-        ],
-        note: 'Đây **không phải luật mới**: Blue zone trên trang tìm việc đã xử lý đúng vấn đề này theo đúng cách — dưới số tối thiểu thì ẩn cả dải, không hiện một dải lèo tèo.',
+        text: 'Bỏ những job khối 1 đang hiện (cả 30 job của khối 1, không riêng trang đang xem), **rồi mới đếm**. Còn **0, 1 hoặc 2 job → không vẽ gì cả**: không tiêu đề, không đường kẻ, không lưới, không nút chuyển trang. Đúng 3 job thì hiện 3 thẻ và không có nút chuyển trang. Bước 1 không chọn vị trí nào, hoặc `/jobs/search` lỗi, cũng không có khối 2 — màn kết quả vẫn lên bình thường.',
       },
 
       /* ───────────────────────────────────────────────────────────────── */
       { kind: 'h', text: '§4 · Vị trí nào được in lên tiêu đề' },
       {
-        kind: 'table',
-        cols: ['', 'Bản đang chạy', 'Luật chốt 17/11'],
-        rows: [
-          ['Trong ≤3 vị trí chọn ở bước 1, lấy vị trí có nhiều job đang mở nhất', 'đếm theo **cả ngành nghề**', 'đếm theo **chính vị trí đó**'],
-        ],
-        note: 'Cách chọn không đổi, chỉ đổi cái đem ra đếm. Hoà → lấy vị trí ứng viên chọn trước.',
+        kind: 'p',
+        text: 'Trong tối đa 3 vị trí chọn ở bước 1, lấy vị trí **có nhiều job đang mở nhất**. Cách chọn không đổi, chỉ đổi cái đem ra đếm: đếm job của **chính vị trí đó**, không đếm cả ngành nghề như bản đang chạy. Hoà nhau → lấy vị trí ứng viên chọn trước.',
       },
       {
-        kind: 'list',
-        items: [
-          '**Không chọn lại sang vị trí khác** khi vị trí đã chọn rơi xuống dưới 3 job sau khi trừ id khối 1. Tiêu đề chỉ in được một tên, và những job đó ứng viên vẫn đang nhìn thấy ngay phía trên ở khối 1 — ẩn khối 2 lúc đó là **đúng**, không phải thiếu sót.',
+        kind: 'example',
+        heading: 'Hai cách đếm, hai tiêu đề khác nhau',
+        scenario: 'Ứng viên chọn hai vị trí ở bước 1: **Hành chính marketing** (ngành *Marketing · Truyền thông*) và **Nhân viên kinh doanh** (ngành *Kinh doanh & Thương mại*).',
+        cols: ['Vị trí chọn ở bước 1', 'Job đang mở đúng vị trí đó', 'Job đang mở của cả ngành nghề'],
+        rows: [
+          ['Hành chính marketing', '**40**', '520'],
+          ['Nhân viên kinh doanh', '25', '**1.150**'],
         ],
+        note: '**Bản đang chạy** đếm cột phải → chọn *Nhân viên kinh doanh*, in *“Việc làm cho Nhân viên kinh doanh”*, dù vị trí đó chỉ có 25 job còn vị trí kia có 40.\n\n**Luật chốt 17/11** đếm cột giữa → in *“Việc làm cho Hành chính marketing”*, lấy đúng 40 job đó, bỏ những job khối 1 đang hiện (giả sử trùng 4) còn **36 job** → 12 trang × 3 thẻ.',
       },
 
       /* ───────────────────────────────────────────────────────────────── */
