@@ -122,7 +122,7 @@ export const RULE_DETAIL: Record<string, DocBlock[]> = {
     rule('Rule — Năm chỗ gợi ý và ranh giới giữa chúng', [
       '**Recommended jobs** (người ↔ tin) đọc hồ sơ ứng viên và chấm trên thang 42/20/14/12/5/4/3. Dùng ở onboarding, trang cá nhân, chi tiết tin, popup sau khi nộp đơn và email gợi ý hằng tuần.',
       '**Similar jobs** (tin ↔ tin) **không đọc hồ sơ người xem** — mọi người thấy cùng một danh sách cho cùng một tin, cache **1 giờ** (làm mới chậm nhất ~75 phút). Bảng riêng 45/15/15/10/8/4/3.',
-      '**Hai khối nằm cạnh nhau trên trang chi tiết tin là hai cách tính khác nhau**, và **không bao giờ trùng tin**: carousel *Việc làm tương tự* lấy trước, khối *Gợi ý việc làm cho bạn* bỏ các id đã hiện. Khách chưa đăng nhập thấy dòng 7–12 của chính danh sách Similar jobs, dưới tiêu đề *Có thể bạn quan tâm*.',
+      '**Hai khối nằm cạnh nhau trên trang chi tiết tin là hai cách tính khác nhau**, và **không bao giờ trùng tin**: carousel *Các công việc tương tự* lấy trước, khối *Gợi ý việc làm cho bạn* bỏ các id đã hiện. Khách chưa đăng nhập thấy dòng 7–12 của chính danh sách Similar jobs, dưới tiêu đề *Có thể bạn quan tâm*.',
       '**Recommended candidates** (tin ↔ người) dùng cùng bảng điểm của Recommended jobs nhưng **chỉ đọc dữ liệu ứng viên tự khai** — hành vi xem tin, lưu tin, nộp đơn **không bao giờ** sang phía nhà tuyển dụng.',
       '**Onboarding job count** không chấm điểm gì cả, chỉ là một phép **đếm theo bộ lọc** chạy cho khách chưa có tài khoản.',
       '**Khối gợi ý trong email sau khi nộp đơn** (JS 4 / JS 5) là chỗ thứ năm: chạy trên **Elasticsearch**, **không đọc hồ sơ**, chỉ tìm tin giống **tin vừa nộp** (chung ≥ 1 kỹ năng và ≥ 1 tỉnh), tối đa 4 tin, không đủ thì ẩn cả khối.',
@@ -141,7 +141,7 @@ export const RULE_DETAIL: Record<string, DocBlock[]> = {
 
     rule('Rule — “Đã ứng tuyển” và ngoại lệ của đơn đã rút', [
       '**“Đã ứng tuyển” = có bất kỳ dòng đơn nào** cho cặp (ứng viên, tin), **mọi trạng thái** kể cả đã bị từ chối hay thu hồi. Tin đó biến mất khỏi Recommended jobs ở **mọi** màn hình (kể cả popup Batch apply) và khỏi email JS 3 / JS 4 / JS 5.',
-      '**Ngoại lệ từ 16/11 (SRM-1551):** rút đơn là dứt khoát và **giải phóng tin** — tin đã rút **hiện lại trên carousel *Việc làm tương tự*** và nộp lại được, thành một đơn mới với snapshot mới. Ở Recommended jobs và các email thì vẫn ẩn.',
+      '**Ngoại lệ từ 16/11 (SRM-1551):** rút đơn là dứt khoát và **giải phóng tin** — tin đã rút **hiện lại trên carousel *Các công việc tương tự*** và nộp lại được, thành một đơn mới với snapshot mới. Ở Recommended jobs và các email thì vẫn ẩn.',
       '**Hệ quả cố ý:** cùng một tin có thể thấy ở carousel mà không thấy ở khối gợi ý ngay bên dưới. Đây không phải lỗi hiển thị.',
       '**Đơn đã rút cũng không còn trên bảng ứng viên** của nhà tuyển dụng.',
       '**Tin ứng viên bấm “bỏ qua”** bị xử lý y như tin đã nộp đơn: loại vĩnh viễn khỏi mọi danh sách gợi ý.',

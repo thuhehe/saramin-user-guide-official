@@ -285,12 +285,12 @@ export const MATCHING_PAGE_DOCS: Record<string, PageDoc> = {
       '**Hệ thống không hứa “tương tự” khi nó không tương tự:** điểm cao nhất dưới 40 thì giao diện đổi tiêu đề thành *Việc làm khác tại {tỉnh}* — nhưng vẫn hiện đủ 6 thẻ.',
     ],
     how: [
-      'Mở bất kỳ **trang chi tiết job** nào trên site ứng viên và kéo xuống carousel *Việc làm tương tự*.',
+      'Mở bất kỳ **trang chi tiết job** nào trên site ứng viên và kéo xuống carousel *Các công việc tương tự*.',
       'Ngay dưới carousel là khối thứ hai. **Đã đăng nhập** thì khối đó là *Gợi ý việc làm cho bạn* (**Gợi ý việc làm cho bạn**, có đọc hồ sơ). **Chưa đăng nhập** thì khối đó lấy **dòng 7–12 của chính danh sách này** và mang tiêu đề *Có thể bạn quan tâm*.',
       'Muốn biết vì sao một job lọt vào: so hai job với nhau theo bảng ở §2 — không cần biết người xem là ai. Có ví dụ chạy đủ số ở §5.',
     ],
     watch: [
-      '**Hai khối cạnh nhau, hai cách tính khác nhau.** *Việc làm tương tự* so job với job; *Gợi ý việc làm cho bạn* so hồ sơ với job. Hai khối **không bao giờ trùng job**: carousel lấy trước, khối dưới bỏ các id đã hiện.',
+      '**Hai khối cạnh nhau, hai cách tính khác nhau.** *Các công việc tương tự* so job với job; *Gợi ý việc làm cho bạn* so hồ sơ với job. Hai khối **không bao giờ trùng job**: carousel lấy trước, khối dưới bỏ các id đã hiện.',
       '**Job đã nộp đơn vẫn nằm trong danh sách dùng chung** — giao diện mới là chỗ ẩn nó đi cho người đã đăng nhập (§4). Nên danh sách gốc không đổi theo từng người.',
       '**Từ 16/11, job đã rút đơn hiện lại trên carousel này** và nộp lại được, trong khi ở *Recommended jobs* và các email thì vẫn bị ẩn. Cùng một job có thể thấy ở chỗ này mà không thấy ở chỗ kia — đây là hệ quả cố ý của quyết định “rút đơn là dứt khoát và giải phóng job”.',
       '**Sửa nội dung một job không làm danh sách đổi ngay** — phải chờ cache hết hạn.',
@@ -300,6 +300,12 @@ export const MATCHING_PAGE_DOCS: Record<string, PageDoc> = {
       { kind: 'p', text: STAMP },
 
       { kind: 'h', text: '§1 · Luồng chạy' },
+      {
+        kind: 'shot',
+        src: '/shots/matching/job-detail-two-blocks.jpg',
+        where: 'Jobseeker site',
+        caption: 'Carousel **Các công việc tương tự** (khối trên) là thứ trang này mô tả. Khối **Có thể bạn quan tâm** ngay dưới lấy các dòng tiếp theo của cùng danh sách khi người xem **chưa đăng nhập**; đã đăng nhập thì chỗ đó là *Gợi ý việc làm cho bạn*, một cách tính khác hẳn.',
+      },
       {
         kind: 'list',
         items: [
@@ -799,7 +805,7 @@ export const MATCHING_MODULE_DOCS: Record<string, ModuleDoc> = {
     lead:
       'Trang này mô tả **cách hệ thống đang chạy trên bản build**, không phải bản yêu cầu.\n\nSaramin có **năm chỗ gợi ý việc làm**, và mỗi chỗ tính theo một cách riêng. Phần lớn câu hỏi “sao chỗ này hiện khác chỗ kia” là do nhầm hai chỗ với nhau. Bốn chỗ đầu có trang riêng; chỗ thứ năm — khối gợi ý trong email sau khi nộp đơn — mô tả ở cuối trang này.',
     headline: [
-      '**Trang chi tiết job có hai khối gợi ý nằm cạnh nhau, và chúng tính theo hai cách khác nhau.** Khối trên (*Việc làm tương tự*) so **job với job**. Khối dưới (*Gợi ý việc làm cho bạn*) so **hồ sơ ứng viên với job**.',
+      '**Trang chi tiết job có hai khối gợi ý nằm cạnh nhau, và chúng tính theo hai cách khác nhau.** Khối trên (*Các công việc tương tự*) so **job với job**. Khối dưới (*Gợi ý việc làm cho bạn*) so **hồ sơ ứng viên với job**.',
       '**Job ứng viên đã nộp đơn thì không bao giờ hiện lại trong gợi ý** — kể cả khi đơn đã bị từ chối. Đây là lý do phổ biến nhất của câu hỏi “sao job này biến mất”.',
     ],
     blocks: [
@@ -809,7 +815,7 @@ export const MATCHING_MODULE_DOCS: Record<string, ModuleDoc> = {
         cols: ['Chỗ gợi ý', 'Người dùng thấy ở đâu', 'So cái gì với cái gì', 'Đọc hồ sơ?'],
         rows: [
           ['**Gợi ý việc làm cho bạn**', 'Trang cá nhân · trang chi tiết job · màn kết quả onboarding · popup sau khi nộp đơn · email hằng tuần', 'Hồ sơ ứng viên ↔ job', 'Có'],
-          ['**Việc làm tương tự**', 'Carousel dưới trang chi tiết job', 'Job ↔ job', 'Không'],
+          ['**Các công việc tương tự**', 'Carousel dưới trang chi tiết job', 'Job ↔ job', 'Không'],
           ['**Recommended talent**', 'Company Home của nhà tuyển dụng · % trên bảng ứng viên', 'Job ↔ hồ sơ ứng viên', 'Có — chỉ phần ứng viên tự khai'],
           ['**Số việc ở onboarding**', 'Câu dẫn ở bước 3 và bước 4 của wizard', 'Chỉ đếm theo bộ lọc, không chấm điểm', 'Không'],
           ['**Việc gợi ý trong email sau khi nộp đơn**', 'Email *Bạn đã ứng tuyển thành công*', 'Job ↔ job', 'Không'],
@@ -818,6 +824,14 @@ export const MATCHING_MODULE_DOCS: Record<string, ModuleDoc> = {
       {
         kind: 'p',
         text: '**Trang chủ và trang tìm việc không có khối gợi ý cá nhân nào.**',
+      },
+
+      {
+        kind: 'shot',
+        src: '/shots/matching/job-detail-two-blocks.jpg',
+        where: 'Jobseeker site',
+        caption: 'Hai khối nằm trên cùng một trang chi tiết job, và đây là chỗ hay bị nhầm nhất. **Các công việc tương tự** ở trên so **job với job** — ai mở cũng thấy cùng danh sách. **Có thể bạn quan tâm** ở dưới là phần còn lại của chính danh sách đó (khách chưa đăng nhập); người **đã đăng nhập** thấy *Gợi ý việc làm cho bạn* ở đúng chỗ này, và khối đó mới là khối đọc hồ sơ.',
+        note: 'Ảnh dev ngày 17/11. Thẻ thứ hai trong carousel là **cùng công ty, cùng tiêu đề, cùng tỉnh** với chính job đang xem — luật bỏ job trùng lẽ ra phải loại nó.',
       },
 
       { kind: 'h', text: 'Quy số năm kinh nghiệm ra cấp bậc' },

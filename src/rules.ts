@@ -223,7 +223,7 @@ export const RULE_CATS: RuleCat[] = [
       {
         title: '“Đã ứng tuyển” là có bất kỳ dòng đơn nào — đơn đã rút là ngoại lệ từ 16/11',
         summary:
-          'Có **bất kỳ** dòng đơn nào cho cặp (ứng viên, tin), **mọi trạng thái kể cả đã bị từ chối**, là tin đó biến mất khỏi gợi ý và khỏi cả ba loại email. Từ 16/11 rút đơn là dứt khoát và **giải phóng tin**: tin đã rút hiện lại trên carousel *Việc làm tương tự* và nộp lại được, trong khi ở Recommended jobs và các email thì vẫn ẩn. Cùng một tin thấy ở chỗ này mà không thấy ở chỗ kia là **hệ quả cố ý**, không phải lỗi.',
+          'Có **bất kỳ** dòng đơn nào cho cặp (ứng viên, tin), **mọi trạng thái kể cả đã bị từ chối**, là tin đó biến mất khỏi gợi ý và khỏi cả ba loại email. Từ 16/11 rút đơn là dứt khoát và **giải phóng tin**: tin đã rút hiện lại trên carousel *Các công việc tương tự* và nộp lại được, trong khi ở Recommended jobs và các email thì vẫn ẩn. Cùng một tin thấy ở chỗ này mà không thấy ở chỗ kia là **hệ quả cố ý**, không phải lỗi.',
         kind: 'both', group: 'Matching', heading: 'Rule — “Đã ứng tuyển” và ngoại lệ của đơn đã rút',
         src: 'SRM-1551 · chốt của BA 16/11',
       },

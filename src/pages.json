@@ -181,7 +181,7 @@
   "perm": "",
   "flag": "",
   "site": "Jobseeker site",
-  "what": "Carousel **Việc làm tương tự** dưới trang chi tiết tin: so **tin với tin**, không đọc hồ sơ người xem, cache 1 giờ — ai cũng thấy cùng một danh sách.",
+  "what": "Carousel **Các công việc tương tự** dưới trang chi tiết tin: so **tin với tin**, không đọc hồ sơ người xem, cache 1 giờ — ai cũng thấy cùng một danh sách.",
   "sub": [
    "/jobs/:slug"
   ]
