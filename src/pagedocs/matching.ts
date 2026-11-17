@@ -28,7 +28,7 @@ export const MATCHING_PAGE_DOCS: Record<string, PageDoc> = {
   /* ────────────────────────────────────────────────────────────────────────── */
   'recommended-jobs': {
     logic: [
-      '**Gợi ý việc làm cho một ứng viên cụ thể.** Hệ thống đọc hồ sơ của ứng viên, chấm từng tin tuyển dụng trên **thang 100 điểm** gồm **7 tín hiệu**, rồi chọn thẻ để hiện. Cùng một cách tính đó chạy ở **sáu** chỗ khác nhau trên site ứng viên.',
+      '**Gợi ý việc làm cho một ứng viên cụ thể.** Hệ thống đọc hồ sơ của ứng viên, chấm từng tin tuyển dụng trên **thang 100 điểm** gồm **7 tín hiệu**, rồi chọn thẻ để hiện. Cùng một cách tính đó chạy ở **năm** chỗ khác nhau trên site ứng viên.',
       '**Lọc và chấm điểm là hai việc khác nhau — đừng nhầm.** Điều kiện ứng viên **tự khai** là *cổng lọc*: tin không qua thì **không bao giờ** xuất hiện, dù điểm cao đến đâu. Mọi thứ còn lại chỉ **đổi thứ tự**, không loại tin nào.',
       '**Tính mới mỗi lần mở trang.** Không có danh sách gợi ý nào được lưu sẵn cho từng người. Đổi Work preference là lần tải trang sau đã khác.',
       '**Ứng viên không bao giờ nhìn thấy điểm.** Không có % trên thẻ, không có điểm sàn, và mỗi màn hình chỉ có **một tiêu đề cố định** — hệ thống không đổi tiêu đề theo chất lượng kết quả.',
@@ -71,14 +71,14 @@ export const MATCHING_PAGE_DOCS: Record<string, PageDoc> = {
         kind: 'list',
         heading: 'Vì sao phải có một “rổ” rồi mới rải ra, thay vì in top 6 ở mọi nơi',
         items: [
-          'In đúng top 6 ở cả sáu màn hình thì **năm màn hình kia thành thừa** — ứng viên gặp lại đúng sáu tấm thẻ vừa lướt qua.',
+          'In đúng top 6 ở cả năm màn hình thì **bốn màn hình kia thành thừa** — ứng viên gặp lại đúng sáu tấm thẻ vừa lướt qua.',
           'Rải từ một rổ chung thì mỗi màn hình đưa ra thứ họ **chưa lướt qua**, mà vẫn nằm trong 30 tin tốt nhất của chính họ — nên không có tin kém nào lọt ra.',
           'Riêng **popup sau khi nộp đơn** thì **không xáo**: đó là màn hình duy nhất mà thứ tự quyết định ứng viên thật sự nộp vào tin nào, nên thứ hạng ở đó phải trung thực.',
         ],
       },
 
       /* ───────────────────────────────────────────────────────────────── */
-      { kind: 'h', text: '§2 · Sáu nơi dùng cùng một cách tính' },
+      { kind: 'h', text: '§2 · Năm nơi dùng cùng một cách tính — và một nơi không dùng' },
       {
         kind: 'table',
         note: 'Cùng một phép tính, khác tham số `surface` — nên thứ tự hiển thị và số thẻ khác nhau, còn cách chấm điểm thì giống hệt.',
