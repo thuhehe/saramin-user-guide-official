@@ -84,7 +84,7 @@ export const MATCHING_PAGE_DOCS: Record<string, PageDoc> = {
         note: 'Cùng một phép tính, khác tham số `surface` — nên thứ tự hiển thị và số thẻ khác nhau, còn cách chấm điểm thì giống hệt.',
         cols: ['Nơi hiển thị', 'Ai thấy', 'Số thẻ', 'Thứ tự'],
         rows: [
-          ['**Onboarding** — khối “những việc phù hợp nhất”', 'Ứng viên vừa xong wizard', 'tối đa 30 thẻ, giao diện chia 6/trang (tối đa 5 trang)', '**Đúng thứ tự điểm**, cap 3 tin/công ty, cách nhau ≥ 6 vị trí'],
+          ['**Onboarding** — khối “những việc phù hợp nhất”\n\n*Khối thứ hai ngay dưới — “Việc làm cho {vị trí}” — **không** dùng bộ máy này; nó là một lượt tìm kiếm thuần, có trang riêng.*', 'Ứng viên vừa xong wizard', 'tối đa 30 thẻ, giao diện chia 6/trang (tối đa 5 trang)', '**Đúng thứ tự điểm**, cap 3 tin/công ty, cách nhau ≥ 6 vị trí'],
           ['**Trang cá nhân** — *Việc làm phù hợp với bạn*', 'Đã đăng nhập', '6', 'Xáo trộn **trong từng bậc vị trí** (§5)'],
           ['**Chi tiết tin** — *Gợi ý việc làm cho bạn*', 'Đã đăng nhập', '6', 'Xáo trộn trong từng bậc vị trí; **neo** theo ngành nghề của tin đang xem'],
           ['**Popup sau khi nộp đơn** (Batch apply)', 'Người vừa nộp đơn', '30', '**Đúng thứ tự điểm**, không xáo, không neo ngành nghề'],
