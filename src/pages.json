@@ -215,6 +215,19 @@
   ]
  },
  {
+  "group": "Matching",
+  "key": "onboarding-role-strip",
+  "label": "Dải “Việc làm cho {vị trí}”",
+  "path": "/welcome",
+  "perm": "",
+  "flag": "",
+  "site": "Jobseeker site",
+  "what": "Dải **thứ hai** ở màn kết quả onboarding: một lượt **tìm kiếm thuần** theo đúng vị trí đã chọn — không chấm điểm, không xáo trộn; dưới 3 tin thì **ẩn cả khối**.",
+  "sub": [
+   "/welcome"
+  ]
+ },
+ {
   "group": "Users",
   "key": "jobseeker-users",
   "label": "Jobseeker users",

@@ -993,6 +993,122 @@ export const MATCHING_PAGE_DOCS: Record<string, PageDoc> = {
       },
     ],
   },
+
+  /* ─────────────────────────────────────────────────────────────────
+     DẢI "VIỆC LÀM CHO {VỊ TRÍ}" — khối thứ hai của màn kết quả onboarding.
+     Không phải một bộ máy gợi ý: một lượt tìm kiếm thuần. Tách khỏi
+     SRM-1338 ngày 17/11 thành SRM-1596, vì nằm chung thì luật của nó bị
+     đọc nhầm thành luật của Recommended jobs.
+     ───────────────────────────────────────────────────────────────── */
+  'onboarding-role-strip': {
+    logic: [
+      '**Đây KHÔNG phải bộ máy gợi ý.** Một lượt **tìm kiếm thuần** trên `/jobs/search` — không đọc CV, không đọc hồ sơ, không trọng số, không xáo trộn, không ghi log hiển thị. Khối ngay phía trên nó (*“những việc phù hợp nhất”*) mới là bộ máy chấm điểm.',
+      '**Chỉ lấy tin đúng vị trí in trên tiêu đề.** Tiêu đề viết *“Việc làm cho Hành chính marketing”* thì mọi thẻ bên dưới phải là **Hành chính marketing**. Không có nhánh “phần còn lại của ngành nghề”.',
+      '**Dưới 3 tin thì ẩn cả khối** — không tiêu đề, không đường kẻ, không lưới, không nút chuyển trang.',
+      '**Thứ tự: mới nhất trước.** Không điểm, không xáo trộn, không ưu tiên gói tin.',
+      '**Trừ trước, đếm sau.** Bỏ mọi id khối 1 đang hiện (cả ≤30 tin, không chỉ trang đang xem) **rồi mới** đếm xem có đủ 3 không và chia trang.',
+    ],
+    how: [
+      'Chạy wizard onboarding trên site ứng viên (`/welcome`, bản tiếng Việt là `/chao-mung`) tới màn kết quả, rồi cuộn xuống **dưới** lưới “những việc phù hợp nhất”.',
+      'Muốn kiểm: đọc tên vị trí in trên tiêu đề, mở trang tìm việc lọc đúng vị trí đó, so hai danh sách. Mọi thẻ trong dải phải có mặt trong kết quả lọc.',
+      'Không thấy khối: kiểm xem bước 1 của wizard có chọn vị trí nào không, và vị trí đó còn lại mấy tin sau khi trừ các tin khối 1 đang hiện.',
+    ],
+    watch: [
+      '**Thẻ không đúng vị trí in trên tiêu đề là lỗi.** Ảnh production 17/11: tiêu đề *“Việc làm cho Hành chính marketing”*, bên dưới một thẻ *“Platform Operations Specialist — ANTSOMI”*. Thẻ mâu thuẫn với dòng chữ ngay trên nó.',
+      '**Một hoặc hai thẻ dưới tiêu đề cũng là lỗi.** Lưới 3 cột với 1 thẻ trông như trang hỏng — đúng ngưỡng thì phải ẩn cả khối.',
+      '**Con số ở bước 3 / bước 4 của wizard đếm theo NGÀNH NGHỀ, dải này lọc theo VỊ TRÍ.** Hai con số khác nhau là **đúng thiết kế**, không phải lỗi — xem §5.',
+      '**Ẩn khối này không ảnh hưởng gì khác:** khối 1 vẫn render, nút “Hoàn tất CV và ứng tuyển” vẫn ở nguyên chỗ. Ẩn thì ẩn cả khoảng trắng phía trên, không để lại lỗ hổng.',
+    ],
+    blocks: [
+      {
+        kind: 'warn',
+        text: '**Luật dưới đây Thu chốt ngày 17/11/2026 và CHƯA có trong code** (SRM-1596, tách ra từ SRM-1338 T5). Bản đang chạy làm khác ở hai chỗ: nó đọc **hai** lượt rồi ghép (tin đúng vị trí, xong tin của các vị trí anh em cùng ngành nghề), và nó vẽ khối ngay khi còn **≥ 1** tin.',
+      },
+
+      /* ── §1 ─────────────────────────────────────────────────────────────── */
+      { kind: 'h', text: '§1 · Màn kết quả có hai khối, hai nguồn khác hẳn nhau' },
+      {
+        kind: 'table',
+        cols: ['', 'Khối 1 — “những việc phù hợp nhất”', 'Khối 2 — “Việc làm cho {vị trí}”'],
+        rows: [
+          ['Nguồn', 'Bộ máy **Recommended jobs** (chấm điểm)', '**Tìm kiếm thuần** trên `/jobs/search`'],
+          ['Đọc gì của ứng viên', 'CV · hồ sơ · hành vi · trọng số', '**Đúng một thứ**: vị trí đã chọn ở bước 1'],
+          ['Thứ tự', 'Điểm cao nhất trước', '**Mới nhất trước**'],
+          ['Số thẻ', 'tối đa 30 (6/trang)', '3 thẻ một hàng, phân trang'],
+          ['Ghi log hiển thị', 'Có', '**Không**'],
+          ['Ticket', 'SRM-1338', '**SRM-1596**'],
+        ],
+        note: 'Hai khối này nằm sát nhau trên cùng một màn hình nên rất dễ bị đọc là một. Chúng **không** chia sẻ luật nào cả — ngoài việc khối 2 phải bỏ những tin khối 1 đang hiện.',
+      },
+
+      /* ── §2 ─────────────────────────────────────────────────────────────── */
+      { kind: 'h', text: '§2 · Chỉ tin đúng vị trí — không bao giờ nới lên ngành nghề' },
+      {
+        kind: 'p',
+        text: 'Danh sách chỉ chứa tin có vị trí **đúng bằng** cái tên in trên tiêu đề. Hết. Bản đang chạy có thêm một lượt đọc thứ hai lấy tin của các vị trí **anh em cùng ngành nghề** rồi ghép vào — lượt đó bị bỏ.',
+      },
+      {
+        kind: 'list',
+        heading: 'Bốn lý do',
+        items: [
+          '**Tiêu đề in tên vị trí**, nên mọi thẻ dưới nó phải là vị trí đó. Nới ra là tự mâu thuẫn với chính dòng chữ phía trên — đúng cái ảnh production cho thấy.',
+          '**Bảng phân loại chỉ có hai tầng:** ngành nghề (tầng 1) → vị trí (tầng 2). Một ngành nghề chứa **khoảng 50 vị trí** — *Kinh doanh & Thương mại* có 52, *Tài chính & Bảo hiểm* có 58. “Phần còn lại của ngành nghề” cạnh *Bán dịch vụ tài chính* là *Bán bất động sản*, *Vận hành Livestream*… Đó không phải một bước nới nhẹ, đó là cả một ngành.',
+          '**Nấc giữa (nhóm vị trí) đáng ra để làm việc nới nhẹ này, nhưng chưa có dữ liệu** — SRM-1315. Khi nào có mới bàn lại.',
+          '**Ứng viên không mất gì.** Khối 1 ngay phía trên đã là một danh sách rộng hơn nhiều, có chấm điểm và có cơ chế nới riêng.',
+        ],
+      },
+
+      /* ── §3 ─────────────────────────────────────────────────────────────── */
+      { kind: 'h', text: '§3 · Dưới 3 tin thì ẩn cả khối' },
+      {
+        kind: 'p',
+        text: 'Đếm **sau khi** đã trừ id của khối 1. Còn 0, 1 hoặc 2 tin thì không vẽ gì cả: không tiêu đề, không đường kẻ, không lưới, không nút chuyển trang.',
+      },
+      {
+        kind: 'table',
+        heading: 'Khi nào hiện, khi nào ẩn',
+        cols: ['Tình huống', 'Kết quả'],
+        rows: [
+          ['Vị trí có 12 tin mở, khối 1 không trùng tin nào', 'Hiện 12 tin, 4 trang × 3 thẻ — **tất cả đều đúng vị trí đó**'],
+          ['Vị trí có 8 tin, khối 1 đang hiện 6 trong số đó', 'Còn 2 → **ẩn cả khối**'],
+          ['Vị trí có đúng 3 tin', 'Hiện đúng 3 thẻ, **không** có nút chuyển trang'],
+          ['Vị trí có 2 tin / 0 tin', '**Ẩn cả khối**'],
+          ['Bước 1 không chọn vị trí nào', '**Không có khối 2**; khối 1 vẫn render bình thường'],
+          ['`/jobs/search` lỗi', 'Ẩn khối 2, màn kết quả vẫn lên bình thường'],
+        ],
+        note: 'Đây **không phải luật mới**: Blue zone trên trang tìm việc đã xử lý đúng vấn đề này theo đúng cách — dưới số tối thiểu thì ẩn cả dải, không hiện một dải lèo tèo.',
+      },
+
+      /* ── §4 ─────────────────────────────────────────────────────────────── */
+      { kind: 'h', text: '§4 · Vị trí nào được in lên tiêu đề' },
+      {
+        kind: 'table',
+        cols: ['', 'Bản đang chạy', 'Luật chốt 17/11'],
+        rows: [
+          ['Trong ≤3 vị trí chọn ở bước 1, lấy vị trí có nhiều tin đang mở nhất', 'đếm theo **cả ngành nghề**', 'đếm theo **chính vị trí đó**'],
+        ],
+        note: 'Cách chọn không đổi, chỉ đổi cái đem ra đếm. Hoà → lấy vị trí ứng viên chọn trước.',
+      },
+      {
+        kind: 'list',
+        items: [
+          '**Không chọn lại sang vị trí khác** khi vị trí đã chọn rơi xuống dưới 3 tin sau khi trừ id khối 1. Tiêu đề chỉ in được một tên, và những tin đó ứng viên vẫn đang nhìn thấy ngay phía trên ở khối 1 — ẩn khối 2 lúc đó là **đúng**, không phải thiếu sót.',
+        ],
+      },
+
+      /* ── §5 ─────────────────────────────────────────────────────────────── */
+      { kind: 'h', text: '§5 · Những thứ KHÔNG đụng tới' },
+      {
+        kind: 'list',
+        items: [
+          '**Con số ở bước 3 / bước 4 của wizard** (trang *Onboarding job count*) vẫn đếm ở **mức ngành nghề** — cố ý. Hai câu hỏi khác nhau: con số trả lời *“có bao nhiêu việc cho hướng đi này”*, dải này trả lời *“mở xem vài tin đúng vị trí này”*. **Đừng sửa cho khớp.**',
+          '**Khối 1** (Recommended jobs) — không đổi gì.',
+          'Khối 2 **không ghi log hiển thị**, không gọi API gợi ý.',
+          'API phía server không đổi: `/jobs/search` vốn đã nhận mã vị trí và sắp xếp theo ngày đăng.',
+        ],
+      },
+    ],
+  },
 }
 
 /* ────────────────────────────────────────────────────────────────────────────
