@@ -40,6 +40,15 @@ export const JOB_DISPLAY_PAGE_DOCS: Record<string, PageDoc> = {
         kind: 'p',
         text: 'Dải này tên là **Top search**. Nó nằm ngay trên danh sách kết quả tìm kiếm, tiêu đề *“Việc {từ khoá} dành cho bạn”*, 8 thẻ job, trên máy tính chia **2 slide 4 thẻ** và tự chạy mỗi 3 giây.\n\nTrang này đi theo đúng thứ tự hệ thống chạy: **ai đủ điều kiện → xếp theo gì → giữ mấy job → trang tìm kiếm vẽ khi nào**. Đọc hết §1–§4 là hiểu toàn bộ bộ máy; §6 là phần dành cho Sales.',
       },
+      {
+        kind: 'shot',
+        src: '/shots/job-display/top-search-on-page.jpg',
+        where: 'Jobseeker site',
+        caption:
+          '**Ô Top search là khung đỏ** — trang kết quả tìm kiếm, từ khoá *ngân hàng*. Ô nằm **trên** khối *Kết quả tìm kiếm*, và chỉ hiện **4 thẻ một lúc**: 8 job chia 2 slide.',
+        note:
+          'Khối *Kết quả tìm kiếm* ngay dưới là danh sách kết quả bình thường — **không phải** ô này, và chạy theo luật khác hẳn.',
+      },
 
       /* ───────────────────────────────────────────────────────────────── */
       { kind: 'h', text: '§1 · Tóm lại: bốn bước' },
@@ -210,6 +219,13 @@ export const JOB_DISPLAY_PAGE_DOCS: Record<string, PageDoc> = {
           ['**Nhãn trên thẻ** (`CARD_TAG`)', 'Dòng chữ nhỏ nổi trên thẻ job', 'Không bắt buộc. Không điền thì thẻ không có nhãn'],
           ['**Ảnh banner 596×258** (`PHOTO_LANDSCAPE`)', 'Ảnh ngang in trên thẻ job', '**Bắt buộc** — xem cảnh báo ngay dưới'],
         ],
+      },
+      {
+        kind: 'shot',
+        src: '/shots/job-display/top-search-cards.jpg',
+        where: 'Jobseeker site',
+        caption:
+          'Hai thẻ đầu của dải, phóng to. **Nhãn trên thẻ** (*Urgent Hiring*, *Hot job*) và **ảnh ngang** là đúng hai thứ ô Top search tặng kèm — thẻ trong danh sách kết quả bên dưới không có cả hai.',
       },
       {
         kind: 'warn',
