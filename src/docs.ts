@@ -76,6 +76,9 @@ export interface ModuleDoc {
   /** the two or three facts that, unknown, produce a wrong outcome — read first */
   headline: string[]
   blocks: DocBlock[]
+  /** true when the module's own blocks already list its pages, so the generated
+   *  "N trang trong nhóm" list at the foot would say the same thing twice. */
+  hidePageList?: boolean
 }
 
 /* ── Module-level logic ─────────────────────────────────────────────────────── */

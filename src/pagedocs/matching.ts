@@ -627,7 +627,7 @@ export const MATCHING_PAGE_DOCS: Record<string, PageDoc> = {
           ['**Ngành** (≤3)', 'Trùng ngành, **hoặc** job không ghi ngành — job công ty tự đăng không có ô ngành nên luôn qua', 'Job **có ghi** ngành và không nằm trong danh sách đã chọn'],
           ['**Loại hợp đồng**', 'Nằm trong tập đã chọn, **hoặc** job không khai', 'Job **có ghi** và không trùng'],
           ['**Nơi làm việc** (≤3)', 'Job **remote** (qua từ mọi nơi), **hoặc** tỉnh của job / của công ty nằm trong tập, **hoặc** job không ghi địa điểm', 'Job **có ghi** tỉnh và không tỉnh nào được chọn'],
-          ['**Số năm kinh nghiệm** (chỉ N₄)', 'Quy số năm ra cấp bậc — xem đoạn dưới bảng', 'Ứng viên thấp hơn mức job yêu cầu'],
+          ['**Số năm kinh nghiệm** (chỉ N₄)', 'Dải năm của job bao được số năm ứng viên; job bỏ trống dải năm thì xét cấp bậc — xem đoạn dưới bảng', 'Ứng viên thấp hơn mức job yêu cầu'],
           ['Học vấn', 'Luôn được tính', '**Không** là điều kiện đếm'],
         ],
       },
@@ -643,7 +643,23 @@ export const MATCHING_PAGE_DOCS: Record<string, PageDoc> = {
       /* ───────────────────────────────────────────────────────────────── */
       {
         kind: 'p',
-        text: '**Kinh nghiệm đọc hai nguồn.** Job khai **dải năm** thì so thẳng với số năm ứng viên chọn. Job chỉ khai **cấp bậc** — phần lớn job tự đăng — thì quy số năm ra cấp bậc (bảng ở trang *Logic chung*) rồi mới so, và giữ job có bậc không cao hơn ứng viên quá **1 bậc**.',
+        text: '**Kinh nghiệm đọc hai nguồn, theo đúng thứ tự này.** Job khai **dải năm** thì so thẳng số năm với số năm — giữ job có mức tối thiểu không cao hơn số năm ứng viên chọn. **Chỉ khi job bỏ trống dải năm** mới đọc tới **cấp bậc**: quy số năm ứng viên ra bậc theo bảng dưới, rồi giữ job có bậc không cao hơn ứng viên quá **1 bậc**. Job không khai cả hai thì **luôn được tính**.',
+      },
+      {
+        kind: 'table',
+        heading: 'Quy số năm ra cấp bậc — chỉ dùng khi job bỏ trống dải năm',
+        note: 'Bảng này dùng chung cho chỗ đếm onboarding và cho tiêu chí kinh nghiệm khi chấm điểm, để hai chỗ không bất đồng về ai là người thiếu kinh nghiệm.',
+        cols: ['Số năm kinh nghiệm', 'Cấp bậc'],
+        rows: [
+          ['Dưới 1 năm (kể cả fresher)', '2'],
+          ['1 – 2 năm', '3'],
+          ['3 – 4 năm', '4'],
+          ['5 – 7 năm', '5'],
+          ['8 – 11 năm', '6'],
+          ['12 – 14 năm', '7'],
+          ['Từ 15 năm', '8'],
+          ['Không khai', 'Không có bậc → không so được tiêu chí kinh nghiệm'],
+        ],
       },
 
       { kind: 'h', text: '§3 · Con số in ra như thế nào' },
@@ -787,26 +803,35 @@ export const MATCHING_PAGE_DOCS: Record<string, PageDoc> = {
 
 export const MATCHING_MODULE_DOCS: Record<string, ModuleDoc> = {
   Matching: {
-    title: 'Matching & gợi ý — năm chỗ, năm cách tính',
+    hidePageList: true,
+    title: 'Matching & gợi ý — sáu chỗ, sáu cách tính',
     lead:
-      'Saramin gợi ý việc làm ở **năm chỗ**, và **không chỗ nào tính giống chỗ nào**. Cùng một ứng viên, cùng một lúc, năm chỗ đó có thể ra năm danh sách khác nhau — **đúng thiết kế**, không phải lỗi.\n\nNên câu hỏi “sao chỗ này hiện khác chỗ kia” hầu như luôn là đang so nhầm hai chỗ với nhau. Trang này để tra đúng một việc: **chỗ nào là chỗ nào**, và chỗ đó **nhìn vào đâu để tìm ra gì**. Bốn trong năm chỗ có trang riêng — danh sách ở cuối trang; chỗ thứ năm, khối gợi ý trong email sau khi nộp đơn, chưa có trang riêng.',
+      'Saramin tự chọn job để hiện ở **sáu chỗ**, và **không chỗ nào tính giống chỗ nào**. Cùng một ứng viên, cùng một lúc, sáu chỗ đó có thể ra sáu danh sách khác nhau — **đúng thiết kế**, không phải lỗi.\n\nNên câu hỏi “sao chỗ này hiện khác chỗ kia” hầu như luôn là đang so nhầm hai chỗ với nhau. Bảng dưới đây là **toàn bộ danh sách**: mỗi chỗ nhìn vào đâu, tìm ra gì, và trang nào nói kỹ về nó.',
     headline: [],
     blocks: [
-      { kind: 'h', text: 'Năm chỗ gợi ý việc làm' },
+      { kind: 'h', text: 'Sáu chỗ hệ thống tự chọn job để hiện' },
       {
         kind: 'table',
+        note: 'Mỗi chỗ có một trang riêng đi sâu vào cách tính — tên trang ghi ngay dưới tên khối.',
         cols: ['Chỗ gợi ý', 'Người dùng thấy ở đâu', 'Nhìn vào đâu → tìm ra gì', 'Đọc hồ sơ?'],
         rows: [
-          ['**Gợi ý việc làm cho bạn**', 'Trang cá nhân · trang chi tiết job · màn kết quả onboarding · popup sau khi nộp đơn · email hằng tuần', 'Nhìn **hồ sơ của ứng viên** → tìm ra **job** hợp với họ', 'Có'],
-          ['**Các công việc tương tự**', 'Carousel dưới trang chi tiết job', 'Nhìn **job đang mở** → tìm ra **job khác** giống nó', 'Không'],
-          ['**Recommended talent**', 'Company Home của nhà tuyển dụng · % trên bảng ứng viên', 'Nhìn **job đang tuyển** → tìm ra **ứng viên** hợp với job', 'Có — chỉ phần ứng viên tự khai'],
-          ['**Số việc ở onboarding**', 'Câu dẫn ở bước 3 và bước 4 của wizard', 'Không tìm ai cả, chỉ **đếm**: có bao nhiêu job lọt qua bộ lọc', 'Không'],
-          ['**Việc gợi ý trong email sau khi nộp đơn**', 'Email *Bạn đã ứng tuyển thành công*', 'Nhìn **job vừa nộp đơn** → tìm ra **job khác** giống nó', 'Không'],
+          ['**Gợi ý việc làm cho bạn**\n`/trang/recommended-jobs`', 'Trang cá nhân · trang chi tiết job · màn kết quả onboarding · popup sau khi nộp đơn · email hằng tuần', 'Nhìn **hồ sơ của ứng viên** → tìm ra **job** hợp với họ', 'Có'],
+          ['**Các công việc tương tự**\n`/trang/similar-jobs`', 'Carousel dưới trang chi tiết job', 'Nhìn **job đang mở** → tìm ra **job khác** giống nó', 'Không'],
+          ['**Recommended talent**\n`/trang/recommended-candidates`', 'Company Home của nhà tuyển dụng · % trên bảng ứng viên', 'Nhìn **job đang tuyển** → tìm ra **ứng viên** hợp với job', 'Có — chỉ phần ứng viên tự khai'],
+          ['**Số việc ở onboarding**\n`/trang/onboarding-job-count`', 'Câu dẫn ở bước 3 và bước 4 của wizard', 'Không tìm ai cả, chỉ **đếm**: có bao nhiêu job lọt qua bộ lọc', 'Không'],
+          ['**Dải “Việc làm cho {vị trí}”**\n`/trang/onboarding-role-strip`', 'Màn kết quả onboarding, dưới lưới *những việc phù hợp nhất*', 'Nhìn **vị trí ứng viên vừa chọn** → tìm ra **job** đúng vị trí đó, mới nhất trước', 'Không'],
+          ['**Việc gợi ý trong email sau khi nộp đơn**\n*chưa có trang riêng*', 'Email *Bạn đã ứng tuyển thành công*', 'Nhìn **job vừa nộp đơn** → tìm ra **job khác** giống nó', 'Không'],
         ],
       },
       {
-        kind: 'p',
-        text: '**Trang chủ và trang tìm việc không có khối gợi ý cá nhân nào.**',
+        kind: 'list',
+        heading: 'Ranh giới giữa các chỗ',
+        items: [
+          '**Hai khối trên trang chi tiết job không bao giờ trùng job.** Carousel *Các công việc tương tự* lấy trước; khối *Gợi ý việc làm cho bạn* bỏ đi những job carousel đã hiện. Khách **chưa đăng nhập** thấy phần còn lại của chính danh sách carousel, dưới tiêu đề *Có thể bạn quan tâm*.',
+          '***Các công việc tương tự* được cache 1 giờ** (chậm nhất ~75 phút mới đổi), nên mọi người mở cùng một job đều thấy cùng một danh sách.',
+          '***Recommended talent* dùng cùng bảng điểm với *Gợi ý việc làm cho bạn***, nhưng **chỉ đọc dữ liệu ứng viên tự khai** — hành vi xem job, lưu job, nộp đơn **không bao giờ** đi sang phía nhà tuyển dụng.',
+          '**Trang chủ và trang tìm việc không có khối gợi ý cá nhân nào.**',
+        ],
       },
 
       {
@@ -815,39 +840,6 @@ export const MATCHING_MODULE_DOCS: Record<string, ModuleDoc> = {
         where: 'Jobseeker site',
         caption: 'Hai khối nằm trên cùng một trang chi tiết job, và đây là chỗ hay bị nhầm nhất. **Các công việc tương tự** ở trên so **job với job** — ai mở cũng thấy cùng danh sách. **Có thể bạn quan tâm** ở dưới là phần còn lại của chính danh sách đó (khách chưa đăng nhập); người **đã đăng nhập** thấy *Gợi ý việc làm cho bạn* ở đúng chỗ này, và khối đó mới là khối đọc hồ sơ.',
         note: 'Ảnh dev ngày 17/11. Thẻ thứ hai trong carousel là **cùng công ty, cùng tiêu đề, cùng tỉnh** với chính job đang xem — luật bỏ job trùng lẽ ra phải loại nó.',
-      },
-
-      { kind: 'h', text: 'Quy số năm kinh nghiệm ra cấp bậc' },
-      {
-        kind: 'p',
-        text: 'Form tạo job trong admin **bắt buộc** nhập số năm kinh nghiệm (hoặc tick *No experience required*) trước khi đăng — vậy sao vẫn cần quy ra cấp bậc? Vì hai chỗ dưới đây không đọc số năm của job.',
-      },
-      {
-        kind: 'table',
-        cols: ['Chỗ dùng bảng này', 'Khi nào', 'Để làm gì'],
-        rows: [
-          ['**Số việc ở onboarding**', '**Luôn luôn**', 'Chỗ này không xét số năm của job. Nó quy số năm ứng viên ra bậc, rồi chỉ giữ job có **cấp bậc cao hơn tối đa 1 bậc**.'],
-          ['**Chấm điểm kinh nghiệm** — *Gợi ý việc làm cho bạn*, *Recommended talent*, % trên bảng ứng viên', 'Chỉ khi job **không** khai số năm', 'So cấp bậc của job với bậc của ứng viên.'],
-        ],
-      },
-      {
-        kind: 'p',
-        text: 'Job không khai số năm vẫn tồn tại vì **chỉ form admin mới bắt buộc**: trên trang nhà tuyển dụng tự đăng job, cả khối kinh nghiệm là tuỳ chọn, và API cũng không chặn. Job vừa không có số năm vừa không có cấp bậc thì tiêu chí kinh nghiệm **tính 0 điểm**.',
-      },
-      {
-        kind: 'table',
-        note: '**Lệch 1 bậc** là “với tới được”; **lệch từ 2 bậc** là không hợp.',
-        cols: ['Số năm kinh nghiệm', 'Cấp bậc'],
-        rows: [
-          ['Dưới 1 năm (kể cả fresher)', '2'],
-          ['1 – 2 năm', '3'],
-          ['3 – 4 năm', '4'],
-          ['5 – 7 năm', '5'],
-          ['8 – 11 năm', '6'],
-          ['12 – 14 năm', '7'],
-          ['Từ 15 năm', '8'],
-          ['Không khai', 'Không có bậc → không so được tiêu chí kinh nghiệm'],
-        ],
       },
 
       {

@@ -493,6 +493,7 @@ function ModuleView({ group, onPick }: { group: string; onPick: (key: string) =>
         {mod.blocks.map((b, i) => <DocBlockView key={i} b={b} />)}
       </div>
 
+      {!mod.hidePageList && (
       <section className="mt-7">
         <h2 className="border-b border-ink pb-1.5 text-[15px] font-bold tracking-tight">{pages.length} trang trong nhóm</h2>
         <div className="mt-1">
@@ -508,6 +509,7 @@ function ModuleView({ group, onPick }: { group: string; onPick: (key: string) =>
           ))}
         </div>
       </section>
+      )}
     </article>
   )
 }

@@ -204,13 +204,13 @@ export const RULE_CATS: RuleCat[] = [
   },
   {
     title: 'Matching & gợi ý',
-    note: 'Từ 05/11 nhóm này đã có logic chạy thật, và đã được viết ra: xem nhóm **Matching** trong thanh bên — bốn trang, một trang Logic chung, viết theo code đang chạy ngày 16/11.',
+    note: 'Từ 05/11 nhóm này đã có logic chạy thật, và đã được viết ra: xem nhóm **Matching** trong thanh bên — năm trang, một trang Logic chung, viết theo code đang chạy ngày 16–17/11.',
     rules: [
       {
-        title: 'Năm chỗ gợi ý riêng biệt, không phải một thuật toán',
+        title: 'Sáu chỗ gợi ý riêng biệt, không phải một thuật toán',
         summary:
-          'Nhầm hai bộ với nhau là nguyên nhân của gần như mọi câu hỏi “sao chỗ này khác chỗ kia”. **Recommended jobs** so người ↔ tin (bảng 42/20/14/12/5/4/3). **Similar jobs** so tin ↔ tin (bảng 45/15/15/10/8/4/3, không đọc hồ sơ, cache 1 giờ). **Recommended candidates** so tin ↔ người, chỉ dữ liệu tự khai. **Onboarding job count** chỉ là một phép đếm. **Khối gợi ý trong mail sau khi nộp đơn** chạy trên Elasticsearch với công thức riêng. Hai khối cạnh nhau trên trang chi tiết tin là hai cách tính khác nhau và không bao giờ trùng tin.',
-        kind: 'ab', group: 'Matching', heading: 'Rule — Năm chỗ gợi ý và ranh giới giữa chúng',
+          'Nhầm hai bộ với nhau là nguyên nhân của gần như mọi câu hỏi “sao chỗ này khác chỗ kia”. **Recommended jobs** so người ↔ tin (bảng 42/20/14/12/5/4/3). **Similar jobs** so tin ↔ tin (bảng 45/15/15/10/8/4/3, không đọc hồ sơ, cache 1 giờ). **Recommended candidates** so tin ↔ người, chỉ dữ liệu tự khai. **Onboarding job count** chỉ là một phép đếm. **Dải “Việc làm cho {vị trí}”** ở màn onboarding chỉ là một lượt tìm kiếm theo vị trí. **Khối gợi ý trong mail sau khi nộp đơn** chạy trên Elasticsearch với công thức riêng. Hai khối cạnh nhau trên trang chi tiết tin là hai cách tính khác nhau và không bao giờ trùng tin.',
+        kind: 'ab', group: 'Matching', heading: 'Sáu chỗ hệ thống tự chọn job để hiện',
         src: 'as-built 16/11 · SRM-1330 (1338 · 1331 · 1345 · 1347)',
       },
       {
