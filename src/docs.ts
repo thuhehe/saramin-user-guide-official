@@ -34,6 +34,9 @@ import { USERS_ORG_PAGE_DOCS, USERS_ORG_MODULE_DOCS } from './pagedocs/users-org
 import { RULE_DETAIL } from './pagedocs/rules-detail'
 
 export interface PageDoc {
+  /* One sentence saying what a reader came to this page for, shown above
+     everything else. Only for pages whose whole shape answers one question. */
+  story?: string
   logic?: string[]
   how?: string[]
   watch?: string[]

@@ -424,6 +424,13 @@ function PageView({ p, dev, onModule }: { p: Page; dev: boolean; onModule: () =>
 
       {p.what && <p className="mt-4 max-w-[76ch] text-[14.5px] leading-[1.7] text-ink/80">{md(p.what)}</p>}
 
+      {d?.story && (
+        <div className="mt-5 border-l-2 border-brand bg-brand-soft/45 py-3 pl-4 pr-4">
+          <p className="font-mono text-[9.5px] uppercase tracking-[0.14em] text-brand">User story</p>
+          <p className="mt-1.5 max-w-[78ch] text-[13.5px] leading-[1.65] text-ink/85">{md(d.story)}</p>
+        </div>
+      )}
+
       <SectionIndex
         titles={[
           ...(d?.logic?.length ? ['Logic phía sau'] : []),
