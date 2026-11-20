@@ -42,7 +42,7 @@ export const MATCHING_PAGE_DOCS: Record<string, PageDoc> = {
         note: 'Ba bước này chạy lại **mỗi lần ứng viên mở trang**. Không có danh sách gợi ý nào được lưu sẵn cho từng người — ứng viên sửa Work preference thì lần tải trang sau đã khác.',
         cols: ['Bước', 'Hệ thống làm gì', 'Ra cái gì', 'Đọc chi tiết ở'],
         rows: [
-          ['**1 · Lọc**', 'Bỏ job ứng viên **đã nộp đơn, đã bấm bỏ qua, đã hết hạn**. Giữ job khớp **ngành nghề** và **tỉnh** ứng viên đã khai. Rồi cắt tiếp, chỉ giữ **500 job liên quan nhất**.', 'Tối đa **500 job** đủ điều kiện để chấm', '§2'],
+          ['**1 · Lọc**', 'Bỏ job ứng viên **đã nộp đơn**, **đã tự ẩn**, **đã hết hạn**. Giữ job đúng **nghề** và **tỉnh** ứng viên đã khai. Rồi cắt xuống **500 job**: ưu tiên job đúng vị trí, sau đó job mới đăng.', 'Tối đa **500 job** đủ điều kiện để chấm', '§2'],
           ['**2 · Chấm điểm**', 'So **từng job** trong 500 job đó với **thông tin của ứng viên**, trên **7 tiêu chí**, tổng **100 điểm**.', 'Mỗi job một **điểm số**', '§3'],
           ['**3 · Sắp xếp**', 'Giữ **30 job điểm cao nhất** (tối đa 3 job một công ty), rồi mỗi màn hình **hoặc giữ nguyên thứ tự điểm, hoặc xáo trộn**.', 'Danh sách thẻ **ứng viên nhìn thấy**', '§4'],
         ],
@@ -65,40 +65,59 @@ export const MATCHING_PAGE_DOCS: Record<string, PageDoc> = {
       },
       {
         kind: 'table',
+        heading: 'Ba chữ gần giống nhau, ba trường khác hẳn nhau',
+        cols: ['Chữ dùng trong tài liệu', 'Trường trong master data', 'Ví dụ'],
+        rows: [
+          ['**Vị trí**', '`job_role` — *job role*', 'Senior Frontend Engineer'],
+          ['**Nghề**', '`job_category` — *job category*', 'Lập trình / Phần mềm'],
+          ['**Ngành**', '`industry` — *industry*', 'Công nghệ thông tin'],
+        ],
+        note: 'Cổng lọc dưới đây **chỉ lọc theo Nghề**. **Ngành chưa bao giờ được dùng để lọc** — job khác ngành vẫn vào danh sách bình thường, ngành chỉ là một tiêu chí **5 điểm** ở bước 2. Cả trang này dùng đúng ba chữ trên, không dùng lẫn.',
+      },
+      {
+        kind: 'table',
         cols: ['Điều kiện', 'Bật khi nào', 'Loại job nào'],
         rows: [
-          ['**Job còn sống**', 'Luôn luôn', 'Job đã đóng · hết hạn · tắt hiển thị · công ty không công khai; **job đã từng nộp đơn** (mọi trạng thái, kể cả đã rút); job ứng viên đã bấm **bỏ qua**'],
-          ['**Ngành nghề**', 'Khi ứng viên đã khai vị trí **hoặc** ngành nghề', 'Job ngoài tập ngành nghề (khai ∪ hành vi)'],
-          ['**Địa điểm**', 'Khi đã khai tỉnh **và không** tick *sẵn sàng chuyển chỗ ở*', 'Job ngoài các tỉnh đó — **trừ job remote**, job remote luôn qua cổng này'],
-          ['**Neo theo job đang xem**', 'Chỉ ở trang chi tiết job', 'Job khác ngành nghề với job đang xem — và **không bao giờ nới**'],
-          ['Ngành · hình thức · lương · kinh nghiệm · học vấn · kỹ năng', '**Không bao giờ lọc**', 'Chỉ ảnh hưởng điểm số'],
+          ['**Job còn sống**', 'Luôn luôn', 'Job đã đóng · hết hạn · **chưa tới giờ đăng** · tắt hiển thị · công ty không công khai; **job ứng viên đã từng nộp đơn** (mọi trạng thái, kể cả đã rút); **job ứng viên đã tự ẩn** — xem ghi chú ngay dưới bảng'],
+          ['**Nghề** *(job category)*', 'Chỉ khi ứng viên **tự khai** vị trí mong muốn hoặc nghề mong muốn', 'Job không gắn **nghề** nào nằm trong tập nghề của ứng viên. Tập đó là **khai ∪ suy từ hành vi** — cổng mở theo cả hai'],
+          ['**Tỉnh**', 'Chỉ khi ứng viên **tự khai** tỉnh **và không** tick *sẵn sàng chuyển chỗ ở*', 'Job ngoài các tỉnh đó — **trừ job remote**, job remote luôn qua cổng này'],
+          ['**Neo theo job đang xem**', 'Chỉ ở trang chi tiết job', 'Job không chung **nghề** nào với job đang xem — và **không bao giờ nới**'],
+          ['**Ngành** *(industry)* · hình thức · lương · kinh nghiệm · học vấn · kỹ năng', '**Không bao giờ lọc**', 'Không loại job nào. Chỉ ảnh hưởng **điểm số** ở bước 2'],
         ],
       },
       {
-        kind: 'list',
-        heading: 'Ba luật đi kèm',
-        items: [
-          '**Không khai gì thì không bật cổng nào** — tập job rộng nhất có thể. Hệ thống không bao giờ trả về danh sách rỗng chỉ vì hồ sơ trống.',
-          '**Cắt còn 500 job trước khi chấm — và luật chọn ra 500 job đó là một phép SẮP XẾP, không phải một phép chấm điểm thứ hai.** Sắp theo đúng hai khoá, theo thứ tự:\n\n**① Job có ít nhất một vị trí nằm trong tập vị trí của ứng viên** (tập đã khai ∪ tập suy từ hành vi) đứng trước — tất cả, không giới hạn số lượng.\n**② Trong mỗi nhóm, job đăng mới nhất đứng trước.**\n\nRồi lấy 500 dòng đầu. Ứng viên chưa khai vị trí nào và chưa có hành vi thì khoá ① không phân biệt được job nào với job nào, nên còn lại đúng “mới nhất trước”.\n\nVì sao cắt như vậy là an toàn: job không trúng vị trí nào thì nhiều nhất cũng chỉ ăn 17 trong 42 điểm của tiêu chí vị trí, nên gần như không bao giờ lọt nổi vào pool 30 — cắt chúng trước không làm mất job tốt nào. Hệ thống xin **501** dòng chỉ để biết có bị cắt hay không, và ghi cờ `pool_capped` vào log.',
-          '**Dưới 6 job thì nới hai bước:** bỏ điều kiện tỉnh, chạy lại; vẫn dưới 6 thì bỏ luôn điều kiện ngành nghề. **Tiêu đề khối không đổi** — hệ thống không thông báo là đã nới. Riêng trang chi tiết job thì không bao giờ nới.',
-        ],
+        kind: 'p',
+        text: '**“Job ứng viên đã tự ẩn” là nút ✕ trên thẻ gợi ý.** Nó chỉ có ở **một chỗ duy nhất**: khối *Việc làm phù hợp với bạn* trên trang cá nhân. Bấm ✕ là job đó **biến khỏi mọi màn gợi ý, vĩnh viễn** — nên luôn kèm một toast **Hoàn tác trong 8 giây** (ẩn nhiều thẻ liền nhau thì toast gộp lại thành *Hoàn tác tất cả*). Hết 8 giây là không còn đường lùi nào trên giao diện: API có `DELETE` để khôi phục, nhưng **không màn hình nào gọi nó**. Trang chi tiết job, onboarding, email và popup Batch apply **không có nút này** — nhưng job đã ẩn thì biến mất ở cả bốn chỗ đó.',
       },
       {
         kind: 'list',
         heading: '1a · Hai luật đi kèm cổng lọc',
         items: [
           '**Ứng viên không khai gì thì không cổng nào bật** — họ nhận tập job rộng nhất có thể. Hệ thống **không bao giờ** trả về danh sách rỗng chỉ vì hồ sơ còn trống.',
-          '**Dưới 6 job thì nới hai bước:** bỏ điều kiện tỉnh, chạy lại; vẫn dưới 6 thì bỏ luôn điều kiện ngành nghề. **Tiêu đề khối không đổi** — hệ thống không báo cho ứng viên biết là đã nới. Riêng trang chi tiết job thì **không bao giờ nới**.',
+          '**Dưới 6 job thì nới hai bước:** bỏ điều kiện tỉnh, chạy lại; vẫn dưới 6 thì bỏ luôn điều kiện nghề. **Tiêu đề khối không đổi** — hệ thống không báo cho ứng viên biết là đã nới. Riêng trang chi tiết job thì **không bao giờ nới**.',
         ],
       },
       {
         kind: 'list',
-        heading: '1b · Cắt còn 500 job — đây là một phép SẮP XẾP, không phải một phép chấm điểm thứ hai',
+        heading: '1b · Cắt còn 500 job — một phép SẮP XẾP, không phải một phép chấm điểm thứ hai',
         items: [
-          'Sắp theo đúng hai khoá, theo thứ tự:\n\n**① Job có ít nhất một vị trí nằm trong tập vị trí của ứng viên** (tập đã khai ∪ tập suy từ hành vi) đứng trước — tất cả, không giới hạn số lượng.\n**② Trong mỗi nhóm, job đăng mới nhất đứng trước.**\n\nRồi lấy **500 dòng đầu**.',
+          '**Không có phép tính “liên quan nhất” nào ở bước này.** Câu truy vấn lọc kết thúc bằng một `ORDER BY` hai khoá rồi `LIMIT` — không chấm điểm, không trọng số, không so job với hồ sơ. Việc so sánh thật sự chỉ bắt đầu ở bước 2.',
+          'Hai khoá đó, theo đúng thứ tự:\n\n**① Job có ít nhất một vị trí nằm trong tập vị trí của ứng viên** (tập đã khai ∪ tập suy từ hành vi) đứng trước.\n**② Trong mỗi nhóm, job đăng mới nhất đứng trước** — job chưa có ngày đăng xuống cuối, rồi so theo id cho khỏi hoà.\n\nRồi lấy **500 dòng đầu**.',
+          '**Khoá ① là có / không, không phải nhiều / ít.** Job trúng **ba** vị trí của ứng viên đứng ngang hàng với job trúng **một** — cả hai cùng vào nhóm trên, và trong nhóm đó thứ tự chỉ còn là ngày đăng. Hệ thống **không** đo job nào trúng nhiều hơn ở bước này.',
           'Ứng viên chưa khai vị trí nào và chưa có hành vi thì khoá ① không phân biệt được job nào với job nào, nên còn lại đúng **“mới nhất trước”**.',
           '**Vì sao cắt như vậy là an toàn:** job không trúng vị trí nào thì nhiều nhất cũng chỉ ăn **17 trong 42** điểm của tiêu chí vị trí, nên gần như không bao giờ lọt nổi vào pool 30 ở bước 3. Cắt chúng trước không làm mất job tốt nào.',
           'Hệ thống xin **501** dòng chỉ để biết có bị cắt hay không, rồi ghi cờ `pool_capped` vào log.',
+        ],
+      },
+
+      {
+        kind: 'list',
+        heading: '1c · Đã lọc theo nghề rồi, sao bước 2 vẫn chấm điểm nghề?',
+        items: [
+          '**Cổng lọc hỏi “có hay không”, điểm số hỏi “khớp tới đâu”.** Qua cổng chỉ nghĩa là job gắn ít nhất một nghề của ứng viên — bậc **thấp nhất** của tiêu chí. Bước 2 vẫn phải tách job **đúng vị trí** (42 điểm) khỏi job chỉ **cùng nghề, khác vị trí** (17 điểm). Hai job cùng qua cổng có thể lệch nhau **25 điểm**.',
+          '**Cổng lọc không phân biệt khai với suy ra, điểm số thì có.** Cổng nhận cả tập khai lẫn tập suy từ hành vi, như nhau. Bước 2 trả **100 %** cho thứ ứng viên tự khai và **80 %** cho thứ đoán từ hành vi — 42 so với 34.',
+          '**Và cổng nghề có thể không bật.** Ứng viên chưa khai vị trí lẫn nghề thì **không có cổng nghề nào cả** — mọi job còn sống đều chạy vào bước 2, và lúc đó điểm số là thứ **duy nhất** xếp chúng. Đây mới là lý do tiêu chí này phải tồn tại.',
+          '**Và tiêu chí 42 điểm không phải tiêu chí “nghề”.** Nó chấm **vị trí** trước; nghề chỉ là bậc đáy của nó. Còn **Ngành** (*industry*) là một tiêu chí **riêng, 5 điểm** — và ngành thì **chưa bao giờ bị lọc**, nên mọi job khác ngành đều vào tới bước 2 và được chấm bình thường.',
         ],
       },
 
@@ -113,19 +132,10 @@ export const MATCHING_PAGE_DOCS: Record<string, PageDoc> = {
         note: 'Giá trị **tự khai** ăn điểm đầy đủ. Giá trị **suy ra** chỉ ăn **80 %** của bậc tương ứng (làm tròn): 42→34 · 30→24 · 20→16 · 17→14 · 5→4.',
         cols: ['Nguồn', 'Lấy gì', 'Loại'],
         rows: [
-          ['**Vị trí mong muốn** (tối đa 3) trong Work preference', 'Vị trí, và ngành nghề của vị trí đó', 'Tự khai'],
-          ['**Ngành nghề · Địa điểm mong muốn · Ngành mong muốn**', 'Ngành nghề, tỉnh, ngành', 'Tự khai'],
-          ['**Hành vi 90 ngày gần nhất** — nộp đơn hoặc lưu job (**1 lần là đủ**), xem job (**3 job khác nhau**)', 'Vị trí · ngành nghề · tỉnh của những job đó, giữ **top 3** mỗi loại', 'Suy ra'],
-          ['**Tiêu đề CV** — chỉ khi ứng viên **không khai cả** vị trí lẫn ngành nghề', 'Vị trí có tên hoặc tên gọi khác nằm trọn trong tiêu đề; cụm dài nhất thắng', 'Suy ra — **không** bật cổng lọc'],
-        ],
-      },
-      {
-        kind: 'list',
-        heading: 'Ba điều dễ hiểu nhầm',
-        items: [
-          '**Hành vi không cộng điểm.** Nó làm hai việc: mở rộng tập so khớp, và phá hoà — hai job bằng điểm thì job ứng viên **chưa xem** đứng trước.',
-          '**Vị trí suy từ tiêu đề CV không bật cổng lọc.** Nó chỉ dùng để chấm điểm, nên một ứng viên chưa khai gì vẫn nhìn thấy tập job rộng nhất.',
-          '**Ngành chỉ lấy từ trường “Ngành mong muốn”** trong Work preference (chốt 16/11). Hệ thống **không** suy ngành từ công ty ghi trong CV.',
+          ['**Vị trí mong muốn** (tối đa 3) trong Work preference', 'Vị trí, và nghề của vị trí đó', 'Tự khai'],
+          ['**Nghề · Địa điểm mong muốn · Ngành mong muốn**', 'Nghề, tỉnh, ngành', 'Tự khai'],
+          ['**Hành vi 90 ngày gần nhất** — nộp đơn hoặc lưu job (**1 lần là đủ**), xem job (**3 job khác nhau**)', 'Vị trí · nghề · tỉnh của những job đó, giữ **top 3** mỗi loại', 'Suy ra'],
+          ['**Tiêu đề CV** — chỉ khi ứng viên **không khai cả** vị trí lẫn nghề', 'Vị trí có tên hoặc tên gọi khác nằm trọn trong tiêu đề; cụm dài nhất thắng', 'Suy ra — **không** bật cổng lọc'],
         ],
       },
       {
@@ -149,11 +159,11 @@ export const MATCHING_PAGE_DOCS: Record<string, PageDoc> = {
       {
         kind: 'table',
         note: 'Đọc **theo hàng ngang**: cột giữa là hệ thống lấy thông tin của ứng viên ở đâu, cột phải là job khớp thì ăn bao nhiêu điểm. Trọng số **phiên bản v4**, cố định trong code; admin **không chỉnh được** — tab chỉnh đã bỏ khỏi console ngày 05/11. Mỗi điểm số ghi log kèm số phiên bản.',
-        cols: ['Tín hiệu', 'Điểm', 'Lấy từ ứng viên', 'Job ăn bao nhiêu'],
+        cols: ['Tiêu chí', 'Điểm', 'Lấy từ ứng viên', 'Job ăn bao nhiêu'],
         rows: [
-          ['**Vị trí & ngành nghề**', '**42**',
-           '**Khai:** vị trí mong muốn (≤3) + ngành nghề mong muốn.\n**Hành vi:** vị trí / ngành nghề của job đã nộp, đã lưu, hoặc xem ≥ 3 job — dùng **cùng lúc** với phần khai.\n**Chỉ khi cả hai rỗng:** vị trí đọc từ tiêu đề CV.',
-           'Cùng **vị trí** → **42** khai / **34** suy ra\nCùng **nhóm vị trí**, khác vị trí → **30** / **24**\nCùng **ngành nghề**, khác nhóm → **17** / **14**\nKhác ngành nghề → **0**'],
+          ['**Vị trí & nghề**', '**42**',
+           '**Khai:** vị trí mong muốn (≤3) + nghề mong muốn.\n**Hành vi:** vị trí / nghề của job đã nộp, đã lưu, hoặc xem ≥ 3 job — dùng **cùng lúc** với phần khai.\n**Chỉ khi cả hai rỗng:** vị trí đọc từ tiêu đề CV.',
+           'Cùng **vị trí** → **42** khai / **34** suy ra\nCùng **nhóm vị trí**, khác vị trí → **30** / **24**\nCùng **nghề**, khác nhóm → **17** / **14**\nKhác nghề → **0**'],
           ['**Địa điểm & hình thức**', '**20**',
            '**Khai:** tỉnh mong muốn + hình thức làm việc.\n**Hành vi:** tỉnh của job đã nộp, đã lưu, hoặc xem ≥ 3 job.\n**Không khai gì:** không so.',
            'Đúng tỉnh **và** đúng hình thức → **20** khai / **16** suy ra\nJob **remote** → **20**, từ mọi nơi\nĐúng tỉnh, khác hình thức → **14**\nTỉnh khác → **0**'],
@@ -176,27 +186,8 @@ export const MATCHING_PAGE_DOCS: Record<string, PageDoc> = {
         ],
       },
       {
-        kind: 'list',
-        heading: 'Thứ tự đọc của mỗi tín hiệu — ba bước',
-        items: [
-          '**① Gộp khai và hành vi lại với nhau** thành một tập. Hai nguồn này luôn dùng **cùng lúc**, không phải cái này thay cái kia.',
-          '**② Chỉ khi tập đó rỗng** mới đọc tới dòng dự phòng — tiêu đề CV cho vị trí, CV cho số năm kinh nghiệm.',
-          '**③ Vẫn không có gì** thì tín hiệu đó **0 điểm**. Lương, ngành, kỹ năng, học vấn **không có dòng dự phòng nào** — không ai đoán được những thứ đó.',
-        ],
-      },
-      {
-        kind: 'list',
-        heading: 'Bốn luật chấm điểm',
-        items: [
-          '**Thiếu dữ liệu là 0 điểm, không chia lại thang.** Job không ghi lương, hoặc ứng viên không khai lương, thì tín hiệu lương bằng 0 — 12 điểm đó **không** được chia sang tín hiệu khác. Đúng cho cả hai phía.',
-          '**Ứng viên có nhiều CV:** chấm **từng CV**, mỗi job giữ **điểm cao nhất** trong các CV.',
-          '**Tổng luôn trên thang 100 và chỉ làm tròn một lần ở tổng** — không làm tròn từng tín hiệu.',
-          '**Khác tiền tệ thì quy đổi theo tỷ giá admin nhập, dùng hai chiều.** Không có tỷ giá thì tín hiệu lương bằng 0. Đây là **thứ duy nhất** liên quan matching mà admin chỉnh được.',
-        ],
-      },
-      {
         kind: 'warn',
-        text: '**Kỹ năng ứng viên gõ tay mà không khớp master data được tính là “không có kỹ năng”** — mất điểm tín hiệu kỹ năng, và vẫn tính là một tín hiệu đã so được. Trường hợp này khá phổ biến với CV tải lên.',
+        text: '**Kỹ năng ứng viên gõ tay mà không khớp master data được tính là “không có kỹ năng”** — mất điểm tiêu chí kỹ năng, và vẫn tính là một tiêu chí đã so được. Trường hợp này khá phổ biến với CV tải lên.',
       },
       {
         kind: 'list',
@@ -233,64 +224,41 @@ export const MATCHING_PAGE_DOCS: Record<string, PageDoc> = {
         kind: 'list',
         items: [
           '**Bỏ job trùng** — cùng công ty + cùng tiêu đề + cùng tỉnh thì giữ job mới nhất.',
-          '**Lấy 30 job điểm cao nhất làm “pool”.** Con số này đổi hai lần trong hai ngày: 80 → **50** (16/11 — 80 quá rộng, lọt nhiều job không liên quan) → **30** (17/11). **Không có điểm sàn** — pool luôn đầy nếu có đủ job.',
+          '**Lấy 30 job điểm cao nhất làm “pool”.** Con số này đổi hai lần trong hai ngày: 80 → **50** (16/11 — 80 quá rộng, lọt nhiều job không liên quan) → **30** (17/11). Đã **kiểm lại code `dev` ngày 20/11**: `JobFeed.POOL = 30`, cả hai lần chốt đều đã lên. **Không có điểm sàn** — pool luôn đầy nếu có đủ job.',
           '**Tối đa 3 job một công ty trong pool** (chốt 17/11) — áp cho trang cá nhân, chi tiết job và onboarding. Đi từ trên xuống, gặp job **thứ 4** của cùng một công ty thì bỏ qua: không xếp lại, không đổi điểm, không giữ chỗ cho ai. **Popup Batch apply không áp luật này.**\n\n3 ≈ **10% của pool 30** — đó là cách *chọn* con số, không phải cách *tính* nó: trong code nó là hằng số `3`, pool đổi thì chốt lại bằng tay. Nếu để code tự nhân 10% thì lúc pool mỏng (còn 8 job) cap tự tụt xuống 1, và mỗi màn hình rút số thẻ khác nhau nên mỗi nơi lại ra một con số khác.',
           '**Hai job cùng công ty cách nhau ít nhất 6 vị trí** (chốt 17/11). Luật này **thay cho** “một công ty một hàng” trước đây — một *hàng* là bố cục chứ không phải luật: trên điện thoại một hàng là một thẻ, nên luật cũ không bảo vệ được gì ở đó. Đếm theo **vị trí** trong danh sách thì không phụ thuộc bề ngang màn hình.\n\nDựng danh sách từng vị trí một: lấy job xếp cao nhất còn lại mà công ty của nó **chưa xuất hiện trong 5 vị trí gần nhất**. Không còn job nào hợp lệ thì **vẫn lấp** (và ghi cờ vào log) — bỏ trống một vị trí sẽ đẩy lệch mọi thẻ phía sau. Có cap ở trên thì gần như không bao giờ chạy tới đường lùi này.',
           '**Job đang xem và bản trùng của nó** bị loại khỏi pool ở trang chi tiết job và ở popup sau khi nộp đơn — không bao giờ gợi ý lại đúng job vừa nộp.',
         ],
       },
       {
-        kind: 'table',
-        heading: 'Thứ tự theo từng màn hình',
-        cols: ['Màn hình', 'Thứ tự'],
-        rows: [
-          ['Popup sau khi nộp đơn', '**Đúng thứ tự điểm**, **không cap công ty** — nhưng không để hai job cùng công ty đứng liền nhau: gặp job trùng công ty với job vừa đặt thì nhìn xuống **tối đa 3 dòng** để đổi chỗ, cả 3 cũng trùng thì chấp nhận lặp. Không thẻ nào xê dịch quá 3 bậc so với hạng của nó, nên thứ tự vẫn trung thực với điểm'],
-          ['Onboarding · Email JS 3', '**Điểm cao nhất trước**, cap 3 job/công ty, cách nhau ≥ 6 vị trí'],
-          ['Trang cá nhân · Chi tiết job', '**Xáo trộn trong từng bậc vị trí** — xem dưới'],
-        ],
-      },
-      {
-        kind: 'table',
-        heading: 'Ứng viên thấy tối đa bao nhiêu job của cùng một công ty',
-        cols: ['Màn hình', 'Số thẻ hiện ra', 'Tối đa / công ty'],
-        rows: [
-          ['**Onboarding** — khối “những việc phù hợp nhất”', 'tối đa 30 thẻ (6/trang × 5 trang)', '**3** — và chắc chắn không hai thẻ cùng một trang'],
-          ['**Chi tiết job** — “Recommended jobs”', '6 thẻ', '**1**'],
-          ['**Trang cá nhân** — “Việc làm phù hợp với bạn”', '6 thẻ (carousel hiện 3)', '**1**'],
-          ['**Email JS 3** — gợi ý hằng tuần', '6 thẻ', '**1**'],
-          ['**Popup Batch apply**', 'tối đa 30 dòng', 'không giới hạn — chỉ không đứng liền nhau'],
-        ],
-        note: 'Ba màn 6 thẻ ra **1** là hệ quả tự động của luật khoảng cách, không phải một luật riêng: 6 vị trí không lọt vừa trong 6 thẻ. Cap 3 vì thế chỉ thực sự có hiệu lực ở **onboarding** — màn duy nhất hiện đủ 30 thẻ. Và 3 thẻ cách nhau ≥ 6 vị trí trong 30 vị trí thì rơi vào 3 trang khác nhau.',
-      },
-      {
         kind: 'list',
         heading: 'Xáo trộn trong từng bậc vị trí (SRM-1491, 16/11)',
         items: [
-          'Pool được xếp theo **điểm của riêng tín hiệu vị trí**: vị trí **khai** 42 → vị trí **suy từ hành vi** 34 → nhóm vị trí 30 / 24 → ngành nghề 17 / 14 → còn lại 0. Rồi **chỉ xáo bên trong mỗi bậc**.',
-          'Hệ quả: **job đúng vị trí ứng viên đã khai không bao giờ đứng sau job chỉ cùng ngành nghề**, dù job kia hơn điểm địa điểm hay lương.',
+          'Pool được xếp theo **điểm của riêng tiêu chí vị trí**: vị trí **khai** 42 → vị trí **suy từ hành vi** 34 → nhóm vị trí 30 / 24 → nghề 17 / 14 → còn lại 0. Rồi **chỉ xáo bên trong mỗi bậc**.',
+          'Hệ quả: **job đúng vị trí ứng viên đã khai không bao giờ đứng sau job chỉ cùng nghề**, dù job kia hơn điểm địa điểm hay lương.',
           'Lý do có luật này: QA báo một QA Engineer nhìn thấy Sysadmin, Helpdesk và Data Engineer đứng trước job QA.',
           '**Hạt giống** = ứng viên + ngày + màn hình (+ job đang xem ở trang chi tiết). Cùng một màn hình thì **ổn định cả ngày**, reload không đổi; mỗi màn hình đảo một kiểu khác; hôm sau mới khác. **Không bao giờ random thuần.**',
         ],
       },
-      {
-        kind: 'open',
-        text: '**Chưa kiểm lại code `dev` sau ngày 17/11.** Lần đọc code gần nhất là tối 16/11, lúc đó pool trong code vẫn là **80** — cả hai lần chốt (80 → 50 ngày 16/11, 50 → **30** ngày 17/11) đều chưa thấy lên `dev`. Chừng nào chưa lên, danh sách trên `dev` sẽ rộng hơn và lẫn nhiều job xa hơn so với mô tả ở trang này.',
-      },
-
       /* ───────────────────────────────────────────────────────────────── */
       { kind: 'h', text: '§5 · Năm nơi dùng kết quả này — và một nơi không dùng' },
       {
         kind: 'table',
-        note: 'Cùng một phép tính, khác tham số `surface` — nên thứ tự hiển thị và số thẻ khác nhau, còn cách chấm điểm thì giống hệt.',
-        cols: ['Nơi hiển thị', 'Ai thấy', 'Số thẻ', 'Thứ tự'],
+        note: 'Cùng một phép tính, khác tham số `surface` — nên **số thẻ, cap công ty và thứ tự** khác nhau, còn cách chấm điểm thì giống hệt.\n\n**Ba màn 6 thẻ ra cap 1 là hệ quả tự động của luật khoảng cách, không phải một luật riêng:** hai job cùng công ty phải cách nhau ≥ 6 vị trí, mà cả màn chỉ có 6 thẻ. Nên **cap 3 chỉ thực sự có hiệu lực ở onboarding** — màn duy nhất hiện đủ 30 thẻ — và 3 thẻ cách nhau ≥ 6 vị trí trong 30 vị trí thì rơi vào 3 trang khác nhau.',
+        cols: ['Nơi hiển thị', 'Ai thấy', 'Số thẻ', 'Tối đa / công ty', 'Thứ tự'],
         rows: [
-          ['**Onboarding** — khối “những việc phù hợp nhất”\n\n*Khối thứ hai ngay dưới — “Việc làm cho {vị trí}” — **không** dùng bộ máy này; nó là một lượt tìm kiếm thuần, có trang riêng.*', 'Ứng viên vừa xong wizard', 'tối đa 30 thẻ, giao diện chia 6/trang (tối đa 5 trang)', '**Đúng thứ tự điểm**, cap 3 job/công ty, cách nhau ≥ 6 vị trí'],
-          ['**Trang cá nhân** — *Việc làm phù hợp với bạn*', 'Đã đăng nhập', '6', 'Xáo trộn **trong từng bậc vị trí** (§4)'],
-          ['**Chi tiết job** — *Gợi ý việc làm cho bạn*', 'Đã đăng nhập', '6', 'Xáo trộn trong từng bậc vị trí; **neo** theo ngành nghề của job đang xem'],
-          ['**Popup sau khi nộp đơn** (Batch apply)', 'Người vừa nộp đơn', '30', '**Đúng thứ tự điểm**, không xáo, không neo ngành nghề'],
-          ['**Email JS 3** — gợi ý hằng tuần, thứ Hai 07:00', 'Mọi ứng viên đang hoạt động chưa tắt công tắc nhận mail', '6', '**Đúng thứ tự điểm**, một công ty một hàng'],
-          ['**Trang tìm kiếm** — không có khối gợi ý', '—', '—', 'Backend có sẵn một `surface=SEARCH` nhưng **giao diện không bao giờ gọi nó** — hiện **không có strip gợi ý nào** trên trang tìm việc. Chữ `SEARCH` trong code của trang này là **nhãn analytics** cho kết quả tìm kiếm thường, không phải một khối gợi ý'],
+          ['**Onboarding** — khối “những việc phù hợp nhất”\n\n*Khối thứ hai ngay dưới — “Việc làm cho {vị trí}” — **không** dùng bộ máy này; nó là một lượt tìm kiếm thuần, có trang riêng.*', 'Ứng viên vừa xong wizard', 'tối đa 30 thẻ, giao diện chia 6/trang (tối đa 5 trang)', '**3** — và chắc chắn không hai thẻ cùng một trang', '**Đúng thứ tự điểm**, cách nhau ≥ 6 vị trí'],
+          ['**Trang cá nhân** — *Việc làm phù hợp với bạn*\n\n*Màn **duy nhất** có nút ✕ tự ẩn job (§2).*', 'Đã đăng nhập', '6 (carousel hiện 3)', '**1**', 'Xáo trộn **trong từng bậc vị trí** (§4)'],
+          ['**Chi tiết job** — *Gợi ý việc làm cho bạn*', 'Đã đăng nhập', '6', '**1**', 'Xáo trộn trong từng bậc vị trí; **neo** theo **nghề** của job đang xem'],
+          ['**Popup sau khi nộp đơn** (Batch apply)', 'Người vừa nộp đơn', '30 — **đang hỏi lại, xem dưới bảng**', 'không giới hạn — chỉ không đứng liền nhau', '**Đúng thứ tự điểm**, không xáo, không neo nghề'],
+          ['**Email JS 3** — gợi ý hằng tuần, thứ Hai 07:00', 'Mọi ứng viên đang hoạt động chưa tắt công tắc nhận mail', '6', '**1**', '**Đúng thứ tự điểm**'],
+          ['**Trang tìm kiếm** — không có khối gợi ý', '—', '—', '—', 'Backend có sẵn một `surface=SEARCH` nhưng **giao diện không bao giờ gọi nó** — hiện **không có strip gợi ý nào** trên trang tìm việc. Chữ `SEARCH` trong code của trang này là **nhãn analytics** cho kết quả tìm kiếm thường, không phải một khối gợi ý'],
         ],
+      },
+
+      {
+        kind: 'open',
+        text: '**Popup Batch apply hiện bao nhiêu dòng — 30 hay 10?** Bảng trên ghi **30** vì đó là con số đọc được ở cả hai nơi: spec (`job-management.ts` §12 — “Batch apply up to 30”, và mục pool 30 nói rõ onboarding với Batch apply là hai màn xin 30 thẻ) và code frontend (`features/job-recommendations/api/after-apply-matches.api.ts` — `AFTER_APPLY_SIZE = 30`; dialog render thẳng mảng trả về, không cắt bớt). BA báo ngày 20/11 rằng màn thật là **10 job, 10 dòng**. Chưa chốt. Nếu 10 là quyết định mới thì phải sửa **ba chỗ**: spec, code, và bảng này — còn nếu 30 vẫn đúng thì chỉ cần xác nhận lại.',
       },
 
       /* ───────────────────────────────────────────────────────────────── */
@@ -300,9 +268,9 @@ export const MATCHING_PAGE_DOCS: Record<string, PageDoc> = {
         heading: 'Linh và ba job — đọc theo hàng ngang',
         scenario:
           '**Linh** gõ vào Work preference: **Marketing Executive · Marketing · Hồ Chí Minh · 20 triệu**. Hồ sơ ghi **3 năm**. CV có *Facebook Ads · Google Analytics · Content Writing*, bằng **Đại học**, và một công ty thương mại điện tử — nhưng cô **chưa bao giờ khai Ngành mong muốn**. Trong 90 ngày qua cô **nộp đơn 1 job** (Chuyên viên Marketing · Shopee), **lưu 1 job** (Content Marketing) và **mở 6 job**, trong đó 4 job ở Bình Dương.',
-        cols: ['Tín hiệu', 'Linh có gì', 'A · Content Marketing · Lazada · HCM', 'B · Chuyên viên MKT · Lazada · Bình Dương', 'C · Marketing Executive · VNG · HCM'],
+        cols: ['Tiêu chí', 'Linh có gì', 'A · Content Marketing · Lazada · HCM', 'B · Chuyên viên MKT · Lazada · Bình Dương', 'C · Marketing Executive · VNG · HCM'],
         rows: [
-          ['Vị trí & ngành nghề · 42', 'Gõ: **Marketing Executive**. Hành vi: Chuyên viên Marketing (đã nộp), Content Marketing (đã lưu)', 'Content Marketing — đúng vị trí, nhưng **suy ra** → **34**', 'Chuyên viên MKT — đúng vị trí, **suy ra** → **34**', 'Marketing Executive — đúng vị trí cô **tự gõ** → **42**'],
+          ['Vị trí & nghề · 42', 'Gõ: **Marketing Executive**. Hành vi: Chuyên viên Marketing (đã nộp), Content Marketing (đã lưu)', 'Content Marketing — đúng vị trí, nhưng **suy ra** → **34**', 'Chuyên viên MKT — đúng vị trí, **suy ra** → **34**', 'Marketing Executive — đúng vị trí cô **tự gõ** → **42**'],
           ['Địa điểm · 20', 'Gõ: **Hồ Chí Minh**. Hành vi: Bình Dương (mở 4 job ở đó)', 'HCM, tự khai → **20**', 'Bình Dương, suy ra → 80 % → **16**', 'HCM, tự khai → **20**'],
           ['Kinh nghiệm · 14', '3 năm (Hồ sơ)', 'Job cần 2–4 → **14**', 'Job cần 3–5 → **14**', 'Job cần 1–2, cô thừa 1 năm → **10**'],
           ['Lương · 12', '20 triệu', '18–25 → **12**', '20–28 → **12**', 'Trần 16 — cô đòi cao hơn 25 % → **0**'],
@@ -312,7 +280,7 @@ export const MATCHING_PAGE_DOCS: Record<string, PageDoc> = {
           ['**Tổng**', '', '**85,7 → 86**', '**80**', '**75**'],
         ],
         note:
-          '**Năm điều rút ra.** **(1) Job C giữ 42 trong 75 điểm chỉ nhờ một sự thật** — Marketing Executive là vị trí Linh **tự gõ**. Trả lương hụt 25 %, không một kỹ năng chung, không điểm ngành nào — ở ví dụ này không job nào có — vậy mà vẫn 75: thứ ứng viên nói mình muốn thắng gần như mọi thứ khác. **(2) Job A và B ăn 34 chứ không phải 42** — đúng vị trí, nhưng học được từ một job đã nộp và một job đã lưu, nên chỉ 80 %. Job B có mặt trong danh sách **chỉ nhờ hành vi**: Bình Dương không nằm ở đâu trong hồ sơ của Linh. **(3) Cả ba job đều 0 điểm ngành** vì Linh bỏ trống Ngành mong muốn — một ô trống **bên phía ứng viên** trừ điểm **mọi job như nhau**, nên **thứ tự không hề đổi**. **(4) Job B mất 3 điểm vì một ô nhà tuyển dụng bỏ trống**, và 3 điểm đó **không** được chia cho tín hiệu khác — chia thì B đọc ra 80 ÷ 97 = **82 %** thay vì 80, tức là con số cao hơn chỉ nhờ **khai ít hơn**. Ở ví dụ này 82 vẫn chưa đủ vượt A (86) — nhưng job bỏ trống càng nhiều ô thì con số càng bị thổi lên, và tới một lúc nó lật hẳn thứ tự. **(5) Linh không bao giờ thấy con số nào.** Cả ba job vào pool của cô; popup sau khi nộp đơn liệt kê A, B, C đúng thứ tự đó; trang cá nhân và chi tiết job rút thẻ xáo trộn từ cùng pool ấy — và vì A với B cùng là Lazada nên **hai thẻ phải cách nhau ít nhất 6 vị trí** — trên một dải 6 thẻ thì nghĩa là không bao giờ thấy cả hai cùng lúc. Job Shopee cô đã nộp đơn không có mặt ở cột nào vì **đã nộp là mất hẳn** (§2) — nhưng chính nó là lý do A và B được 34 điểm vị trí.',
+          '**Năm điều rút ra.** **(1) Job C giữ 42 trong 75 điểm chỉ nhờ một sự thật** — Marketing Executive là vị trí Linh **tự gõ**. Trả lương hụt 25 %, không một kỹ năng chung, không điểm ngành nào — ở ví dụ này không job nào có — vậy mà vẫn 75: thứ ứng viên nói mình muốn thắng gần như mọi thứ khác. **(2) Job A và B ăn 34 chứ không phải 42** — đúng vị trí, nhưng học được từ một job đã nộp và một job đã lưu, nên chỉ 80 %. Job B có mặt trong danh sách **chỉ nhờ hành vi**: Bình Dương không nằm ở đâu trong hồ sơ của Linh. **(3) Cả ba job đều 0 điểm ngành** vì Linh bỏ trống Ngành mong muốn — một ô trống **bên phía ứng viên** trừ điểm **mọi job như nhau**, nên **thứ tự không hề đổi**. **(4) Job B mất 3 điểm vì một ô nhà tuyển dụng bỏ trống**, và 3 điểm đó **không** được chia cho tiêu chí khác — chia thì B đọc ra 80 ÷ 97 = **82 %** thay vì 80, tức là con số cao hơn chỉ nhờ **khai ít hơn**. Ở ví dụ này 82 vẫn chưa đủ vượt A (86) — nhưng job bỏ trống càng nhiều ô thì con số càng bị thổi lên, và tới một lúc nó lật hẳn thứ tự. **(5) Linh không bao giờ thấy con số nào.** Cả ba job vào pool của cô; popup sau khi nộp đơn liệt kê A, B, C đúng thứ tự đó; trang cá nhân và chi tiết job rút thẻ xáo trộn từ cùng pool ấy — và vì A với B cùng là Lazada nên **hai thẻ phải cách nhau ít nhất 6 vị trí** — trên một dải 6 thẻ thì nghĩa là không bao giờ thấy cả hai cùng lúc. Job Shopee cô đã nộp đơn không có mặt ở cột nào vì **đã nộp là mất hẳn** (§2) — nhưng chính nó là lý do A và B được 34 điểm vị trí.',
       },
 
       /* ───────────────────────────────────────────────────────────────── */
@@ -322,9 +290,9 @@ export const MATCHING_PAGE_DOCS: Record<string, PageDoc> = {
         items: [
           '**Job đã nộp đơn biến mất vĩnh viễn khỏi mọi gợi ý** — tính cả đơn đã bị từ chối và đơn đã thu hồi. Đây là nguyên nhân số một của câu hỏi “sao job này không còn hiện nữa”.',
           '**Ứng viên không khai địa điểm mong muốn thì tiêu chí địa điểm bằng 0**, kể cả với job remote. Đây là hành vi **cố ý** (chốt 12/11), không phải lỗi.',
-          '**Ở trang chi tiết job, hệ thống không bao giờ nới điều kiện.** Nếu không còn job nào cùng ngành nghề, khối gợi ý **ẩn hẳn** chứ không lấp bằng job không liên quan.',
+          '**Ở trang chi tiết job, hệ thống không bao giờ nới điều kiện.** Nếu không còn job nào cùng nghề, khối gợi ý **ẩn hẳn** chứ không lấp bằng job không liên quan.',
           '**Thấy đúng 6 thẻ đó suốt cả ngày là đúng thiết kế**, không phải cache hỏng. Reload không đổi; sang ngày hôm sau mới đảo bộ khác.',
-          '**Bậc “cùng nhóm vị trí” (30 điểm) chưa bao giờ đạt được** vì dữ liệu taxonomy ba tầng chưa có. Thực tế thang vị trí chỉ chạy hai bậc: cùng vị trí 42, hoặc cùng ngành nghề 17.',
+          '**Bậc “cùng nhóm vị trí” (30 điểm) chưa bao giờ đạt được** vì dữ liệu taxonomy ba tầng chưa có. Thực tế thang vị trí chỉ chạy hai bậc: cùng vị trí 42, hoặc cùng nghề 17.',
         ],
       },
 
@@ -337,7 +305,7 @@ export const MATCHING_PAGE_DOCS: Record<string, PageDoc> = {
       '**So job với job, không đọc hồ sơ người xem.** Vì vậy **mọi người đều thấy cùng một danh sách** cho cùng một job — khách chưa đăng nhập cũng thấy y hệt người đã đăng nhập.',
       '**Đây là bảng điểm riêng**, khác bảng của *Recommended jobs*: 45 / 15 / 15 / 10 / 8 / 4 / 3, trên cùng thang 100. Đừng dùng bảng của bên kia để giải thích kết quả bên này.',
       '**Kết quả được cache 1 giờ cho mỗi job** và chỉ tính lại ở lượt xem đầu tiên sau khi cache hết hạn — thực tế làm mới chậm nhất khoảng **75 phút**.',
-      '**Không có cổng lọc ngành nghề — và đó là cả mục đích của thiết kế này.** Bản nháp cũ bắt buộc cùng ngành nghề rồi bỏ hết phần còn lại; làm vậy sẽ có những job **không có việc tương tự nào để hiện**, và một khối rỗng là kết cục mà tính năng này không được phép tạo ra. Chấm hết mọi job thì không bao giờ rỗng, và phần dự phòng tự nó hợp lý: một job không có gì cùng ngành nghề vẫn ăn điểm địa điểm, cấp bậc, lương và hình thức — thành ra *cùng thành phố, cùng cấp bậc, lương tương đương*.',
+      '**Không có cổng lọc nghề — và đó là cả mục đích của thiết kế này.** Bản nháp cũ bắt buộc cùng nghề rồi bỏ hết phần còn lại; làm vậy sẽ có những job **không có việc tương tự nào để hiện**, và một khối rỗng là kết cục mà tính năng này không được phép tạo ra. Chấm hết mọi job thì không bao giờ rỗng, và phần dự phòng tự nó hợp lý: một job không có gì cùng nghề vẫn ăn điểm địa điểm, cấp bậc, lương và hình thức — thành ra *cùng thành phố, cùng cấp bậc, lương tương đương*.',
       '**Hệ thống không hứa “tương tự” khi nó không tương tự:** điểm cao nhất dưới 40 thì giao diện đổi tiêu đề thành *Việc làm khác tại {tỉnh}* — nhưng vẫn hiện đủ 6 thẻ.',
     ],
     how: [
@@ -366,7 +334,7 @@ export const MATCHING_PAGE_DOCS: Record<string, PageDoc> = {
         kind: 'list',
         items: [
           'Job gốc phải đang **mở hoặc đã đóng**, còn bật hiển thị, công ty công khai — không thì trả về **404**.',
-          'Đọc **một câu truy vấn** lấy thông tin job gốc và **mọi job đang sống** — không có cổng ngành nghề, không giới hạn theo ngày đăng.',
+          'Đọc **một câu truy vấn** lấy thông tin job gốc và **mọi job đang sống** — không có cổng nghề, không giới hạn theo ngày đăng.',
           'Chấm điểm trong bộ nhớ → **bỏ job trùng** (cùng công ty + tiêu đề + tỉnh) và bỏ bản trùng của chính job gốc → **tối đa 2 job mỗi công ty** → sắp **điểm ↓ → ngày đăng ↓ → id ↓** → giữ **20 id** → dựng thẻ và kiểm tra lại job còn sống.',
           'Giao diện xin khoảng **12 dòng**: 6 cho carousel, dòng 7–12 cho khối thứ hai của khách chưa đăng nhập.',
           '**Luôn loại:** chính job đang xem · job đã đóng hoặc hết hạn · job tắt hiển thị · công ty không còn hoạt động.',
@@ -379,9 +347,9 @@ export const MATCHING_PAGE_DOCS: Record<string, PageDoc> = {
       {
         kind: 'table',
         note: 'Trọng số **phiên bản v3**, cố định trong code. Thiếu dữ liệu ở **bất kỳ phía nào** là 0 điểm, không chia lại thang.',
-        cols: ['Tín hiệu', 'Tối đa', 'Các bậc'],
+        cols: ['Tiêu chí', 'Tối đa', 'Các bậc'],
         rows: [
-          ['**Ngành nghề**', '**45**', 'Cùng vị trí 45 · cùng nhóm vị trí 32 · cùng ngành nghề 18. Lấy quan hệ **mạnh nhất** giữa mọi cặp vị trí của hai job'],
+          ['**Nghề**', '**45**', 'Cùng vị trí 45 · cùng nhóm vị trí 32 · cùng nghề 18. Lấy quan hệ **mạnh nhất** giữa mọi cặp vị trí của hai job'],
           ['**Cấp bậc**', '**15**', 'Cùng bậc 15 · lệch 1 bậc 9 · lệch 2 bậc 4 · từ 3 bậc trở lên 0'],
           ['**Địa điểm**', '**15**', 'Cùng tỉnh, hoặc một bên là job remote 15 · khác tỉnh 0'],
           ['**Lương**', '**10**', 'Hai dải giao nhau 10 · lệch trong 20 % 5 · không giao 0. Quy về **lương tháng** và quy đổi tiền tệ trước khi so'],
@@ -392,7 +360,7 @@ export const MATCHING_PAGE_DOCS: Record<string, PageDoc> = {
       },
       {
         kind: 'warn',
-        text: '**Bậc “cùng nhóm vị trí” (32 điểm) chưa bao giờ đạt được** — dữ liệu taxonomy ba tầng chưa có (SRM-1315). Thực tế thang ngành nghề chạy hai bậc: 45 hoặc 18. Xem §5 để thấy điều này đổi thứ hạng như thế nào.',
+        text: '**Bậc “cùng nhóm vị trí” (32 điểm) chưa bao giờ đạt được** — dữ liệu taxonomy ba tầng chưa có (SRM-1315). Thực tế thang nghề chạy hai bậc: 45 hoặc 18. Xem §5 để thấy điều này đổi thứ hạng như thế nào.',
       },
 
       {
@@ -412,7 +380,7 @@ export const MATCHING_PAGE_DOCS: Record<string, PageDoc> = {
           'API trả về danh sách thẻ **kèm một cờ `weak`**, và **không trả điểm**.',
           '`weak` bật khi **job cao điểm nhất vẫn dưới 40**. Giao diện khi đó đổi tiêu đề thành **“Việc làm khác tại {tỉnh}”**.',
           '**Vẫn hiện đủ 6 thẻ** — không ẩn khối, không giảm số thẻ. Chỉ lời hứa trong tiêu đề là thay đổi.',
-          'Dưới 40 điểm nghĩa là **ngành nghề gần như không đóng góp gì** và các thẻ chỉ còn được gắn với nhau bằng địa điểm và cấp bậc. Đổi tiêu đề thay vì giấu danh sách là cách trung thực hơn.',
+          'Dưới 40 điểm nghĩa là **nghề gần như không đóng góp gì** và các thẻ chỉ còn được gắn với nhau bằng địa điểm và cấp bậc. Đổi tiêu đề thay vì giấu danh sách là cách trung thực hơn.',
         ],
       },
 
@@ -444,18 +412,18 @@ export const MATCHING_PAGE_DOCS: Record<string, PageDoc> = {
         kind: 'example',
         heading: 'Người đọc đang xem một job Senior Frontend Engineer',
         scenario:
-          'Job đang xem: **Senior Frontend Engineer · FPT Software · Hồ Chí Minh · Senior · IT/Phần mềm · 30–45 triệu**, khai **5 kỹ năng**: React · TypeScript · Git · Docker · AWS. Con số 5 này là mẫu số của tín hiệu kỹ năng.',
-        cols: ['Job ứng viên', 'Ngành nghề 45', 'Cấp bậc 15', 'Địa điểm 15', 'Lương 10', 'Kỹ năng 8', 'Ngành 4 + HT 3', 'Tổng'],
+          'Job đang xem: **Senior Frontend Engineer · FPT Software · Hồ Chí Minh · Senior · IT/Phần mềm · 30–45 triệu**, khai **5 kỹ năng**: React · TypeScript · Git · Docker · AWS. Con số 5 này là mẫu số của tiêu chí kỹ năng.',
+        cols: ['Job ứng viên', 'Nghề 45', 'Cấp bậc 15', 'Địa điểm 15', 'Lương 10', 'Kỹ năng 8', 'Ngành 4 + HT 3', 'Tổng'],
         rows: [
           ['**React Developer** · Tiki · HCM · Senior · 32–48tr · chung React, TypeScript, Git', 'cùng vị trí **45**', '**15**', '**15**', '**10**', '3/5 → **4,8**', '**7**', '**97**'],
           ['**Backend Engineer** · Shopee · HCM · Senior · 30–45tr · chung Docker', 'cùng nhóm **32**', '**15**', '**15**', '**10**', '1/5 → **1,6**', '**7**', '**81**'],
           ['**Frontend Engineer** · VNG · **Hà Nội** · Senior · 30–45tr · chung React, TypeScript', 'cùng vị trí **45**', '**15**', 'khác tỉnh **0**', '**10**', '2/5 → **3,2**', '**7**', '**80**'],
           ['**Frontend Intern** · Base.vn · HCM · **Intern** · 8–12tr · chung React', 'cùng vị trí **45**', 'lệch 3 bậc **0**', '**15**', 'không giao **0**', '1/5 → **1,6**', '**7**', '**69**'],
-          ['**Data Engineer** · MoMo · HCM · Senior · 35–50tr · chung AWS', 'cùng ngành nghề **18**', '**15**', '**15**', '**10**', '1/5 → **1,6**', '**7**', '**67**'],
-          ['**Kế toán trưởng** · VNG · HCM · Manager · 30–45tr · không chung gì', 'khác ngành nghề **0**', 'lệch 1 bậc **9**', '**15**', '**10**', '**0**', '**3**', '**37**'],
+          ['**Data Engineer** · MoMo · HCM · Senior · 35–50tr · chung AWS', 'cùng nghề **18**', '**15**', '**15**', '**10**', '1/5 → **1,6**', '**7**', '**67**'],
+          ['**Kế toán trưởng** · VNG · HCM · Manager · 30–45tr · không chung gì', 'khác nghề **0**', 'lệch 1 bậc **9**', '**15**', '**10**', '**0**', '**3**', '**37**'],
         ],
         note:
-          '**Thứ tự theo tài liệu:** Tiki 97 · Shopee 81 · VNG 80 · Base.vn 69 · MoMo 67 · Kế toán 37. — ⚠ **Trên build hôm nay thì khác**: bậc *cùng nhóm vị trí* chưa chạy, nên Shopee chỉ được **18** chứ không phải 32, tổng còn **67** — **bằng đúng MoMo**, và hai job phải phá hoà bằng ngày đăng. Đây chính là cái giá của việc thiếu tầng taxonomy giữa (§2). — Ba điều khác đáng rút ra: **(1)** Shopee 81 nhỉnh hơn VNG 80 **một điểm** là thiết kế đang chạy đúng — “khác vị trí, cùng thành phố” và “cùng vị trí, khác vùng” thật sự xấp xỉ nhau. **(2)** Job **Intern** (69) vượt Data Engineer (67) dù lương bằng một phần năm: cùng vị trí và cùng thành phố thắng cùng ngành nghề. Nếu thấy sai thì vặn **Cấp bậc** từ 15 lên 20, **đừng lọc bỏ cấp bậc** — làm vậy là đem khối rỗng quay lại. **(3)** Job **Kế toán trưởng** vẫn nằm đó ở 37 điểm, và đó là cố ý: nếu thị trường chỉ có sáu job này thì người đọc vẫn thấy sáu thẻ. Khi có năm chục job IT thì nó không bao giờ xuất hiện.',
+          '**Thứ tự theo tài liệu:** Tiki 97 · Shopee 81 · VNG 80 · Base.vn 69 · MoMo 67 · Kế toán 37. — ⚠ **Trên build hôm nay thì khác**: bậc *cùng nhóm vị trí* chưa chạy, nên Shopee chỉ được **18** chứ không phải 32, tổng còn **67** — **bằng đúng MoMo**, và hai job phải phá hoà bằng ngày đăng. Đây chính là cái giá của việc thiếu tầng taxonomy giữa (§2). — Ba điều khác đáng rút ra: **(1)** Shopee 81 nhỉnh hơn VNG 80 **một điểm** là thiết kế đang chạy đúng — “khác vị trí, cùng thành phố” và “cùng vị trí, khác vùng” thật sự xấp xỉ nhau. **(2)** Job **Intern** (69) vượt Data Engineer (67) dù lương bằng một phần năm: cùng vị trí và cùng thành phố thắng cùng nghề. Nếu thấy sai thì vặn **Cấp bậc** từ 15 lên 20, **đừng lọc bỏ cấp bậc** — làm vậy là đem khối rỗng quay lại. **(3)** Job **Kế toán trưởng** vẫn nằm đó ở 37 điểm, và đó là cố ý: nếu thị trường chỉ có sáu job này thì người đọc vẫn thấy sáu thẻ. Khi có năm chục job IT thì nó không bao giờ xuất hiện.',
       },
 
     ],
@@ -465,7 +433,7 @@ export const MATCHING_PAGE_DOCS: Record<string, PageDoc> = {
   'recommended-candidates': {
     logic: [
       '**Khối này neo vào MỘT TIN TUYỂN DỤNG, không neo vào thư mục.** Thư mục talent pool chỉ có tên và ngày tạo — không có vị trí, không cấp bậc, không địa điểm, nên không có gì để so. Thư mục là nơi **lưu** kết quả, không phải đề bài sinh ra kết quả.',
-      '**Một phép tính duy nhất — job nháp không phải trường hợp riêng.** Không có cổng “job nháp đủ thông tin chưa”. Job khai thiếu thì **tự khắc điểm thấp**, vì tín hiệu job không khai được 0 điểm.',
+      '**Một phép tính duy nhất — job nháp không phải trường hợp riêng.** Không có cổng “job nháp đủ thông tin chưa”. Job khai thiếu thì **tự khắc điểm thấp**, vì tiêu chí job không khai được 0 điểm.',
       '**Chỉ đọc dữ liệu ứng viên tự khai** — hồ sơ và CV. Hành vi xem job, lưu job, nộp đơn **không bao giờ** sang phía nhà tuyển dụng; đó là dữ liệu cá nhân, đọc để xếp feed của chính người đó chứ không cho việc gì khác.',
       '**Có điểm sàn 40 đặt trên KẾT QUẢ.** Người cao điểm nhất dưới 40 nghĩa là job này không sinh ra được gì dùng được → đổi hẳn sang chế độ *Hồ sơ mới cập nhật*. Phía ứng viên không có sàn nào.',
       '**Điểm chọn ra pool, phép xáo trộn gieo theo ngày chọn ai hiện hôm nay.** Áp dụng cho **cả hai** chế độ, không phải mẹo riêng của chế độ dự phòng.',
@@ -523,7 +491,7 @@ export const MATCHING_PAGE_DOCS: Record<string, PageDoc> = {
         cols: ['Đọc từ job', 'So với ứng viên'],
         rows: [
           ['Mọi **vị trí** gắn trên job', '**Vị trí mong muốn** của ứng viên (tối đa 3)'],
-          ['**Ngành nghề** của job', '**Ngành nghề mong muốn** trên hồ sơ'],
+          ['**Nghề** của job', '**Nghề mong muốn** trên hồ sơ'],
           ['**Kỹ năng** của job', '**Kỹ năng trên CV** của ứng viên'],
         ],
       },
@@ -532,10 +500,10 @@ export const MATCHING_PAGE_DOCS: Record<string, PageDoc> = {
         items: [
           '**KHÔNG CÓ BƯỚC NÀY THÌ ĐIỂM SỐ CHO NGƯỜI LẠ LỌT QUA.** Địa điểm 20 + kinh nghiệm 14 + lương 12 là **46** — đã trên sàn 40. Nghĩa là một người cùng thành phố, đúng số năm, đúng mức lương sẽ đủ điểm cho một job thuộc ngành hoàn toàn không liên quan. Điểm sàn không bắt được chuyện đó; chỉ bước này bắt được.',
           '**LÀ “HOẶC”, KHÔNG PHẢI “VÀ”.** Đây là gợi ý, không phải tìm kiếm: quăng lưới rộng ở đây rồi để điểm số xếp hạng. Dùng “và” thì trên một cơ sở dữ liệu cỡ Việt Nam sẽ gần như không ra ai.',
-          '**ĐÂY CŨNG LÀ THỨ LÀM TIN NHÁP SƠ SÀI TỰ GIẢI QUYẾT.** Job nháp không vị trí, không ngành nghề, không kỹ năng thì không khớp ai ở bước này → danh sách rỗng → khối rơi xuống chế độ ở §3. Không cần một luật riêng nào cho job nháp.',
-          '**KHỚP CẢ THỨ HỌ MUỐN LẪN THỨ HỌ LÀM ĐƯỢC.** Vị trí và ngành nghề mong muốn nói họ đang tìm gì; kỹ năng trên CV nói họ làm được gì. NTD cần cả hai đúng, nên cả hai đều được quyền đưa một người vào vòng chấm, và cả hai đều được chấm ở bước sau.',
+          '**ĐÂY CŨNG LÀ THỨ LÀM TIN NHÁP SƠ SÀI TỰ GIẢI QUYẾT.** Job nháp không vị trí, không nghề, không kỹ năng thì không khớp ai ở bước này → danh sách rỗng → khối rơi xuống chế độ ở §3. Không cần một luật riêng nào cho job nháp.',
+          '**KHỚP CẢ THỨ HỌ MUỐN LẪN THỨ HỌ LÀM ĐƯỢC.** Vị trí và nghề mong muốn nói họ đang tìm gì; kỹ năng trên CV nói họ làm được gì. NTD cần cả hai đúng, nên cả hai đều được quyền đưa một người vào vòng chấm, và cả hai đều được chấm ở bước sau.',
           '**NGƯỜI ĐÃ BỊ “LỜ ĐI” 3 LẦN RỜI TẬP TRƯỚC KHI CẮT 500**, không phải sau — nếu không thì họ vẫn chiếm chỗ trong 500 người được chấm.',
-          '⚠ **MẶT TRÁI CỦA NHÁNH KỸ NĂNG:** ứng viên gõ tay kỹ năng không khớp master data thì nhánh thứ ba **không bao giờ chạy** cho họ. Họ phải khai vị trí hoặc ngành nghề mới vào được vòng chấm — mất nhiều hơn hẳn 4 điểm kỹ năng.',
+          '⚠ **MẶT TRÁI CỦA NHÁNH KỸ NĂNG:** ứng viên gõ tay kỹ năng không khớp master data thì nhánh thứ ba **không bao giờ chạy** cho họ. Họ phải khai vị trí hoặc nghề mới vào được vòng chấm — mất nhiều hơn hẳn 4 điểm kỹ năng.',
         ],
       },
 
@@ -559,9 +527,9 @@ export const MATCHING_PAGE_DOCS: Record<string, PageDoc> = {
         cols: ['Bước', 'Luật'],
         rows: [
           ['1 · Lọc', 'Các bộ lọc cứng ở mục trên. Ngoài những người đó ra, không ai được hiện.'],
-          ['2 · Ưu tiên', 'Người có ngành hoặc ngành nghề mong muốn trùng **ngành của chính công ty** lên trước. Không có job nào thì ít nhất ta vẫn biết họ làm nghề gì.'],
+          ['2 · Ưu tiên', 'Người có ngành hoặc nghề mong muốn trùng **ngành của chính công ty** lên trước. Không có job nào thì ít nhất ta vẫn biết họ làm nghề gì.'],
           ['3 · Sắp xếp', 'CV cập nhật gần nhất trước — CV mới nghĩa là người đang thật sự tìm việc.'],
-          ['4 · Dàn đều', '**Mỗi ngành nghề một người**, không thì cả hàng ra ba bạn QA tester.'],
+          ['4 · Dàn đều', '**Mỗi nghề một người**, không thì cả hàng ra ba bạn QA tester.'],
           ['5 · Xoay vòng', 'Hằng ngày, theo cùng luật chọn ba người — không phải hành vi riêng của chế độ dự phòng.'],
         ],
       },
@@ -605,7 +573,7 @@ export const MATCHING_PAGE_DOCS: Record<string, PageDoc> = {
       {
         kind: 'list',
         items: [
-          '**SO ĐƯỢC DƯỚI 4 TRONG 7 TÍN HIỆU THÌ KHÔNG IN %.** Một con số dựng trên hai ba tín hiệu gây hiểu nhầm nặng hơn là để trống. Đây là **ngoại lệ duy nhất** của luật “thiếu dữ liệu là 0”.',
+          '**SO ĐƯỢC DƯỚI 4 TRONG 7 TÍN HIỆU THÌ KHÔNG IN %.** Một con số dựng trên hai ba tiêu chí gây hiểu nhầm nặng hơn là để trống. Đây là **ngoại lệ duy nhất** của luật “thiếu dữ liệu là 0”.',
           '**Ô TRỐNG KHÔNG CÓ NGHĨA LÀ 0 %.** In nhầm thành 0 là sai nghiêm trọng: nó biến một hồ sơ chưa chấm được thành một hồ sơ bị loại.',
           '**THỨ TỰ TRÊN BẢNG KHÔNG ĐỔI** vì luật “thiếu dữ liệu là 0”: mọi ứng viên của cùng một job đều chia cho cùng một số. Chỉ **con số in ra** thấp đi, và chỉ với job khai ít.',
           '**ĐƠN ĐÃ RÚT KHÔNG CÒN TRÊN BẢNG** (SRM-1551, 16/11).',
@@ -613,7 +581,7 @@ export const MATCHING_PAGE_DOCS: Record<string, PageDoc> = {
       },
       {
         kind: 'warn',
-        text: '**Kỹ năng trong CV không khớp master data được tính là “không có kỹ năng”** — mất điểm tín hiệu kỹ năng, **và vẫn tính là một tín hiệu đã so được**. Tài liệu yêu cầu nói nên tính là “chưa biết” và chia lại. Build giữ cách hiện tại: nếu tính là “chưa biết”, ứng viên vẫn mất đúng số điểm đó (thiếu dữ liệu = 0, không chia lại) nhưng lại dễ tụt xuống dưới mốc 4/7 và **mất luôn cả con số %** — một bảng đầy ô trống khó đọc hơn một % thấp hơn 4 điểm. **Chưa chốt.**',
+        text: '**Kỹ năng trong CV không khớp master data được tính là “không có kỹ năng”** — mất điểm tiêu chí kỹ năng, **và vẫn tính là một tiêu chí đã so được**. Tài liệu yêu cầu nói nên tính là “chưa biết” và chia lại. Build giữ cách hiện tại: nếu tính là “chưa biết”, ứng viên vẫn mất đúng số điểm đó (thiếu dữ liệu = 0, không chia lại) nhưng lại dễ tụt xuống dưới mốc 4/7 và **mất luôn cả con số %** — một bảng đầy ô trống khó đọc hơn một % thấp hơn 4 điểm. **Chưa chốt.**',
       },
     ],
   },
@@ -679,7 +647,7 @@ export const MATCHING_PAGE_DOCS: Record<string, PageDoc> = {
         cols: ['Ứng viên chọn', 'Job được tính khi', 'Chỉ bị loại khi'],
         rows: [
           ['Luôn luôn', 'Job **đang mở** · đã đăng · còn bật hiển thị · công ty công khai', '—'],
-          ['**Vị trí** (≤3)', 'Job thuộc **ngành nghề** của vị trí đó, **hoặc** job không gắn ngành nghề nào', 'Ngành nghề của job không nằm trong ngành nghề của các vị trí đã chọn'],
+          ['**Vị trí** (≤3)', 'Job thuộc **nghề** của vị trí đó, **hoặc** job không gắn nghề nào', 'Nghề của job không nằm trong nghề của các vị trí đã chọn'],
           ['**Ngành** (≤3)', 'Trùng ngành, **hoặc** job không ghi ngành — job công ty tự đăng không có ô ngành nên luôn qua', 'Job **có ghi** ngành và không nằm trong danh sách đã chọn'],
           ['**Loại hợp đồng**', 'Nằm trong tập đã chọn, **hoặc** job không khai', 'Job **có ghi** và không trùng'],
           ['**Nơi làm việc** (≤3)', 'Job **remote** (qua từ mọi nơi), **hoặc** tỉnh của job / của công ty nằm trong tập, **hoặc** job không ghi địa điểm', 'Job **có ghi** tỉnh và không tỉnh nào được chọn'],
@@ -691,7 +659,7 @@ export const MATCHING_PAGE_DOCS: Record<string, PageDoc> = {
         kind: 'list',
         heading: 'Hai chi tiết quyết định con số',
         items: [
-          '**Vị trí so ở mức ngành nghề, KHÔNG so đúng vị trí.** So đúng vị trí thì một vị trí hẹp ra con số kiểu “2 job”, và wizard biến thành một lời từ chối.',
+          '**Vị trí so ở mức nghề, KHÔNG so đúng vị trí.** So đúng vị trí thì một vị trí hẹp ra con số kiểu “2 job”, và wizard biến thành một lời từ chối.',
           '**Thừa kinh nghiệm hoặc thừa cấp bậc không bao giờ bị loại.** Giới hạn trên trong job VN là đỉnh dải quảng cáo, không phải trần tuyển dụng.',
         ],
       },
@@ -751,7 +719,7 @@ export const MATCHING_PAGE_DOCS: Record<string, PageDoc> = {
           'Bước 1 Nam chọn vị trí *QA Engineer*; bước 2 chọn *Đà Nẵng*; bước 3 chọn loại hợp đồng *Fulltime*; bước 4 khai **4 năm** kinh nghiệm.',
         cols: ['Bước', 'Đếm trên', 'Kết quả'],
         rows: [
-          ['Bước 3', 'Ngành nghề IT (từ vị trí QA Engineer) + Đà Nẵng', '**3 job** — dưới 5 nên câu thêm con số toàn quốc: “toàn quốc có 128 việc”'],
+          ['Bước 3', 'Nghề IT (từ vị trí QA Engineer) + Đà Nẵng', '**3 job** — dưới 5 nên câu thêm con số toàn quốc: “toàn quốc có 128 việc”'],
           ['Bước 4', 'Thêm điều kiện Fulltime và 4 năm kinh nghiệm', '**3 job** — bằng bước 3 nên **không in số**'],
         ],
         note:
@@ -791,7 +759,7 @@ export const MATCHING_PAGE_DOCS: Record<string, PageDoc> = {
       '**Khối này không chấm điểm.** Nó chỉ là một lượt **tìm kiếm thường**: lấy job đúng vị trí ứng viên vừa chọn, mới nhất trước. Không đọc CV, không đọc hồ sơ, không xáo trộn, không ưu tiên gói dịch vụ.',
       '**Tiêu đề in tên vị trí nào thì mọi thẻ bên dưới phải đúng vị trí đó.** *“Việc làm cho Hành chính marketing”* → bên dưới chỉ có job **Hành chính marketing**. Thẻ lạc vị trí là lỗi.',
       '**Dưới 3 job thì ẩn cả khối**, đếm sau khi đã bỏ những job khối 1 đang hiện.',
-      '**Con số ở bước 3 / bước 4 của wizard đếm theo ngành nghề, còn dải này lọc theo vị trí** — nên hai con số không khớp nhau, và đó là đúng thiết kế.',
+      '**Con số ở bước 3 / bước 4 của wizard đếm theo nghề, còn dải này lọc theo vị trí** — nên hai con số không khớp nhau, và đó là đúng thiết kế.',
     ],
     blocks: [
       {
@@ -818,10 +786,10 @@ export const MATCHING_PAGE_DOCS: Record<string, PageDoc> = {
       },
 
       /* ───────────────────────────────────────────────────────────────── */
-      { kind: 'h', text: '§2 · Chỉ job đúng vị trí — không bao giờ nới lên ngành nghề' },
+      { kind: 'h', text: '§2 · Chỉ job đúng vị trí — không bao giờ nới lên nghề' },
       {
         kind: 'p',
-        text: 'Danh sách chỉ chứa job có vị trí **đúng bằng** tên in trên tiêu đề. Bản đang chạy còn đọc thêm một lượt nữa, lấy job của các vị trí **anh em cùng ngành nghề** rồi ghép vào — lượt đó bỏ.',
+        text: 'Danh sách chỉ chứa job có vị trí **đúng bằng** tên in trên tiêu đề. Bản đang chạy còn đọc thêm một lượt nữa, lấy job của các vị trí **anh em cùng nghề** rồi ghép vào — lượt đó bỏ.',
       },
       /* ───────────────────────────────────────────────────────────────── */
       { kind: 'h', text: '§3 · Dưới 3 job thì ẩn cả khối' },
@@ -834,13 +802,13 @@ export const MATCHING_PAGE_DOCS: Record<string, PageDoc> = {
       { kind: 'h', text: '§4 · Vị trí nào được in lên tiêu đề' },
       {
         kind: 'p',
-        text: 'Trong tối đa 3 vị trí chọn ở bước 1, lấy vị trí **có nhiều job đang mở nhất**. Cách chọn không đổi, chỉ đổi cái đem ra đếm: đếm job của **chính vị trí đó**, không đếm cả ngành nghề như bản đang chạy. Hoà nhau → lấy vị trí ứng viên chọn trước.',
+        text: 'Trong tối đa 3 vị trí chọn ở bước 1, lấy vị trí **có nhiều job đang mở nhất**. Cách chọn không đổi, chỉ đổi cái đem ra đếm: đếm job của **chính vị trí đó**, không đếm cả nghề như bản đang chạy. Hoà nhau → lấy vị trí ứng viên chọn trước.',
       },
       {
         kind: 'example',
         heading: 'Hai cách đếm, hai tiêu đề khác nhau',
         scenario: 'Ứng viên chọn hai vị trí ở bước 1: **Hành chính marketing** (ngành *Marketing · Truyền thông*) và **Nhân viên kinh doanh** (ngành *Kinh doanh & Thương mại*).',
-        cols: ['Vị trí chọn ở bước 1', 'Job đang mở đúng vị trí đó', 'Job đang mở của cả ngành nghề'],
+        cols: ['Vị trí chọn ở bước 1', 'Job đang mở đúng vị trí đó', 'Job đang mở của cả nghề'],
         rows: [
           ['Hành chính marketing', '**40**', '520'],
           ['Nhân viên kinh doanh', '25', '**1.150**'],
