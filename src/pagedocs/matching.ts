@@ -789,19 +789,19 @@ export const MATCHING_MODULE_DOCS: Record<string, ModuleDoc> = {
   Matching: {
     title: 'Matching & gợi ý — năm chỗ, năm cách tính',
     lead:
-      'Saramin gợi ý việc làm ở **năm chỗ**, và **không chỗ nào tính giống chỗ nào**. Cùng một ứng viên, cùng một lúc, năm chỗ đó có thể ra năm danh sách khác nhau — **đúng thiết kế**, không phải lỗi.\n\nNên câu hỏi “sao chỗ này hiện khác chỗ kia” hầu như luôn là đang so nhầm hai chỗ với nhau. Trang này để tra đúng một việc: **chỗ nào là chỗ nào**, và chỗ đó so **cái gì với cái gì**. Bốn trong năm chỗ có trang riêng — danh sách ở cuối trang; chỗ thứ năm, khối gợi ý trong email sau khi nộp đơn, chưa có trang riêng.',
+      'Saramin gợi ý việc làm ở **năm chỗ**, và **không chỗ nào tính giống chỗ nào**. Cùng một ứng viên, cùng một lúc, năm chỗ đó có thể ra năm danh sách khác nhau — **đúng thiết kế**, không phải lỗi.\n\nNên câu hỏi “sao chỗ này hiện khác chỗ kia” hầu như luôn là đang so nhầm hai chỗ với nhau. Trang này để tra đúng một việc: **chỗ nào là chỗ nào**, và chỗ đó **nhìn vào đâu để tìm ra gì**. Bốn trong năm chỗ có trang riêng — danh sách ở cuối trang; chỗ thứ năm, khối gợi ý trong email sau khi nộp đơn, chưa có trang riêng.',
     headline: [],
     blocks: [
       { kind: 'h', text: 'Năm chỗ gợi ý việc làm' },
       {
         kind: 'table',
-        cols: ['Chỗ gợi ý', 'Người dùng thấy ở đâu', 'So cái gì với cái gì', 'Đọc hồ sơ?'],
+        cols: ['Chỗ gợi ý', 'Người dùng thấy ở đâu', 'Nhìn vào đâu → tìm ra gì', 'Đọc hồ sơ?'],
         rows: [
-          ['**Gợi ý việc làm cho bạn**', 'Trang cá nhân · trang chi tiết job · màn kết quả onboarding · popup sau khi nộp đơn · email hằng tuần', 'Hồ sơ ứng viên ↔ job', 'Có'],
-          ['**Các công việc tương tự**', 'Carousel dưới trang chi tiết job', 'Job ↔ job', 'Không'],
-          ['**Recommended talent**', 'Company Home của nhà tuyển dụng · % trên bảng ứng viên', 'Job ↔ hồ sơ ứng viên', 'Có — chỉ phần ứng viên tự khai'],
-          ['**Số việc ở onboarding**', 'Câu dẫn ở bước 3 và bước 4 của wizard', 'Chỉ đếm theo bộ lọc, không chấm điểm', 'Không'],
-          ['**Việc gợi ý trong email sau khi nộp đơn**', 'Email *Bạn đã ứng tuyển thành công*', 'Job ↔ job', 'Không'],
+          ['**Gợi ý việc làm cho bạn**', 'Trang cá nhân · trang chi tiết job · màn kết quả onboarding · popup sau khi nộp đơn · email hằng tuần', 'Nhìn **hồ sơ của ứng viên** → tìm ra **job** hợp với họ', 'Có'],
+          ['**Các công việc tương tự**', 'Carousel dưới trang chi tiết job', 'Nhìn **job đang mở** → tìm ra **job khác** giống nó', 'Không'],
+          ['**Recommended talent**', 'Company Home của nhà tuyển dụng · % trên bảng ứng viên', 'Nhìn **job đang tuyển** → tìm ra **ứng viên** hợp với job', 'Có — chỉ phần ứng viên tự khai'],
+          ['**Số việc ở onboarding**', 'Câu dẫn ở bước 3 và bước 4 của wizard', 'Không tìm ai cả, chỉ **đếm**: có bao nhiêu job lọt qua bộ lọc', 'Không'],
+          ['**Việc gợi ý trong email sau khi nộp đơn**', 'Email *Bạn đã ứng tuyển thành công*', 'Nhìn **job vừa nộp đơn** → tìm ra **job khác** giống nó', 'Không'],
         ],
       },
       {
