@@ -42,7 +42,7 @@ export const MATCHING_PAGE_DOCS: Record<string, PageDoc> = {
         note: 'Ba bước này chạy lại **mỗi lần ứng viên mở trang**. Không có danh sách gợi ý nào được lưu sẵn cho từng người — ứng viên sửa Work preference thì lần tải trang sau đã khác.',
         cols: ['Bước', 'Hệ thống làm gì', 'Ra cái gì', 'Đọc chi tiết ở'],
         rows: [
-          ['**1 · Lọc**', 'Bỏ job ứng viên **đã nộp đơn**, **đã tự ẩn**, **đã hết hạn**. Giữ job đúng **nghề** và **tỉnh** ứng viên đã khai. Rồi cắt xuống **500 job**: ưu tiên job đúng vị trí, sau đó job mới đăng.', 'Tối đa **500 job** đủ điều kiện để chấm', '§2'],
+          ['**1 · Lọc**', 'Bỏ job ứng viên **đã nộp đơn** và job **đã hết hạn**. Giữ job đúng **nghề** và **tỉnh** ứng viên đã khai. Rồi cắt xuống **500 job**: ưu tiên job đúng vị trí, sau đó job mới đăng.', 'Tối đa **500 job** đủ điều kiện để chấm', '§2'],
           ['**2 · Chấm điểm**', 'So **từng job** trong 500 job đó với **thông tin của ứng viên**, trên **7 tiêu chí**, tổng **100 điểm**.', 'Mỗi job một **điểm số**', '§3'],
           ['**3 · Sắp xếp**', 'Giữ **30 job điểm cao nhất** (tối đa 3 job một công ty), rồi mỗi màn hình **hoặc giữ nguyên thứ tự điểm, hoặc xáo trộn**.', 'Danh sách thẻ **ứng viên nhìn thấy**', '§4'],
         ],
@@ -78,7 +78,7 @@ export const MATCHING_PAGE_DOCS: Record<string, PageDoc> = {
         kind: 'table',
         cols: ['Điều kiện', 'Bật khi nào', 'Loại job nào'],
         rows: [
-          ['**Job còn sống**', 'Luôn luôn', 'Job đã đóng · hết hạn · **chưa tới giờ đăng** · tắt hiển thị · công ty không công khai; **job ứng viên đã từng nộp đơn** (mọi trạng thái, kể cả đã rút); **job ứng viên đã tự ẩn** — xem ghi chú ngay dưới bảng'],
+          ['**Job còn sống**', 'Luôn luôn', 'Job đã đóng · hết hạn · **chưa tới giờ đăng** · tắt hiển thị · công ty không công khai; **job ứng viên đã từng nộp đơn** (mọi trạng thái, kể cả đã rút)'],
           ['**Nghề** *(job category)*', 'Chỉ khi ứng viên **tự khai** vị trí mong muốn hoặc nghề mong muốn', 'Job không gắn **nghề** nào nằm trong tập nghề của ứng viên. Tập đó là **khai ∪ suy từ hành vi** — cổng mở theo cả hai'],
           ['**Tỉnh**', 'Chỉ khi ứng viên **tự khai** tỉnh **và không** tick *sẵn sàng chuyển chỗ ở*', 'Job ngoài các tỉnh đó — **trừ job remote**, job remote luôn qua cổng này'],
           ['**Neo theo job đang xem**', 'Chỉ ở trang chi tiết job', 'Job không chung **nghề** nào với job đang xem — và **không bao giờ nới**'],
@@ -86,8 +86,8 @@ export const MATCHING_PAGE_DOCS: Record<string, PageDoc> = {
         ],
       },
       {
-        kind: 'p',
-        text: '**“Job ứng viên đã tự ẩn” là nút ✕ trên thẻ gợi ý.** Nó chỉ có ở **một chỗ duy nhất**: khối *Việc làm phù hợp với bạn* trên trang cá nhân. Bấm ✕ là job đó **biến khỏi mọi màn gợi ý, vĩnh viễn** — nên luôn kèm một toast **Hoàn tác trong 8 giây** (ẩn nhiều thẻ liền nhau thì toast gộp lại thành *Hoàn tác tất cả*). Hết 8 giây là không còn đường lùi nào trên giao diện: API có `DELETE` để khôi phục, nhưng **không màn hình nào gọi nó**. Trang chi tiết job, onboarding, email và popup Batch apply **không có nút này** — nhưng job đã ẩn thì biến mất ở cả bốn chỗ đó.',
+        kind: 'warn',
+        text: '**Không có chức năng “ẩn job này” cho ứng viên — chốt 20/11/2026 (Thu).** Câu truy vấn lọc hiện vẫn còn một mệnh đề loại job đã ẩn, và backend vẫn còn bảng `candidate_job_dismissal` với hai API `PUT` / `DELETE .../dismissed`. Nhưng **không màn hình nào bấm được**: nút ✕ chỉ nằm trong `recommended-for-you-section`, một khối đã bị **gỡ khỏi trang chủ ngày 27/08/2026** và chưa bao giờ gắn lại. Bảng đó rỗng, mệnh đề đó **chưa từng loại một dòng nào**. Đã chốt gỡ hẳn — spec đã bỏ, dev gỡ bảng, mệnh đề, hai API và hai file FE.',
       },
       {
         kind: 'list',
@@ -248,7 +248,7 @@ export const MATCHING_PAGE_DOCS: Record<string, PageDoc> = {
         cols: ['Nơi hiển thị', 'Ai thấy', 'Số thẻ', 'Tối đa / công ty', 'Thứ tự'],
         rows: [
           ['**Onboarding** — khối “những việc phù hợp nhất”\n\n*Khối thứ hai ngay dưới — “Việc làm cho {vị trí}” — **không** dùng bộ máy này; nó là một lượt tìm kiếm thuần, có trang riêng.*', 'Ứng viên vừa xong wizard', 'tối đa 30 thẻ, giao diện chia 6/trang (tối đa 5 trang)', '**3** — và chắc chắn không hai thẻ cùng một trang', '**Đúng thứ tự điểm**, cách nhau ≥ 6 vị trí'],
-          ['**Trang cá nhân** — *Việc làm phù hợp với bạn*\n\n*Màn **duy nhất** có nút ✕ tự ẩn job (§2).*', 'Đã đăng nhập', '6 (carousel hiện 3)', '**1**', 'Xáo trộn **trong từng bậc vị trí** (§4)'],
+          ['**Trang cá nhân** — *Việc làm phù hợp với bạn*', 'Đã đăng nhập', '6 (carousel hiện 3)', '**1**', 'Xáo trộn **trong từng bậc vị trí** (§4)'],
           ['**Chi tiết job** — *Gợi ý việc làm cho bạn*', 'Đã đăng nhập', '6', '**1**', 'Xáo trộn trong từng bậc vị trí; **neo** theo **nghề** của job đang xem'],
           ['**Popup sau khi nộp đơn** (Batch apply)', 'Người vừa nộp đơn', '30 — **đang hỏi lại, xem dưới bảng**', 'không giới hạn — chỉ không đứng liền nhau', '**Đúng thứ tự điểm**, không xáo, không neo nghề'],
           ['**Email JS 3** — gợi ý hằng tuần, thứ Hai 07:00', 'Mọi ứng viên đang hoạt động chưa tắt công tắc nhận mail', '6', '**1**', '**Đúng thứ tự điểm**'],
