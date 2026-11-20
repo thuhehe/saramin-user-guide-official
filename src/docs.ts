@@ -28,6 +28,7 @@ import { CRM_SALES_PAGE_DOCS, CRM_SALES_MODULE_DOCS } from './pagedocs/crm-sales
 import { JOBS_APPS_PAGE_DOCS, JOBS_APPS_MODULE_DOCS } from './pagedocs/jobs-apps'
 import { MATCHING_PAGE_DOCS, MATCHING_MODULE_DOCS } from './pagedocs/matching'
 import { NOTIF_SYSTEM_PAGE_DOCS, NOTIF_SYSTEM_MODULE_DOCS } from './pagedocs/notif-system'
+import { JOB_DISPLAY_PAGE_DOCS, JOB_DISPLAY_MODULE_DOCS } from './pagedocs/job-display-logic'
 import { PRODUCT_SERVICE_PAGE_DOCS, PRODUCT_SERVICE_MODULE_DOCS } from './pagedocs/product-service'
 import { RESUME_PAGE_DOCS, RESUME_MODULE_DOCS } from './pagedocs/resume'
 import { USERS_ORG_PAGE_DOCS, USERS_ORG_MODULE_DOCS } from './pagedocs/users-org'
@@ -92,6 +93,7 @@ export const MODULE_DOCS: Record<string, ModuleDoc> = {
   ...CRM_SALES_MODULE_DOCS,
   ...JOBS_APPS_MODULE_DOCS,
   ...MATCHING_MODULE_DOCS,
+  ...JOB_DISPLAY_MODULE_DOCS,
   ...NOTIF_SYSTEM_MODULE_DOCS,
   ...PRODUCT_SERVICE_MODULE_DOCS,
   ...RESUME_MODULE_DOCS,
@@ -725,6 +727,7 @@ export const PAGE_DOCS: Record<string, PageDoc> = {
   ...CRM_SALES_PAGE_DOCS,
   ...JOBS_APPS_PAGE_DOCS,
   ...MATCHING_PAGE_DOCS,
+  ...JOB_DISPLAY_PAGE_DOCS,
   ...NOTIF_SYSTEM_PAGE_DOCS,
   ...PRODUCT_SERVICE_PAGE_DOCS,
   ...RESUME_PAGE_DOCS,
