@@ -355,7 +355,7 @@ export const JOB_DISPLAY_MODULE_DOCS: Record<string, ModuleDoc> = {
         cols: ['Hộp', 'Ở đâu trên site', 'Loại', 'Trang'],
         rows: [
           ['**Tìm kiếm — Top search**', 'Dải job trên đầu trang kết quả tìm kiếm', 'Search-fed', '`/trang/top-search`'],
-          ['*Các dải trang chủ · Korea · Global*', 'Super hot · Top job · Distinction · Basic plus · Basic · Free · Recommended', 'Tier-fed', '*chưa có trang riêng*'],
+          ['**Các dải trang chủ · Korea · Global**', 'Super hot · Top job · Distinction · Basic plus · Basic · Free · Recommended', 'Tier-fed', '`/trang/home-job-bands`'],
           ['*Mega menu — Trending jobs / Don’t miss these jobs*', 'Hai dải trên các trang bảng tin của mega menu', 'Search-fed', '*chưa có trang riêng — xem /trang/jobs-pages*'],
           ['*Banner và popup*', 'Trang chủ, trang công ty, trang cá nhân, trang đăng nhập', '`BOOKED`', '*xem nhóm Content*'],
         ],

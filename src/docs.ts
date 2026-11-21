@@ -29,6 +29,7 @@ import { JOBS_APPS_PAGE_DOCS, JOBS_APPS_MODULE_DOCS } from './pagedocs/jobs-apps
 import { MATCHING_PAGE_DOCS, MATCHING_MODULE_DOCS } from './pagedocs/matching'
 import { NOTIF_SYSTEM_PAGE_DOCS, NOTIF_SYSTEM_MODULE_DOCS } from './pagedocs/notif-system'
 import { JOB_DISPLAY_PAGE_DOCS, JOB_DISPLAY_MODULE_DOCS } from './pagedocs/job-display-logic'
+import { HOME_BANDS_PAGE_DOCS } from './pagedocs/job-display-home-bands'
 import { PRODUCT_SERVICE_PAGE_DOCS, PRODUCT_SERVICE_MODULE_DOCS } from './pagedocs/product-service'
 import { RESUME_PAGE_DOCS, RESUME_MODULE_DOCS } from './pagedocs/resume'
 import { USERS_ORG_PAGE_DOCS, USERS_ORG_MODULE_DOCS } from './pagedocs/users-org'
@@ -728,6 +729,7 @@ export const PAGE_DOCS: Record<string, PageDoc> = {
   ...JOBS_APPS_PAGE_DOCS,
   ...MATCHING_PAGE_DOCS,
   ...JOB_DISPLAY_PAGE_DOCS,
+  ...HOME_BANDS_PAGE_DOCS,
   ...NOTIF_SYSTEM_PAGE_DOCS,
   ...PRODUCT_SERVICE_PAGE_DOCS,
   ...RESUME_PAGE_DOCS,

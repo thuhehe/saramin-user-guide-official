@@ -613,6 +613,20 @@
   ]
  },
  {
+  "group": "Job display logic",
+  "key": "home-job-bands",
+  "label": "Dải job trang chủ · Korea · Global",
+  "path": "/",
+  "perm": "",
+  "flag": "",
+  "site": "Jobseeker site",
+  "what": "Tám dải job dùng chung cho trang chủ và hai trang Việc làm Hàn Quốc / nước ngoài: dải nào lấy job nào, hiện bao nhiêu thẻ, xoay vòng ra sao, khi nào dải bị ẩn.",
+  "sub": [
+   "/viec-lam/han-quoc",
+   "/viec-lam/nuoc-ngoai"
+  ]
+ },
+ {
   "group": "Notifications",
   "key": "notification-rules",
   "label": "Automation rules",
