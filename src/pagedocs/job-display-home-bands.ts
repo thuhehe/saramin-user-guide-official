@@ -97,7 +97,7 @@ export const HOME_BANDS_PAGE_DOCS: Record<string, PageDoc> = {
         items: [
           'Ba trang có **ba bộ ô riêng**. Tick một dải cho product ở trang chủ **không** đưa job lên dải cùng tên ở hai trang kia — phải tick riêng từng ô.',
           'Vì vậy hai trang Hàn Quốc / nước ngoài có thể **trống hoàn toàn** trong khi trang chủ vẫn đầy: chưa bán ô nào thì chưa có dải nào.',
-          'Lọc quốc gia chạy **sau** khi đã chọn xong job theo ô. Một job của công ty Việt Nam dù có mua ô ở trang Hàn Quốc cũng **không** lên trang đó.',
+          'Lọc quốc gia là **điều kiện bắt buộc**, không phải cách sắp xếp: job của công ty Việt Nam dù đã mua ô trên trang Hàn Quốc cũng **không** lên trang đó.',
           'Banner trên ba trang là **cùng một ô**, chia theo quốc gia của **người mua banner**, không theo công ty của job.',
         ],
       },
