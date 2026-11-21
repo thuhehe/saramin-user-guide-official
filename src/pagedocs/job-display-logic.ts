@@ -68,7 +68,7 @@ export const JOB_DISPLAY_PAGE_DOCS: Record<string, PageDoc> = {
     blocks: [
       {
         kind: 'p',
-        text: 'Tài liệu quy định dải **Top search** trên đầu trang kết quả tìm kiếm: khi nào dải hiện, lấy job nào, xếp theo gì, hiện bao nhiêu thẻ, xoay vòng thế nào, giao diện gồm những gì.\n\nTrạng thái: **✅ đã chốt — chị Thu 21/11/2026**. Task SRM-1739. Riêng tiêu đề dải khi không có từ khoá: **🔶 đề xuất, chờ chốt** (mục 2).',
+        text: 'Tài liệu quy định dải **Top search** trên đầu trang kết quả tìm kiếm: khi nào dải hiện, lấy job nào, xếp theo gì, hiện bao nhiêu thẻ, xoay vòng thế nào, giao diện gồm những gì.\n\nTrạng thái: **✅ đã chốt — chị Thu 21/11/2026**. Task SRM-1739.',
       },
       {
         kind: 'shot',
@@ -116,8 +116,8 @@ export const JOB_DISPLAY_PAGE_DOCS: Record<string, PageDoc> = {
         ],
       },
       {
-        kind: 'open',
-        text: '**🔶 Tiêu đề khi không có từ khoá — đề xuất, chờ chị Thu chốt.**\n\nĐề xuất: dùng *Việc làm dành cho bạn* cho mọi trường hợp không có từ khoá, kể cả khi đã đặt bộ lọc.\n\nLý do: người dùng thường đặt nhiều bộ lọc một lúc — hai khu vực, ba ngành nghề là bình thường. Ghép hết vào tiêu đề thì không ai đọc nổi. Saramin Hàn Quốc cũng dùng tiêu đề trung tính.\n\nPhương án 2: đúng một nhóm bộ lọc và nhóm đó chỉ một giá trị thì gọi tên. VD: chỉ chọn Đà Nẵng → *Việc làm tại Đà Nẵng dành cho bạn*. Các trường hợp khác vẫn dùng tiêu đề trung tính.\n\nChi phí phương án 2: mỗi nhóm bộ lọc phải có một cách viết riêng.',
+        kind: 'p',
+        text: '**✅ Tiêu đề khi không có từ khoá: *Việc làm dành cho bạn* — chị Thu 21/11/2026.**\n\nTiêu đề trung tính dùng cho mọi trường hợp không có từ khoá, kể cả khi đã đặt bộ lọc. Không ghép tên bộ lọc vào tiêu đề.\n\nLý do: người dùng thường đặt nhiều bộ lọc một lúc — hai khu vực, ba ngành nghề là bình thường. Ghép hết vào tiêu đề thì không ai đọc nổi. Saramin Hàn Quốc cũng để tiêu đề trung tính.\n\nĐã cân nhắc và **bỏ**: gọi tên bộ lọc khi chỉ chọn đúng một giá trị, VD chỉ chọn Đà Nẵng → *Việc làm tại Đà Nẵng dành cho bạn*. Bỏ vì mỗi nhóm bộ lọc phải có một cách viết riêng, chỉ để phục vụ số ít lượt tìm kiếm.',
       },
 
       /* ───────────────────────────────────────────────────────────────── */
