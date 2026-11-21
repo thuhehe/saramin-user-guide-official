@@ -8,23 +8,42 @@
  * design. The group answers one question per area, in the same shape every
  * time, so a new area is a new page and nothing else moves.
  *
- * TWO KINDS OF PAGE LIVE HERE, AND THEY MUST NOT BE CONFUSED.
- *   - The group index below is AS-BUILT: it describes the registry and the two
- *     fill routes as they run today.
- *   - /trang/top-search is a REQUIREMENT, settled 2026-11-21 and built under
- *     SRM-1739. It states rules, not behaviour. Production figures appear on
- *     it only as evidence, each carrying the date it was measured.
- * A page that mixes the two silently is the failure mode to avoid: say which
- * kind it is in the opening paragraph and in the closing stamp.
+ * WHO READS THESE PAGES. Thu settled this on 2026-11-21: the per-area pages
+ * (/trang/top-search and the ones that follow it) are a USER GUIDE FOR THE
+ * CLIENT. They describe the logic of an area and nothing else. They are NOT a
+ * requirement for the dev, so none of the following belongs on them:
+ *   - "Bản yêu cầu", status lines, ✅ / 🔶 markers, who decided and when
+ *   - ticket codes
+ *   - gap statements: "hiện tại là 8", "đổi thành 20 nằm trong task",
+ *     "khác hiện tại", anything comparing today's build to the target
+ *   - production measurements, pool sizes, named employers, config advice
+ *   - internal to-do lists for the team
+ * That material lives in the spec site and the PM ticket, which is where the
+ * dev reads it. The group index below is the exception: it is the technical
+ * as-built page about the registry itself.
  *
- * SHAPE OF THE TOP SEARCH REQUIREMENT:
- *   §1 Tóm lại — the six steps as one table
- *   §2 Khi nào dải hiện ra, và tiêu đề là gì
- *   §3 Job nào đủ điều kiện
- *   §4 Thứ tự, và sức chứa
- *   §5 Mỗi slide tối đa một job của một công ty
- *   §6 Xoay vòng
- *   §7 Giao diện
+ * SHAPE OF THE TOP SEARCH PAGE:
+ *   1 Tóm lại — the whole band as one table
+ *   2 Khi nào dải hiện, và tiêu đề là gì
+ *   3 Job nào được lên dải
+ *   4 Xếp theo gì, hiện bao nhiêu thẻ
+ *   5 Mỗi slide tối đa một job của một công ty
+ *   6 Xoay vòng
+ *   7 Giao diện
+ *
+ * KEPT OUT OF THE PAGE ON 2026-11-21, because they are internal findings and
+ * not logic the client needs. Measured on production 20/11/2026; move them to
+ * the ticket or the spec site if they still need an owner:
+ *   - Product "TOP JOB - TEST" is Active at 3.000.000 đ and sells this slot.
+ *     Looks like test data; should be Inactive.
+ *   - Placement load counts 2.626 for this slot, the search endpoint returns
+ *     2.624 — the dashboard also counts jobs on archived products.
+ *   - The "hiển thị trong N ngày đầu" field on the slot row is a no-op here.
+ *   - Placement load treats this slot as rotation-free; once the band rotates
+ *     that has to change or "Waiting for a turn" reports nonsense.
+ *   - The pool is 2.626 postings over 22 companies, 2.592 of them MBBANK's,
+ *     so one company per slide holds for about eleven slides and no further.
+ *     Narrowing which products sell this slot is the only real fix.
  *
  * VOICE OF THE TOP SEARCH PAGE — Thu picked a colleague's Notion docs as the
  * model on 2026-11-21 and the page is written to match them:
@@ -35,11 +54,11 @@
  *   - examples are one line with an arrow: "VD: … → …"
  *   - NO code identifiers in reader-facing text. Not refreshed_at but "lần làm
  *     mới gần nhất"; not items_shown but "số thẻ"; not rotation_seconds but
- *     "chu kỳ". Name things the way an admin sees them on screen. A ticket
- *     code (SRM-1739) on its own is fine.
- *   - decisions carry who and when: "✅ chị Thu 21/11". Legend: ✅ đã chốt ·
- *     🔶 đề xuất, chờ chốt · ❓ câu hỏi mở
+ *     "chu kỳ". Name things the way an admin sees them on screen. No ticket
+ *     codes either.
  * Detail that only makes sense with a code name belongs in the ticket, not here.
+ * So do decision markers: a client reading a guide does not care who signed it
+ * off, only how the thing works.
  *
  * VOCABULARY. Never "vẽ" for what the user sees — it reads as jargon. Use
  * "hiện" / "hiển thị". Never "ai" for jobs; jobs are not people.
@@ -59,8 +78,7 @@ const STAMP =
 
 const STAMP_ASBUILT = `${STAMP} Đây là mô tả *cái đang chạy*, không phải bản yêu cầu.`
 
-const STAMP_TOP_SEARCH =
-  'Bản yêu cầu dải Top search. **✅ đã chốt — chị Thu 21/11/2026**, task SRM-1739. Số liệu production đo ngày 20/11/2026.'
+const STAMP_TOP_SEARCH = 'Cập nhật 21/11/2026.'
 
 export const JOB_DISPLAY_PAGE_DOCS: Record<string, PageDoc> = {
   /* ────────────────────────────────────────────────────────────────────────── */
@@ -68,30 +86,30 @@ export const JOB_DISPLAY_PAGE_DOCS: Record<string, PageDoc> = {
     blocks: [
       {
         kind: 'p',
-        text: 'Tài liệu quy định dải **Top search** trên đầu trang kết quả tìm kiếm: khi nào dải hiện, lấy job nào, xếp theo gì, hiện bao nhiêu thẻ, xoay vòng thế nào, giao diện gồm những gì.\n\nTrạng thái: **✅ đã chốt — chị Thu 21/11/2026**. Task SRM-1739.',
+        text: 'Dải **Top search** là hàng thẻ việc làm nằm trên đầu trang kết quả tìm kiếm, phía trên danh sách kết quả. Đây là một ô có bán: job chỉ lên dải khi bậc tin của job, hoặc add-on hiển thị gắn vào job, có bán ô này.\n\nTrang này nói: khi nào dải hiện, lấy job nào, xếp theo gì, hiện bao nhiêu thẻ, xoay vòng ra sao, và trên màn hình dải gồm những gì.',
       },
       {
         kind: 'shot',
         src: '/shots/job-display/top-search-on-page.jpg',
         where: 'Jobseeker site',
         caption: 'Dải Top search là khung đỏ. Nó nằm **trên** khối *Kết quả tìm kiếm*.',
-        note: 'Ảnh chụp dải **đang chạy hôm nay**: 8 thẻ, 2 slide, chỉ hiện khi có từ khoá. Tài liệu này đổi cả ba.',
+        note: 'Ảnh để thấy **vị trí** của dải trên trang.',
       },
 
       /* ───────────────────────────────────────────────────────────────── */
-      { kind: 'h', text: '1. Tóm tắt luật' },
+      { kind: 'h', text: '1. Tóm lại' },
       {
         kind: 'table',
-        cols: ['Hạng mục', 'Luật', 'Hiện tại'],
+        cols: ['Hạng mục', 'Dải chạy thế nào'],
         rows: [
-          ['Khi nào hiện', 'Luôn hiện', 'Chỉ khi có từ khoá'],
-          ['Lọc theo', 'Từ khoá + bộ lọc', 'Chỉ từ khoá'],
-          ['Số thẻ', '20', '8'],
-          ['Chia slide', '5 slide × 4 thẻ', '2 slide × 4 thẻ'],
-          ['Thứ tự', 'Mới làm mới trước', 'Giống'],
-          ['Một công ty trong 1 slide', 'Nhiều nhất 1 thẻ', 'Không giới hạn'],
-          ['Xoay vòng', '5 phút tịnh tiến 4 job', 'Không xoay vòng'],
-          ['Nút Xem thêm', 'Không có', 'Không có'],
+          ['Khi nào hiện', 'Luôn hiện, trừ khi không còn job nào đủ điều kiện'],
+          ['Lọc theo', 'Từ khoá và bộ lọc trên thanh tìm kiếm'],
+          ['Số thẻ', '20'],
+          ['Chia slide', '5 slide × 4 thẻ'],
+          ['Thứ tự', 'Job làm mới gần nhất đứng trước'],
+          ['Một công ty trong 1 slide', 'Nhiều nhất 1 thẻ'],
+          ['Xoay vòng', '5 phút tịnh tiến 4 job'],
+          ['Nút Xem thêm', 'Không có'],
         ],
       },
 
@@ -111,13 +129,13 @@ export const JOB_DISPLAY_PAGE_DOCS: Record<string, PageDoc> = {
         kind: 'list',
         items: [
           'Dải **luôn hiện**. Chỉ ẩn khi không còn job nào đủ điều kiện.',
-          'Khác hiện tại: hôm nay không gõ từ khoá thì không có dải, dù đã chọn khu vực hay ngành nghề.',
-          'Server đã lọc được sẵn, phần còn thiếu là giao diện chưa gửi bộ lọc lên. VD đo trên production 20/11: từ khoá *ngân hàng* + lương từ 100 triệu → số job đủ điều kiện từ **2.592 xuống 0**.',
+          'Bộ lọc ở đây là đúng các bộ lọc của trang kết quả: khu vực, ngành nghề, vị trí, kỹ năng, cấp bậc, mức lương, loại hợp đồng, kinh nghiệm.',
+          'Dải và danh sách kết quả bên dưới luôn trả lời **cùng một câu hỏi**. Đổi một bộ lọc thì cả hai đổi theo.',
         ],
       },
       {
         kind: 'p',
-        text: '**✅ Tiêu đề khi không có từ khoá: *Việc làm dành cho bạn* — chị Thu 21/11/2026.**\n\nTiêu đề trung tính dùng cho mọi trường hợp không có từ khoá, kể cả khi đã đặt bộ lọc. Không ghép tên bộ lọc vào tiêu đề.\n\nLý do: người dùng thường đặt nhiều bộ lọc một lúc — hai khu vực, ba ngành nghề là bình thường. Ghép hết vào tiêu đề thì không ai đọc nổi. Saramin Hàn Quốc cũng để tiêu đề trung tính.\n\nĐã cân nhắc và **bỏ**: gọi tên bộ lọc khi chỉ chọn đúng một giá trị, VD chỉ chọn Đà Nẵng → *Việc làm tại Đà Nẵng dành cho bạn*. Bỏ vì mỗi nhóm bộ lọc phải có một cách viết riêng, chỉ để phục vụ số ít lượt tìm kiếm.',
+        text: 'Tên bộ lọc **không** ghép vào tiêu đề. Người dùng thường đặt nhiều bộ lọc một lúc — hai khu vực, ba ngành nghề là bình thường — ghép hết vào thì tiêu đề không đọc nổi. Nên không có từ khoá thì tiêu đề để trung tính, dù đã chọn bộ lọc hay chưa.',
       },
 
       /* ───────────────────────────────────────────────────────────────── */
@@ -137,7 +155,7 @@ export const JOB_DISPLAY_PAGE_DOCS: Record<string, PageDoc> = {
         items: [
           'Bậc đang chạy: bậc **cao nhất** job đang giữ, còn trong hạn.',
           'Product đã archive: job rớt khỏi dải, dù bậc còn hạn.',
-          'Add-on hiển thị: mua kèm vào job đang chạy bậc bất kỳ, **không cần đổi bậc**. Có từ 17/11/2026.',
+          'Add-on hiển thị: mua kèm vào job đang chạy bậc bất kỳ, **không cần đổi bậc**.',
         ],
       },
 
@@ -149,7 +167,7 @@ export const JOB_DISPLAY_PAGE_DOCS: Record<string, PageDoc> = {
           'Thứ tự: job **làm mới gần nhất** đứng trước. Không phải ngày đăng.',
           'Menu sắp xếp của người dùng (VD *Lương cao nhất*) **không** đổi thứ tự dải. Nó chỉ đổi danh sách kết quả bên dưới.',
           'Hàng job được **chốt ở đầu mỗi chu kỳ**. Job làm mới giữa chu kỳ vào hàng từ chu kỳ sau — không cướp lượt của job đang chờ.',
-          'Số thẻ: **20**, chia **5 slide × 4 thẻ**. Hiện đang là 8 thẻ; đổi thành 20 nằm trong task.',
+          'Số thẻ: **20**, chia **5 slide × 4 thẻ**.',
           'Ít hơn 20 job thì hiện bấy nhiêu. VD: 7 job đủ điều kiện → 2 slide, slide sau 3 thẻ.',
           '**Không** lấy job chưa mua ô này vào cho đủ 20.',
         ],
@@ -162,12 +180,9 @@ export const JOB_DISPLAY_PAGE_DOCS: Record<string, PageDoc> = {
         items: [
           'Trong một slide 4 thẻ, mỗi công ty nhiều nhất **1 thẻ**.',
           'Trên cả 20 thẻ, một công ty nhiều nhất **5 thẻ**.',
-          'Khác hiện tại: hôm nay dải không chia lượt theo công ty, một công ty có thể giữ cả 8 chỗ.',
+          'Nếu số công ty đang có job trong dải **không đủ** để chia như vậy: rải xa nhất có thể. Còn công ty chưa dùng trong slide thì ưu tiên công ty đó; hết mới chấp nhận một công ty xuất hiện hai lần.',
+          '**Không bỏ job** ra khỏi dải để giữ luật này, cũng **không để slide thiếu thẻ**.',
         ],
-      },
-      {
-        kind: 'warn',
-        text: '**Dữ liệu hôm nay chưa đủ để luôn đạt luật này.** Số đo 20/11: 2.626 job đủ điều kiện, trong đó **2.592 là của riêng MBBANK**; cả pool chỉ có 22 công ty, tức ngoài MBBANK còn 34 job.\n\nMột slide cần 4 công ty khác nhau → mỗi slide cần **3 job ngoài MBBANK**. Một lần tải trang cần 15 job như vậy, hiện có 34 → **màn đầu vẫn đạt luật**. Nhưng cả pool chỉ đủ **khoảng 11 slide**; từ đó trở đi slide buộc phải lặp công ty.\n\nCách làm: rải xa nhất có thể. Còn công ty chưa dùng trong slide thì ưu tiên, hết mới chấp nhận lặp. **Không bỏ job đi** để giữ luật.\n\nCách sửa gốc không nằm ở code: **thu hẹp danh sách product được bán ô này**. Đây là quyết định của chị Thu.',
       },
 
       /* ───────────────────────────────────────────────────────────────── */
@@ -207,22 +222,6 @@ export const JOB_DISPLAY_PAGE_DOCS: Record<string, PageDoc> = {
           '**Không có nút Xem thêm.**',
         ],
       },
-      {
-        kind: 'p',
-        text: 'Mẫu tham chiếu: dải *회원님을 위한 공고* trên trang tìm kiếm Saramin Hàn Quốc.',
-      },
-
-      /* ───────────────────────────────────────────────────────────────── */
-      { kind: 'h', text: '8. Vấn đề trên production, cần xử lý' },
-      {
-        kind: 'list',
-        items: [
-          'Product **TOP JOB - TEST** đang Active, giá 3.000.000 đ, có bán ô Top search. Nếu là dữ liệu thử thì nên chuyển sang *Inactive*.',
-          'Màn hình *Placement load* đếm **2.626**, ô tìm kiếm trả **2.624**. Chênh vì màn hình đếm cả job chạy trên product đã archive. Cần số đúng với cái ứng viên thấy thì lấy từ ô tìm kiếm.',
-          'Ô *hiển thị trong N ngày đầu* trên dòng tick **không có tác dụng** với dải này. Đặt số vào đó không giới hạn được gì.',
-          'Màn hình *Placement load* hiện coi dải này là **không xoay vòng**. Khi dải xoay vòng thật phải sửa cùng lúc, nếu không nhóm *Waiting for a turn* báo sai.',
-        ],
-      },
 
       { kind: 'p', text: `*${STAMP_TOP_SEARCH}*` },
     ],
@@ -241,7 +240,7 @@ export const JOB_DISPLAY_MODULE_DOCS: Record<string, ModuleDoc> = {
     headline: [
       '**Một “placement” là một cái hộp trên một trang** — không phải một sản phẩm, không phải một job. Sửa ở **Product settings → Placements**; thêm hay xoá hộp thì phải đụng database, admin không làm được.',
       '**Job vào hộp bằng một trong hai đường:** `TIER` — product của job có **tick** hộp đó; hoặc `BOOKED` — khách **mua thẳng một khung thời gian** trên hộp (chỉ dùng cho banner và popup).',
-      '**Trong nhóm TIER còn chia tiếp làm hai, và đây mới là chỗ hay sai:** phần lớn hộp được trang chủ/bảng tin tự lấp và **có xoay vòng**; còn **3 hộp** được lấp bằng chính ô tìm kiếm và **hôm nay không xoay vòng** — `rotation_seconds` đặt trên 3 hộp đó không ai đọc. Riêng **Top search**, task **SRM-1739** đang làm phần xoay vòng đó — xem `/trang/top-search` §5.',
+      '**Trong nhóm TIER còn chia tiếp làm hai, và đây mới là chỗ hay sai:** phần lớn hộp được trang chủ/bảng tin tự lấp và **có xoay vòng**; còn **3 hộp** được lấp bằng chính ô tìm kiếm và **hôm nay không xoay vòng** — `rotation_seconds` đặt trên 3 hộp đó không ai đọc. Riêng **Top search** có luật xoay vòng của riêng nó — xem `/trang/top-search`.',
     ],
     blocks: [
       /* ───────────────────────────────────────────────────────────────── */
@@ -256,7 +255,7 @@ export const JOB_DISPLAY_MODULE_DOCS: Record<string, ModuleDoc> = {
           ['`page`', 'Hộp nằm ở trang nào', '`HOME` · `SEARCH` · `KOREA` · `GLOBAL` · `JOB_LIST` · `COMPANY_PAGE` · `PROFILE` · `AUTH`'],
           ['`format`', 'Hộp chứa kiểu nội dung gì', '`CONTENT_POOL` (danh sách job) · `IMAGE_BANNER` · `POPUP`'],
           ['`fill_route`', '**Job/ảnh vào hộp bằng đường nào** — xem §2', '`TIER` · `BOOKED`'],
-          ['`items_shown`', 'Hộp hiện bao nhiêu thẻ cùng lúc', '`8` với Top search — **thành `20`** theo SRM-1739'],
+          ['`items_shown`', 'Hộp hiện bao nhiêu thẻ cùng lúc', '`8`'],
           ['`pool_cap`', 'Trần cũ cho số dòng truy vấn. **Với dải job thì không còn ai đọc** từ 10/11/2026', 'để trống'],
           ['`rotation_seconds`', 'Bao lâu đổi lượt một lần — **chỉ có tác dụng với hộp tier-fed**, xem §4', '`300`'],
         ],
@@ -301,7 +300,7 @@ export const JOB_DISPLAY_MODULE_DOCS: Record<string, ModuleDoc> = {
           ['Là những hộp nào', 'Toàn bộ dải trang chủ, Korea, Global (8 dải × 3 trang) + 1 hộp trang quên mật khẩu (đang tắt)', '`TOP_SEARCH` · `MEGA_MENU_PAGE_JOB_LIST_TRENDING` · `MEGA_MENU_PAGE_JOB_LIST_ANNOUNCEMENT`'],
           ['Lấy nội dung bằng', '`GET /placements/{id}/jobs`', '`GET /jobs/search` với một cờ riêng'],
           ['Có đọc từ khoá người dùng gõ?', '**Không** — hộp hiện như nhau với mọi người', '**Có** — hộp trả lời chính câu người dùng hỏi'],
-          ['Có xoay vòng?', '**Có**, theo `rotation_seconds`', '**Hôm nay chưa** — đường tìm kiếm không có đoạn code xoay vòng nào. Riêng Top search: đang làm ở **SRM-1739**'],
+          ['Có xoay vòng?', '**Có**, theo `rotation_seconds`', '**Hôm nay chưa** — đường tìm kiếm không có đoạn code xoay vòng nào. Riêng **Top search** có luật xoay vòng riêng, xem `/trang/top-search`'],
           ['Xếp theo', 'Thứ tự xoay vòng của chu kỳ hiện tại', '`refreshed_at` giảm dần — mới làm mới nhất trước'],
         ],
       },
@@ -323,7 +322,7 @@ export const JOB_DISPLAY_MODULE_DOCS: Record<string, ModuleDoc> = {
       },
       {
         kind: 'warn',
-        text: '**Hôm nay cả 28 hộp TIER đều đang để rotation_seconds = 300** (5 phút) — kể cả 3 hộp search-fed. Với 25 hộp tier-fed, con số đó chạy thật. Với 3 hộp search-fed, nó **chưa làm gì cả**: dải lấy N job đầu theo `refreshed_at` và dừng ở đó, job thứ N+1 trở đi không tới lượt. Với **Top search**, đó đúng là thứ **SRM-1739** đang sửa — con số 300 sẽ bắt đầu có tác dụng.',
+        text: '**Hôm nay cả 28 hộp TIER đều đang để rotation_seconds = 300** (5 phút) — kể cả 3 hộp search-fed. Với 25 hộp tier-fed, con số đó chạy thật. Với 3 hộp search-fed, nó **chưa làm gì cả**: dải lấy N job đầu theo `refreshed_at` và dừng ở đó, job thứ N+1 trở đi không tới lượt. Với **Top search**, 300 giây chính là chu kỳ xoay vòng của dải — xem `/trang/top-search`.',
       },
 
       /* ───────────────────────────────────────────────────────────────── */
@@ -351,10 +350,10 @@ export const JOB_DISPLAY_MODULE_DOCS: Record<string, ModuleDoc> = {
       { kind: 'h', text: '§6 · Các trang trong nhóm này' },
       {
         kind: 'table',
-        note: 'Trang **Top search** là **bản yêu cầu đã chốt** cho dải đó (21/11/2026, task SRM-1739) — nó nói dải **phải** chạy thế nào. Trang này, và các trang hộp khác khi viết, mô tả **cái đang chạy**. Mở một trang ra là biết nó thuộc loại nào: câu đầu tiên và dòng cuối trang đều nói rõ.',
+        note: 'Trang này nói phần **chung cho mọi hộp**: hộp là gì, nội dung vào hộp bằng đường nào, hộp nào xoay vòng. Mỗi hộp có trang riêng nói cách hộp đó **chọn và xếp job** — hôm nay mới có trang cho Top search.',
         cols: ['Hộp', 'Ở đâu trên site', 'Loại', 'Trang'],
         rows: [
-          ['**Tìm kiếm — Top search**', 'Dải job trên đầu trang kết quả tìm kiếm', 'Search-fed', '`/trang/top-search` — **bản yêu cầu**'],
+          ['**Tìm kiếm — Top search**', 'Dải job trên đầu trang kết quả tìm kiếm', 'Search-fed', '`/trang/top-search`'],
           ['*Các dải trang chủ · Korea · Global*', 'Super hot · Top job · Distinction · Basic plus · Basic · Free · Recommended', 'Tier-fed', '*chưa có trang riêng*'],
           ['*Mega menu — Trending jobs / Don’t miss these jobs*', 'Hai dải trên các trang bảng tin của mega menu', 'Search-fed', '*chưa có trang riêng — xem /trang/jobs-pages*'],
           ['*Banner và popup*', 'Trang chủ, trang công ty, trang cá nhân, trang đăng nhập', '`BOOKED`', '*xem nhóm Content*'],

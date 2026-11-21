@@ -131,7 +131,35 @@ B=$(curl -s https://saramin-admin-guide.vercel.app/ | grep -o '/assets/index-[A-
 curl -s "https://saramin-admin-guide.vercel.app$B" -o /tmp/g.js && LC_ALL=C grep -c '<new string>' /tmp/g.js
 ```
 
-## 9 · The spec site is a different job
+## 9 · The guide site is for the client, and carries no requirement furniture
+
+Thu settled this on 21/11/2026, after the Top search page had been written as a
+requirement and had to be stripped back: **a guide-site page is a user guide for
+the client. It describes the logic of one area and nothing else.**
+
+Never put any of this on a guide page:
+
+| Out | Where it belongs |
+| --- | --- |
+| "Bản yêu cầu", status lines, ✅ / 🔶 / ❓ markers | the spec site |
+| Who decided, and when | the spec site |
+| Ticket codes | the PM ticket |
+| "hiện tại là 8", "đổi thành 20 nằm trong task", "khác hiện tại" | the PM ticket |
+| Production measurements, pool sizes, named employers | the PM ticket |
+| Config advice, internal to-do lists | the PM ticket |
+
+A gap statement is the easiest one to write by accident. If a sentence only
+makes sense to someone who is about to change the code, it is not guide text.
+
+The close of a guide page is a plain date — `Cập nhật 21/11/2026.` — not a
+provenance stamp with commit hashes. Those belong in the file's header comment,
+where the next writer reads them and the client does not.
+
+When the same decision has to be recorded for the dev, write it three times, in
+three voices: the guide page says how it works, the spec site says what must be
+built and why, the ticket says what to change and how it is tested.
+
+## 10 · The spec site is a different job
 
 `~/Documents/SARAMIN_REQUIREMENT`, data in `src/data/build/*.ts`, deploys to
 saramin-eta.vercel.app on push to `main` (that checkout is *not* divergent —
