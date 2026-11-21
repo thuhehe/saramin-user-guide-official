@@ -794,7 +794,7 @@ export const MATCHING_PAGE_DOCS: Record<string, PageDoc> = {
       {
         kind: 'table',
         note: 'Hai khối nằm sát nhau nên rất dễ bị đọc là một. Chúng **không** chia sẻ luật nào — ngoài việc khối 2 phải bỏ những job khối 1 đang hiện.',
-        cols: ['', 'Khối 1 — *những việc phù hợp nhất*', 'Khối 2 — *Việc làm cho {vị trí}*'],
+        cols: ['', 'Khối 1 — những việc phù hợp nhất', 'Khối 2 — Việc làm cho {vị trí}'],
         rows: [
           ['Nguồn', 'Bộ máy **Recommended jobs** (có chấm điểm)', '**Tìm kiếm thuần**'],
           ['Đọc gì của ứng viên', 'CV · hồ sơ · hành vi · trọng số', '**Đúng một thứ**: vị trí đã chọn ở bước 1'],
