@@ -37,6 +37,22 @@
  *           feat-korea-global-home-layout.md, dictionaries/vi.json + the live
  *           dev site for the headings a jobseeker actually reads.
  *
+ * ORDER INSIDE A BAND — corrected 21/11/2026. The first draft said "job làm
+ * mới gần nhất đứng trước", carried over from the pool query's ORDER BY. That
+ * cannot hold together with the 5-minute rotation the same page describes: a
+ * band cannot both show the most recently refreshed N and walk every job in
+ * the pool. The rotation wins, and it is also the better rule. Every band
+ * carries rotation_seconds = 300 (V354), so spreadPage lays the whole pool out
+ * once per cycle keyed off each job's own id and company — the incoming
+ * refresh order is discarded — then cuts it into one page per period. So:
+ * refreshing a posting buys nothing on these bands, and what a product buys is
+ * a better band and more turns, never a place at the head of one. That is the
+ * same conclusion the two job-board strips reached on their own redesign
+ * (tier out of the sort keys, product buys frequency), so the two pages agree.
+ * The company spreading is best effort by construction: breakRuns searches
+ * forward only, so a tail left holding one company stays as it is — the page
+ * says so rather than promising what arithmetic cannot deliver.
+ *
  * KEPT OUT OF THE PAGE, deliberately:
  *   - What the Korea / Global pages hold right now. Observed on dev 21/11/2026:
  *     Korea draws no band at all and Global draws two. That is a selling state,
@@ -73,7 +89,7 @@ export const HOME_BANDS_PAGE_DOCS: Record<string, PageDoc> = {
           ['Job lên dải vì', 'Bậc tin, hoặc add-on hiển thị, có bán đúng ô đó'],
           ['Lọc theo', 'Quốc gia của công ty — chỉ ở hai trang Hàn Quốc và nước ngoài'],
           ['Không lọc theo', 'Từ khoá — ba trang này không có ô tìm kiếm dẫn vào dải'],
-          ['Thứ tự', 'Job làm mới gần nhất đứng trước'],
+          ['Thứ tự trong dải', 'Rải đều theo công ty — không job nào được xếp trước vì mới đăng hay mới làm mới'],
           ['Số thẻ', 'Đặt riêng cho từng dải — xem mục 3'],
           ['Xoay vòng', '5 phút đổi sang nhóm job tiếp theo'],
           ['Dải không có job', 'Trang ẩn luôn dải đó'],
@@ -156,7 +172,9 @@ export const HOME_BANDS_PAGE_DOCS: Record<string, PageDoc> = {
       {
         kind: 'list',
         items: [
-          'Thứ tự: job **làm mới gần nhất** đứng trước. Không phải ngày đăng — bấm làm mới tin là lên đầu hàng.',
+          'Trong một dải, **không job nào được ưu tiên đứng trước**. Mua bậc cao hơn là mua **dải tốt hơn và nhiều lượt hiện hơn**, không phải mua chỗ đứng đầu dải.',
+          '**Bấm làm mới tin không đẩy job lên đầu dải.** Làm mới có tác dụng ở trang tìm kiếm, không có tác dụng ở các dải này.',
+          'Hàng chờ của dải được **xếp lại ở mỗi vòng**: job của cùng một công ty bị tách ra, **rải đều khắp hàng** trước khi cắt thành từng lượt. Nhờ vậy một công ty đăng 30 tin cùng lúc không chiếm trọn một lượt hiện.',
           'Số thẻ của dải là trần: ít job hơn thì hiện bấy nhiêu, **không** lấy job chưa mua dải vào cho đủ.',
           '**Hàng cuối lẻ thì bỏ cả hàng.** Các dải xếp theo lưới: *Việc làm Tiêu Điểm* 4 cột, *Việc Làm Mới Nhất* 5 cột, *Mạng Lưới Việc Làm* 6 cột. VD: lưới 4 cột có 13 job → hiện 12, job thứ 13 chờ lượt sau.',
           '**Top job và Distinction nằm chung một khối 6 hàng.** Top job xếp trước, nhiều nhất 4 hàng; Distinction lấp nốt chỗ còn trống của khối. Top job ít job thì Distinction lên sớm hơn, khối vẫn liền mạch, không để hàng hụt.',
@@ -169,11 +187,13 @@ export const HOME_BANDS_PAGE_DOCS: Record<string, PageDoc> = {
       {
         kind: 'list',
         items: [
-          'Toàn bộ job đủ điều kiện của một dải xếp thành **một hàng**. Dải hiện phần đầu hàng.',
-          'Mỗi **5 phút**, dải **lật sang nhóm tiếp theo** trong hàng. Hết hàng thì xếp lại từ đầu.',
-          'Đi hết một vòng thì **mọi job trong hàng đều đã được hiện đúng một lần** — không job nào bị bỏ qua.',
+          'Toàn bộ job đủ điều kiện của một dải xếp thành **một hàng chờ**. Dải hiện phần đầu hàng.',
+          'Mỗi **5 phút**, dải **lật sang nhóm tiếp theo** trong hàng. Hết hàng là xong **một vòng**.',
+          'Đi hết một vòng thì **mọi job trong hàng đều đã tới lượt** — không job nào bị bỏ qua.',
+          'Lượt cuối của vòng nếu không đủ job thì **lấy tiếp từ đầu hàng cho đủ số thẻ** — dải không bao giờ hiện hụt.',
+          'Sang vòng mới, **hàng được xếp lại từ đầu**, nên thứ tự vòng này khác vòng trước.',
           'Mọi người mở trang trong cùng một nhịp 5 phút đều thấy **cùng một danh sách**. Thứ tự tính theo đồng hồ, không theo từng lượt truy cập.',
-          'Trong một lượt hiện, job của **cùng một công ty được rải ra**, không đứng cạnh nhau.',
+          'Job của **cùng một công ty được tách ra**, không đứng cạnh nhau. Chỉ khi trong hàng không còn công ty nào khác để chen vào thì mới chấp nhận đứng cạnh nhau.',
           'Thẻ bị cắt vì lẻ hàng ở lượt này sẽ **lên trước ở lượt sau**.',
         ],
       },
@@ -185,8 +205,8 @@ export const HOME_BANDS_PAGE_DOCS: Record<string, PageDoc> = {
         rows: [
           ['Mở trang', '30 job đầu hàng', '50'],
           ['Sau 5 phút', '30 job tiếp theo', '20'],
-          ['Sau 10 phút', '20 job cuối hàng', '0'],
-          ['Sau 15 phút', 'Quay lại 30 job đầu hàng', '50'],
+          ['Sau 10 phút', '20 job cuối hàng, lấy thêm **10 job đầu hàng** cho đủ 30 thẻ', '0'],
+          ['Sau 15 phút', 'Vòng mới — hàng xếp lại, chạy lại từ đầu', '50'],
         ],
         note: 'Một vòng ở đây dài **15 phút**. Dải càng nhiều job thì vòng càng dài, nhưng job nào cũng tới lượt.',
       },
