@@ -49,9 +49,15 @@
  * a better band and more turns, never a place at the head of one. That is the
  * same conclusion the two job-board strips reached on their own redesign
  * (tier out of the sort keys, product buys frequency), so the two pages agree.
- * The company spreading is best effort by construction: breakRuns searches
- * forward only, so a tail left holding one company stays as it is — the page
- * says so rather than promising what arithmetic cannot deliver.
+ * The company spreading is best effort, and the reason is the MISSING CAP, not
+ * the repair pass. A run of n cards can be arranged with no two of one company
+ * adjacent exactly when the largest company holds at most ceil(n/2) of them.
+ * These bands cap nobody, so one company can hold most of a band's pool and no
+ * algorithm can space it. (The two job-board strips cap a company at 10% of the
+ * cards, which keeps every instance far inside that bound, so THEY can promise
+ * "never adjacent" outright — their cap and their spacing rule hold each other
+ * up.) Say the cap is what differs if the two pages are ever reconciled; the
+ * weaker wording here is not sloppiness on either side.
  *
  * KEPT OUT OF THE PAGE, deliberately:
  *   - What the Korea / Global pages hold right now. Observed on dev 21/11/2026:
@@ -193,7 +199,7 @@ export const HOME_BANDS_PAGE_DOCS: Record<string, PageDoc> = {
           'Lượt cuối của vòng nếu không đủ job thì **lấy tiếp từ đầu hàng cho đủ số thẻ** — dải không bao giờ hiện hụt.',
           'Sang vòng mới, **hàng được xếp lại từ đầu**, nên thứ tự vòng này khác vòng trước.',
           'Mọi người mở trang trong cùng một nhịp 5 phút đều thấy **cùng một danh sách**. Thứ tự tính theo đồng hồ, không theo từng lượt truy cập.',
-          'Job của **cùng một công ty được tách ra**, không đứng cạnh nhau. Chỉ khi trong hàng không còn công ty nào khác để chen vào thì mới chấp nhận đứng cạnh nhau.',
+          'Job của **cùng một công ty được tách ra**, không đứng cạnh nhau. Đây là **cố gắng tối đa**, không phải bảo đảm tuyệt đối: các dải này **không giới hạn một công ty được bao nhiêu tin**, nên khi một công ty nắm hơn nửa số job của dải thì không còn cách xếp nào tránh được hai thẻ của họ đứng cạnh nhau.',
           'Thẻ bị cắt vì lẻ hàng ở lượt này sẽ **lên trước ở lượt sau**.',
         ],
       },
