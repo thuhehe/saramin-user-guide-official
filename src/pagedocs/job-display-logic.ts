@@ -68,6 +68,25 @@
  *     (pool ÷ cards) × 5 min, so narrowing which rungs sell a slot is now the
  *     only lever that makes a posting appear more often. That is the sales
  *     story once everyone is guaranteed a turn.
+ * THE CAP PAYS FOR THE SPACING GUARANTEE, AND ONLY A CONSTRUCTION COLLECTS IT.
+ * Section 6 promises "never adjacent" with no hedge, and it can because the cap
+ * holds a company to 3 of 30 cards: a non-adjacent arrangement exists whenever
+ * the largest company stays at or under ceil(n/2), and the cap keeps it far
+ * inside that. Two things follow, and both are easy to lose in a rewrite:
+ *   - DO NOT soften section 6 to match the home bands page. That page says
+ *     "best effort" because those bands have NO cap at all, so one company can
+ *     hold most of a pool and no algorithm can space it. Different cause, not
+ *     a sloppier version of the same rule.
+ *   - BUILD IT AS A CONSTRUCTION, NOT A REPAIR. Section 6 says to deal each
+ *     round from nothing, always taking the company with the most cards left
+ *     and never the company just placed; that is the constructive proof of the
+ *     bound and it succeeds on every feasible instance. A repair pass that
+ *     walks an existing order patching collisions forward — what the build does
+ *     today — can give up on an instance that IS feasible, because it never
+ *     looks backward. Implement it that way and the promise on the page quietly
+ *     stops being true while both the page and the cap still look correct.
+ * Reached with the Home session on 2026-11-21, each of us holding one half.
+ *
  * ONE TRADE-OFF IS STILL THU'S TO SETTLE and the page currently takes the
  * first option: the group key ("nhóm đông tin nhất") keeps big provinces at
  * the top of every round, so a posting in a small province gets equal AIRTIME
