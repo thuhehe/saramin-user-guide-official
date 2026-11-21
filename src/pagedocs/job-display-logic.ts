@@ -631,12 +631,13 @@ export const JOB_DISPLAY_MODULE_DOCS: Record<string, ModuleDoc> = {
       },
       {
         kind: 'list',
-        heading: '2a · Bốn điều hay bị hiểu nhầm',
+        heading: '2a · Năm điều hay bị hiểu nhầm',
         items: [
           'Mua ô **không phải** mua chỗ. Mua ô là **được xếp vào hàng** của ô đó.',
           'Dải cùng tên ở trang khác là **ô khác**. Dải trên trang chủ và dải cùng tên ở trang Việc làm Hàn Quốc / nước ngoài phải **tick riêng từng ô**.',
           'Một bậc tin thường bán **một dải**. Muốn tin có mặt ở thêm dải thì mua **add-on hiển thị**, không cần đổi bậc.',
           'Có ô chỉ bán **N ngày đầu**. Hết số ngày đó tin rời ô, nhưng tin **vẫn đăng bình thường** ở mọi chỗ khác.',
+          'Ở **hai dải trang danh sách việc làm**, khách **không mua thứ hạng** — mọi tin trong dải đều chắc chắn được lên. Cái khách mua là **tần suất**: bậc cao vào được ô ít tin hơn, ô càng ít tin thì vòng càng ngắn và tin càng được hiện thường xuyên.',
         ],
       },
 
@@ -734,7 +735,7 @@ export const JOB_DISPLAY_MODULE_DOCS: Record<string, ModuleDoc> = {
         rows: [
           ['**8 dải trang chủ · Hàn Quốc · nước ngoài**', 'Kho tin đã mua đúng ô đó', 'Không', 'Rải đều theo công ty, xếp lại mỗi vòng — **làm mới không đổi được thứ tự**', 'Có'],
           ['**Top search**', 'Ô tìm kiếm, lọc trong các tin đã mua ô', '**Có**', 'Làm mới gần nhất', 'Có'],
-          ['**Trending jobs · Don’t miss these jobs**', 'Ô tìm kiếm của trang danh sách việc làm', '**Có** — theo trang đang mở', 'Hàng cắt thành từng lượt. Trong một lượt: nhóm đông tin nhất trên, rồi làm mới gần nhất — kèm trần 10% và luật không đứng cạnh nhau. **Bậc tin không xếp thứ tự**', 'Có'],
+          ['**Trending jobs · Don’t miss these jobs**', 'Ô tìm kiếm của trang danh sách việc làm', '**Có** — theo trang đang mở', 'Hàng xếp theo nhóm đông tin nhất, rồi lần làm mới. Rồi **chia bài** ra các lượt — trần 10% và luật không đứng cạnh nhau áp **trong từng lượt**. **Bậc tin không xếp thứ tự**', 'Có'],
           ['**Banner · popup**', 'Đơn đặt chỗ đã duyệt', 'Không', 'Theo nhịp của ô', 'Có'],
           ['**Việc làm gợi ý theo hồ sơ** *(không bán)*', 'Toàn bộ tin đang mở, chấm theo hồ sơ ứng viên', 'Không', 'Điểm phù hợp', 'Đổi mỗi ngày'],
         ],
@@ -753,7 +754,7 @@ export const JOB_DISPLAY_MODULE_DOCS: Record<string, ModuleDoc> = {
         rows: [
           ['**Showing now**', 'Ô đang hiện tin này ngay lúc này', '*Tin đang hiện*'],
           ['**Waiting for a turn**', 'Tin sẽ tới lượt ở một nhịp sau', '*Tin đang trong hàng, tới lượt trong vòng này*'],
-          ['**Never shown**', 'Tin đủ điều kiện nhưng hết cả một vòng vẫn không tới lượt', 'Nhóm này **phải trống**. Mọi ô thẻ việc làm đều xoay vòng, và hết một vòng là mọi tin đã lên — thấy tin nằm đây thì **báo lại**, đừng giải thích với khách là bình thường'],
+          ['**Never shown**', 'Tin đủ điều kiện nhưng hết cả một vòng vẫn không tới lượt', 'Nhóm này **phải trống**. Mọi ô thẻ việc làm đều xoay vòng, và hết một vòng là mọi tin đã lên — thấy tin nằm đây thì **báo lại**, đừng giải thích với khách là bình thường. Câu hỏi đúng bây giờ không còn là *“tin có được hiện không”* mà là ***“bao lâu một lần”*** — mục 5'],
           ['**Empty slot**', 'Ô còn chỗ trống vì chưa đủ tin', '*Ô này còn chỗ bán*'],
         ],
       },
@@ -767,6 +768,7 @@ export const JOB_DISPLAY_MODULE_DOCS: Record<string, ModuleDoc> = {
           ['Tin sẽ vào hàng của đúng ô đã mua', 'Tin luôn nằm ở thẻ đầu, hay ở slide 1 — và **không có cách trả thêm tiền để chen lên trước** trong cùng một ô'],
           ['Mỗi vòng tin **lên đúng một lần** — kể cả tin ở bậc thấp nhất của ô', 'Tin lúc nào cũng có mặt trên màn hình'],
           ['Tính trước được **bao lâu tin lên một lần**: bể càng đông thì vòng càng dài', 'Bậc cao hơn thì hiện **dày hơn** — trong cùng một ô, bậc không đổi được tần suất'],
+          ['Hai dải trang danh sách việc làm: trong một lượt **không công ty nào quá 10% số thẻ**', 'Một vị trí cụ thể trong dải'],
           ['Cùng một thời điểm, mọi ứng viên thấy như nhau', 'Thứ tự riêng cho từng ứng viên'],
           ['Làm mới tin **rút ngắn thời gian chờ** tới lượt ở Top search, hai dải trang danh sách việc làm và danh sách kết quả tìm kiếm', 'Làm mới đẩy được tin lên đầu **8 dải trang chủ · Hàn Quốc · nước ngoài** — hoặc cho tin lên hai lần trong một vòng'],
           ['Mua add-on hiển thị để có mặt ở thêm ô', 'Mua nhiều tin thì mỗi tin được hiện nhiều hơn'],
