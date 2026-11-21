@@ -57,7 +57,12 @@
  * cards, which keeps every instance far inside that bound, so THEY can promise
  * "never adjacent" outright — their cap and their spacing rule hold each other
  * up.) Say the cap is what differs if the two pages are ever reconciled; the
- * weaker wording here is not sloppiness on either side.
+ * weaker wording here is not sloppiness on either side. Their guarantee also
+ * has to be BUILT as a construction — deal each round from scratch, always
+ * taking the company with the most cards left — and not as a pass that walks
+ * an existing order patching collisions forward, which is what the code does
+ * today and is not known to be complete even when an arrangement exists. The
+ * cap pays for the guarantee; only the construction collects it.
  *
  * KEPT OUT OF THE PAGE, deliberately:
  *   - What the Korea / Global pages hold right now. Observed on dev 21/11/2026:
