@@ -361,7 +361,7 @@ export const JOB_DISPLAY_MODULE_DOCS: Record<string, ModuleDoc> = {
       },
       {
         kind: 'table',
-        note: 'VD luật 10%: dải 40 thẻ → mỗi công ty nhiều nhất **4 thẻ**; dải 15 thẻ → **1 thẻ**. VD Top search: 20 thẻ chia 5 slide → một công ty nhiều nhất **5 thẻ**, mỗi slide một thẻ.\n\nDanh sách kết quả tìm kiếm để mặc định ở *Đề xuất* — bậc tin trước, rồi độ khớp từ khoá, rồi lần làm mới — và ở chế độ đó **không có luật công ty nào**. Cách xếp theo vòng trong bảng là của lựa chọn *Mới nhất*.',
+        note: 'VD luật 10%: dải 40 thẻ → mỗi công ty nhiều nhất **4 thẻ**; dải 15 thẻ → **1 thẻ**. VD Top search: 20 thẻ chia 5 slide → một công ty nhiều nhất **5 thẻ**, mỗi slide một thẻ.\n\nDanh sách kết quả tìm kiếm để mặc định ở *Đề xuất* — bậc tin trước, rồi độ khớp từ khoá, rồi lần làm mới — và ở chế độ đó **không có luật công ty nào**. Cách xếp theo vòng trong bảng là của lựa chọn *Mới nhất*.\n\n**Riêng hai dải trên trang danh sách việc làm: 10% là trần, không phải lệnh rải đều.** Dải xếp theo **bậc tin trước**, luật công ty mới tính sau — nên một công ty giữ bậc cao hơn mọi công ty khác có thể đứng **liền nhau ngay đầu dải**, đủ số thẻ trần của mình, mà vẫn đúng luật. Muốn thật sự rải ra thì phải **thu hẹp những bậc tin bán hai dải này**, chứ luật công ty không làm thay được.',
         cols: ['Ô hiển thị', 'Một công ty được giữ', 'Khi không đủ công ty để chia'],
         rows: [
           ['**Top search** — đầu trang kết quả tìm kiếm', 'Nhiều nhất **1 thẻ trong mỗi slide 4 thẻ**', 'Rải xa nhất có thể, rồi vẫn lấp cho đủ — không để slide thiếu thẻ'],
@@ -433,7 +433,7 @@ export const JOB_DISPLAY_MODULE_DOCS: Record<string, ModuleDoc> = {
         rows: [
           ['**8 dải trang chủ · Hàn Quốc · nước ngoài**', 'Kho tin đã mua đúng ô đó', 'Không', 'Làm mới gần nhất', 'Có'],
           ['**Top search**', 'Ô tìm kiếm, lọc trong các tin đã mua ô', '**Có**', 'Làm mới gần nhất', 'Có'],
-          ['**Trending jobs · Don’t miss these jobs**', 'Ô tìm kiếm của trang danh sách việc làm', '**Có** — theo trang đang mở', 'Nhóm đông tin nhất trước, rồi bậc tin, rồi rải công ty, rồi làm mới', 'Không'],
+          ['**Trending jobs · Don’t miss these jobs**', 'Ô tìm kiếm của trang danh sách việc làm', '**Có** — theo trang đang mở', 'Tin vượt trần công ty xuống cuối, rồi nhóm đông tin nhất, rồi bậc tin, rồi rải công ty, rồi làm mới', 'Không'],
           ['**Banner · popup**', 'Đơn đặt chỗ đã duyệt', 'Không', 'Theo nhịp của ô', 'Có'],
           ['**Việc làm gợi ý theo hồ sơ** *(không bán)*', 'Toàn bộ tin đang mở, chấm theo hồ sơ ứng viên', 'Không', 'Điểm phù hợp', 'Đổi mỗi ngày'],
         ],
