@@ -32,6 +32,26 @@
  *   6 Xoay vòng
  *   7 Giao diện
  *
+ * SHAPE OF THE BOARD STRIPS PAGE (/trang/board-strips), the same spine over two
+ * areas at once — "Tin tuyển dụng nổi bật" and "Đừng bỏ lỡ những tin này!" on
+ * the three mega-menu board pages:
+ *   1 Tóm lại — one table, a column per strip
+ *   2 Ba trang, một màn hình
+ *   3 Job nào đủ điều kiện lên dải
+ *   4 Xếp theo gì
+ *   5 Một công ty tối đa 10% số thẻ
+ *   6 Xoay vòng
+ *   7 Giao diện
+ *
+ * KEPT OUT OF THE BOARD STRIPS PAGE, same reasons — they belong to the ticket:
+ *   - the band split is enforced by WHICH product ticks which area, not by a
+ *     rung test in code, so "Basic Plus trở lên" is a configuration the page
+ *     states as a rule and the ticket has to keep true
+ *   - today the two areas are cut at items_shown with no rotation at all; the
+ *     page states the rotating rule without naming the gap
+ *   - 30 / 40 cards read off staging on 2026-11-21 (the trending strip drew
+ *     exactly 30, the free strip 23 of its 40 — its pool is smaller)
+ *
  * KEPT OUT OF THE PAGE ON 2026-11-21, because they are internal findings and
  * not logic the client needs. Measured on production 20/11/2026; move them to
  * the ticket or the spec site if they still need an owner:
@@ -74,6 +94,10 @@ import type { PageDoc, ModuleDoc } from '../docs'
 const STAMP_TOP_SEARCH = 'Cập nhật 21/11/2026.'
 
 const STAMP_GROUP = 'Cập nhật 21/11/2026.'
+
+/* A DATE PER PAGE, never one shared constant: two guide pages are refreshed on
+   different days, and a shared stamp would re-date the one nobody touched. */
+const STAMP_BOARD_STRIPS = 'Cập nhật 21/11/2026.'
 
 export const JOB_DISPLAY_PAGE_DOCS: Record<string, PageDoc> = {
   /* ────────────────────────────────────────────────────────────────────────── */
@@ -220,6 +244,166 @@ export const JOB_DISPLAY_PAGE_DOCS: Record<string, PageDoc> = {
       },
 
       { kind: 'p', text: `*${STAMP_TOP_SEARCH}*` },
+    ],
+  },
+  /* ────────────────────────────────────────────────────────────────────────── */
+  'board-strips': {
+    blocks: [
+      {
+        kind: 'p',
+        text: 'Ba trang bảng tin của mega menu — **Theo khu vực**, **Theo ngành nghề**, **Theo ngành** — mỗi trang có **hai dải thẻ việc làm** nằm dưới thanh tìm kiếm: *Tin tuyển dụng nổi bật* ở trên, *Đừng bỏ lỡ những tin này!* ở dưới.\n\nHai dải là **hai ô có bán khác nhau**, không phải hai nửa của một ô. Job lên một dải khi bậc tin đang chạy của job có bán đúng ô đó.\n\nTrang này nói: job nào lên dải nào, xếp theo gì, hiện bao nhiêu thẻ, xoay vòng ra sao, và trên màn hình dải gồm những gì.',
+      },
+      {
+        kind: 'shot',
+        src: '/shots/job-display/board-trending.jpg',
+        where: 'Jobseeker site',
+        caption: 'Dải **Tin tuyển dụng nổi bật** là khung đỏ. Nằm dưới thanh tìm kiếm, lưới **3 cột**.',
+      },
+      {
+        kind: 'shot',
+        src: '/shots/job-display/board-announcement.jpg',
+        where: 'Jobseeker site',
+        caption: 'Dải **Đừng bỏ lỡ những tin này!** là khung đỏ. Nằm **dưới** dải Nổi bật, lưới **4 cột**.',
+        note: 'Hai ảnh để thấy **vị trí** của hai dải trên trang.',
+      },
+
+      /* ───────────────────────────────────────────────────────────────── */
+      { kind: 'h', text: '1. Tóm lại' },
+      {
+        kind: 'table',
+        note: '**“Đủ điều kiện”** ở trang này nghĩa là job đạt **cả ba** điều: đang hiển thị bình thường trên site, khớp từ khoá và bộ lọc trên trang, và bậc tin đang chạy của job có bán đúng ô của dải. Mục 3 nói rõ từng điều.\n\n**Số thẻ** do người vận hành đặt cho từng ô trong Admin. Đổi số thẻ là đổi luôn trần của một công ty, vì trần đó là 10% số thẻ.',
+        cols: ['Hạng mục', 'Tin tuyển dụng nổi bật', 'Đừng bỏ lỡ những tin này!'],
+        rows: [
+          ['Vị trí trên trang', 'Dải trên', 'Dải dưới'],
+          ['Bậc tin vào được', 'Basic Plus trở lên', 'Basic và Free'],
+          ['Số thẻ', '30', '40'],
+          ['Lưới trên máy tính', '3 cột', '4 cột'],
+          ['Lọc theo', 'Từ khoá và bộ lọc của trang', 'Như dải trên'],
+          ['Nhóm lên trước', 'Nhóm đang có nhiều tin nhất', 'Như dải trên'],
+          ['Một công ty tối đa', '3 thẻ', '4 thẻ'],
+          ['Xoay vòng', 'Theo chu kỳ đặt cho ô', 'Theo chu kỳ đặt cho ô'],
+          ['Nút Xem thêm', 'Không có', 'Không có'],
+        ],
+      },
+
+      /* ───────────────────────────────────────────────────────────────── */
+      { kind: 'h', text: '2. Ba trang, một màn hình' },
+      {
+        kind: 'table',
+        note: 'Ba trang dùng **cùng một màn hình**: cùng thanh tìm kiếm, cùng hai dải, cùng khối quảng cáo cuối trang. Khác nhau đúng một chỗ là **trục nhóm** của hai dải. Nhóm được **đếm sống** trên tin đang hiển thị, không phải danh sách cố định — một tỉnh nhỏ nhiều tin lên thì nhóm đó lên trước.',
+        cols: ['Trang', 'Đường dẫn', 'Hai dải nhóm theo'],
+        rows: [
+          ['**Theo khu vực**', '`/viec-lam/dia-diem`', 'Tỉnh/TP đang có nhiều tin nhất'],
+          ['**Theo ngành nghề**', '`/viec-lam/nganh-nghe`', 'Ngành nghề đang có nhiều tin nhất'],
+          ['**Theo ngành**', '`/viec-lam/nganh`', 'Ngành của công ty đang có nhiều tin nhất'],
+        ],
+      },
+
+      /* ───────────────────────────────────────────────────────────────── */
+      { kind: 'h', text: '3. Job nào đủ điều kiện lên dải' },
+      {
+        kind: 'table',
+        note: 'Job phải đạt **cả ba**. Rớt một điều kiện là không lên dải nào, dù job mới đăng đến đâu.',
+        cols: ['Điều kiện', 'Nội dung'],
+        rows: [
+          ['1. Đang hiển thị bình thường', 'Job đang mở, đang bật hiển thị, còn trong hạn nhận hồ sơ. Công ty đang hoạt động và đã có mã số thuế'],
+          ['2. Khớp từ khoá và bộ lọc', 'Theo đúng luật tìm kiếm thường. Chưa gõ, chưa lọc thì không loại job nào'],
+          ['3. Bậc tin có bán ô của dải', 'Mỗi dải là **một ô riêng** trong Admin. Bậc tin đang chạy của job có bán ô nào thì job lên dải đó'],
+        ],
+      },
+      {
+        kind: 'list',
+        items: [
+          'Bậc đang chạy: bậc **cao nhất** job đang giữ, còn trong hạn.',
+          'Hai dải **không giao nhau**. Một job chỉ ở một trong hai, không bao giờ ở cả hai.',
+          'Ranh giới là **Basic Plus**: từ Basic Plus trở lên vào dải Nổi bật, Basic và Free vào dải Đừng bỏ lỡ. Ranh giới này do việc bậc nào bán ô nào quyết định, sửa được trong Admin.',
+          'Product đã archive: job rớt khỏi cả hai dải, dù bậc còn hạn.',
+          '**Không** mượn job của dải kia để lấp cho đủ số thẻ. Ít job đủ điều kiện thì hiện bấy nhiêu.',
+          'Dải không còn job nào thì **ẩn hẳn** — không có tiêu đề trên một lưới trống.',
+        ],
+      },
+
+      /* ───────────────────────────────────────────────────────────────── */
+      { kind: 'h', text: '4. Xếp theo gì' },
+      {
+        kind: 'table',
+        cols: ['#', 'Khoá xếp', 'Nghĩa'],
+        rows: [
+          ['1', '**Nhóm đông tin nhất**', 'Theo trục nhóm của trang — tỉnh, ngành nghề hoặc ngành đang có nhiều tin hiển thị nhất lên trước'],
+          ['2', '**Bậc tin**', 'Bậc cao đứng trước bậc thấp, theo thang bậc kéo trong Admin'],
+          ['3', '**Trải đều công ty**', 'Mỗi công ty một tin tốt nhất, rồi tới vòng hai'],
+          ['4', '**Lần làm mới gần nhất**', 'Không phải ngày đăng, cũng không phải lần sửa tin'],
+        ],
+      },
+      {
+        kind: 'list',
+        items: [
+          'Hai dải dùng **cùng bốn khoá** này. Chỉ khác nhau ở chỗ bậc tin nào được vào.',
+          'Menu sắp xếp của người dùng (VD *Lương cao nhất*) **không** đổi thứ tự hai dải. Nó chỉ đổi danh sách kết quả bên dưới.',
+          'Hàng job được **chốt ở đầu mỗi chu kỳ**. Job làm mới giữa chu kỳ vào hàng từ chu kỳ sau — không cướp lượt của job đang chờ.',
+        ],
+      },
+
+      /* ───────────────────────────────────────────────────────────────── */
+      { kind: 'h', text: '5. Một công ty tối đa 10% số thẻ' },
+      {
+        kind: 'list',
+        items: [
+          'Trần là **10% số thẻ, làm tròn xuống**, và thấp nhất là 1 thẻ.',
+          'VD: dải 30 thẻ → 3 thẻ một công ty. Dải 40 thẻ → 4 thẻ.',
+          'Quá trần thì các thẻ tiếp theo của công ty đó **xuống sau mọi công ty khác**, chứ không bị bỏ ra khỏi dải.',
+          '**Không để dải thiếu thẻ** vì luật này. Hết công ty khác thì một công ty vẫn lấp tiếp.',
+        ],
+      },
+      {
+        kind: 'warn',
+        text: '**Trần không có nghĩa là thẻ của một công ty nằm cách xa nhau.** Bậc tin xếp **trước** việc trải đều công ty, nên một công ty đang giữ bậc cao hơn mọi công ty khác sẽ có cả 3 (hoặc 4) thẻ đứng liền nhau ở đầu dải — vẫn đúng trần. Hai công ty **cùng nhóm, cùng bậc** thì vẫn xen kẽ nhau bình thường: cái dải không làm được là rải **giữa các bậc** và **giữa các nhóm**. Muốn thẻ của họ nằm cách xa nhau thì phải **thu hẹp danh sách bậc tin được bán ô này**; trần 10% không làm được việc đó.',
+      },
+
+      /* ───────────────────────────────────────────────────────────────── */
+      { kind: 'h', text: '6. Xoay vòng' },
+      {
+        kind: 'list',
+        items: [
+          'Toàn bộ job đủ điều kiện của dải xếp thành **một hàng**, theo đúng bốn khoá ở mục 4.',
+          'Dải hiện **trang đầu** của hàng. Mỗi chu kỳ, dải lật sang **trang tiếp theo**.',
+          'Đi hết hàng thì **quay lại đầu hàng**.',
+          'Trong một vòng, **mỗi job đủ điều kiện lên đúng một lần** — kể cả job ở tỉnh ít tin.',
+          'Mọi người mở trang **trong cùng một chu kỳ** đều thấy **cùng một danh sách**.',
+          'Trong một trang đang hiện, bậc cao vẫn đứng trước bậc thấp, và trần một công ty vẫn giữ.',
+          'Độ dài chu kỳ đặt riêng cho từng dải trong Admin. **Để trống thì dải không xoay vòng**: mọi lần tải ra đúng một danh sách, và job nằm sau thẻ cuối không bao giờ lên.',
+        ],
+      },
+      {
+        kind: 'example',
+        heading: 'VD: dải 30 thẻ, 300 job đủ điều kiện, chu kỳ 5 phút',
+        scenario: 'Ứng viên mở trang, rồi tải lại sau mỗi 5 phút.',
+        cols: ['Lần tải', 'Dải hiện job nào'],
+        rows: [
+          ['Mở trang', 'Job 1–30'],
+          ['Sau 5 phút', 'Job 31–60'],
+          ['Sau 10 phút', 'Job 61–90'],
+          ['…', '…'],
+          ['Sau 45 phút', 'Job 271–300'],
+          ['Sau 50 phút', 'Quay lại job 1–30'],
+        ],
+        note: 'Hàng 300 job, dải 30 thẻ → một vòng đúng **10 chu kỳ**, tức 50 phút. Hàng càng dài so với số thẻ thì một vòng càng lâu.',
+      },
+
+      /* ───────────────────────────────────────────────────────────────── */
+      { kind: 'h', text: '7. Giao diện dải' },
+      {
+        kind: 'list',
+        items: [
+          'Dải là **một lưới tĩnh**: mọi thẻ hiện cùng lúc. Không tự chạy, không mũi tên, không bộ đếm slide.',
+          'Trên máy tính: dải Nổi bật **3 cột**, dải Đừng bỏ lỡ **4 cột**. Màn hình hẹp hơn xuống 2 cột, rồi 1 cột.',
+          '**Không có nút Xem thêm**, cũng không phân trang. Hết số thẻ là hết dải.',
+          'Ứng viên đã đăng nhập: tiêu đề dải Đừng bỏ lỡ **gọi tên** họ — *“{tên} ơi, đừng bỏ lỡ những tin này!”*. Khách chưa đăng nhập thấy tiêu đề thường.',
+          'Danh sách kết quả tìm kiếm chỉ hiện **sau khi bấm Tìm**, và nằm dưới hai dải.',
+        ],
+      },
+
+      { kind: 'p', text: `*${STAMP_BOARD_STRIPS}*` },
     ],
   },
 }
@@ -481,7 +665,7 @@ export const JOB_DISPLAY_MODULE_DOCS: Record<string, ModuleDoc> = {
         rows: [
           ['**Top search**', 'Dải thẻ trên đầu trang kết quả tìm kiếm', '`/trang/top-search`'],
           ['**8 dải trang chủ · Hàn Quốc · nước ngoài**', 'Việc làm Premium · Top Việc Làm Hấp Dẫn · Việc làm Tiêu Điểm · Việc Làm Mới Nhất · Mạng Lưới Việc Làm …', '`/trang/home-job-bands`'],
-          ['**Trending jobs · Don’t miss these jobs**', 'Hai dải trên các trang danh sách việc làm trong mega menu', '*chưa có trang riêng*'],
+          ['**Trending jobs · Don’t miss these jobs**', 'Hai dải trên các trang danh sách việc làm trong mega menu', '`/trang/board-strips`'],
           ['**Banner và popup**', 'Trang chủ, trang công ty, trang cá nhân, trang đăng nhập', '*xem nhóm Content*'],
         ],
       },

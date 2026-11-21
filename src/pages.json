@@ -579,7 +579,7 @@
   "perm": "",
   "flag": "",
   "site": "Jobseeker site",
-  "what": "Ba trang bảng tin của mega menu — **Theo khu vực**, **Theo ngành nghề**, **Theo ngành** — cùng một màn hình: thanh tìm kiếm của /search, băng *Đừng bỏ lỡ những tin này!* và băng *Tin tuyển dụng nổi bật*; tin vào băng khi product của tin có tick vùng placement *Mega menu page*.",
+  "what": "Ba trang bảng tin của mega menu — **Theo khu vực**, **Theo ngành nghề**, **Theo ngành** — cùng một màn hình: thanh tìm kiếm của /search, băng *Tin tuyển dụng nổi bật* và băng *Đừng bỏ lỡ những tin này!*; tin vào băng khi product của tin có tick vùng placement *Mega menu page*.",
   "sub": [
    "/jobs/locations",
    "/jobs/industries"
@@ -624,6 +624,20 @@
   "sub": [
    "/viec-lam/han-quoc",
    "/viec-lam/nuoc-ngoai"
+  ]
+ },
+ {
+  "group": "Job display logic",
+  "key": "board-strips",
+  "label": "Trending & Đừng bỏ lỡ",
+  "path": "/viec-lam/dia-diem",
+  "perm": "",
+  "flag": "",
+  "site": "Jobseeker site",
+  "what": "Hai dải job trên ba trang bảng tin của mega menu — *Tin tuyển dụng nổi bật* và *Đừng bỏ lỡ những tin này!*: job nào lên dải nào, xếp theo gì, hiện bao nhiêu thẻ, xoay vòng ra sao.",
+  "sub": [
+   "/viec-lam/nganh-nghe",
+   "/viec-lam/nganh"
   ]
  },
  {

@@ -1103,7 +1103,7 @@ export const CONTENT_PAGE_DOCS: Record<string, PageDoc> = {
   'jobs-pages': {
     logic: [
       'Ba trang của mục **Việc làm** trên mega menu — **Theo khu vực**, **Theo ngành nghề**, **Theo ngành** — là **cùng một màn hình** trên site jobseeker. Chúng chỉ khác nhau ở **trục nhóm** mà svn-be dùng để xếp tin, ở ô bắt buộc của thanh tìm kiếm, và ở tiêu đề.',
-      'Từ trên xuống: tiêu đề (chỉ desktop) → **thanh tìm kiếm đầy đủ** của trang `/search` (khu vực, ngành nghề/ngành, từ khoá, panel `+` kinh nghiệm/học vấn/lương…) → băng **Đừng bỏ lỡ những tin này!** (3 cột) → băng **Tin tuyển dụng nổi bật** (4 cột) → (chỉ sau khi bấm tìm) **danh sách kết quả** giống `/search` → banner quảng cáo cuối trang. Trên mobile, thanh tìm kiếm được thay bằng panel tìm kiếm mobile.',
+      'Từ trên xuống: tiêu đề (chỉ desktop) → **thanh tìm kiếm đầy đủ** của trang `/search` (khu vực, ngành nghề/ngành, từ khoá, panel `+` kinh nghiệm/học vấn/lương…) → băng **Tin tuyển dụng nổi bật** (3 cột) → băng **Đừng bỏ lỡ những tin này!** (4 cột) → (chỉ sau khi bấm tìm) **danh sách kết quả** giống `/search` → banner quảng cáo cuối trang. Trên mobile, thanh tìm kiếm được thay bằng panel tìm kiếm mobile.',
       '**Không có màn hình admin riêng** cho các trang này. Admin điều khiển chúng **gián tiếp** qua: sản phẩm tin đăng (bậc nào phủ băng nào), số thẻ của vùng placement, thang bậc tin, auto-refresh, dữ liệu tin và công ty, master data, và mục menu.',
       'Hai băng **không tự chọn tin bằng tay**: một tin vào băng khi **product cao nhất đang chạy của tin đó có tick vùng placement tương ứng** (*Mega menu page - Job list trending* / *… announcement*). Vùng chưa ai tick → băng **rỗng và ẩn hẳn**.',
     ],
@@ -1143,10 +1143,10 @@ export const CONTENT_PAGE_DOCS: Record<string, PageDoc> = {
         heading: 'Hai băng',
         cols: ['Băng', 'Thứ tự trên trang', 'Ai vào được', 'Số thẻ', 'Vùng placement'],
         rows: [
-          ['**Đừng bỏ lỡ những tin này!**', 'Trước (3 cột)', 'Tin có product cao nhất **tick vùng announcement**', '`Items shown` của vùng (seed **15**)', '`placement_mega_menu_page_job_list_announcement` — *Mega menu page - Job list announcement*'],
-          ['**Tin tuyển dụng nổi bật**', 'Sau (4 cột)', 'Tin có product cao nhất **tick vùng trending**', '`Items shown` của vùng (seed **40**)', '`placement_mega_menu_page_job_list_trending` — *Mega menu page - Job list trending*'],
+          ['**Tin tuyển dụng nổi bật**', 'Trước (3 cột)', 'Tin có product cao nhất **tick vùng trending**', '`Items shown` của vùng (seed **40**)', '`placement_mega_menu_page_job_list_trending` — *Mega menu page - Job list trending*'],
+          ['**Đừng bỏ lỡ những tin này!**', 'Sau (4 cột)', 'Tin có product cao nhất **tick vùng announcement**', '`Items shown` của vùng (seed **15**)', '`placement_mega_menu_page_job_list_announcement` — *Mega menu page - Job list announcement*'],
         ],
-        note: 'Băng **không phân trang**. Băng rỗng thì **không vẽ gì** (không có tiêu đề trên lưới trống). Nếu không đọc được Items shown, site dùng 15 / 40.',
+        note: 'Băng **không phân trang**. Băng rỗng thì **không hiện gì** (không có tiêu đề trên lưới trống). Nếu không đọc được Items shown, site dùng 40 cho trending và 15 cho announcement. Luật chọn và xếp job của hai băng nằm ở `/trang/board-strips`.',
       },
       {
         kind: 'table',
