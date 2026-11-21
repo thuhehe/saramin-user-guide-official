@@ -434,6 +434,8 @@ export const JOB_DISPLAY_PAGE_DOCS: Record<string, PageDoc> = {
           'Công ty có nhiều tin hơn **số lượt nhân trần** thì phần dư không lên trong vòng này mà chờ vòng sau — và vòng sau **đổi sang những tin khác** của công ty đó, để trong nội bộ một công ty các tin cũng được chia lượt đều nhau.',
           'Trường hợp đó chỉ xảy ra khi một công ty giữ **hơn 10% toàn bộ tin đủ điều kiện** của trang. Trên trang tỉnh lớn gần như không gặp; trên trang ngành hẹp thì có thể.',
           'Trần là **luật cứng**: thiếu công ty khác thì dải **hiện ít thẻ hơn**, chứ không nới trần để lấp cho đầy và cũng không mượn tin của dải kia.',
+          'Luật khoảng cách cũng **cứng**, và nó giữ được là **nhờ có trần**: khi không công ty nào quá 10% số thẻ thì **luôn tồn tại** một cách xếp không có hai thẻ cùng công ty liền nhau. Đây là lý do hai luật ở mục này phải đi với nhau — bỏ trần thì luật khoảng cách thành lời hứa không giữ nổi.',
+          'Ngoại lệ duy nhất là **bể quá mỏng**: ít tin tới mức một công ty chiếm hơn nửa số thẻ xếp được. Khi đó dải **bớt thẻ xuống** cho tới khi xếp được, chứ không đặt hai thẻ cùng công ty cạnh nhau.',
         ],
       },
 
