@@ -502,7 +502,7 @@ export const JOB_DISPLAY_PAGE_DOCS: Record<string, PageDoc> = {
         kind: 'list',
         heading: 'Muốn tin được hiện thường xuyên hơn thì làm gì',
         items: [
-          '**Thu hẹp bể**: bớt số bậc tin được bán ô này. Ít tin vào được thì vòng ngắn lại cho tất cả những tin đã vào. Đây là đòn bẩy mạnh nhất, và là chỗ bậc tin còn giá trị bán được.',
+          '**Thu hẹp bể**: bớt số bậc tin được bán ô này. Ít tin vào được thì vòng ngắn lại cho tất cả những tin đã vào. Đây là đòn bẩy mạnh nhất, và là cách bậc tin còn tác dụng **trên hai dải này**. (Bậc tin vẫn xếp trước ở *danh sách kết quả tìm kiếm* — đó là ô khác, xem trang nhóm.)',
           '**Tăng số thẻ** của dải trong Admin. Nhưng tăng số thẻ là tăng luôn trần một công ty, vì trần là 10% số thẻ.',
           'Rút ngắn chu kỳ 5 phút thì **không** ăn thua: cả vòng chạy nhanh hơn nhưng mỗi tin vẫn chỉ lên một lượt mỗi vòng, và lượt đó ngắn lại đúng bằng phần rút.',
         ],
