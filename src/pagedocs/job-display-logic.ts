@@ -76,7 +76,7 @@ import type { PageDoc, ModuleDoc } from '../docs'
 const STAMP =
   'Viết theo **code đang chạy** trên nhánh `dev`, đọc ngày 20/11/2026 (svn-be `785c698d7` · svn-web `ed538a26e` · admin `a63d271d`), số liệu đo thẳng trên **production** cùng ngày.'
 
-const STAMP_ASBUILT = `${STAMP} Đây là mô tả *cái đang chạy*, không phải bản yêu cầu.`
+const STAMP_ASBUILT = STAMP
 
 const STAMP_TOP_SEARCH = 'Cập nhật 21/11/2026.'
 
