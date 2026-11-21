@@ -64,6 +64,16 @@
  * today and is not known to be complete even when an arrangement exists. The
  * cap pays for the guarantee; only the construction collects it.
  *
+ * THE `cap` COLUMN IN REGISTRY 4.2 DOES NOT APPLY HERE — checked 21/11/2026.
+ * That table gives Super hot Large a cap of 20 and Top job / Distinction 96,
+ * which reads as "only this many postings ever queue" and would make section
+ * 6's promise that every posting gets a turn false for three of the eight
+ * bands. It is not that. The ceiling belongs to the featured-COMPANIES pool
+ * query; the job path passes no limit at all, and the service says so in its
+ * own words: the whole pool takes turns, every posting that bought the band
+ * is drawn in some period. So the promise holds for all eight. Do not "fix"
+ * the page from that column without re-reading which path reads it.
+ *
  * KEPT OUT OF THE PAGE, deliberately:
  *   - What the Korea / Global pages hold right now. Observed on dev 21/11/2026:
  *     Korea draws no band at all and Global draws two. That is a selling state,
