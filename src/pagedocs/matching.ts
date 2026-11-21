@@ -155,7 +155,7 @@ export const MATCHING_PAGE_DOCS: Record<string, PageDoc> = {
         cols: ['Nguồn', 'Lấy gì', 'Loại'],
         rows: [
           ['**Work preference**', 'Vị trí mong muốn (tối đa 3) và nghề của chúng · nghề mong muốn · địa điểm · ngành · lương · hình thức làm việc', '**Tự khai**'],
-          ['**Hành vi 90 ngày gần nhất** — nộp đơn hoặc lưu job (1 lần là đủ), xem job (3 job khác nhau)', 'Vị trí · nghề · tỉnh của những job đó, giữ top 3 mỗi loại', '**Học được**'],
+          ['**Hành vi 90 ngày gần nhất** — nộp đơn hoặc lưu job (1 lần là đủ), xem job (**3 job khác nhau cùng mang giá trị đó**)', 'Vị trí · nghề · tỉnh của những job đó, giữ **top 3** mỗi loại', '**Học được**'],
           ['**CV**', 'Số năm kinh nghiệm · kỹ năng · học vấn', 'Tự khai'],
           ['**Tiêu đề CV**', 'Vị trí đọc ra từ tiêu đề — **chỉ dùng khi** ứng viên không khai cả vị trí lẫn nghề', '**Học được**'],
         ],
@@ -182,10 +182,10 @@ export const MATCHING_PAGE_DOCS: Record<string, PageDoc> = {
         cols: ['Tiêu chí', 'Điểm', 'Lấy từ ứng viên', 'Job ăn bao nhiêu'],
         rows: [
           ['**Vị trí & nghề**', '**42**',
-           'Khai: vị trí mong muốn (≤3) + nghề mong muốn.\nHọc được: vị trí / nghề của job đã nộp, đã lưu, hoặc xem ≥ 3 job.\nCả hai rỗng: vị trí đọc từ tiêu đề CV.',
+           'Khai: vị trí mong muốn (≤3) + nghề mong muốn.\nHọc được: vị trí / nghề của job đã nộp, đã lưu, hoặc xem ≥ 3 job cùng vị trí / nghề đó.\nCả hai rỗng: vị trí đọc từ tiêu đề CV.',
            'Cùng **vị trí** → **42** khai / **34** học được\nCùng **nhóm vị trí** → **30** / **24**\nCùng **nghề**, khác vị trí → **17** / **14**\nKhác nghề → **0**'],
           ['**Địa điểm & hình thức**', '**20**',
-           'Khai: tỉnh mong muốn + hình thức làm việc.\nHọc được: tỉnh của job đã nộp, đã lưu, hoặc xem ≥ 3 job.\nKhông khai gì: không so.',
+           'Khai: tỉnh mong muốn + hình thức làm việc.\nHọc được: tỉnh của job đã nộp, đã lưu, hoặc xem ≥ 3 job cùng tỉnh đó.\nKhông khai gì: không so.',
            'Đúng tỉnh **và** đúng hình thức → **20** khai / **16** học được\nJob **remote** → **20**, từ mọi nơi\nĐúng tỉnh, khác hình thức → **14**\nTỉnh khác → **0**'],
           ['**Kinh nghiệm**', '**14**',
            'Số năm trên **Hồ sơ**.\nTrống thì tính từ lịch sử làm việc trong CV.',
