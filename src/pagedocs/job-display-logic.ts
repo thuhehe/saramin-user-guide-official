@@ -564,6 +564,14 @@ export const JOB_DISPLAY_PAGE_DOCS: Record<string, PageDoc> = {
  *   - PlacementLoadService: the two mega-menu strips are replayed with no
  *     rotation; Top search is replayed off the frozen line.
  *
+ * THE PAGE STATES THE AGREED RULE, NOT TODAY'S BUILD (Thu, 2026-11-21: "user
+ * guide là requirement, cái tôi muốn, ko phải cái thật sự build"). Where the
+ * two differ the page is ahead on purpose — do NOT edit it back to match code,
+ * and do not add a line saying the build differs. The gap belongs in the ticket.
+ * The two mega-menu strips are the live case: they rotate on this page because
+ * that is the rule Thu signed off on 2026-11-21, while the build still replays
+ * them unrotated.
+ *
  * KEPT OUT OF THE PAGE, deliberately:
  *   - Counts of placement rows (47 / 28 / 19) and any production measurement.
  *     They date the page and sales does not sell by them.
@@ -582,7 +590,7 @@ export const JOB_DISPLAY_MODULE_DOCS: Record<string, ModuleDoc> = {
     headline: [
       '**Một ô hiển thị là một cái hộp trên một trang** — không phải một sản phẩm, không phải một tin. Tin vào ô khi bậc tin đang chạy của tin có bán ô đó, hoặc khi tin có add-on hiển thị.',
       '**Không ô nào bán vị trí.** Trong cùng một ô, mọi tin đã trả cùng một giá cho cùng một chỗ, nên thứ tự do luật của ô quyết định — không ai mua được chỗ đầu.',
-      '**Mỗi ô có luật riêng về số thẻ một công ty được giữ**, và **không phải ô nào cũng xoay vòng**. Hai điều này là gốc của gần hết câu hỏi *“sao tin này không hiện”* — mục 4 và mục 5.',
+      '**Mỗi ô có luật riêng về số thẻ một công ty được giữ**, và **vòng của mỗi ô dài ngắn khác nhau**. Hai điều này là gốc của gần hết câu hỏi *“sao tin này không hiện”* — mục 4 và mục 5.',
     ],
     blocks: [
       {
@@ -600,10 +608,10 @@ export const JOB_DISPLAY_MODULE_DOCS: Record<string, ModuleDoc> = {
           ['Tin vào ô bằng', 'Bậc tin đang chạy có bán ô đó, **hoặc** add-on hiển thị gắn vào tin'],
           ['Tính từ lúc', 'Đăng tin — không phải lúc chọn gói trên form'],
           ['Thiếu tin thì', 'Hiện ít thẻ hơn. **Không** lấy tin chưa mua ô vào cho đủ'],
-          ['Thứ tự cơ bản', 'Tin làm mới gần nhất đứng trước'],
+          ['Thứ tự cơ bản', 'Tin làm mới gần nhất đứng trước. **Bậc tin quyết định tin vào được ô nào, không quyết định tin đứng thứ mấy**'],
           ['Vị trí', 'Không bán riêng — không ai mua được chỗ đầu'],
           ['Một công ty giữ mấy thẻ', 'Mỗi ô một luật — mục 4'],
-          ['Bao lâu đổi lượt', 'Ô có xoay vòng: 5 phút. Có ô không xoay vòng — mục 5'],
+          ['Bao lâu đổi lượt', 'Ô thẻ việc làm: **5 phút** một lượt. Banner theo nhịp riêng của từng ô — mục 5'],
           ['Ai thấy gì', 'Cùng một thời điểm, mọi ứng viên thấy **cùng một danh sách**. Trừ các ô gợi ý theo hồ sơ'],
         ],
       },
@@ -638,7 +646,7 @@ export const JOB_DISPLAY_MODULE_DOCS: Record<string, ModuleDoc> = {
         kind: 'list',
         items: [
           '**Tin phải đang hiển thị bình thường**: tin đang mở, đang bật hiển thị, chưa hết hạn; công ty đang hoạt động và đã có mã số thuế. Rớt một điều là không vào ô nào cả.',
-          '**Tin phải đã mua đúng ô đó** — qua bậc tin đang chạy, hoặc qua add-on hiển thị. Bậc đang chạy là bậc **cao nhất** tin đang giữ và còn trong hạn.',
+          '**Tin phải đã mua đúng ô đó** — qua bậc tin đang chạy, hoặc qua add-on hiển thị. Bậc đang chạy là bậc **cao nhất** tin đang giữ và còn trong hạn. Bậc tin chỉ quyết định **vào được ô nào**: vào rồi thì ở ô nào bậc cũng **không** quyết định tin đứng thứ mấy.',
           '**Không lấp chỗ.** Ô thiếu tin thì hiện ít thẻ hơn; dải trên trang chủ không còn tin nào thì trang **ẩn luôn dải**. Không bao giờ lấy tin chưa mua ô vào cho đủ.',
           '**Thứ tự không bốc thăm theo từng người.** Cùng một thời điểm, hai ứng viên mở cùng một trang thấy **cùng một danh sách** — nên khách báo gì cũng tra lại được.',
           '**Làm mới tin là cách duy nhất tự đẩy tin lên đầu hàng** ở những ô xếp theo lần làm mới. Không phải ngày đăng, và sửa nội dung tin **không** tính.',
@@ -653,7 +661,7 @@ export const JOB_DISPLAY_MODULE_DOCS: Record<string, ModuleDoc> = {
       },
       {
         kind: 'table',
-        note: 'VD luật 10%: dải 40 thẻ → mỗi công ty nhiều nhất **4 thẻ**; dải 15 thẻ → **1 thẻ**. VD Top search: 20 thẻ chia 5 slide → một công ty nhiều nhất **5 thẻ**, mỗi slide một thẻ.\n\nDanh sách kết quả tìm kiếm để mặc định ở *Đề xuất* — bậc tin trước, rồi độ khớp từ khoá, rồi lần làm mới — và ở chế độ đó **không có luật công ty nào**. Cách xếp theo vòng trong bảng là của lựa chọn *Mới nhất*.\n\n**Riêng hai dải trên trang danh sách việc làm: trần 10% tính trong một lượt, và đi kèm luật khoảng cách.** Hai dải này **không xếp theo bậc tin** — bậc chỉ quyết định tin vào được dải nào, vào rồi thì mọi tin xếp hàng như nhau. Chính vì bỏ bậc ra khỏi thứ tự mà trong một lượt, hai thẻ cùng công ty **không bao giờ đứng cạnh nhau**. Trang *Trending & Đừng bỏ lỡ* nói kỹ.',
+        note: 'VD luật 10%: dải 30 thẻ → mỗi công ty nhiều nhất **3 thẻ**; dải 40 thẻ → **4 thẻ**. VD Top search: 20 thẻ chia 5 slide → một công ty nhiều nhất **5 thẻ**, mỗi slide một thẻ.\n\nDanh sách kết quả tìm kiếm để mặc định ở *Đề xuất* — bậc tin trước, rồi độ khớp từ khoá, rồi lần làm mới — và ở chế độ đó **không có luật công ty nào**. Cách xếp theo vòng trong bảng là của lựa chọn *Mới nhất*.\n\n**Riêng hai dải trên trang danh sách việc làm: trần 10% tính trong một lượt, và đi kèm luật khoảng cách.** Hai dải này **không xếp theo bậc tin** — bậc chỉ quyết định tin vào được dải nào, vào rồi thì mọi tin xếp hàng như nhau. Chính vì bỏ bậc ra khỏi thứ tự mà trong một lượt, hai thẻ cùng công ty **không bao giờ đứng cạnh nhau**. Trang *Trending & Đừng bỏ lỡ* nói kỹ.',
         cols: ['Ô hiển thị', 'Một công ty được giữ', 'Khi không đủ công ty để chia'],
         rows: [
           ['**Top search** — đầu trang kết quả tìm kiếm', 'Nhiều nhất **1 thẻ trong mỗi slide 4 thẻ**', 'Rải xa nhất có thể, rồi vẫn lấp cho đủ — không để slide thiếu thẻ'],
@@ -669,7 +677,7 @@ export const JOB_DISPLAY_MODULE_DOCS: Record<string, ModuleDoc> = {
         heading: '4a · Khi một công ty nắm phần lớn kho tin của ô',
         items: [
           'Với **hầu hết các ô**, luật công ty là **cố gắng tối đa**, không phải lời hứa tuyệt đối: khi một công ty nắm phần lớn số tin đủ điều kiện của ô thì **không có cách xếp nào** vừa giữ được luật vừa không để chỗ trống. *Ngoại lệ là hai dải trên trang danh sách việc làm* — ở đó trần là luật cứng, và dải chấp nhận hiện ít thẻ hơn.',
-          'Khi đó ô **giữ đủ thẻ trước**: rải xa nhất có thể, chứ không bỏ bớt tin ra khỏi ô và không để ô thiếu thẻ.',
+          'Ở những ô còn lại, ô **giữ đủ thẻ trước**: rải xa nhất có thể, chứ không bỏ bớt tin ra khỏi ô và không để ô thiếu thẻ.',
           'VD: một slide cần 4 công ty khác nhau, kho chỉ còn 2 công ty → slide vẫn đủ 4 thẻ, và có công ty xuất hiện hai lần.',
           '**Hệ quả phải nói trước với khách:** luật chia lượt **theo công ty**, không theo số tin. Công ty mua **nhiều tin** trong cùng một ô thì **mỗi tin** tới lượt **thưa hơn** tin của công ty chỉ mua một. Mua thêm tin là mua thêm **chỗ trong hàng**, không nhân lên số lượt hiện của từng tin.',
         ],
@@ -701,7 +709,7 @@ export const JOB_DISPLAY_MODULE_DOCS: Record<string, ModuleDoc> = {
           ['**Top search**', 'Có — **5 phút**', 'Hàng tịnh tiến **4 tin**: slide 2 lên slide 1, 4 tin kế tiếp vào slide cuối'],
           ['**Banner**', 'Có — theo nhịp đặt trên từng ô', 'Dịch **1 vị trí**: banner thứ hai lên đầu'],
           ['**Trending jobs · Don’t miss these jobs**', 'Có — **5 phút**', 'Đổi **cả cụm thẻ** sang lượt tiếp theo; hết vòng thì chia lại hàng'],
-          ['**Danh sách kết quả tìm kiếm**', '**Không**', 'Như trên'],
+          ['**Danh sách kết quả tìm kiếm**', '**Không**', 'Thứ tự chỉ đổi khi có tin được làm mới, hoặc có tin mới mua ô'],
           ['**Việc làm gợi ý theo hồ sơ** *(không bán)*', 'Đổi **mỗi ngày**', 'Mỗi ứng viên một thứ tự riêng, giữ nguyên trong ngày'],
         ],
       },
@@ -725,7 +733,7 @@ export const JOB_DISPLAY_MODULE_DOCS: Record<string, ModuleDoc> = {
         rows: [
           ['**8 dải trang chủ · Hàn Quốc · nước ngoài**', 'Kho tin đã mua đúng ô đó', 'Không', 'Làm mới gần nhất', 'Có'],
           ['**Top search**', 'Ô tìm kiếm, lọc trong các tin đã mua ô', '**Có**', 'Làm mới gần nhất', 'Có'],
-          ['**Trending jobs · Don’t miss these jobs**', 'Ô tìm kiếm của trang danh sách việc làm', '**Có** — theo trang đang mở', 'Tin vượt trần công ty xuống cuối, rồi nhóm đông tin nhất, rồi bậc tin, rồi rải công ty, rồi làm mới', 'Không'],
+          ['**Trending jobs · Don’t miss these jobs**', 'Ô tìm kiếm của trang danh sách việc làm', '**Có** — theo trang đang mở', 'Hàng cắt thành từng lượt. Trong một lượt: nhóm đông tin nhất trên, rồi làm mới gần nhất — kèm trần 10% và luật không đứng cạnh nhau. **Bậc tin không xếp thứ tự**', 'Có'],
           ['**Banner · popup**', 'Đơn đặt chỗ đã duyệt', 'Không', 'Theo nhịp của ô', 'Có'],
           ['**Việc làm gợi ý theo hồ sơ** *(không bán)*', 'Toàn bộ tin đang mở, chấm theo hồ sơ ứng viên', 'Không', 'Điểm phù hợp', 'Đổi mỗi ngày'],
         ],
@@ -744,7 +752,7 @@ export const JOB_DISPLAY_MODULE_DOCS: Record<string, ModuleDoc> = {
         rows: [
           ['**Showing now**', 'Ô đang hiện tin này ngay lúc này', '*Tin đang hiện*'],
           ['**Waiting for a turn**', 'Tin sẽ tới lượt ở một nhịp sau', '*Tin đang trong hàng, tới lượt trong vòng này*'],
-          ['**Never shown**', 'Tin đủ điều kiện nhưng ô không xoay vòng nên chưa tới lượt', 'Chỉ gặp ở hai dải trang danh sách việc làm. **Không phải lỗi** — ô đó không xoay vòng'],
+          ['**Never shown**', 'Tin đủ điều kiện nhưng hết cả một vòng vẫn không tới lượt', 'Nhóm này **phải trống**. Mọi ô thẻ việc làm đều xoay vòng, và hết một vòng là mọi tin đã lên — thấy tin nằm đây thì **báo lại**, đừng giải thích với khách là bình thường'],
           ['**Empty slot**', 'Ô còn chỗ trống vì chưa đủ tin', '*Ô này còn chỗ bán*'],
         ],
       },
@@ -755,10 +763,11 @@ export const JOB_DISPLAY_MODULE_DOCS: Record<string, ModuleDoc> = {
         kind: 'table',
         cols: ['Hứa được', 'Không hứa'],
         rows: [
-          ['Tin sẽ vào hàng của đúng ô đã mua', 'Tin luôn nằm ở thẻ đầu, hay ở slide 1'],
-          ['Ô có xoay vòng: mỗi vòng tin đều tới lượt', 'Tin lúc nào cũng có mặt trên màn hình'],
+          ['Tin sẽ vào hàng của đúng ô đã mua', 'Tin luôn nằm ở thẻ đầu, hay ở slide 1 — và **không có cách trả thêm tiền để chen lên trước** trong cùng một ô'],
+          ['Mỗi vòng tin **lên đúng một lần** — kể cả tin ở bậc thấp nhất của ô', 'Tin lúc nào cũng có mặt trên màn hình'],
+          ['Tính trước được **bao lâu tin lên một lần**: bể càng đông thì vòng càng dài', 'Bậc cao hơn thì hiện **dày hơn** — trong cùng một ô, bậc không đổi được tần suất'],
           ['Cùng một thời điểm, mọi ứng viên thấy như nhau', 'Thứ tự riêng cho từng ứng viên'],
-          ['Làm mới tin đưa tin lên đầu hàng', 'Trả thêm tiền để chen lên trước trong cùng một ô'],
+          ['Làm mới tin **rút ngắn thời gian chờ** tới lượt', 'Làm mới cho tin lên hai lần trong một vòng'],
           ['Mua add-on hiển thị để có mặt ở thêm ô', 'Mua nhiều tin thì mỗi tin được hiện nhiều hơn'],
           ['Số thẻ và nhịp của ô sửa được, không cần dev', 'Tin lên ô ngay khi ký — phải **đăng tin** trước'],
         ],
