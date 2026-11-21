@@ -100,9 +100,10 @@ export const JOB_DISPLAY_PAGE_DOCS: Record<string, PageDoc> = {
       { kind: 'h', text: '1. Tóm lại' },
       {
         kind: 'table',
+        note: '**“Đủ điều kiện”** ở trang này nghĩa là job đạt **cả ba** điều: đang hiển thị bình thường trên site, khớp từ khoá và bộ lọc ứng viên đang dùng, và đã mua ô Top search — qua bậc tin đang chạy của job, hoặc add-on hiển thị gắn vào job. Mục 3 nói rõ từng điều.',
         cols: ['Hạng mục', 'Dải chạy thế nào'],
         rows: [
-          ['Khi nào hiện', 'Luôn hiện, trừ khi không còn job nào đủ điều kiện'],
+          ['Khi nào hiện', 'Luôn hiện, trừ khi không còn job nào **đủ điều kiện**'],
           ['Lọc theo', 'Từ khoá và bộ lọc trên thanh tìm kiếm'],
           ['Số thẻ', '20'],
           ['Chia slide', '5 slide × 4 thẻ'],
@@ -128,7 +129,7 @@ export const JOB_DISPLAY_PAGE_DOCS: Record<string, PageDoc> = {
       {
         kind: 'list',
         items: [
-          'Dải **luôn hiện**. Chỉ ẩn khi không còn job nào đủ điều kiện.',
+          'Dải **luôn hiện**. Chỉ ẩn khi không còn job nào đủ điều kiện — tức không còn job nào vừa đang hiển thị, vừa khớp tìm kiếm, vừa đã mua ô này.',
           'Bộ lọc ở đây là đúng các bộ lọc của trang kết quả: khu vực, ngành nghề, vị trí, kỹ năng, cấp bậc, mức lương, loại hợp đồng, kinh nghiệm.',
           'Dải và danh sách kết quả bên dưới luôn trả lời **cùng một câu hỏi**. Đổi một bộ lọc thì cả hai đổi theo.',
         ],
@@ -139,7 +140,7 @@ export const JOB_DISPLAY_PAGE_DOCS: Record<string, PageDoc> = {
       },
 
       /* ───────────────────────────────────────────────────────────────── */
-      { kind: 'h', text: '3. Job nào được lên dải' },
+      { kind: 'h', text: '3. Job nào đủ điều kiện lên dải' },
       {
         kind: 'table',
         note: 'Job phải đạt **cả ba**. Rớt một điều kiện là không lên dải, dù job mới đăng đến đâu.',
