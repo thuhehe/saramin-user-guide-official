@@ -606,7 +606,7 @@
   "perm": "",
   "flag": "",
   "site": "Jobseeker site",
-  "what": "Dải job trên đầu trang kết quả tìm kiếm. **Bản yêu cầu đã chốt 21/11/2026**, làm ở task **SRM-1739**: dải **luôn hiện**, lọc theo **từ khoá và bộ lọc**, nhiều nhất **20 job** chia **5 slide 4 thẻ**, mỗi slide không quá một job của cùng công ty, **tịnh tiến 4 job** mỗi chu kỳ.",
+  "what": "Dải job trên đầu trang kết quả tìm kiếm phía ứng viên. Bản yêu cầu: **✅ đã chốt — chị Thu 21/11/2026**, task SRM-1739.",
   "sub": [
    "/tim-kiem",
    "/search"
