@@ -641,6 +641,17 @@
   ]
  },
  {
+  "group": "Job display logic",
+  "key": "hot-100",
+  "label": "HOT 100",
+  "path": "/viec-lam/cong-ty-hang-dau",
+  "perm": "",
+  "flag": "",
+  "site": "Jobseeker site",
+  "what": "Bảng xếp hạng 100 tin tuyển dụng, chốt mỗi đêm lúc 0h: tin nào lên bảng, vị trí tính thế nào, mũi tên ▲▼ và dòng Gợi ý nghĩa là gì.",
+  "sub": []
+ },
+ {
   "group": "Notifications",
   "key": "notification-rules",
   "label": "Automation rules",
