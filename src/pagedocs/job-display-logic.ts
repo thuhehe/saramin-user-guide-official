@@ -862,7 +862,7 @@ export const JOB_DISPLAY_MODULE_DOCS: Record<string, ModuleDoc> = {
         kind: 'table',
         cols: ['Hứa được', 'Không hứa'],
         rows: [
-          ['Tin sẽ vào hàng của đúng ô đã mua', 'Tin luôn nằm ở thẻ đầu, hay ở slide 1 — và **không có cách trả thêm tiền để chen lên trước** trong cùng một ô'],
+          ['Tin sẽ vào **bể tin** của đúng ô đã mua', 'Tin luôn nằm ở thẻ đầu, hay ở slide 1 — và **không có cách trả thêm tiền để chen lên trước** trong cùng một ô'],
           ['Mỗi vòng tin **lên đúng một lần** — kể cả tin ở bậc thấp nhất của ô. *Trừ* công ty đang vượt 10% bể tin ở hai dải trang danh sách việc làm: tin của họ phải chờ qua vòng (mục 4)', 'Tin lúc nào cũng có mặt trên màn hình'],
           ['Tính trước được **bao lâu tin lên một lần** ở các ô **không có trần công ty**: bể càng đông thì vòng càng dài', 'Bậc cao hơn thì hiện **dày hơn** — trong cùng một ô, bậc không đổi được tần suất'],
           ['Hai dải trang danh sách việc làm: trong một lượt **không công ty nào quá 10% số thẻ**', 'Một vị trí cụ thể trong dải — và với công ty vượt 10% bể tin, **một con số cho câu “bao lâu tin tôi lên một lần”**'],
