@@ -166,7 +166,7 @@
   "perm": "",
   "flag": "",
   "site": "Jobseeker site",
-  "what": "Gợi ý việc làm cho **một ứng viên cụ thể**: lọc job đủ điều kiện, chấm từng job trên **thang 100 điểm / 7 tiêu chí**, rồi rải ra năm chỗ trên site ứng viên.",
+  "what": "Hệ thống chọn tin để gợi ý cho một ứng viên: lọc theo **job category** và tỉnh họ đã khai, chấm mỗi tin trên **thang 100 điểm / 7 tiêu chí**, rồi hiện 30 tin cao nhất ở năm chỗ.",
   "sub": [
    "/welcome",
    "/jobs/:slug",
