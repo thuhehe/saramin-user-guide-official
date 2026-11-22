@@ -494,7 +494,17 @@ export const JOB_DISPLAY_PAGE_DOCS: Record<string, PageDoc> = {
           'Mọi job vào được dải xếp thành một hàng, job làm mới gần nhất đứng trước — không phải ngày đăng.',
           'Menu sắp xếp của ứng viên (VD *Lương cao nhất*) không đổi thứ tự dải. Nó chỉ đổi danh sách kết quả bên dưới.',
           'Luật: trong một slide 4 thẻ, mỗi công ty nhiều nhất **1 thẻ**; trên cả 20 thẻ nhiều nhất **5 thẻ**.',
-          'Nếu không còn đủ job của công ty khác để xếp xen vào, dải **vòng lại** lấy job đã hiện cho đủ thẻ, chứ không cho một công ty chiếm 2 thẻ trong cùng một slide. Job của các công ty khác vẫn luân phiên theo đúng tỉ lệ **1 thẻ trong 4**.',
+        ],
+      },
+      {
+        kind: 'table',
+        heading: 'Khi hàng chờ không đủ công ty',
+        note: 'Luật một công ty một thẻ là **cố gắng tối đa**, không phải điều kiện bắt buộc. Hàng chờ mỏng tới đâu thì dải nhượng tới đó, theo thứ tự trên xuống. Dải **không bỏ job** nào ra và **không để slide thiếu thẻ**.',
+        cols: ['Hàng chờ có gì', 'Dải xếp thế nào'],
+        rows: [
+          ['Từ 4 công ty khác nhau trở lên', 'Mỗi slide 4 công ty khác nhau, mỗi công ty 1 thẻ'],
+          ['Còn công ty khác, nhưng không đủ để kê xen vào', 'Vòng lại lấy job đã hiện cho đủ 4 thẻ, chứ không cho một công ty 2 thẻ trong cùng một slide'],
+          ['Gần như chỉ còn một công ty — VD 4 job của công ty A, 1 job của công ty B', 'Chấp nhận job của A **đứng cạnh nhau** và chiếm **nhiều hơn 1 thẻ trong 4**'],
         ],
       },
 
