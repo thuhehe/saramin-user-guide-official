@@ -100,6 +100,25 @@
  * does not exist here. Claims on this page have to be checked against the
  * group page instead.
  *
+ * FOUR RULES CAME BACK after the "ngắn gọn hơn" cut dropped them, 22/11.
+ * Enumerating what that cut removed — from the diff, not from memory — gave 25
+ * lines gone, and almost all of them were explainers that deserved to go: the
+ * static-grid and column counts, the personalised band title, the levers, the
+ * acceptance check. Four were RULES and nothing else on the page carried them:
+ *   - which placement applies when a job holds several (highest still in date)
+ *   - an archived product drops the job from both sections
+ *   - a section never borrows from the other to fill its cards
+ *   - a section with nothing eligible hides entirely
+ * They are back in section 2 as one line each. The lesson is the cut itself:
+ * shortening deletes rules and explainers at the same rate unless you diff it
+ * afterwards, and the page reads fine either way, so nothing signals the loss.
+ * The Logic chung session noticed the archive rule was live but missing here.
+ *
+ * ADJACENT AND STILL OPEN: the restored rule covers an archived PRODUCT. The
+ * question put to Thu covers an archived COMPANY, which the build handles
+ * elsewhere (D-3, every public read). A salesperson will not distinguish the
+ * two, so whoever answers one should be asked about the other.
+ *
  * AND IT IS SHORT ON PURPOSE — ~5.000 characters, about the length of her own
  * Notion page. She asked twice: "theo đúng bố cục của notion", then "ngắn gọn
  * hơn!!!". The first pass kept her six blocks but filled them with our tables
@@ -559,6 +578,9 @@ export const JOB_DISPLAY_PAGE_DOCS: Record<string, PageDoc> = {
           'Job đang mở và đang hiển thị trên site.',
           'Job có placement của đúng section đó. Hai section không giao nhau, một job chỉ nằm ở một trong hai.',
           'Nếu ứng viên đã gõ hoặc đã lọc thì job còn phải khớp với tìm kiếm.',
+          'Một job có thể giữ nhiều placement. Placement đang chạy là cái còn hạn và cao nhất, và nó quyết định job vào section nào.',
+          'Product đã archive thì job rớt khỏi cả hai section, dù placement còn hạn.',
+          'Section không mượn job của section kia để lấp cho đủ thẻ. Ít job đủ điều kiện thì hiện bấy nhiêu, và không còn job nào thì section ẩn hẳn.',
         ],
       },
 
