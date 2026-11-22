@@ -464,7 +464,7 @@ export const JOB_DISPLAY_PAGE_DOCS: Record<string, PageDoc> = {
         note: 'Tên bộ lọc không ghép vào tiêu đề, dù ứng viên đã chọn bộ lọc hay chưa.',
         cols: ['Hạng mục', 'Dải chạy thế nào'],
         rows: [
-          ['Số thẻ', 'Nhiều nhất 20 — 5 slide × 4 thẻ. Hàng ít job hơn thì ít slide hơn'],
+          ['Số thẻ', 'Nhiều nhất 20 — 5 slide × 4 thẻ. Mỗi slide đủ 4 thẻ, hàng ít job hơn thì ít slide hơn'],
           ['Lọc theo', 'Từ khoá và bộ lọc trên thanh tìm kiếm'],
           ['Thứ tự', 'Job làm mới gần nhất đứng trước'],
           ['Một công ty trong 1 slide', 'Nhiều nhất 1 thẻ'],
@@ -503,8 +503,8 @@ export const JOB_DISPLAY_PAGE_DOCS: Record<string, PageDoc> = {
       {
         kind: 'list',
         items: [
-          'Số slide do số job trong hàng quyết định, **nhiều nhất 5 slide** — tức 20 thẻ.',
-          'Mọi slide đều đủ **4 thẻ**. Hàng không chia hết cho 4 thì slide cuối **vòng lại đầu hàng** cho đủ. VD hàng 7 job: slide 1 là job 1–4, slide 2 là job 5, 6, 7 rồi job 1.',
+          'Mỗi slide đủ **4 thẻ**. Số slide = số job trong hàng chia cho 4, **bỏ phần dư** — nhiều nhất 5 slide. VD hàng 18 job: 4 slide, job dư chờ nhịp sau.',
+          'Hàng chỉ có **1–3 job** thì dải **vẫn hiện**: một slide với bấy nhiêu thẻ.',
           'Không lấy job chưa mua ô này vào cho đủ thẻ.',
           'Hàng job được chốt ở đầu mỗi chu kỳ. Job làm mới giữa chu kỳ vào hàng từ chu kỳ sau — không cướp lượt của job đang chờ.',
         ],
@@ -530,9 +530,8 @@ export const JOB_DISPLAY_PAGE_DOCS: Record<string, PageDoc> = {
           ['Slide 2', 'Job 5–8', 'Job 9–12', 'Job 13–16'],
           ['Slide 3', 'Job 9–12', 'Job 13–16', 'Job 17, 18, 1, 2'],
           ['Slide 4', 'Job 13–16', 'Job 17, 18, 1, 2', 'Job 3–6'],
-          ['Slide 5', 'Job 17, 18, 1, 2', 'Job 3–6', 'Job 7–10'],
         ],
-        note: 'Hàng 18 job vẫn đủ 5 slide: slide cuối vòng lại lấy job 1, 2. Mỗi nhịp cả bảng dịch lên một dòng, nên mọi job đều tới lượt đứng slide 1.',
+        note: 'Hàng 18 job thì dải lấy 16 thẻ, tức 4 slide — job 17 và 18 chờ nhịp sau. Mỗi nhịp cả bảng dịch lên một dòng, nên mọi job đều tới lượt đứng slide 1. Dải lấy ít thẻ hơn số job trong hàng nên không job nào hiện hai lần cùng lúc.',
       },
     ],
   },
