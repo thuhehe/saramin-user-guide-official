@@ -35,12 +35,28 @@
  * SHAPE OF THE BOARD STRIPS PAGE (/trang/board-strips), the same spine over two
  * areas at once — "Tin tuyển dụng nổi bật" and "Đừng bỏ lỡ những tin này!" on
  * the three mega-menu board pages:
- *   1 Tổng quan  (ba khối khi bấm Tìm · bảng so hai dải · giao diện)
+ *   1 Tổng quan  (ba khối khi bấm Tìm)
  *   2 Job nào lên được hai dải
  *   3 Bước 1 — xếp hàng chờ lên hiển thị  (+ diagram 'board-strip-queue')
- *   4 Bước 2 — cứ 5 phút bốc một lượt 30/40 tin  (+ tần suất, làm mới)
- *   5 Bước 3 — lên màn hình theo thứ tự ngẫu nhiên
+ *   4 Bước 2 — cứ 5 phút bốc một lượt
+ *   5 Bước 3 — thứ tự trên màn hình là ngẫu nhiên
  *   6 Một câu để nói với khách
+ *
+ * AND IT IS SHORT ON PURPOSE — ~5.000 characters, about the length of her own
+ * Notion page. She asked twice: "theo đúng bố cục của notion", then "ngắn gọn
+ * hơn!!!". The first pass kept her six blocks but filled them with our tables
+ * (a strip-comparison table, the frequency table and its worked rows, a Q&A
+ * table, the refresh table, the levers list, a worked example) and came to
+ * 13.400 characters. Those were ours, not hers, and the length was the problem
+ * she was pointing at both times. They are gone; the rules they carried stayed
+ * as single clauses:
+ *   - do not quote a frequency  → one clause in §3
+ *   - thin pool shows fewer cards → one clause in §3
+ *   - the over-10% exception to one-turn-per-cycle → one clause in §4
+ *   - tier sorts only in the search results list → the note under §1's table
+ * DO NOT GROW IT BACK. A new rule becomes a clause inside one of her six
+ * blocks, not a table and not a section. If a table feels necessary, that is
+ * the signal to ask her, not to add it.
  *
  * THIS SHAPE IS THU'S, NOT OURS (2026-11-22, second pass). She sent the Notion
  * page back and asked for the page to follow HER layout exactly — "sửa i chang
@@ -436,7 +452,7 @@ export const JOB_DISPLAY_PAGE_DOCS: Record<string, PageDoc> = {
     blocks: [
       {
         kind: 'p',
-        text: 'Trang này viết cho **người bán**. Hai dải *Tin tuyển dụng nổi bật* và *Đừng bỏ lỡ những tin này!* là **hai ô có bán khác nhau**, không phải hai nửa của một ô.\n\nĐọc theo thứ tự: tin nào lên được dải, rồi **ba bước** đưa tin từ bể lên màn hình, và ở cuối là **một câu để nói với khách**.',
+        text: 'Viết cho **người bán**. Hai dải là **hai ô có bán khác nhau**, không phải hai nửa của một ô.',
       },
       {
         kind: 'shot',
@@ -454,171 +470,81 @@ export const JOB_DISPLAY_PAGE_DOCS: Record<string, PageDoc> = {
 
       /* ───────────────────────────────────────────────────────────────── */
       /* ───────────────────────────────────────────────────────────────── */
+      /* ───────────────────────────────────────────────────────────────── */
       { kind: 'h', text: '1. Tổng quan' },
       {
         kind: 'p',
-        text: 'Ba trang bảng tin của mega menu — **Theo khu vực**, **Theo ngành nghề**, **Theo ngành** — dùng **chung một màn hình**. Trên đó có hai dải thẻ việc làm nằm dưới thanh tìm kiếm: *Tin tuyển dụng nổi bật* ở trên, *Đừng bỏ lỡ những tin này!* ở dưới. Đây là chỗ hiện những tin **đã mua chỗ** trên trang bảng tin.\n\nKhi ứng viên **bấm Tìm**, trang có **ba khối**: hai dải lọc lại theo đúng tiêu chí vừa tìm, và bên dưới hiện thêm **khối kết quả tìm kiếm**.',
+        text: 'Đây là chỗ hiện những tin **đã mua chỗ** trên trang bảng tin. Khi ứng viên **bấm Tìm**, trang có **ba khối**.',
       },
       {
         kind: 'table',
-        note: 'Chưa gõ gì thì trang chỉ có hai dải. Khối thứ ba **không phải ô bán** — tin không mua gì vẫn nằm trong đó.',
-        cols: ['Khối', 'Hiện tin nào', 'Xếp theo'],
+        note: 'Chưa gõ gì thì chỉ có hai dải. Khối thứ ba **không phải ô bán** — tin không mua gì vẫn nằm trong đó, và đây là **chỗ duy nhất bậc tin còn xếp thứ tự**.',
+        cols: ['Khối', 'Hiện tin nào'],
         rows: [
-          ['**Dải Tin tuyển dụng nổi bật**', 'Tin **vừa khớp tìm kiếm vừa có bậc bán ô này**', 'Ba bước ở mục 3–5'],
-          ['**Dải Đừng bỏ lỡ những tin này!**', 'Như trên, nhưng bậc Basic và Free', 'Ba bước ở mục 3–5'],
-          ['**Danh sách kết quả tìm kiếm**', '**Tất cả** tin khớp — có mua ô hay không cũng vào', 'Luật tìm kiếm thường, **giống hệt** thanh tìm kiếm chính'],
-        ],
-      },
-      {
-        kind: 'table',
-        note: '**Số thẻ** do người vận hành đặt cho từng ô trong Admin. Đổi số thẻ là đổi luôn trần của một công ty, vì trần đó là 10% số thẻ.',
-        cols: ['Hạng mục', 'Tin tuyển dụng nổi bật', 'Đừng bỏ lỡ những tin này!'],
-        rows: [
-          ['Vị trí trên trang', 'Dải trên', 'Dải dưới'],
-          ['Bậc tin vào được', 'Basic Plus trở lên', 'Basic và Free'],
-          ['Số thẻ một lượt', '30', '40'],
-          ['Lưới trên máy tính', '3 cột', '4 cột'],
-          ['Gom nhóm theo', 'Trục của trang — tỉnh, ngành nghề hoặc ngành', 'Như dải trên'],
-          ['Một công ty tối đa', '3 thẻ mỗi lượt', '4 thẻ mỗi lượt'],
-          ['Đổi lượt', 'Mỗi 5 phút, thay cả cụm', 'Mỗi 5 phút, thay cả cụm'],
-          ['Thứ tự trên màn hình', 'Ngẫu nhiên, xáo lại mỗi lượt', 'Ngẫu nhiên, xáo lại mỗi lượt'],
-          ['Bậc tin xếp thứ tự', 'Không — chỉ quyết định ai vào dải', 'Không — chỉ quyết định ai vào dải'],
-          ['Nút Xem thêm', 'Không có', 'Không có'],
-        ],
-      },
-      {
-        kind: 'list',
-        items: [
-          'Dải là **lưới tĩnh**: mọi thẻ hiện cùng lúc, không tự chạy, không mũi tên, không bộ đếm slide. Màn hình hẹp hơn thì xuống 2 cột, rồi 1 cột.',
-          'Ứng viên đã đăng nhập: tiêu đề dải dưới **gọi tên** họ — *“{tên} ơi, đừng bỏ lỡ những tin này!”*.',
-          'Dải không còn tin nào đủ điều kiện thì **ẩn hẳn** — không để tiêu đề trên một lưới trống.',
+          ['**Tin tuyển dụng nổi bật** — 30 thẻ', 'Tin khớp tìm kiếm, bậc **Basic Plus trở lên**'],
+          ['**Đừng bỏ lỡ những tin này!** — 40 thẻ', 'Tin khớp tìm kiếm, bậc **Basic và Free**'],
+          ['**Danh sách kết quả tìm kiếm**', '**Tất cả** tin khớp — giống hệt thanh tìm kiếm chính'],
         ],
       },
 
       /* ───────────────────────────────────────────────────────────────── */
       { kind: 'h', text: '2. Job nào lên được hai dải' },
       {
-        kind: 'table',
-        note: 'Ở đây **không nhắc** tới mã số thuế hay công ty còn hoạt động: không đạt mấy điều đó thì **đã không đăng được tin**, nên đưa vào danh sách này chỉ làm rối thêm.',
-        cols: ['Điều kiện', 'Nội dung'],
-        rows: [
-          ['1. Tin đang mở', 'Đang hiển thị bình thường trên site, còn trong hạn nhận hồ sơ'],
-          ['2. Bậc tin có bán ô của dải', 'Mỗi dải là **một ô riêng** trong Admin. Bậc đang chạy của tin có bán ô nào thì tin lên dải đó'],
-          ['3. Khớp tìm kiếm', 'Chỉ xét khi ứng viên đã gõ hoặc đã lọc. Chưa gõ, chưa lọc thì không loại tin nào'],
-        ],
-      },
-      {
         kind: 'list',
         items: [
-          'Bậc đang chạy: bậc **cao nhất** tin đang giữ, còn trong hạn.',
-          'Hai dải **không giao nhau**. Một tin chỉ ở một trong hai, không bao giờ ở cả hai.',
-          'Ranh giới là **Basic Plus**: từ Basic Plus trở lên vào dải Nổi bật, Basic và Free vào dải Đừng bỏ lỡ. Ranh giới này do việc bậc nào bán ô nào quyết định, sửa được trong Admin.',
-          'Product đã archive: tin rớt khỏi cả hai dải, dù bậc còn hạn.',
-          '**Không** mượn tin của dải kia để lấp cho đủ số thẻ. Ít tin đủ điều kiện thì hiện bấy nhiêu.',
+          'Tin **đang mở** — còn hiển thị, còn trong hạn nhận hồ sơ.',
+          'Bậc tin đang chạy **có bán đúng ô** của dải đó. Hai dải không giao nhau: một tin chỉ ở một trong hai.',
+          'Nếu ứng viên đã gõ hoặc đã lọc thì phải **khớp tìm kiếm**.',
+          '*Không nhắc mã số thuế hay công ty còn hoạt động: không đạt mấy điều đó thì đã không đăng được tin.*',
         ],
       },
 
       /* ───────────────────────────────────────────────────────────────── */
       { kind: 'h', text: '3. Bước 1 — xếp hàng chờ lên hiển thị' },
       {
-        kind: 'table',
-        note: 'Hàng này **không phải thứ tự trên màn hình** — bước 3 mới quyết định chỗ đứng. Hàng chỉ quyết định **tin nào đi cùng một lượt**. Tin mới vào bể thì cũng vào đúng nhóm, đúng thứ tự làm mới.',
-        cols: ['Thứ tự', 'Hệ thống làm gì', 'Nói với khách thế nào'],
-        rows: [
-          ['1', 'Gom tin thành nhóm theo trục của trang — tỉnh/TP, ngành nghề, hoặc ngành', 'Tin của anh/chị nằm trong nhóm của tỉnh (hoặc ngành) mà tin đó đăng'],
-          ['2', 'Trong mỗi nhóm, tin **làm mới gần đây nhất** đứng trước. Làm mới, không phải ngày đăng, cũng không phải lần sửa tin', 'Làm mới tin là cách đẩy tin lên sớm hơn, **không mất tiền** — trừ khi công ty đang giữ hơn 10% bể tin, lúc đó phải chờ vòng sau'],
-          ['3', 'Rải tin cùng công ty ra: giữa hai tin của **cùng một công ty** luôn cách nhau **ít nhất 10 chỗ**', 'Không công ty nào chiếm được một mảng lớn của dải'],
+        kind: 'list',
+        items: [
+          'Gom tin thành **nhóm** theo trục của trang — tỉnh/TP, ngành nghề, hoặc ngành.',
+          'Trong mỗi nhóm, tin **làm mới gần nhất** đứng trước. Tin mới vào cũng xếp theo đúng thứ tự đó.',
+          'Rải tin cùng công ty ra: hai tin của **cùng một công ty** luôn cách nhau **ít nhất 10 chỗ**. Đây chính là trần 10% — 30 thẻ thì một công ty nhiều nhất **3 thẻ**.',
         ],
       },
       {
         kind: 'diagram',
         id: 'board-strip-queue',
-        note: 'Ô màu **A** là tin của một công ty đang đăng rất nhiều tin. Hàng trên là **bước 1** — chúng bị đẩy cách nhau ít nhất 10 chỗ, tin của các công ty khác xen kẽ vào giữa. Hàng dưới là **bước 3** — vẫn đúng 30 tin đó, nhưng thứ tự đã xáo.',
+        note: 'Ô màu **A** là tin của một công ty đang đăng rất nhiều tin: hàng trên là lúc xếp hàng, hàng dưới là lúc lên màn hình.',
       },
       {
         kind: 'list',
         items: [
-          '**“Cách nhau 10 chỗ” chính là trần 10%, nói theo cách khác.** Một lượt có 30 thẻ, mà cứ 10 chỗ mới có 1 tin của công ty đó, nên trong 30 thẻ họ nhiều nhất **3 thẻ**; dải dưới 40 thẻ thì **4 thẻ**. Một luật, hai kết quả: vừa không chiếm quá 10%, vừa không đứng cạnh nhau.',
-          '**Công ty đăng càng nhiều tin thì mỗi tin của họ càng ít được hiện**, vì hàng chỉ nhận 1 tin của họ mỗi 10 chỗ và phần còn lại chờ các vòng sau. Đây là điều **đã chấp nhận** khi chốt luật — Sales cần biết để không hứa ngược.',
-          '**Đăng thêm tin không mua được thêm chỗ.** Phần của một công ty bị chặn ở 10% dù họ có 5 tin hay 500 tin. Muốn tin lên thường xuyên hơn thì **lên bậc cao hơn** — mục 4 nói vì sao.',
-          '**Bậc tin không xếp thứ tự trong hàng.** Bậc chỉ quyết định tin vào được dải nào (mục 2). Nếu để bậc xếp trước thì tin của công ty bậc cao bị kéo về sát nhau ở đầu dải — vẫn đúng trần 10% nhưng phá luật khoảng cách.',
-          '**Bể mỏng tới mức gần như chỉ còn một công ty** thì không đủ tin của công ty khác để chen vào giữa. Khi đó dải **hiện ít thẻ hơn**, chứ **không** nới luật ra để lấp cho đủ.',
-        ],
-      },
-      {
-        kind: 'example',
-        heading: 'VD: một công ty có 50 tin trong bể 100 tin',
-        scenario: 'Trang **Theo khu vực**, dải *Tin tuyển dụng nổi bật* (30 thẻ). Bể có 100 tin đủ điều kiện, trong đó **50 tin của cùng một công ty** — họ vừa đăng hàng loạt trong một buổi.',
-        cols: ['Nếu chỉ xếp theo lần làm mới', 'Có rải — cách nhau 10 chỗ'],
-        rows: [
-          ['50 tin đó nằm **sát nhau** trong hàng', 'Hàng nhận **1 tin** của họ mỗi 10 chỗ'],
-          ['Lượt đầu gần như **toàn tin một công ty**', 'Mỗi lượt nhiều nhất **3 thẻ** của họ'],
-          ['Các công ty nhỏ gần như không lên được', '50 tin còn lại **chia nhau** các chỗ còn trống'],
-        ],
-        note: 'Với bể 100 tin này, **nhiều nhất 6 trong 50 tin** của họ lên được mỗi vòng, trong khi tin của một công ty nhỏ lên **mỗi vòng một lần**. **Đừng hứa một con số** — bao lâu một tin tới lượt lại còn tuỳ bể tin lúc đó; chỉ nói chắc được là **thưa hơn hẳn**. Đây là chủ ý, không phải lỗi.',
-      },
-
-      /* ───────────────────────────────────────────────────────────────── */
-      { kind: 'h', text: '4. Bước 2 — cứ 5 phút bốc một lượt 30/40 tin' },
-      {
-        kind: 'list',
-        items: [
-          'Dải lấy **30 tin kế tiếp** trong hàng (dải dưới 40) và **thay toàn bộ thẻ một lúc**. Không tịnh tiến từng tin, không đẩy một thẻ vào rồi bỏ một thẻ ra.',
-          'Hết 5 phút thì bốc lượt kế tiếp, cứ thế xoay vòng. Mọi người mở trang **trong cùng một chu kỳ 5 phút** đều thấy **cùng một lượt**.',
-          'Đi hết hàng là **hết một vòng**, rồi xếp hàng lại từ bể tin **tại thời điểm đó** — tin mới vào bể, tin hết hạn rời bể.',
-          'Trong một vòng, **mỗi tin đủ điều kiện được lên đúng một lần** — kể cả tin ở tỉnh ít việc, kể cả tin ở bậc thấp nhất của dải. Đây là lời hứa bán được: **chắc chắn được lên**.',
-          '**Một ngoại lệ, và chỉ một**: công ty đang giữ **hơn 10% bể tin**. Luật cách nhau 10 chỗ không xếp hết số tin của họ vào một vòng được, nên các tin đó **thay phiên nhau qua nhiều vòng** — vẫn được lên, nhưng thưa hơn (mục 3).',
-        ],
-      },
-      {
-        kind: 'p',
-        text: 'Khi mọi tin đều chắc chắn được lên và không ai mua được vị trí, thứ phân biệt tin này với tin kia chỉ còn là **tần suất**:\n\n**Một vòng = (số tin trong hàng ÷ số thẻ của dải) × 5 phút**\n\n**Trong hàng**, không phải trong bể. Hai con số này bằng nhau khi **không công ty nào giữ quá 10% bể tin** — tức gần như mọi trang, và khi đó bảng dưới đúng nguyên. Nếu có một công ty vượt mức đó thì hàng **ngắn hơn bể** vì phần tin dư của họ chờ các vòng sau (mục 3): vòng chạy **nhanh hơn** con số trong bảng, nhưng tin của chính công ty đó lại lên **thưa hơn**.',
-      },
-      {
-        kind: 'table',
-        note: 'Cột đầu là **số tin trong hàng**, không phải số tin trong bể — hai số này bằng nhau trừ khi có công ty giữ quá 10%. Tính cho dải **Tin tuyển dụng nổi bật**: 30 thẻ, chu kỳ 5 phút. Dải **Đừng bỏ lỡ** có 40 thẻ nên với cùng số tin thì vòng ngắn hơn khoảng một phần tư.',
-        cols: ['Tin trong hàng', 'Số lượt', 'Một vòng', 'Mỗi tin được hiện'],
-        rows: [
-          ['60', '2', '10 phút', '5 phút mỗi 10 phút'],
-          ['300', '10', '50 phút', '5 phút mỗi 50 phút'],
-          ['900', '30', '2 giờ 30 phút', '5 phút mỗi 2 tiếng rưỡi'],
-          ['3.000', '100', '8 giờ 20 phút', '5 phút mỗi hơn 8 tiếng'],
-        ],
-      },
-      {
-        kind: 'table',
-        heading: 'Làm mới tin thì được gì',
-        note: 'Làm mới **không** cho tin lên hai lần trong một vòng; nó chỉ rút ngắn thời gian chờ tới lượt — **và chỉ khi tin đã được xếp vào hàng của vòng này**.',
-        cols: ['Tin được làm mới lúc', 'Chuyện gì xảy ra'],
-        rows: [
-          ['Chưa lên trong vòng này', 'Tin nhảy lên **đầu phần hàng còn lại** → lên ở **lượt kế tiếp**, hoặc ngay sau đó nếu luật khoảng cách chưa cho. **Đừng hứa số phút**'],
-          ['Đã lên rồi trong vòng này', 'Tin **chờ vòng sau**, và ở vòng sau nó nằm trong nhóm đầu hàng'],
-          ['Công ty đang giữ hơn 10% bể', 'Tin có thể **chưa vào hàng** của vòng này — làm mới lúc đó không đổi được gì cho tới vòng sau'],
-        ],
-      },
-      {
-        kind: 'list',
-        heading: 'Muốn tin được hiện thường xuyên hơn',
-        items: [
-          '**Lên bậc cao hơn để vào ô ít tin hơn.** Dải *Nổi bật* chỉ nhận Basic Plus trở lên nên bể của nó nhỏ hơn hẳn bể dải dưới — ít tin vào được thì vòng ngắn lại cho tất cả những tin đã vào. Đây là đòn bẩy mạnh nhất, và là cách bậc tin còn tác dụng **trên hai dải này**.',
-          '**Tăng số thẻ** của dải trong Admin. Nhưng tăng số thẻ là tăng luôn trần một công ty, vì trần là 10% số thẻ.',
-          'Rút ngắn chu kỳ 5 phút thì **không** ăn thua: cả vòng chạy nhanh hơn nhưng mỗi tin vẫn chỉ lên một lượt mỗi vòng, và lượt đó ngắn lại đúng bằng phần rút.',
+          'Hệ quả: **công ty đăng càng nhiều tin thì mỗi tin của họ càng ít được hiện**, vì phần dư phải chờ các vòng sau. Thưa hơn bao nhiêu thì tuỳ bể tin — **đừng hứa con số**.',
+          'Bể mỏng tới mức gần như chỉ còn một công ty thì dải **hiện ít thẻ hơn**, chứ không nới luật ra để lấp cho đủ.',
         ],
       },
 
       /* ───────────────────────────────────────────────────────────────── */
-      { kind: 'h', text: '5. Bước 3 — lên màn hình theo thứ tự ngẫu nhiên' },
+      { kind: 'h', text: '4. Bước 2 — cứ 5 phút bốc một lượt' },
+      {
+        kind: 'list',
+        items: [
+          'Dải lấy **30 tin kế tiếp** trong hàng (dải dưới 40) và **thay cả cụm một lúc**, không tịnh tiến từng tin.',
+          'Hết 5 phút bốc lượt kế tiếp, cứ thế xoay vòng. Ai mở trang trong cùng 5 phút đó đều thấy **cùng một lượt**.',
+          'Hết hàng là **hết một vòng**, rồi xếp hàng lại từ bể tin tại thời điểm đó. Trong một vòng, **mỗi tin được lên đúng một lần** — trừ công ty giữ hơn 10% bể, tin của họ thay phiên nhau nên thưa hơn.',
+        ],
+      },
+
+      /* ───────────────────────────────────────────────────────────────── */
+      { kind: 'h', text: '5. Bước 3 — thứ tự trên màn hình là ngẫu nhiên' },
       {
         kind: 'p',
-        text: '30 tin của một lượt lên màn hình **không theo thứ tự hàng**, mà được **xáo ngẫu nhiên**.\n\nLý do rất cụ thể: nếu cứ bốc 30 tin theo đúng thứ tự hàng rồi bày lên, thì một tin sẽ **luôn** rơi vào ô đầu tiên và một tin sẽ **luôn** rơi vào ô cuối — vòng nào cũng vậy, mãi mãi. Xáo chỗ bỏ hẳn chuyện đó, và cho mọi tin trong lượt **cơ hội như nhau** ở ô đầu, ô giữa hay ô cuối.',
+        text: 'Nếu cứ bốc 30 tin theo đúng thứ tự hàng rồi bày lên, một tin sẽ **luôn** đứng đầu và một tin **luôn** đứng cuối, vòng nào cũng vậy. Nên 30 tin đó được **xáo ngẫu nhiên** trước khi lên màn hình.',
       },
       {
         kind: 'list',
         items: [
-          'Xáo **một lần cho mỗi lượt**, không phải mỗi người một kiểu. Hai ứng viên mở trang trong cùng một chu kỳ 5 phút thấy **đúng cùng thứ tự** — nên khi khách gọi lên hỏi, Sales mở ra thấy y như khách.',
-          'Xáo ngẫu nhiên **không được phá luật khoảng cách**: xáo xong mà hai thẻ cùng công ty rơi cạnh nhau thì đổi chỗ một thẻ, cho tới khi không còn cặp nào liền nhau.',
-          'Vì thứ tự đổi mỗi lượt nên **không bán được “ô số 1”**. Trên hai dải này không tồn tại vị trí cố định để bán.',
-          'Nghiệm thu: theo một tin qua 10 vòng liên tiếp — vị trí của nó phải khác nhau, không nằm nguyên một chỗ.',
+          'Xáo **một lần cho mỗi lượt**, dùng chung cho mọi người — không phải mỗi người một kiểu.',
+          'Xáo xong vẫn **không để hai thẻ cùng công ty đứng cạnh nhau**.',
+          'Vì thứ tự đổi mỗi lượt nên **không có “ô số 1” để bán**.',
         ],
       },
 
@@ -626,28 +552,15 @@ export const JOB_DISPLAY_PAGE_DOCS: Record<string, PageDoc> = {
       { kind: 'h', text: '6. Một câu để nói với khách' },
       {
         kind: 'p',
-        text: '*“Tin của anh/chị **chắc chắn được lên** dải, theo lượt xoay vòng — **bậc càng cao thì vòng càng ngắn, tin lên càng thường xuyên**.”*\n\nCâu này bán đúng hai thứ hai dải thật sự có: **sự chắc chắn** và **tần suất**. Nó không hứa vị trí, nên không bị khách bắt lỗi về sau.',
-      },
-      {
-        kind: 'table',
-        heading: 'Khách hỏi gì, trả lời sao',
-        cols: ['Khách hỏi', 'Trả lời'],
-        rows: [
-          ['“Tin tôi có được lên đầu không?”', 'Hai dải **không có vị trí cố định** — mỗi lượt thứ tự xáo lại. Đổi lại, tin **chắc chắn được lên**: vòng nào cũng một lần, trừ công ty đang giữ hơn 10% bể tin thì thưa hơn'],
-          ['“Sao tôi mở ra không thấy tin tôi?”', 'Dải chỉ hiện 30 (hoặc 40) tin một lúc và **đổi cả cụm mỗi 5 phút** — tin đang chờ tới lượt, mục 4 có cách tính. Nhưng nếu công ty đang giữ **hơn 10% bể tin** thì tin có thể **chưa vào hàng của vòng này**, và mục 4 không tính ra được cho trường hợp đó (mục 3)'],
-          ['“Tôi đăng 50 tin, sao không thấy nhiều?”', 'Một công ty tối đa **10% số thẻ** mỗi lượt. Đăng thêm **không** mở rộng phần đó — 50 tin thay phiên nhau dùng 3 chỗ'],
-          ['“Mua bậc cao hơn thì được gì?”', '**Vào ô ít tin hơn**, nên **tới lượt nhanh hơn**. Đây là thứ thật sự mua được bằng tiền'],
-          ['“Làm mới tin có tác dụng không?”', 'Có, và **không mất tiền**: tin đã vào hàng vòng này mà chưa lên thì sẽ lên sớm hơn. Không ăn thua với tin đã lên rồi, hoặc tin của công ty giữ hơn 10% bể mà vòng này chưa xếp tới'],
-          ['“Tìm kiếm có ưu tiên tin tôi không?”', 'Có — ở **khối kết quả tìm kiếm** (mục 1), bậc cao đứng trước ở chế độ *Đề xuất*. Hai dải thì không'],
-        ],
+        text: '*“Tin của anh/chị **chắc chắn được lên** dải, theo lượt xoay vòng — **bậc càng cao thì vòng càng ngắn, tin lên càng thường xuyên**.”*',
       },
       {
         kind: 'list',
         heading: 'Ba điều không được hứa',
         items: [
-          'Không hứa **vị trí** — không có ô số 1 để bán.',
-          'Không hứa **hiện liên tục** — tin lên theo lượt.',
-          'Không hứa **một con số** cho câu “bao lâu tin tôi lên một lần”. Với công ty đăng nhiều tin thì không tính trước được; chỉ nói được là **thưa hơn**.',
+          '**Vị trí** — không có ô số 1 để bán.',
+          '**Hiện liên tục** — tin lên theo lượt.',
+          '**Một con số** cho câu “bao lâu tin tôi lên một lần”.',
         ],
       },
 
