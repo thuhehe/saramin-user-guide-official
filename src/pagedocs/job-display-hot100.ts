@@ -134,7 +134,7 @@ export const HOT100_PAGE_DOCS: Record<string, PageDoc> = {
       },
       {
         kind: 'p',
-        text: 'Xếp 100 tin theo điểm, điểm cao nhất là hạng 1. Đây là **hạng theo tương tác**.\n\nNhiều tin cùng điểm thì nhận cùng một hạng. Tin chưa có lượt nào đều 0 điểm nên đều cùng một hạng — giai đoạn chưa nhiều lượt truy cập thì phần lớn bảng rơi vào nhóm này.',
+        text: 'Xếp 100 tin theo điểm, điểm cao nhất là hạng 1. Đây là **hạng theo tương tác**.\n\nNhiều tin cùng điểm thì nhận cùng một hạng, không xếp tuỳ ý. Tin chưa có lượt nào đều 0 điểm, nên bảng có thể có rất nhiều tin cùng một hạng theo tương tác.',
       },
 
       /* ───────────────────────────────────────────────────────────────── */
