@@ -79,6 +79,29 @@
  * from the build: under the guide-is-the-requirement ruling the code would only
  * say what happens today, not what should.
  *
+ * THAT LAST SENTENCE WAS HALF WRONG, and the Logic chung session called it on
+ * 2026-11-22. The ruling governs WHAT THE PAGE SAYS; it does not govern whether
+ * the REASON behind it is true of the system. Her reason is a factual claim —
+ * "these must already hold to post" — and a factual claim is checkable. Checked
+ * independently here against svn-be origin/dev 86a1d09bb rather than taken:
+ *   - CompanyPublicSql.publiclyExposed(alias), javadoc headed "Decision D-3":
+ *       status = 'ACTIVE' AND (mst IS NOT NULL
+ *                              OR (company_kind = 'FOREIGN' AND foreign_tax_id IS NOT NULL))
+ *   - PublicReadRepositoryAdapter is where the jobseeker side evaluates it, and
+ *     its "Placement-public-content slice" — findOpenJobsByTierCodes — applies
+ *     publiclyExposed(c) on the tier-code queries, i.e. on OUR two strips.
+ *   - JobPlacementBoardReaderAdapter composes it per query off clock.instant(),
+ *     beside j.status OPEN and the application window. So it is evaluated ON
+ *     EVERY READ, never once at posting time.
+ * Which means her premise is false as a reason for dropping the condition
+ * permanently: archive a company today and every posting it has paid for leaves
+ * every public surface at once, mid-campaign. The entry row still stays out —
+ * her ruling is unambiguous and the condition IS redundant at entry — but the
+ * ongoing rule is a real question, not a hypothetical one.
+ * TRAP for whoever writes that rule: never "phải có mã số thuế" flatly. Foreign
+ * customers carry foreign_tax_id and no mst; the mst-only spelling hid every
+ * foreign company from every public surface until it was fixed on 2026-10-12.
+ *
  * WHICH RULES THESE PAGES STATE. Thu settled this on 2026-11-21: the pages
  * state THE RULES WE WANT — the agreed target — not the behaviour deployed
  * today. So a page may describe something the build has not caught up with,
