@@ -682,7 +682,19 @@ export const JOB_DISPLAY_PAGE_DOCS: Record<string, PageDoc> = {
  * rule. §2 and §8 were each defensible alone and contradicted each other for
  * weeks; every check that reads one block at a time passes both.
  *
- * RECEIVED FROM THU 2026-11-22 AND NOT APPLIED HERE — both need her, not a guess:
+ * CARD COUNTS SETTLED 2026-11-22: Thu confirmed "40 như hiện tại", so the upper
+ *   strip is 30 and the lower is 40. The digits did not change; their STATUS did.
+ *   Until today 30/40 was an observation read off staging on 21/11 that both
+ *   pages carried as if it were the rule. It is now the rule, stated by her —
+ *   and under the guide-is-the-requirement ruling that difference is the whole
+ *   point, because an observation and a rule look identical on the page. The
+ *   five worked examples here (§4's note twice, §4's cap table, §5's
+ *   cycle-length example, §6's row) stand as written, and law 1's restored
+ *   "làm tròn xuống, ít nhất 1 thẻ" is what resolves any count she changes
+ *   later without another conversation. Relayed via the board-strips session,
+ *   not read from her page.
+ *
+ * RECEIVED FROM THU 2026-11-22 AND NOT APPLIED HERE — this one needs her, not a guess:
  *   - Vocabulary: "dải => Section, bậc tin => Placement", annotated on the strips
  *     page. NOT swept here, for two reasons. (a) This page's generic term is "ô"
  *     (93 uses) and "dải" (53) is a SUBTYPE of it; her mapping says what "dải"
@@ -691,12 +703,6 @@ export const JOB_DISPLAY_PAGE_DOCS: Record<string, PageDoc> = {
  *     — §7's "Product settings → Placement load" — so renaming the 12 "bậc tin"
  *     to Placement puts one word on two meanings, one of them a screen name.
  *     Ask her which word "ô" takes before touching either.
- *   - Card counts: 30 for the upper strip, 40 for the lower, came off staging on
- *     2026-11-21 and she is asking whether the lower one is 40 or 30. It is a
- *     worked number here, not a rule, and it appears in FIVE places: §4's note
- *     (twice), §4's cap table, §5's cycle-length example, §6's row. Changing it
- *     is five edits, not one. Top search's 20-across-5-slides is a different
- *     number and is not in question.
  *   - Counts of placement rows (47 / 28 / 19) and any production measurement.
  *     They date the page and sales does not sell by them.
  *   - That the strip asks the search for 8 cards in today's build while the
