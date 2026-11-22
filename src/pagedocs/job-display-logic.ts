@@ -576,8 +576,8 @@ export const JOB_DISPLAY_PAGE_DOCS: Record<string, PageDoc> = {
       },
       {
         kind: 'table',
-        note: 'Tính cho dải **Tin tuyển dụng nổi bật**: 30 thẻ, chu kỳ 5 phút. Dải **Đừng bỏ lỡ** có 40 thẻ nên với cùng số tin thì vòng ngắn hơn khoảng một phần tư.',
-        cols: ['Tin đủ điều kiện', 'Số lượt', 'Một vòng', 'Mỗi tin được hiện'],
+        note: 'Cột đầu là **số tin trong hàng**, không phải số tin trong bể — hai số này bằng nhau trừ khi có công ty giữ quá 10%. Tính cho dải **Tin tuyển dụng nổi bật**: 30 thẻ, chu kỳ 5 phút. Dải **Đừng bỏ lỡ** có 40 thẻ nên với cùng số tin thì vòng ngắn hơn khoảng một phần tư.',
+        cols: ['Tin trong hàng', 'Số lượt', 'Một vòng', 'Mỗi tin được hiện'],
         rows: [
           ['60', '2', '10 phút', '5 phút mỗi 10 phút'],
           ['300', '10', '50 phút', '5 phút mỗi 50 phút'],
