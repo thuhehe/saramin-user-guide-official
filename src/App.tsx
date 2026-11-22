@@ -63,8 +63,12 @@ const pageUrl = (p: Page) => (p.site ? `${SITE_BASE[p.site]}${p.path}` : adminUr
 
 /** Admin sidebar order, as the console itself renders it — plus Resume management, Application management and Mega menu pages (see above). */
 const GROUP_ORDER = [
-  'Dashboards', 'Job management', 'Resume management', 'Application management', 'Matching', 'Users', 'Product settings', 'Service delivery',
-  'CRM', 'Content', 'Mega menu pages', 'Job display logic', 'Notifications', 'Organisation', 'System',
+  /* The four job groups read in the order a job lives: what a job IS (Job
+     management), where it is SHOWN (Job display logic), how it is MATCHED to
+     people (Matching) — then the CV and the application that follow from it. */
+  'Dashboards', 'Job management', 'Job display logic', 'Matching', 'Resume management', 'Application management',
+  'Users', 'Product settings', 'Service delivery',
+  'CRM', 'Content', 'Mega menu pages', 'Notifications', 'Organisation', 'System',
 ]
 
 /** Handbook sections that stand on their own, before the modules. */
