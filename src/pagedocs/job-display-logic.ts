@@ -63,6 +63,22 @@
  * because "những điều kiện này phải được đáp ứng mới đăng đc job nên nó hiển
  * nhiên". Section 2 now says why it leaves them out rather than listing them.
  *
+ * BUT HER REASON COVERS THE ENTRY CHECK, NOT THE ONGOING ONE — open, and it is
+ * a product rule, so nobody here should guess it onto the page. "Phải được đáp
+ * ứng mới đăng đc job" is true and makes the condition redundant AT POSTING
+ * TIME. It does not follow that the condition stops mattering afterwards, and
+ * the page before this edit implied the opposite: it carried "công ty đang hoạt
+ * động và đã có mã số thuế" inside condition 1, next to "đang bật hiển thị,
+ * chưa hết hạn" — i.e. as a state re-checked while the posting is live, beside
+ * other states that change over time.
+ * So the unanswered question is: a company deactivated (or its tax code pulled)
+ * AFTER its postings went up — do those postings drop off the strips, or keep
+ * running until they expire? Her ruling is followed either way, because the row
+ * is gone from the entry list; what is missing is whether a separate ongoing
+ * rule belongs somewhere else on the page. Asked 2026-11-22. Do not resolve it
+ * from the build: under the guide-is-the-requirement ruling the code would only
+ * say what happens today, not what should.
+ *
  * WHICH RULES THESE PAGES STATE. Thu settled this on 2026-11-21: the pages
  * state THE RULES WE WANT — the agreed target — not the behaviour deployed
  * today. So a page may describe something the build has not caught up with,
