@@ -489,7 +489,7 @@ export const JOB_DISPLAY_PAGE_DOCS: Record<string, PageDoc> = {
           '**Công ty đăng càng nhiều tin thì mỗi tin của họ càng ít được hiện.** Hàng chỉ nhận 1 tin của họ mỗi 10 chỗ, nên số tin còn lại phải chờ các lượt sau. Đây là điều **đã được chấp nhận** khi chốt luật — Sales cần biết để không hứa ngược.',
           '**Đăng thêm tin không mua được thêm chỗ trên dải.** Phần của một công ty bị chặn ở 10% dù họ có 5 tin hay 500 tin. Muốn tin lên thường xuyên hơn thì **lên bậc cao hơn**, không phải đăng thêm — mục 8 nói vì sao.',
           '**Bậc tin không xếp thứ tự trong hàng.** Bậc chỉ quyết định tin vào được dải nào (mục 3); vào rồi thì Premium và Basic Plus đứng chung một hàng. Nếu để bậc xếp trước thì tin của công ty bậc cao bị kéo về sát nhau ở đầu dải — vẫn đúng trần 10% nhưng phá luật khoảng cách.',
-          '**Bể mỏng tới mức gần như chỉ còn một công ty** thì không đủ tin của công ty khác để chen vào giữa. Khi đó dải **hiện ít thẻ hơn** — có khi chỉ vài thẻ — chứ **không** nới luật ra để lấp cho đủ 30 ô. Gặp ở trang tỉnh nhỏ hoặc ngành hẹp, và đây là lý do một dải đôi khi trông ngắn.',
+          '**Bể mỏng tới mức gần như chỉ còn một công ty** thì không đủ tin của công ty khác để chen vào giữa. Khi đó dải **hiện ít thẻ hơn**, có khi chỉ lấp được một phần nhỏ số ô, chứ **không** nới luật ra để lấp cho đủ 30. Gặp ở trang tỉnh nhỏ hoặc ngành hẹp, và đây là lý do một dải đôi khi trông ngắn.',
         ],
       },
       {
@@ -524,7 +524,7 @@ export const JOB_DISPLAY_PAGE_DOCS: Record<string, PageDoc> = {
         note: 'Làm mới tin **không** cho tin lên hai lần trong một vòng. Nó chỉ rút ngắn thời gian chờ tới lượt.',
         cols: ['Tin được làm mới lúc', 'Chuyện gì xảy ra'],
         rows: [
-          ['Chưa lên trong vòng này', 'Tin nhảy lên đầu phần hàng còn lại → lên ở **một trong vài lượt gần nhất kế tiếp**, không phải chờ hết vòng'],
+          ['Chưa lên trong vòng này', 'Tin nhảy lên **đầu phần hàng còn lại** → lên ở **lượt kế tiếp**, hoặc ngay sau đó nếu luật khoảng cách chưa cho, thay vì phải chờ hết vòng. **Đừng hứa số phút** — còn tuỳ hàng còn dài bao nhiêu'],
           ['Đã lên rồi trong vòng này', 'Tin **chờ vòng sau**, và ở vòng sau nó nằm trong nhóm đầu hàng'],
         ],
       },
