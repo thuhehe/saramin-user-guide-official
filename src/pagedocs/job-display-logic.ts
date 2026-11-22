@@ -153,6 +153,38 @@
  *     Said in one breath now — and note this is the shuffle-side twin of the
  *     construction-not-repair warning further up.
  *
+ * THIRD ANNOTATION PASS, 22/11. Twelve items, all applied. The ones that are
+ * rulings rather than wording, so nobody puts them back:
+ *   - "mega menu" is not the client's word for those pages. They are the JOBS
+ *     pages, and the boxes on them are SECTIONS. "Khối" is gone too — one noun
+ *     for one thing.
+ *   - THE TWO 10% ARE ONE RULE after all, and she is right. I had split them
+ *     into 10%-of-cards and 10%-of-pool and spelled out the difference; her
+ *     answer was "ủa 10% chỗ này và ở bước 2 giống nhau chứ" plus "nói nhanh
+ *     cái rule là jobs cùng cty chỉ đc hiển thị 10%". The second denominator
+ *     was my framing, not a second rule: a company with more jobs than the one
+ *     10% allows simply takes turns. Stated once, up front, as the rule, with
+ *     the 10-place spacing demoted to how it is achieved.
+ *   - NO CLAIMS ABOUT HOW ADMIN CONFIGURES PRODUCTS. "Hai section không giao
+ *     nhau" is out — "mình ko kiểm soát đc cách admin set products và
+ *     placement" — and with it the three bullets that depended on the same
+ *     assumption: which product wins when a job holds several, archived
+ *     products, and borrowing between sections. A page cannot state as a rule
+ *     what an operator can reconfigure. Note this reverses the restore made
+ *     earlier the same day: those four lines were real rules, and they are out
+ *     because they are not OURS to state, not because they were wrong.
+ *   - The foot's "Trang con" list is suppressed whenever a page declares
+ *     siteLinks, since the header already lists the same routes.
+ *
+ * HELD FOR A DEV TASK, NOT FOR THIS PAGE (her item 9, verbatim): "lưu ý giữ
+ * như build hiện tại về cái này. cái này note ko phải để đưa vào documents mà
+ * là để xiu nữa tôi nhờ bạn viết task cho dev và nhờ bạn viết rõ những điểm
+ * dev cần thay đổi." So: she will ask for a dev task spelling out what has to
+ * change, and one behaviour is to be left as the build has it. WHICH bullet
+ * that annotation was attached to could not be recovered — items 5 through 11
+ * all carry the same selector and only their order separates them. Ask her
+ * when the task is requested; do not guess it onto the page.
+ *
  * AND IT IS SHORT ON PURPOSE — ~5.000 characters, about the length of her own
  * Notion page. She asked twice: "theo đúng bố cục của notion", then "ngắn gọn
  * hơn!!!". The first pass kept her six blocks but filled them with our tables
@@ -591,16 +623,16 @@ export const JOB_DISPLAY_PAGE_DOCS: Record<string, PageDoc> = {
       { kind: 'h', text: '1. Tổng quan' },
       {
         kind: 'p',
-        text: 'Ba trang bảng tin của mega menu — Theo khu vực, Theo ngành nghề, Theo ngành — dùng chung một màn hình. Trên đó có hai section hiện job đã mua placement.\n\nKhi ứng viên bấm Tìm, trang chia làm ba khối.',
+        text: 'Ba trang Jobs — Theo khu vực, Theo ngành nghề, Theo ngành — dùng chung một màn hình. Trên đó có hai section hiện job đã mua placement.\n\nKhi ứng viên bấm Tìm, trang có ba section.',
       },
       {
         kind: 'table',
-        note: 'Product nào bán placement của section nào là do setting trong Admin, không cố định. Khối thứ ba không phải chỗ bán: job không mua gì vẫn nằm trong đó, và đây cũng là chỗ duy nhất placement còn xếp thứ tự.',
-        cols: ['Khối', 'Hiện job nào', 'Số thẻ'],
+        note: 'Chưa gõ gì thì trang chỉ có hai section đầu.',
+        cols: ['Section', 'Hiện job nào', 'Số thẻ'],
         rows: [
-          ['Section Tin tuyển dụng nổi bật', 'Job khớp tìm kiếm và có placement của section này', '30'],
-          ['Section Đừng bỏ lỡ những tin này!', 'Job khớp tìm kiếm và có placement của section này', '40'],
-          ['Danh sách kết quả tìm kiếm', 'Tất cả job khớp, có mua placement hay không', 'Như tìm kiếm thường'],
+          ['Tin tuyển dụng nổi bật', 'Job khớp tìm kiếm và có placement của section này', '30'],
+          ['Đừng bỏ lỡ những tin này!', 'Job khớp tìm kiếm và có placement của section này', '40'],
+          ['Danh sách kết quả tìm kiếm', 'Mọi job khớp tìm kiếm, **bao gồm cả job không mua placement**. Đây cũng là chỗ duy nhất placement còn xếp thứ tự', 'Như tìm kiếm thường'],
         ],
       },
 
@@ -610,11 +642,8 @@ export const JOB_DISPLAY_PAGE_DOCS: Record<string, PageDoc> = {
         kind: 'list',
         items: [
           'Job đang mở và đang hiển thị trên site.',
-          'Job có placement của đúng section đó. Hai section không giao nhau, một job chỉ nằm ở một trong hai.',
+          'Job có placement của đúng section đó.',
           'Nếu ứng viên đã gõ hoặc đã lọc thì job còn phải khớp với tìm kiếm.',
-          'Một job có thể đang giữ nhiều product cùng lúc. Product còn hạn và ở mức cao nhất là cái quyết định job vào section nào, qua placement mà product đó bán.',
-          'Product đã archive thì job rớt khỏi cả hai section, dù placement còn hạn.',
-          'Section không mượn job của section kia để lấp cho đủ thẻ. Ít job đủ điều kiện thì hiện bấy nhiêu, và không còn job nào thì section ẩn hẳn.',
         ],
       },
 
@@ -625,7 +654,7 @@ export const JOB_DISPLAY_PAGE_DOCS: Record<string, PageDoc> = {
         items: [
           'Gom job thành nhóm theo trục của trang: tỉnh/TP, ngành nghề, hoặc ngành.',
           'Trong mỗi nhóm, job làm mới gần nhất đứng trước. Job mới vào hàng cũng xếp theo đúng thứ tự đó.',
-          'Rải job cùng công ty ra, hai job của một công ty luôn cách nhau ít nhất 10 chỗ. Đây chính là trần 10% số thẻ, làm tròn xuống và thấp nhất 1 thẻ: section 30 thẻ thì một công ty nhiều nhất 3 thẻ, section 40 thẻ thì 4 thẻ.',
+          'Luật: job của cùng một công ty chỉ được chiếm 10% số thẻ của section — làm tròn xuống, thấp nhất 1 thẻ. Section 30 thẻ thì nhiều nhất 3 job, section 40 thẻ thì 4. Cách làm: xếp hàng sao cho hai job của một công ty luôn cách nhau ít nhất 10 chỗ.',
         ],
       },
       {
@@ -648,7 +677,7 @@ export const JOB_DISPLAY_PAGE_DOCS: Record<string, PageDoc> = {
         items: [
           'Section lấy đúng số thẻ của mình từ đầu hàng, rồi thay cả cụm một lúc chứ không tịnh tiến từng job.',
           'Hết 5 phút lại bốc lượt kế tiếp. Ai mở trang trong cùng 5 phút đó đều thấy cùng một lượt.',
-          'Đi hết hàng là hết một vòng, rồi xếp hàng lại từ bể job tại thời điểm đó. Trong một vòng mỗi job được lên đúng một lần, trừ công ty đang giữ hơn 10% tổng số job trong bể thì job của họ thay phiên nhau nên thưa hơn. Đây là 10% của bể job, khác với trần 10% số thẻ ở bước 2.',
+          'Đi hết hàng là hết một vòng, rồi xếp hàng lại từ bể job tại thời điểm đó. Trong một vòng mỗi job được lên đúng một lần — trừ công ty có nhiều job hơn mức 10% đó cho phép, thì job của họ thay phiên nhau qua các vòng nên thưa hơn.',
         ],
       },
 

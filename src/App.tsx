@@ -449,7 +449,9 @@ function PageView({ p, dev, onModule }: { p: Page; dev: boolean; onModule: () =>
         {d?.blocks?.map((b, i) => <DocBlockView key={i} b={b} />)}
       </div>
 
-      {p.sub.length > 0 && (
+      {/* The routes already sit in the header when a page declares siteLinks,
+          so repeating them at the foot is the same list twice. */}
+      {p.sub.length > 0 && !d?.siteLinks && (
         <section className="mt-7">
           <h2 className="border-b border-ink pb-1.5 text-[15px] font-bold tracking-tight">Trang con</h2>
           <ul className="mt-2">
