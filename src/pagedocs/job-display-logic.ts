@@ -670,6 +670,18 @@ export const JOB_DISPLAY_PAGE_DOCS: Record<string, PageDoc> = {
  *   have no mst and carry foreign_tax_id instead (V376, after the mst-only
  *   spelling silently hid every foreign company until 2026-10-12).
  *
+ * §8 IS NOW THE ONLY DO-NOT-PROMISE LIST IN THIS GROUP (2026-11-22). Thu cut the
+ * sales section from the strips page, so the prohibition index that caught §2
+ * selling frequency off tier — §8 already forbade it — exists only here. Two
+ * consequences. Keep §8 enumerating prohibitions, not just permissions: it is
+ * the index every other claim gets read against. And when the strips page makes
+ * a claim, check it against §8, because that page can no longer catch itself.
+ * The dependency runs one way and did not exist before today.
+ *
+ * READ THE PAGE'S CLAIMS AGAINST EACH OTHER, not only each block against the
+ * rule. §2 and §8 were each defensible alone and contradicted each other for
+ * weeks; every check that reads one block at a time passes both.
+ *
  * RECEIVED FROM THU 2026-11-22 AND NOT APPLIED HERE — both need her, not a guess:
  *   - Vocabulary: "dải => Section, bậc tin => Placement", annotated on the strips
  *     page. NOT swept here, for two reasons. (a) This page's generic term is "ô"
@@ -774,13 +786,13 @@ export const JOB_DISPLAY_MODULE_DOCS: Record<string, ModuleDoc> = {
       },
       {
         kind: 'table',
-        note: 'VD luật 10%: dải 30 thẻ → mỗi công ty nhiều nhất **3 thẻ**; dải 40 thẻ → **4 thẻ**. VD Top search: 20 thẻ chia 5 slide → một công ty nhiều nhất **5 thẻ**, mỗi slide một thẻ.\n\nDanh sách kết quả tìm kiếm để mặc định ở *Đề xuất* — bậc tin trước, rồi độ khớp từ khoá, rồi lần làm mới — và ở chế độ đó **không có luật công ty nào**. Cách xếp theo vòng trong bảng là của lựa chọn *Mới nhất*.\n\n**Riêng hai dải trên trang danh sách việc làm, luật đặt ở chỗ khác: ngay khi xếp hàng chờ, hai tin của cùng một công ty đã được rải cách nhau ít nhất 10 chỗ.** Một luật cho hai kết quả — mỗi lượt 30 thẻ thì công ty đó nhiều nhất **3 thẻ** (đúng 10%), **và** không hai thẻ nào của họ đứng cạnh nhau. Hai dải này **không xếp theo bậc tin**: bậc chỉ quyết định tin vào được dải nào, vào rồi thì mọi tin xếp hàng như nhau. Nếu để bậc xếp trước thì tin của một công ty bậc cao bị kéo về sát nhau ở đầu hàng — vẫn đúng 10% nhưng phá luật khoảng cách. Trang *Trending & Đừng bỏ lỡ* nói kỹ.',
+        note: 'VD luật 10%: dải 30 thẻ → mỗi công ty nhiều nhất **3 thẻ**; dải 40 thẻ → **4 thẻ**. VD Top search: 20 thẻ chia 5 slide → một công ty nhiều nhất **5 thẻ**, mỗi slide một thẻ.\n\nDanh sách kết quả tìm kiếm để mặc định ở *Đề xuất* — bậc tin trước, rồi độ khớp từ khoá, rồi lần làm mới — và ở chế độ đó **không có luật công ty nào**. Cách xếp theo vòng trong bảng là của lựa chọn *Mới nhất*.\n\n**Riêng hai dải trên trang danh sách việc làm, luật đặt ở chỗ khác: ngay khi xếp hàng chờ, hai tin của cùng một công ty đã được rải cách nhau ít nhất 10 chỗ.** Một luật cho hai kết quả — mỗi lượt 30 thẻ thì công ty đó nhiều nhất **3 thẻ** (đúng 10%), **và** không hai thẻ nào của họ đứng cạnh nhau. Hai dải này **không xếp theo bậc tin**: bậc chỉ quyết định tin vào được dải nào, vào rồi thì mọi tin xếp hàng như nhau. Nếu để bậc xếp trước thì tin của một công ty bậc cao bị kéo về sát nhau ở đầu hàng — vẫn đúng 10% số thẻ nhưng phá luật khoảng cách. **Hai con số 10% trên trang này đếm hai thứ khác nhau.** *10% số thẻ* là trần trong một lượt: dải 30 thẻ thì một công ty nhiều nhất 3 thẻ. *10% bể tin* là mốc khác hẳn: công ty giữ quá ngần đó tin thì luật rải không còn xếp hết tin của họ vào hàng của một vòng được nữa, phần còn lại chờ vòng sau. Cùng một luật rải cách nhau 10 chỗ, nhưng đếm trên hai tập khác nhau. Trang *Trending & Đừng bỏ lỡ* nói kỹ.',
         cols: ['Ô hiển thị', 'Một công ty được giữ', 'Khi không đủ công ty để chia'],
         rows: [
           ['**Top search** — đầu trang kết quả tìm kiếm', 'Nhiều nhất **1 thẻ trong mỗi slide 4 thẻ**', 'Rải xa nhất có thể, rồi vẫn lấp cho đủ — không để slide thiếu thẻ'],
           ['**8 dải trang chủ · Hàn Quốc · nước ngoài**', '**Không có trần.** Tin của một công ty được **rải đều cả hàng**, hai tin cùng công ty không đứng cạnh nhau — nhưng là **cố gắng tối đa**', 'Khi một công ty nắm **hơn nửa** số tin của dải thì không còn cách xếp nào tránh được, và dải chấp nhận hai thẻ đứng cạnh nhau'],
           ['**Trending jobs · Don’t miss these jobs** — các trang danh sách việc làm', 'Hàng chờ đã **rải tin cùng công ty cách nhau 10 chỗ** — nên mỗi lượt công ty đó nhiều nhất **10% số thẻ** (30 thẻ → 3 thẻ, 40 thẻ → 4 thẻ), và không hai thẻ nào của họ đứng cạnh nhau', 'Dải **hiện ít thẻ hơn**. Trần là luật cứng, không nới ra để lấp cho đầy'],
-          ['**Gợi ý nhanh dưới thanh tìm kiếm** và dải **Công ty hàng đầu**', 'Cũng **10%**, **và** hai thẻ đứng cạnh nhau không cùng một công ty khi còn công ty khác để xếp', 'Hết công ty khác thì mới chấp nhận đứng cạnh nhau'],
+          ['**Gợi ý nhanh dưới thanh tìm kiếm** và dải **Công ty hàng đầu**', 'Cũng **10% số thẻ**, **và** hai thẻ đứng cạnh nhau không cùng một công ty khi còn công ty khác để xếp', 'Hết công ty khác thì mới chấp nhận đứng cạnh nhau'],
           ['**Danh sách kết quả tìm kiếm**, sắp xếp *Mới nhất*', 'Không có trần. Xếp **theo vòng**: tin mới nhất trong ngày của **mỗi** công ty trước, hết một lượt mới tới tin thứ hai của từng công ty', 'Không cần — cách xếp này tự cân'],
           ['**Việc làm gợi ý theo hồ sơ** *(không bán)*', 'Nhiều nhất **3 tin một công ty**, và hai tin cùng công ty cách nhau **ít nhất 6 vị trí**', 'Hết công ty khác thì vẫn lấp cho đủ thẻ'],
         ],
@@ -791,7 +803,7 @@ export const JOB_DISPLAY_MODULE_DOCS: Record<string, ModuleDoc> = {
         items: [
           'Với **hầu hết các ô**, luật công ty là **cố gắng tối đa**, không phải lời hứa tuyệt đối: khi một công ty nắm phần lớn số tin đủ điều kiện của ô thì **không có cách xếp nào** vừa giữ được luật vừa không để chỗ trống. *Ngoại lệ là hai dải trên trang danh sách việc làm* — ở đó trần là luật cứng, và dải chấp nhận hiện ít thẻ hơn.',
           'Ở những ô còn lại, ô **giữ đủ thẻ trước**: rải xa nhất có thể, chứ không bỏ bớt tin ra khỏi ô và không để ô thiếu thẻ.',
-          '**Vì sao ô có trần thì hứa chắc được, ô không trần thì không:** xếp một dải n thẻ mà không để hai thẻ cùng công ty đứng cạnh nhau là **làm được khi và chỉ khi** công ty đông tin nhất giữ không quá **một nửa** số thẻ. Ô có trần 10% thì luôn nằm sâu trong ngưỡng đó nên hứa được; ô không trần thì một công ty có thể vượt nửa, và lúc đó không thuật toán nào cứu được. **Trần chính là thứ làm cho lời hứa “không đứng cạnh nhau” giữ được.**',
+          '**Vì sao ô có trần thì hứa chắc được, ô không trần thì không:** xếp một dải n thẻ mà không để hai thẻ cùng công ty đứng cạnh nhau là **làm được khi và chỉ khi** công ty đông tin nhất giữ không quá **một nửa** số thẻ. Ô có trần 10% số thẻ thì luôn nằm sâu trong ngưỡng đó nên hứa được; ô không trần thì một công ty có thể vượt nửa, và lúc đó không thuật toán nào cứu được. **Trần chính là thứ làm cho lời hứa “không đứng cạnh nhau” giữ được.**',
           'VD: một slide cần 4 công ty khác nhau, kho chỉ còn 2 công ty → slide vẫn đủ 4 thẻ, và có công ty xuất hiện hai lần.',
           '**Hệ quả phải nói trước với khách:** luật chia lượt **theo công ty**, không theo số tin. Công ty mua **nhiều tin** trong cùng một ô thì **mỗi tin** tới lượt **thưa hơn** tin của công ty chỉ mua một. Mua thêm tin là mua thêm **chỗ trong hàng**, không nhân lên số lượt hiện của từng tin.',
         ],
