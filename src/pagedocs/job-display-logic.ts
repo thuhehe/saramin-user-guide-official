@@ -80,10 +80,11 @@
  * and very little bold. Bold had been carrying emphasis on nearly every line
  * here, which is what made it read as dense even after the length came down.
  *
- * STILL HER CALL (asked 22/11): she questioned 40 cards for the lower section
- * — "dải dưới lấy 30 chứ?". The 30/40 pair was read off staging on 21/11, not
- * invented, but staging is not the requirement. The number lives in ONE place
- * now, section 1's table, so it is a one-line change when she answers.
+ * SETTLED 22/11: 40 cards for the lower section, "40 như hiện tại". She had
+ * questioned it ("dải dưới lấy 30 chứ?"); the 30/40 pair came off staging on
+ * 21/11 and she has now confirmed it as the rule, so it is no longer a reading
+ * that happens to match. With the rounding clause restored, 40 gives a company
+ * 4 cards and 30 gives 3 — both already on the page.
  *
  * TWO DIFFERENT 10% ON ONE PAGE, now spelled out. Section 3's is 10% OF THE
  * CARDS in a round (3 of 30, 4 of 40); section 4's is 10% OF THE POOL, the
