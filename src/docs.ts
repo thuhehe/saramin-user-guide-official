@@ -46,6 +46,11 @@ export interface PageDoc {
      vocabulary the module pages use. Rendered after `watch`, so the short answer
      still comes first for a reader who only needed that. */
   blocks?: DocBlock[]
+  /* Drops the "back to the module page" button at the foot. Every page gets it
+     by default and most should keep it; a page that already carries its own
+     closing block ends better without a second one under it. Opt-out rather
+     than opt-in so the link stays the norm. */
+  hideModuleLink?: boolean
 }
 
 /** A block of module logic. Tables carry the distinctions a bullet list flattens. */

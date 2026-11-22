@@ -1356,7 +1356,7 @@ export function BoardStripQueueFlow() {
       </g>
     ))
   return (
-    <Frame label="Ba bước: hàng chờ đã rải đều, bốc một lượt 30 tin, rồi xáo thứ tự khi lên màn hình" w={1200} h={352}>
+    <Frame label="Ba bước: hàng chờ đã rải đều, bốc một lượt 30 tin, rồi xáo thứ tự khi lên màn hình" w={1200} h={296}>
       <Premise title="VÍ DỤ — dải Tin tuyển dụng nổi bật (30 thẻ). Ô màu A là tin của MỘT công ty đang đăng rất nhiều tin.">
         Luật: giữa hai tin của cùng một công ty luôn cách <tspan fontWeight={700} fill={INK}>ít nhất 10 chỗ</tspan> — nên trong 30 thẻ, công ty đó nhiều nhất 3 thẻ.
       </Premise>
@@ -1377,13 +1377,6 @@ export function BoardStripQueueFlow() {
       <text x={22} y={246} fontSize={11} fontWeight={800} letterSpacing="0.04em" fill={MUT}>BƯỚC 3 · TRÊN MÀN HÌNH — vẫn đúng 30 tin đó, thứ tự đã xáo</text>
       {row(30, 258, SCREEN_HOT)}
 
-      <rect x={14} y={300} width={1172} height={38} rx={8} fill="#fffbeb" stroke={AMB} strokeWidth={1.2} />
-      <text x={30} y={316} fontSize={11} fill={MUT}>
-        <tspan fontWeight={800} fill={AMB}>Đọc hàng dưới · </tspan>Ba ô màu nằm rải rác và <tspan fontWeight={700} fill={INK}>không ô nào cạnh ô nào</tspan> — xáo ngẫu nhiên nhưng vẫn giữ luật khoảng cách.
-      </text>
-      <text x={30} y={332} fontSize={11} fill={MUT}>
-        Vì thứ tự xáo lại mỗi lượt nên <tspan fontWeight={700} fill={INK}>không có ô số 1 để bán</tspan>; mọi tin trong lượt có cơ hội đứng đầu như nhau.
-      </text>
     </Frame>
   )
 }

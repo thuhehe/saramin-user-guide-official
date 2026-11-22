@@ -36,11 +36,30 @@
  * areas at once — "Tin tuyển dụng nổi bật" and "Đừng bỏ lỡ những tin này!" on
  * the three mega-menu board pages:
  *   1 Tổng quan  (ba khối khi bấm Tìm)
- *   2 Job nào lên được hai dải
- *   3 Bước 1 — xếp hàng chờ lên hiển thị  (+ diagram 'board-strip-queue')
- *   4 Bước 2 — cứ 5 phút bốc một lượt
- *   5 Bước 3 — thứ tự trên màn hình là ngẫu nhiên
- *   6 Một câu để nói với khách
+ *   2 Bước 1 — Lọc: tin nào được vào dải
+ *   3 Bước 2 — Xếp hàng chờ lên hiển thị  (+ diagram 'board-strip-queue')
+ *   4 Bước 3 — Bốc từng lượt, 5 phút một lần
+ *   5 Bước 4 — Xáo chỗ trước khi lên màn hình
+ *
+ * FOUR STEPS, NOT THREE, and NO SALES SCRIPT — both Thu's, 22/11, from
+ * annotations on the rendered page. The filter is step 1 ("bước 1: là filter"),
+ * so her three bước shifted down; and "Nói gì với khách" is gone entirely,
+ * "để sales tự nói". The page states the mechanism and stops there.
+ *
+ * SHE ALSO KILLED A CLAIM THAT WAS THE WHOLE SALES PITCH, and she was right:
+ * "bậc càng cao thì vòng càng ngắn, tin lên càng thường xuyên" is not how this
+ * works. Tier decides WHICH strip a posting enters, nothing more. Cycle length
+ * is (queue ÷ cards) × 5 min, so it depends on how many postings happen to sit
+ * in that strip — a market fact about who buys which rung, not a rule the
+ * system enforces. I had asserted the Nổi bật pool is "nhỏ hơn hẳn" and never
+ * checked it; it is plausible and unverified, and nothing guarantees it. The
+ * claim is gone from the page along with the section that carried it. Do not
+ * reintroduce it in any form.
+ *
+ * Other annotations applied the same day: no lead paragraph, no date stamp, no
+ * module-link button (hideModuleLink), no "còn hạn nhận hồ sơ" in the filter,
+ * no line about the tax code at all — "remove", so the explanation of why it is
+ * absent went too — and the diagram lost its footnote box.
  *
  * AND IT IS SHORT ON PURPOSE — ~5.000 characters, about the length of her own
  * Notion page. She asked twice: "theo đúng bố cục của notion", then "ngắn gọn
@@ -298,7 +317,6 @@ const STAMP_GROUP = 'Cập nhật 21/11/2026.'
 
 /* A DATE PER PAGE, never one shared constant: two guide pages are refreshed on
    different days, and a shared stamp would re-date the one nobody touched. */
-const STAMP_BOARD_STRIPS = 'Cập nhật 22/11/2026.'
 
 export const JOB_DISPLAY_PAGE_DOCS: Record<string, PageDoc> = {
   /* ────────────────────────────────────────────────────────────────────────── */
@@ -449,11 +467,10 @@ export const JOB_DISPLAY_PAGE_DOCS: Record<string, PageDoc> = {
   },
   /* ────────────────────────────────────────────────────────────────────────── */
   'board-strips': {
+    /* Thu, 22/11: the page ends on its own closing block, so the generated
+       "back to the module page" button under it was one ending too many. */
+    hideModuleLink: true,
     blocks: [
-      {
-        kind: 'p',
-        text: 'Viết cho **người bán**. Hai dải là **hai ô có bán khác nhau**, không phải hai nửa của một ô.',
-      },
       {
         kind: 'shot',
         src: '/shots/job-display/board-trending.jpg',
@@ -471,100 +488,83 @@ export const JOB_DISPLAY_PAGE_DOCS: Record<string, PageDoc> = {
       /* ───────────────────────────────────────────────────────────────── */
       /* ───────────────────────────────────────────────────────────────── */
       /* ───────────────────────────────────────────────────────────────── */
+      /* ───────────────────────────────────────────────────────────────── */
       { kind: 'h', text: '1. Tổng quan' },
       {
         kind: 'p',
-        text: 'Đây là chỗ hiện những tin **đã mua chỗ** trên trang bảng tin. Khi ứng viên **bấm Tìm**, trang có **ba khối**.',
+        text: 'Hai dải này là chỗ hiện những tin đã mua chỗ trên trang bảng tin. Khi ứng viên bấm Tìm, trang chia làm ba khối.',
       },
       {
         kind: 'table',
-        note: 'Chưa gõ gì thì chỉ có hai dải. Khối thứ ba **không phải ô bán** — tin không mua gì vẫn nằm trong đó, và đây là **chỗ duy nhất bậc tin còn xếp thứ tự**.',
+        note: 'Chưa gõ gì thì trang chỉ có hai dải. Khối thứ ba không phải ô bán — tin không mua gì vẫn nằm trong đó, và đây cũng là chỗ duy nhất bậc tin còn xếp thứ tự.',
         cols: ['Khối', 'Hiện tin nào'],
         rows: [
           ['**Tin tuyển dụng nổi bật** — 30 thẻ', 'Tin khớp tìm kiếm, bậc **Basic Plus trở lên**'],
           ['**Đừng bỏ lỡ những tin này!** — 40 thẻ', 'Tin khớp tìm kiếm, bậc **Basic và Free**'],
-          ['**Danh sách kết quả tìm kiếm**', '**Tất cả** tin khớp — giống hệt thanh tìm kiếm chính'],
+          ['**Danh sách kết quả tìm kiếm**', 'Tất cả tin khớp, giống hệt thanh tìm kiếm chính'],
         ],
       },
 
       /* ───────────────────────────────────────────────────────────────── */
-      { kind: 'h', text: '2. Job nào lên được hai dải' },
+      { kind: 'h', text: '2. Bước 1 — Lọc: tin nào được vào dải' },
       {
         kind: 'list',
         items: [
-          'Tin **đang mở** — còn hiển thị, còn trong hạn nhận hồ sơ.',
-          'Bậc tin đang chạy **có bán đúng ô** của dải đó. Hai dải không giao nhau: một tin chỉ ở một trong hai.',
-          'Nếu ứng viên đã gõ hoặc đã lọc thì phải **khớp tìm kiếm**.',
-          '*Không nhắc mã số thuế hay công ty còn hoạt động: không đạt mấy điều đó thì đã không đăng được tin.*',
+          'Tin đang mở và đang hiển thị trên site.',
+          'Bậc tin đang chạy có bán đúng ô của dải đó. Hai dải không giao nhau, nên một tin chỉ nằm ở một trong hai.',
+          'Nếu ứng viên đã gõ hoặc đã lọc thì tin còn phải khớp với tìm kiếm.',
         ],
       },
 
       /* ───────────────────────────────────────────────────────────────── */
-      { kind: 'h', text: '3. Bước 1 — xếp hàng chờ lên hiển thị' },
+      { kind: 'h', text: '3. Bước 2 — Xếp hàng chờ lên hiển thị' },
       {
         kind: 'list',
         items: [
-          'Gom tin thành **nhóm** theo trục của trang — tỉnh/TP, ngành nghề, hoặc ngành.',
-          'Trong mỗi nhóm, tin **làm mới gần nhất** đứng trước. Tin mới vào cũng xếp theo đúng thứ tự đó.',
-          'Rải tin cùng công ty ra: hai tin của **cùng một công ty** luôn cách nhau **ít nhất 10 chỗ**. Đây chính là trần 10% — 30 thẻ thì một công ty nhiều nhất **3 thẻ**.',
+          'Gom tin thành nhóm theo trục của trang: tỉnh/TP, ngành nghề, hoặc ngành.',
+          'Trong mỗi nhóm, tin làm mới gần nhất đứng trước. Tin mới vào hàng cũng xếp theo đúng thứ tự đó.',
+          'Rải tin cùng công ty ra, hai tin của một công ty luôn cách nhau ít nhất 10 chỗ. Đây chính là trần 10%: dải 30 thẻ thì một công ty nhiều nhất 3 thẻ.',
         ],
       },
       {
         kind: 'diagram',
         id: 'board-strip-queue',
-        note: 'Ô màu **A** là tin của một công ty đang đăng rất nhiều tin: hàng trên là lúc xếp hàng, hàng dưới là lúc lên màn hình.',
+        note: 'Ô màu A là tin của một công ty đang đăng rất nhiều tin. Hàng trên là lúc xếp hàng, hàng dưới là lúc lên màn hình.',
       },
       {
         kind: 'list',
         items: [
-          'Hệ quả: **công ty đăng càng nhiều tin thì mỗi tin của họ càng ít được hiện**, vì phần dư phải chờ các vòng sau. Thưa hơn bao nhiêu thì tuỳ bể tin — **đừng hứa con số**.',
-          'Bể mỏng tới mức gần như chỉ còn một công ty thì dải **hiện ít thẻ hơn**, chứ không nới luật ra để lấp cho đủ.',
+          'Vì vậy công ty đăng càng nhiều tin thì mỗi tin của họ càng ít được hiện, phần dư phải chờ các vòng sau. Thưa hơn bao nhiêu còn tuỳ bể tin lúc đó, nên đừng hứa một con số.',
+          'Nếu bể mỏng tới mức gần như chỉ còn một công ty, dải sẽ hiện ít thẻ hơn chứ không nới luật ra để lấp cho đủ.',
         ],
       },
 
       /* ───────────────────────────────────────────────────────────────── */
-      { kind: 'h', text: '4. Bước 2 — cứ 5 phút bốc một lượt' },
+      { kind: 'h', text: '4. Bước 3 — Bốc từng lượt, 5 phút một lần' },
       {
         kind: 'list',
         items: [
-          'Dải lấy **30 tin kế tiếp** trong hàng (dải dưới 40) và **thay cả cụm một lúc**, không tịnh tiến từng tin.',
-          'Hết 5 phút bốc lượt kế tiếp, cứ thế xoay vòng. Ai mở trang trong cùng 5 phút đó đều thấy **cùng một lượt**.',
-          'Hết hàng là **hết một vòng**, rồi xếp hàng lại từ bể tin tại thời điểm đó. Trong một vòng, **mỗi tin được lên đúng một lần** — trừ công ty giữ hơn 10% bể, tin của họ thay phiên nhau nên thưa hơn.',
+          'Dải lấy 30 tin kế tiếp trong hàng, dải dưới lấy 40, rồi thay cả cụm một lúc chứ không tịnh tiến từng tin.',
+          'Hết 5 phút lại bốc lượt kế tiếp. Ai mở trang trong cùng 5 phút đó đều thấy cùng một lượt.',
+          'Đi hết hàng là hết một vòng, rồi xếp hàng lại từ bể tin tại thời điểm đó. Trong một vòng mỗi tin được lên đúng một lần, trừ công ty giữ hơn 10% bể thì tin của họ thay phiên nhau nên thưa hơn.',
         ],
       },
 
       /* ───────────────────────────────────────────────────────────────── */
-      { kind: 'h', text: '5. Bước 3 — thứ tự trên màn hình là ngẫu nhiên' },
+      { kind: 'h', text: '5. Bước 4 — Xáo chỗ trước khi lên màn hình' },
       {
         kind: 'p',
-        text: 'Nếu cứ bốc 30 tin theo đúng thứ tự hàng rồi bày lên, một tin sẽ **luôn** đứng đầu và một tin **luôn** đứng cuối, vòng nào cũng vậy. Nên 30 tin đó được **xáo ngẫu nhiên** trước khi lên màn hình.',
+        text: 'Nếu cứ bốc 30 tin theo đúng thứ tự hàng rồi bày lên, sẽ có một tin luôn đứng đầu và một tin luôn đứng cuối, vòng nào cũng vậy. Nên trước khi lên màn hình, 30 tin đó được xáo ngẫu nhiên.',
       },
       {
         kind: 'list',
         items: [
-          'Xáo **một lần cho mỗi lượt**, dùng chung cho mọi người — không phải mỗi người một kiểu.',
-          'Xáo xong vẫn **không để hai thẻ cùng công ty đứng cạnh nhau**.',
-          'Vì thứ tự đổi mỗi lượt nên **không có “ô số 1” để bán**.',
+          'Xáo một lần cho cả lượt và dùng chung cho mọi người, không phải mỗi người một thứ tự.',
+          'Xáo xong vẫn không để hai thẻ cùng công ty đứng cạnh nhau.',
+          'Thứ tự đổi mỗi lượt, nên không có “ô số 1” để bán.',
         ],
       },
 
-      /* ───────────────────────────────────────────────────────────────── */
-      { kind: 'h', text: '6. Một câu để nói với khách' },
-      {
-        kind: 'p',
-        text: '*“Tin của anh/chị **chắc chắn được lên** dải, theo lượt xoay vòng — **bậc càng cao thì vòng càng ngắn, tin lên càng thường xuyên**.”*',
-      },
-      {
-        kind: 'list',
-        heading: 'Ba điều không được hứa',
-        items: [
-          '**Vị trí** — không có ô số 1 để bán.',
-          '**Hiện liên tục** — tin lên theo lượt.',
-          '**Một con số** cho câu “bao lâu tin tôi lên một lần”.',
-        ],
-      },
-
-      { kind: 'p', text: `*${STAMP_BOARD_STRIPS}*` },
     ],
   },
 }

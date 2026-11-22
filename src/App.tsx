@@ -459,7 +459,7 @@ function PageView({ p, dev, onModule }: { p: Page; dev: boolean; onModule: () =>
         </section>
       )}
 
-      {mod && (
+      {mod && !d?.hideModuleLink && (
         <button onClick={onModule}
                 className="mt-7 block w-full border-l-2 border-brand bg-brand-soft/40 py-2.5 pl-4 pr-4 text-left hover:bg-brand-soft">
           <span className="text-[12.5px] font-semibold text-ink">{mod.title} →</span>
