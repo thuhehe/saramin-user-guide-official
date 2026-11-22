@@ -59,9 +59,7 @@ export const MATCHING_PAGE_DOCS: Record<string, PageDoc> = {
         cols: ['Ứng viên khai gì', 'Hệ thống lọc thế nào'],
         rows: [
           ['**Vị trí mong muốn** — tối đa 3 **job role**', 'Lấy **job category** của từng job role đó, rồi giữ mọi job thuộc các job category ấy'],
-          ['**Nghề mong muốn** — một **job category**', 'Cộng thêm vào tập job category ở trên'],
           ['**Địa điểm mong muốn**', 'Giữ job ở các tỉnh đó. Job **remote** luôn được giữ, dù ở tỉnh nào'],
-          ['Tick *sẵn sàng chuyển chỗ ở*', 'Bỏ hẳn điều kiện tỉnh'],
           ['**Không khai gì**', '**Không lọc gì.** Lấy toàn bộ job đang tuyển'],
         ],
       },
@@ -71,10 +69,8 @@ export const MATCHING_PAGE_DOCS: Record<string, PageDoc> = {
       },
       {
         kind: 'list',
-        heading: 'Bốn luật còn lại của bước lọc',
+        heading: 'Hai luật còn lại của bước lọc',
         items: [
-          '**Industry không bao giờ dùng để lọc.** Job khác industry vẫn vào danh sách bình thường — industry chỉ là một tiêu chí 5 điểm ở bước 2.',
-          '**Job ứng viên đã nộp đơn bị loại vĩnh viễn**, kể cả khi đơn bị từ chối hoặc đã thu hồi. Đây là lý do số một của câu hỏi *“sao job này không còn hiện nữa”*.',
           '**Lọc xong còn dưới 6 job thì bỏ điều kiện tỉnh, chạy lại.** Hệ thống **không bao giờ** bỏ điều kiện job category — nên ứng viên ở một nghề rất hẹp có thể thấy ít hơn 6 job. Đó là chủ ý: vài job đúng nghề vẫn hơn một màn đầy job nghề khác.',
           '**Còn hơn 500 job thì chỉ 500 job được chấm.** Ưu tiên job trùng job role ứng viên quan tâm, sau đó job mới đăng.',
         ],
