@@ -111,7 +111,7 @@ export const MATCHING_PAGE_DOCS: Record<string, PageDoc> = {
         kind: 'list',
         items: [
           'Giữ **30 job điểm cao nhất**.',
-          '**Một công ty tối đa 10 % số job trong danh sách, ít nhất 1 job.** Danh sách 30 job → nhiều nhất 3 job một công ty; dải 6 thẻ → 1. Hai job cùng công ty cũng không đứng sát nhau, để một công ty không chiếm hết màn hình.',
+          '**Một công ty tối đa 3 job** trong danh sách 30. Hai job cùng công ty cũng không đứng sát nhau — nên dải 6 thẻ không bao giờ có hai job cùng công ty.',
           '**Job đúng job role ứng viên khai luôn đứng trước** job chỉ cùng job category — dù job kia hơn điểm lương hay địa điểm.',
           '**Thứ tự ổn định trong ngày.** Tải lại trang không đổi; sang hôm sau mới đảo bộ khác. Thấy đúng 6 thẻ đó cả ngày là đúng thiết kế, không phải lỗi.',
         ],
@@ -121,12 +121,12 @@ export const MATCHING_PAGE_DOCS: Record<string, PageDoc> = {
       { kind: 'h', text: '4. Gợi ý hiện ra ở đâu' },
       {
         kind: 'table',
-        note: 'Cùng một phép tính, chỉ khác số thẻ và cách sắp. Dải chỉ có 6 thẻ thì mỗi công ty chỉ còn 1 job, theo đúng luật 10 %.',
+        note: 'Cùng một phép tính, chỉ khác số thẻ và cách sắp. Dải chỉ có 6 thẻ thì mỗi công ty chỉ còn 1 job.',
         cols: ['Nơi hiển thị', 'Ai thấy', 'Số thẻ', 'Thứ tự'],
         rows: [
           ['**Onboarding** — *những việc phù hợp nhất*', 'Ứng viên vừa xong wizard', 'tối đa 30, chia 6 thẻ một trang', 'Đúng thứ tự điểm'],
           ['**Trang cá nhân** — *Việc làm phù hợp với bạn*', 'Đã đăng nhập', '6', 'Xáo trộn, nhưng job đúng job role vẫn lên trước'],
-          ['**Chi tiết job** — *Gợi ý việc làm cho bạn*', 'Đã đăng nhập', '6', 'Như trên, và chỉ lấy job **cùng job category** với job đang xem'],
+          ['**Chi tiết job** — *Gợi ý việc làm cho bạn*', 'Đã đăng nhập', '6', 'Như trên'],
           ['**Popup sau khi nộp đơn**', 'Người vừa nộp đơn', 'tối đa 30', 'Đúng thứ tự điểm'],
           ['**Email gợi ý hằng tuần** — thứ Hai 07:00', 'Ứng viên chưa tắt công tắc nhận mail', '6', 'Đúng thứ tự điểm'],
         ],
