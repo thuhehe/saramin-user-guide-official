@@ -467,7 +467,7 @@ export const JOB_DISPLAY_PAGE_DOCS: Record<string, PageDoc> = {
           ['Số thẻ', 'Nhiều nhất 20 — 5 slide × 4 thẻ. Mỗi slide đủ 4 thẻ, hàng ít job hơn thì ít slide hơn'],
           ['Lọc theo', 'Từ khoá và bộ lọc trên thanh tìm kiếm'],
           ['Thứ tự', 'Job làm mới gần nhất đứng trước'],
-          ['Một công ty trong 1 slide', 'Nhiều nhất 1 thẻ'],
+          ['Một công ty trong 1 slide', 'Nhiều nhất 1 thẻ — trừ khi hàng chờ không đủ công ty'],
           ['Xoay vòng', '5 phút tịnh tiến 4 job'],
           ['Tiêu đề', 'Có từ khoá: *Việc {từ khoá} dành cho bạn*. Không gõ từ khoá: *Việc làm dành cho bạn*'],
           ['Nút Xem thêm', 'Không có'],
