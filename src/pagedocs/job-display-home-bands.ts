@@ -64,6 +64,36 @@
  * today and is not known to be complete even when an arrangement exists. The
  * cap pays for the guarantee; only the construction collects it.
  *
+ * THE `cap` COLUMN IN REGISTRY 4.2 DOES NOT APPLY HERE — checked 21/11/2026.
+ * That table gives Super hot Large a cap of 20 and Top job / Distinction 96,
+ * which reads as "only this many postings ever queue" and would make section
+ * 6's promise that every posting gets a turn false for three of the eight
+ * bands. It is not that. The ceiling belongs to the featured-COMPANIES pool
+ * query; the job path passes no limit at all, and the service says so in its
+ * own words: the whole pool takes turns, every posting that bought the band
+ * is drawn in some period. So the promise holds for all eight. Do not "fix"
+ * the page from that column without re-reading which path reads it.
+ *
+ * AND THE JAVADOC BESIDE IT SAYS REFRESH DOES MATTER — read the condition.
+ * The pool query is documented "Ordered by last refresh, not creation: a tier
+ * that sells a refresh cadence only means something if a bump actually moves
+ * the posting up the areas it feeds." That is the authoritative file saying
+ * the opposite of this page, in the voice of a design decision rather than a
+ * number, which makes it the easiest of the three to be talked out of.
+ *
+ * It is not stale, it is CONDITIONAL, and the condition is rotation. The
+ * paging step has two paths: a band with no rotation period keeps the order
+ * it was handed, so the javadoc is exactly right for one; a rotating band is
+ * laid out afresh from each posting's own id and company, and the incoming
+ * order is never consulted — not between companies, not within one. All eight
+ * of these bands rotate every 5 minutes (V354), so all eight take the second
+ * path and refresh buys nothing on them.
+ *
+ * The consequence worth keeping: this page's refresh rule rests on the
+ * rotation, not on the query. Clear a band's rotation period and refresh
+ * ordering comes back FOR THAT BAND and this page is wrong about it. Anyone
+ * adding a ninth band, or turning rotation off on one, has to revisit it.
+ *
  * KEPT OUT OF THE PAGE, deliberately:
  *   - What the Korea / Global pages hold right now. Observed on dev 21/11/2026:
  *     Korea draws no band at all and Global draws two. That is a selling state,

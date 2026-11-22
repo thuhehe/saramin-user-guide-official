@@ -63,8 +63,12 @@ const pageUrl = (p: Page) => (p.site ? `${SITE_BASE[p.site]}${p.path}` : adminUr
 
 /** Admin sidebar order, as the console itself renders it — plus Resume management, Application management and Mega menu pages (see above). */
 const GROUP_ORDER = [
-  'Dashboards', 'Job management', 'Resume management', 'Application management', 'Matching', 'Users', 'Product settings', 'Service delivery',
-  'CRM', 'Content', 'Mega menu pages', 'Job display logic', 'Notifications', 'Organisation', 'System',
+  /* The four job groups read in the order a job lives: what a job IS (Job
+     management), where it is SHOWN (Job display logic), how it is MATCHED to
+     people (Matching) — then the CV and the application that follow from it. */
+  'Dashboards', 'Job management', 'Job display logic', 'Matching', 'Resume management', 'Application management',
+  'Users', 'Product settings', 'Service delivery',
+  'CRM', 'Content', 'Mega menu pages', 'Notifications', 'Organisation', 'System',
 ]
 
 /** Handbook sections that stand on their own, before the modules. */
@@ -275,7 +279,7 @@ export function App() {
           ) : (
             (() => {
               const p = ALL.find((x) => x.key === sel.key)
-              return p ? <PageView p={p} dev={dev} onModule={() => pick({ t: 'module', group: p.group })} /> : null
+              return p ? <PageView p={p} dev={dev} /> : null
             })()
           )}
 
@@ -390,9 +394,8 @@ function Home({ onPick }: { onPick: (s: Sel) => void }) {
 
 /* ── one console page ───────────────────────────────────────────────────────── */
 
-function PageView({ p, dev, onModule }: { p: Page; dev: boolean; onModule: () => void }) {
+function PageView({ p, dev }: { p: Page; dev: boolean }) {
   const d = PAGE_DOCS[p.key]
-  const mod = MODULE_DOCS[p.group]
   const iso = (UPDATED as Record<string, string>)[p.key]
   const updated = iso && iso.split('-').reverse().join('/')
 
@@ -463,13 +466,6 @@ function PageView({ p, dev, onModule }: { p: Page; dev: boolean; onModule: () =>
         </section>
       )}
 
-      {mod && !d?.hideModuleLink && (
-        <button onClick={onModule}
-                className="mt-7 block w-full border-l-2 border-brand bg-brand-soft/40 py-2.5 pl-4 pr-4 text-left hover:bg-brand-soft">
-          <span className="text-[12.5px] font-semibold text-ink">{mod.title} →</span>
-          <span className="mt-0.5 block max-w-[76ch] text-[12px] leading-[1.6] text-muted">{md(mod.lead)}</span>
-        </button>
-      )}
     </article>
   )
 }
