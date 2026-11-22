@@ -452,19 +452,6 @@ function PageView({ p, dev }: { p: Page; dev: boolean }) {
         {d?.blocks?.map((b, i) => <DocBlockView key={i} b={b} />)}
       </div>
 
-      {/* The routes already sit in the header when a page declares siteLinks,
-          so repeating them at the foot is the same list twice. */}
-      {p.sub.length > 0 && !d?.siteLinks && (
-        <section className="mt-7">
-          <h2 className="border-b border-ink pb-1.5 text-[15px] font-bold tracking-tight">Trang con</h2>
-          <ul className="mt-2">
-            {p.sub.map((s) => (
-              <li key={s} className="border-b border-line-soft py-1.5 font-mono text-[12px] text-muted">{s}</li>
-            ))}
-          </ul>
-          <p className="mt-1.5 text-[11.5px] text-faint">Các route này không có mục riêng trên menu — mở từ chính trang trên.</p>
-        </section>
-      )}
 
     </article>
   )
