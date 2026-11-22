@@ -435,7 +435,6 @@
  */
 import type { PageDoc, ModuleDoc } from '../docs'
 
-const STAMP_TOP_SEARCH = 'Cập nhật 21/11/2026.'
 
 const STAMP_GROUP = 'Cập nhật 21/11/2026.'
 
@@ -465,7 +464,7 @@ export const JOB_DISPLAY_PAGE_DOCS: Record<string, PageDoc> = {
         note: 'Tên bộ lọc không ghép vào tiêu đề, dù ứng viên đã chọn bộ lọc hay chưa.',
         cols: ['Hạng mục', 'Dải chạy thế nào'],
         rows: [
-          ['Số thẻ', '20, chia 5 slide × 4 thẻ'],
+          ['Số thẻ', 'Nhiều nhất 20 — 5 slide × 4 thẻ. Hàng ít job hơn thì ít slide hơn'],
           ['Lọc theo', 'Từ khoá và bộ lọc trên thanh tìm kiếm'],
           ['Thứ tự', 'Job làm mới gần nhất đứng trước'],
           ['Một công ty trong 1 slide', 'Nhiều nhất 1 thẻ'],
@@ -482,7 +481,6 @@ export const JOB_DISPLAY_PAGE_DOCS: Record<string, PageDoc> = {
         items: [
           'Job đang mở và đang hiển thị trên site.',
           'Job đã mua ô Top search: bậc tin đang chạy có bán ô này, **hoặc** job có add-on hiển thị còn hạn. Add-on mua kèm vào job đang chạy bậc bất kỳ, không cần đổi bậc.',
-          'Product đã archive thì job rớt khỏi dải, dù bậc còn hạn.',
           'Nếu ứng viên đã gõ hoặc đã lọc thì job còn phải khớp với tìm kiếm. Bộ lọc ở đây đúng là bộ lọc của trang kết quả: khu vực, ngành nghề, vị trí, kỹ năng, cấp bậc, mức lương, loại hợp đồng, kinh nghiệm.',
           'Dải và danh sách kết quả bên dưới luôn trả lời cùng một câu hỏi: đổi một bộ lọc thì cả hai đổi theo.',
         ],
@@ -496,18 +494,18 @@ export const JOB_DISPLAY_PAGE_DOCS: Record<string, PageDoc> = {
           'Mọi job vào được dải xếp thành một hàng, job làm mới gần nhất đứng trước — không phải ngày đăng.',
           'Menu sắp xếp của ứng viên (VD *Lương cao nhất*) không đổi thứ tự dải. Nó chỉ đổi danh sách kết quả bên dưới.',
           'Luật: trong một slide 4 thẻ, mỗi công ty nhiều nhất **1 thẻ**; trên cả 20 thẻ nhiều nhất **5 thẻ**.',
-          'Nếu không đủ công ty để chia như vậy thì rải xa nhất có thể: còn công ty chưa dùng trong slide thì ưu tiên công ty đó, hết mới chấp nhận một công ty xuất hiện hai lần. Không bỏ job ra khỏi dải để giữ luật này, cũng không để slide thiếu thẻ.',
+          'Nếu không còn đủ job của công ty khác để xếp xen vào, dải **vòng lại** lấy job đã hiện cho đủ thẻ, chứ không cho một công ty chiếm 2 thẻ trong cùng một slide. Job của các công ty khác vẫn luân phiên theo đúng tỉ lệ **1 thẻ trong 4**.',
         ],
       },
 
       /* ───────────────────────────────────────────────────────────────── */
-      { kind: 'h', text: '4. Bước 3 — Bốc 20 job, chia 5 slide' },
+      { kind: 'h', text: '4. Bước 3 — Bốc job lên dải' },
       {
         kind: 'list',
         items: [
-          'Dải lấy 20 job từ đầu hàng, chia 5 slide × 4 thẻ.',
-          'Ít hơn 20 job thì hiện bấy nhiêu. VD: 7 job → 2 slide, slide sau 3 thẻ.',
-          'Không lấy job chưa mua ô này vào cho đủ 20.',
+          'Số slide do số job trong hàng quyết định, **nhiều nhất 5 slide** — tức 20 thẻ.',
+          'Mọi slide đều đủ **4 thẻ**. Hàng không chia hết cho 4 thì slide cuối **vòng lại đầu hàng** cho đủ. VD hàng 7 job: slide 1 là job 1–4, slide 2 là job 5, 6, 7 rồi job 1.',
+          'Không lấy job chưa mua ô này vào cho đủ thẻ.',
           'Hàng job được chốt ở đầu mỗi chu kỳ. Job làm mới giữa chu kỳ vào hàng từ chu kỳ sau — không cướp lượt của job đang chờ.',
         ],
       },
@@ -524,32 +522,18 @@ export const JOB_DISPLAY_PAGE_DOCS: Record<string, PageDoc> = {
       },
       {
         kind: 'example',
-        heading: 'VD: một hàng 100 job',
+        heading: 'VD: một hàng 18 job',
         scenario: 'Ứng viên mở trang, rồi tải lại sau mỗi 5 phút.',
         cols: ['Slide', 'Mở trang', 'Sau 5 phút', 'Sau 10 phút'],
         rows: [
           ['Slide 1', 'Job 1–4', 'Job 5–8', 'Job 9–12'],
           ['Slide 2', 'Job 5–8', 'Job 9–12', 'Job 13–16'],
-          ['Slide 3', 'Job 9–12', 'Job 13–16', 'Job 17–20'],
-          ['Slide 4', 'Job 13–16', 'Job 17–20', 'Job 21–24'],
-          ['Slide 5', 'Job 17–20', 'Job 21–24', 'Job 25–28'],
+          ['Slide 3', 'Job 9–12', 'Job 13–16', 'Job 17, 18, 1, 2'],
+          ['Slide 4', 'Job 13–16', 'Job 17, 18, 1, 2', 'Job 3–6'],
+          ['Slide 5', 'Job 17, 18, 1, 2', 'Job 3–6', 'Job 7–10'],
         ],
-        note: 'Mỗi nhịp cả bảng dịch lên một dòng. Hết job thứ 100 thì quay lại job 1.',
+        note: 'Hàng 18 job vẫn đủ 5 slide: slide cuối vòng lại lấy job 1, 2. Mỗi nhịp cả bảng dịch lên một dòng, nên mọi job đều tới lượt đứng slide 1.',
       },
-
-      /* ───────────────────────────────────────────────────────────────── */
-      { kind: 'h', text: '6. Giao diện dải' },
-      {
-        kind: 'list',
-        items: [
-          'Dải tự chạy, không cần bấm. Có nút tạm dừng / chạy tiếp.',
-          'Có bộ đếm vị trí slide, dạng *2 / 5*.',
-          'Mũi tên trái phải nhảy trọn một slide 4 thẻ, không trượt từng thẻ.',
-          'Không có nút Xem thêm.',
-        ],
-      },
-
-      { kind: 'p', text: `*${STAMP_TOP_SEARCH}*` },
     ],
   },
   /* ────────────────────────────────────────────────────────────────────────── */
