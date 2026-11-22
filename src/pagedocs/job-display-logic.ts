@@ -669,6 +669,22 @@ export const JOB_DISPLAY_PAGE_DOCS: Record<string, PageDoc> = {
  *   If it is ever written: NOT "phải có mã số thuế" flatly. Foreign customers
  *   have no mst and carry foreign_tax_id instead (V376, after the mst-only
  *   spelling silently hid every foreign company until 2026-10-12).
+ *
+ * RECEIVED FROM THU 2026-11-22 AND NOT APPLIED HERE — both need her, not a guess:
+ *   - Vocabulary: "dải => Section, bậc tin => Placement", annotated on the strips
+ *     page. NOT swept here, for two reasons. (a) This page's generic term is "ô"
+ *     (93 uses) and "dải" (53) is a SUBTYPE of it; her mapping says what "dải"
+ *     becomes and nothing about "ô", and this is the one page that has to name
+ *     every kind of box. (b) "Placement" already appears here in the Admin sense
+ *     — §7's "Product settings → Placement load" — so renaming the 12 "bậc tin"
+ *     to Placement puts one word on two meanings, one of them a screen name.
+ *     Ask her which word "ô" takes before touching either.
+ *   - Card counts: 30 for the upper strip, 40 for the lower, came off staging on
+ *     2026-11-21 and she is asking whether the lower one is 40 or 30. It is a
+ *     worked number here, not a rule, and it appears in FIVE places: §4's note
+ *     (twice), §4's cap table, §5's cycle-length example, §6's row. Changing it
+ *     is five edits, not one. Top search's 20-across-5-slides is a different
+ *     number and is not in question.
  *   - Counts of placement rows (47 / 28 / 19) and any production measurement.
  *     They date the page and sales does not sell by them.
  *   - That the strip asks the search for 8 cards in today's build while the
@@ -733,7 +749,7 @@ export const JOB_DISPLAY_MODULE_DOCS: Record<string, ModuleDoc> = {
           'Dải cùng tên ở trang khác là **ô khác**. Dải trên trang chủ và dải cùng tên ở trang Việc làm Hàn Quốc / nước ngoài phải **tick riêng từng ô**.',
           'Một bậc tin thường bán **một dải**. Muốn tin có mặt ở thêm dải thì mua **add-on hiển thị**, không cần đổi bậc.',
           'Có ô chỉ bán **N ngày đầu**. Hết số ngày đó tin rời ô, nhưng tin **vẫn đăng bình thường** ở mọi chỗ khác.',
-          'Ở **hai dải trang danh sách việc làm**, khách **không mua thứ hạng** — mọi tin trong dải đều chắc chắn được lên. Cái khách mua là **tần suất**: bậc cao vào được ô ít tin hơn, ô càng ít tin thì vòng càng ngắn và tin càng được hiện thường xuyên. *Một điều phải nói trước với khách đăng nhiều tin:* khi tin của một công ty **vượt 10% cả bể tin** của dải thì mỗi vòng chỉ một phần tin của họ được xếp vào hàng, phần còn lại chờ các vòng sau — mục 4 nói vì sao.',
+          'Ở **hai dải trang danh sách việc làm**, khách **không mua thứ hạng** — mọi tin trong dải đều chắc chắn được lên. Bậc tin quyết định tin **vào được ô nào**, chỉ vậy thôi. Còn tin lên **thường xuyên đến đâu** thì tuỳ ô đó đang có bao nhiêu tin: ô đông thì vòng dài, ô vắng thì vòng ngắn. Đó là **tình hình thị trường lúc đó**, không phải thứ bán kèm theo bậc — đừng hứa bậc cao thì tin lên dày hơn. *Một điều phải nói trước với khách đăng nhiều tin:* khi tin của một công ty **vượt 10% cả bể tin** của dải thì mỗi vòng chỉ một phần tin của họ được xếp vào hàng, phần còn lại chờ các vòng sau — mục 4 nói vì sao.',
         ],
       },
 
