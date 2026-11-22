@@ -127,6 +127,23 @@
  * on 2026-11-22 as a question for Thu; it did not need her, it needed the
  * arithmetic, and the answer agrees with the group page's existing §4 cell.
  *
+ * THAT CEILING IS NOT A FREQUENCY, AND IT WAS ON THE PAGE AS ONE FOR AN HOUR.
+ * (others / 9) + 1 is the most a queue COULD hold, reached only if the builder
+ * interleaves well. Two reasonable greedies, both simulated on Thu's 100-with-50:
+ *   - restart the scan after every placement, first eligible wins → 6, the bound
+ *   - repeated full passes, appending each eligible item as encountered → 2,
+ *     because the first pass spends all 50 separators in one block and the
+ *     second pass can then fit a single one of the big company's postings
+ * Same rule, same pool, a factor of three apart (≈8 cycles against ≈25). So the
+ * page states the ceiling AS a ceiling and tells Sales not to quote a figure;
+ * the figure belongs to the builder, and nobody here has read it. The Logic
+ * chung session caught this on 2026-11-22 after I had written "~8 vòng" as the
+ * behaviour — third time in two days that a derived number read as an observed
+ * one, which is now the thing to look for first in anything either page states.
+ * FOR THE TICKET: the requirement is the interleaving builder, for the same
+ * reason as construction-not-repair above — the rule on the page is sound and
+ * only the implementation can give away what it promises.
+ *
  * REWRITTEN FOR SALES ON 2026-11-22 from Thu's own Notion page "Job placement"
  * (app.notion.com/p/Job-placement-420b88bd999780849341c969c3b019b9), which she
  * wrote as the explanation a salesperson should be able to give. Her text is
@@ -486,7 +503,7 @@ export const JOB_DISPLAY_PAGE_DOCS: Record<string, PageDoc> = {
           ['Ứng viên thấy một trang toàn một thương hiệu', 'Ứng viên thấy 30 thẻ của **nhiều công ty**'],
           ['Các công ty nhỏ gần như không lên được', '50 tin còn lại **chia nhau** các chỗ còn trống'],
         ],
-        note: 'Hệ quả cho công ty đăng 50 tin: họ vẫn giữ 3 thẻ mỗi lượt **như mọi công ty khác**, nhưng cả 50 tin phải **thay phiên nhau** dùng những chỗ đó. Với bể 100 tin này, mỗi vòng chỉ khoảng **6 trong 50 tin** của họ lên được, nên **mỗi tin lên một lần mỗi khoảng 8 vòng**, trong khi tin của một công ty nhỏ lên **mỗi vòng một lần**. Đây là chủ ý, không phải lỗi — và là lý do đăng thêm tin không mua được thêm chỗ.',
+        note: 'Hệ quả cho công ty đăng 50 tin: họ vẫn giữ 3 thẻ mỗi lượt **như mọi công ty khác**, nhưng cả 50 tin phải **thay phiên nhau** dùng những chỗ đó. Với bể 100 tin này, **nhiều nhất 6 trong 50 tin** của họ lên được mỗi vòng, trong khi tin của một công ty nhỏ lên **mỗi vòng một lần**. **Đừng hứa một con số cụ thể** — bao lâu một tin tới lượt lại còn tuỳ bể tin lúc đó; chỉ nói chắc được phần này: **thưa hơn hẳn**. Đây là chủ ý, không phải lỗi, và là lý do đăng thêm tin không mua được thêm chỗ.',
       },
 
       /* ───────────────────────────────────────────────────────────────── */
