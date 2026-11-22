@@ -477,7 +477,7 @@ function ModuleView({ group, onPick }: { group: string; onPick: (key: string) =>
         <p className="font-mono text-[9.5px] uppercase tracking-[0.14em] text-brand">Đọc trước</p>
         <ul className="mt-1.5 max-w-[78ch] space-y-1.5">
           {mod.headline.map((t, i) => (
-            <li key={i} className="text-[13px] leading-[1.65] text-ink/85">{md(t)}</li>
+            <li key={i} className="text-[13px] leading-[1.65] text-ink/85"><p>{md(t)}</p></li>
           ))}
         </ul>
       </div>
@@ -653,7 +653,7 @@ function DocBlockView({ b }: { b: DocBlock }) {
               {b.rows.map((r, i) => (
                 <tr key={i} className="border-b border-line-soft last:border-0">
                   {r.map((cell, j) => (
-                    <td key={j} className={cx('whitespace-pre-line py-2 pr-5 align-top text-[12.5px] leading-[1.55] last:pr-0', j === 0 ? 'font-semibold text-ink' : 'text-ink/75')}>{md(cell)}</td>
+                    <td key={j} className={cx('whitespace-pre-line py-2 pr-5 align-top text-[12.5px] leading-[1.55] last:pr-0', j === 0 ? 'font-semibold text-ink' : 'text-ink/75')}><p>{md(cell)}</p></td>
                   ))}
                 </tr>
               ))}
@@ -682,7 +682,7 @@ function DocBlockView({ b }: { b: DocBlock }) {
             {b.rows.map((r, i) => (
               <tr key={i} className="border-b border-line-soft last:border-0">
                 {r.map((cell, j) => (
-                  <td key={j} className={cx('whitespace-pre-line py-2.5 pr-5 align-top text-[12.5px] leading-[1.6] last:pr-0', j === 0 ? 'font-semibold text-ink' : 'text-ink/75')}>{md(cell)}</td>
+                  <td key={j} className={cx('whitespace-pre-line py-2.5 pr-5 align-top text-[12.5px] leading-[1.6] last:pr-0', j === 0 ? 'font-semibold text-ink' : 'text-ink/75')}><p>{md(cell)}</p></td>
                 ))}
               </tr>
             ))}
@@ -701,7 +701,7 @@ function Bullets({ title, items, warn }: { title: string; items: string[]; warn?
         {items.map((t, i) => (
           <li key={i} className={cx('text-[13px] leading-[1.7]', warn ? 'border-l-2 border-ink/25 pl-4 text-ink/75' : 'flex gap-3 text-ink/80')}>
             {!warn && <span className="shrink-0 pt-[7px] text-brand"><span className="block h-1 w-1 rounded-full bg-current" /></span>}
-            <span className="min-w-0">{md(t)}</span>
+            <p className="min-w-0">{md(t)}</p>
           </li>
         ))}
       </ul>
@@ -717,7 +717,7 @@ function Steps({ title, items }: { title: string; items: string[] }) {
         {items.map((t, i) => (
           <li key={i} className="flex gap-3 text-[13px] leading-[1.7] text-ink/80">
             <span className="shrink-0 pt-px font-mono text-[11px] text-brand">{String(i + 1).padStart(2, '0')}</span>
-            <span className="min-w-0">{md(t)}</span>
+            <p className="min-w-0">{md(t)}</p>
           </li>
         ))}
       </ol>
@@ -750,7 +750,7 @@ function Block({ b }: { b: WfBlock }) {
               {b.table.rows.map((r, i) => (
                 <tr key={i} className="border-b border-line-soft last:border-0">
                   {r.map((cell, j) => (
-                    <td key={j} className={cx('whitespace-pre-line py-2 pr-5 align-top text-[12.5px] leading-[1.6] last:pr-0', j === 0 ? 'font-medium text-ink' : 'text-ink/75')}>{md(cell)}</td>
+                    <td key={j} className={cx('whitespace-pre-line py-2 pr-5 align-top text-[12.5px] leading-[1.6] last:pr-0', j === 0 ? 'font-medium text-ink' : 'text-ink/75')}><p>{md(cell)}</p></td>
                   ))}
                 </tr>
               ))}
