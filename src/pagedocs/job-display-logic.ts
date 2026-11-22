@@ -61,6 +61,30 @@
  * no line about the tax code at all — "remove", so the explanation of why it is
  * absent went too — and the diagram lost its footnote box.
  *
+ * TERMS ARE THE CLIENT'S, SET 22/11: "dải" → SECTION, "bậc tin" → PLACEMENT.
+ * Her own Notion already says "các job đang open có placements ở đó", so this
+ * aligns the page with the words she writes in. Applied to the page text, the
+ * screenshot captions, the diagram and the page lead in pages.json. Note that
+ * "placement" here is the thing a product sells into a section, which is how
+ * she uses it — not the Admin registry row of the same name.
+ *
+ * AND NO TIER NAMES IN THE TABLE: "remove basic plus vì tùy thuộc KH đặt
+ * setting cho product". Which rung sells which section is configuration, so
+ * naming Basic Plus on the page freezes a setting as if it were a rule. The
+ * table now says a section takes the job that holds its placement, and the
+ * note says the mapping lives in Admin.
+ *
+ * SECOND STYLE PASS, same day, against two of her own Notion docs (CV keyword
+ * search, Block employer): a short scope paragraph up top, numbered sections
+ * with plain titles, small tables with short cells, one point per sentence,
+ * and very little bold. Bold had been carrying emphasis on nearly every line
+ * here, which is what made it read as dense even after the length came down.
+ *
+ * STILL HER CALL (asked 22/11): she questioned 40 cards for the lower section
+ * — "dải dưới lấy 30 chứ?". The 30/40 pair was read off staging on 21/11, not
+ * invented, but staging is not the requirement. The number lives in ONE place
+ * now, section 1's table, so it is a one-line change when she answers.
+ *
  * AND IT IS SHORT ON PURPOSE — ~5.000 characters, about the length of her own
  * Notion page. She asked twice: "theo đúng bố cục của notion", then "ngắn gọn
  * hơn!!!". The first pass kept her six blocks but filled them with our tables
@@ -470,21 +494,28 @@ export const JOB_DISPLAY_PAGE_DOCS: Record<string, PageDoc> = {
     /* Thu, 22/11: the page ends on its own closing block, so the generated
        "back to the module page" button under it was one ending too many. */
     hideModuleLink: true,
+    /* Thu, 22/11: the header showed one route while the page documents three. */
+    siteLinks: [
+      { label: 'Theo khu vực', path: '/viec-lam/dia-diem' },
+      { label: 'Theo ngành nghề', path: '/viec-lam/nganh-nghe' },
+      { label: 'Theo ngành', path: '/viec-lam/nganh' },
+    ],
     blocks: [
       {
         kind: 'shot',
         src: '/shots/job-display/board-trending.jpg',
         where: 'Jobseeker site',
-        caption: 'Dải **Tin tuyển dụng nổi bật** là khung đỏ. Nằm dưới thanh tìm kiếm, lưới **3 cột**.',
+        caption: 'Section Tin tuyển dụng nổi bật là khung đỏ. Nằm dưới thanh tìm kiếm, lưới 3 cột.',
       },
       {
         kind: 'shot',
         src: '/shots/job-display/board-announcement.jpg',
         where: 'Jobseeker site',
-        caption: 'Dải **Đừng bỏ lỡ những tin này!** là khung đỏ. Nằm **dưới** dải Nổi bật, lưới **4 cột**.',
-        note: 'Hai ảnh để thấy **vị trí** của hai dải trên trang.',
+        caption: 'Section Đừng bỏ lỡ những tin này! là khung đỏ, nằm dưới section trên, lưới 4 cột.',
+        note: 'Hai ảnh để thấy vị trí của hai section trên trang.',
       },
 
+      /* ───────────────────────────────────────────────────────────────── */
       /* ───────────────────────────────────────────────────────────────── */
       /* ───────────────────────────────────────────────────────────────── */
       /* ───────────────────────────────────────────────────────────────── */
@@ -492,27 +523,27 @@ export const JOB_DISPLAY_PAGE_DOCS: Record<string, PageDoc> = {
       { kind: 'h', text: '1. Tổng quan' },
       {
         kind: 'p',
-        text: 'Hai dải này là chỗ hiện những tin đã mua chỗ trên trang bảng tin. Khi ứng viên bấm Tìm, trang chia làm ba khối.',
+        text: 'Ba trang bảng tin của mega menu — Theo khu vực, Theo ngành nghề, Theo ngành — dùng chung một màn hình. Trên đó có hai section hiện job đã mua placement.\n\nKhi ứng viên bấm Tìm, trang chia làm ba khối.',
       },
       {
         kind: 'table',
-        note: 'Chưa gõ gì thì trang chỉ có hai dải. Khối thứ ba không phải ô bán — tin không mua gì vẫn nằm trong đó, và đây cũng là chỗ duy nhất bậc tin còn xếp thứ tự.',
-        cols: ['Khối', 'Hiện tin nào'],
+        note: 'Product nào bán placement của section nào là do setting trong Admin, không cố định. Khối thứ ba không phải chỗ bán: job không mua gì vẫn nằm trong đó, và đây cũng là chỗ duy nhất placement còn xếp thứ tự.',
+        cols: ['Khối', 'Hiện job nào', 'Số thẻ'],
         rows: [
-          ['**Tin tuyển dụng nổi bật** — 30 thẻ', 'Tin khớp tìm kiếm, bậc **Basic Plus trở lên**'],
-          ['**Đừng bỏ lỡ những tin này!** — 40 thẻ', 'Tin khớp tìm kiếm, bậc **Basic và Free**'],
-          ['**Danh sách kết quả tìm kiếm**', 'Tất cả tin khớp, giống hệt thanh tìm kiếm chính'],
+          ['Section Tin tuyển dụng nổi bật', 'Job khớp tìm kiếm và có placement của section này', '30'],
+          ['Section Đừng bỏ lỡ những tin này!', 'Job khớp tìm kiếm và có placement của section này', '40'],
+          ['Danh sách kết quả tìm kiếm', 'Tất cả job khớp, có mua placement hay không', 'Như tìm kiếm thường'],
         ],
       },
 
       /* ───────────────────────────────────────────────────────────────── */
-      { kind: 'h', text: '2. Bước 1 — Lọc: tin nào được vào dải' },
+      { kind: 'h', text: '2. Bước 1 — Lọc: job nào vào được section' },
       {
         kind: 'list',
         items: [
-          'Tin đang mở và đang hiển thị trên site.',
-          'Bậc tin đang chạy có bán đúng ô của dải đó. Hai dải không giao nhau, nên một tin chỉ nằm ở một trong hai.',
-          'Nếu ứng viên đã gõ hoặc đã lọc thì tin còn phải khớp với tìm kiếm.',
+          'Job đang mở và đang hiển thị trên site.',
+          'Job có placement của đúng section đó. Hai section không giao nhau, một job chỉ nằm ở một trong hai.',
+          'Nếu ứng viên đã gõ hoặc đã lọc thì job còn phải khớp với tìm kiếm.',
         ],
       },
 
@@ -521,21 +552,21 @@ export const JOB_DISPLAY_PAGE_DOCS: Record<string, PageDoc> = {
       {
         kind: 'list',
         items: [
-          'Gom tin thành nhóm theo trục của trang: tỉnh/TP, ngành nghề, hoặc ngành.',
-          'Trong mỗi nhóm, tin làm mới gần nhất đứng trước. Tin mới vào hàng cũng xếp theo đúng thứ tự đó.',
-          'Rải tin cùng công ty ra, hai tin của một công ty luôn cách nhau ít nhất 10 chỗ. Đây chính là trần 10%: dải 30 thẻ thì một công ty nhiều nhất 3 thẻ.',
+          'Gom job thành nhóm theo trục của trang: tỉnh/TP, ngành nghề, hoặc ngành.',
+          'Trong mỗi nhóm, job làm mới gần nhất đứng trước. Job mới vào hàng cũng xếp theo đúng thứ tự đó.',
+          'Rải job cùng công ty ra, hai job của một công ty luôn cách nhau ít nhất 10 chỗ. Đây chính là trần 10%: section 30 thẻ thì một công ty nhiều nhất 3 thẻ.',
         ],
       },
       {
         kind: 'diagram',
         id: 'board-strip-queue',
-        note: 'Ô màu A là tin của một công ty đang đăng rất nhiều tin. Hàng trên là lúc xếp hàng, hàng dưới là lúc lên màn hình.',
+        note: 'Ô màu A là job của một công ty đang đăng rất nhiều. Hàng trên là lúc xếp hàng, lưới dưới là lúc lên màn hình.',
       },
       {
         kind: 'list',
         items: [
-          'Vì vậy công ty đăng càng nhiều tin thì mỗi tin của họ càng ít được hiện, phần dư phải chờ các vòng sau. Thưa hơn bao nhiêu còn tuỳ bể tin lúc đó, nên đừng hứa một con số.',
-          'Nếu bể mỏng tới mức gần như chỉ còn một công ty, dải sẽ hiện ít thẻ hơn chứ không nới luật ra để lấp cho đủ.',
+          'Vì vậy công ty đăng càng nhiều job thì mỗi job của họ càng ít được hiện, phần dư phải chờ các vòng sau.',
+          'Nếu bể job mỏng tới mức gần như chỉ còn một công ty, section sẽ hiện ít thẻ hơn chứ không nới luật ra để lấp cho đủ.',
         ],
       },
 
@@ -544,9 +575,9 @@ export const JOB_DISPLAY_PAGE_DOCS: Record<string, PageDoc> = {
       {
         kind: 'list',
         items: [
-          'Dải lấy 30 tin kế tiếp trong hàng, dải dưới lấy 40, rồi thay cả cụm một lúc chứ không tịnh tiến từng tin.',
+          'Section lấy đúng số thẻ của mình từ đầu hàng, rồi thay cả cụm một lúc chứ không tịnh tiến từng job.',
           'Hết 5 phút lại bốc lượt kế tiếp. Ai mở trang trong cùng 5 phút đó đều thấy cùng một lượt.',
-          'Đi hết hàng là hết một vòng, rồi xếp hàng lại từ bể tin tại thời điểm đó. Trong một vòng mỗi tin được lên đúng một lần, trừ công ty giữ hơn 10% bể thì tin của họ thay phiên nhau nên thưa hơn.',
+          'Đi hết hàng là hết một vòng, rồi xếp hàng lại từ bể job tại thời điểm đó. Trong một vòng mỗi job được lên đúng một lần, trừ công ty giữ hơn 10% bể thì job của họ thay phiên nhau nên thưa hơn.',
         ],
       },
 
@@ -554,15 +585,7 @@ export const JOB_DISPLAY_PAGE_DOCS: Record<string, PageDoc> = {
       { kind: 'h', text: '5. Bước 4 — Xáo chỗ trước khi lên màn hình' },
       {
         kind: 'p',
-        text: 'Nếu cứ bốc 30 tin theo đúng thứ tự hàng rồi bày lên, sẽ có một tin luôn đứng đầu và một tin luôn đứng cuối, vòng nào cũng vậy. Nên trước khi lên màn hình, 30 tin đó được xáo ngẫu nhiên.',
-      },
-      {
-        kind: 'list',
-        items: [
-          'Xáo một lần cho cả lượt và dùng chung cho mọi người, không phải mỗi người một thứ tự.',
-          'Xáo xong vẫn không để hai thẻ cùng công ty đứng cạnh nhau.',
-          'Thứ tự đổi mỗi lượt, nên không có “ô số 1” để bán.',
-        ],
+        text: 'Thứ tự trên màn hình là xáo trộn ngẫu nhiên, nhưng có xác suất thống kê công bằng: mọi job trong lượt đều có cơ hội đứng đầu, đứng giữa hay đứng cuối như nhau.\n\nXáo một lần cho cả lượt và dùng chung cho mọi người, không phải mỗi người một thứ tự. Xáo xong vẫn không để hai thẻ cùng công ty đứng cạnh nhau. Và vì thứ tự đổi mỗi lượt nên không có “ô số 1” để bán.',
       },
 
     ],

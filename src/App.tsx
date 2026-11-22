@@ -417,7 +417,9 @@ function PageView({ p, dev, onModule }: { p: Page; dev: boolean; onModule: () =>
 
       <dl className="mt-3 flex flex-wrap gap-x-8 gap-y-2 border-b border-line pb-3">
         <Fact k="Site" v={p.site ?? 'Admin'} />
-        <Fact k="Đường dẫn" v={p.path} mono />
+        {d?.siteLinks
+          ? d.siteLinks.map((l) => <Fact key={l.path} k={l.label} v={l.path} href={p.site ? `${SITE_BASE[p.site]}${l.path}` : adminUrl(l.path)} mono />)
+          : <Fact k="Đường dẫn" v={p.path} mono />}
         {!p.site && <Fact k="Quyền" v={p.perm || 'không gắn quyền'} mono />}
         {dev && p.flag && <Fact k="Module flag" v={p.flag} mono />}
       </dl>

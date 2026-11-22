@@ -51,6 +51,11 @@ export interface PageDoc {
      closing block ends better without a second one under it. Opt-out rather
      than opt-in so the link stays the norm. */
   hideModuleLink?: boolean
+  /* Replaces the single "Đường dẫn" fact at the head of the page with one
+     labelled link per route. For a page that documents several routes at once,
+     one path in the header is a half-truth and the reader cannot reach the
+     other two. */
+  siteLinks?: { label: string; path: string }[]
 }
 
 /** A block of module logic. Tables carry the distinctions a bullet list flattens. */

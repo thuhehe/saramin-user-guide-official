@@ -1341,42 +1341,47 @@ export function CvDeleteOptionsFlow() {
    thing that changes between them is the ORDER, and a reader has to see the two
    rows side by side to believe that. The coloured chips are one company. */
 export function BoardStripQueueFlow() {
-  const X0 = 22
-  const PITCH = 35
-  const W = 32
-  /* One company's postings: every 10th place in the queue, scattered on screen.
-     Both rows are hand-set rather than random so the drawing is stable. */
+  const X0 = 22, PITCH = 35, W = 32          /* hàng chờ: dải chip ngang */
+  const GX = 241, GW = 230, GH = 20, GGAP = 14, GROW = 23   /* màn hình: lưới 3 cột x 10 dòng */
   const QUEUE_HOT = [0, 10, 20, 30]
-  const SCREEN_HOT = [3, 14, 23]
+  const SCREEN_HOT = [4, 15, 25]             /* ô của cùng công ty, không ô nào kề ô nào */
   const cx = (i: number) => X0 + i * PITCH + W / 2
-  const row = (n: number, y: number, hot: number[], fadeFrom = 99) =>
-    Array.from({ length: n }, (_, i) => (
-      <g key={i} opacity={i >= fadeFrom ? 0.38 : 1}>
-        <Chip x={X0 + i * PITCH} y={y} w={W} label={hot.includes(i) ? 'A' : ''} tone={hot.includes(i) ? 'brand' : 'plain'} />
-      </g>
-    ))
   return (
-    <Frame label="Ba bước: hàng chờ đã rải đều, bốc một lượt 30 tin, rồi xáo thứ tự khi lên màn hình" w={1200} h={296}>
-      <Premise title="VÍ DỤ — dải Tin tuyển dụng nổi bật (30 thẻ). Ô màu A là tin của MỘT công ty đang đăng rất nhiều tin.">
-        Luật: giữa hai tin của cùng một công ty luôn cách <tspan fontWeight={700} fill={INK}>ít nhất 10 chỗ</tspan> — nên trong 30 thẻ, công ty đó nhiều nhất 3 thẻ.
+    <Frame label="Hàng chờ đã rải đều, rồi lên lưới 3 cột 10 dòng với thứ tự xáo ngẫu nhiên" w={1200} h={500}>
+      <Premise title="VÍ DỤ — section Tin tuyển dụng nổi bật, 30 thẻ. Ô màu A là job của MỘT công ty đang đăng rất nhiều.">
+        Luật: hai job của cùng một công ty luôn cách nhau <tspan fontWeight={700} fill={INK}>ít nhất 10 chỗ</tspan> trong hàng chờ.
       </Premise>
 
-      <text x={22} y={88} fontSize={11} fontWeight={800} letterSpacing="0.04em" fill={MUT}>BƯỚC 1 · HÀNG CHỜ — đã rải tin cùng công ty ra xa nhau</text>
+      <text x={22} y={88} fontSize={11} fontWeight={800} letterSpacing="0.04em" fill={MUT}>BƯỚC 2 · HÀNG CHỜ — job cùng công ty đã bị rải ra xa nhau</text>
       <path d={`M ${X0} 112 L ${X0} 104 L ${X0 + 29 * PITCH + W} 104 L ${X0 + 29 * PITCH + W} 112`} fill="none" stroke={BR} strokeWidth={1.3} />
       <text x={(X0 + X0 + 29 * PITCH + W) / 2} y={100} fontSize={10.5} fontWeight={700} textAnchor="middle" fill={BR} {...HALO}>30 chỗ đầu hàng = lượt này</text>
-      {row(33, 120, QUEUE_HOT, 30)}
+      {Array.from({ length: 33 }, (_, i) => (
+        <g key={i} opacity={i >= 30 ? 0.38 : 1}>
+          <Chip x={X0 + i * PITCH} y={120} w={W} label={QUEUE_HOT.includes(i) ? 'A' : ''} tone={QUEUE_HOT.includes(i) ? 'brand' : 'plain'} />
+        </g>
+      ))}
       {[0, 10, 20, 30].map((i) => (
         <text key={i} x={cx(i)} y={162} fontSize={10} fontWeight={700} textAnchor="middle" fill={MUT}>{i + 1}</text>
       ))}
       <text x={cx(31)} y={162} fontSize={10} textAnchor="middle" fill={MUT}>lượt sau</text>
 
-      <Arrow d="M 546 174 L 546 224" tone="brand" />
-      <text x={562} y={194} fontSize={11} fontWeight={700} fill={BR}>BƯỚC 2 · cứ 5 phút bốc một lượt</text>
-      <text x={562} y={212} fontSize={11} fill={MUT}>thay toàn bộ thẻ cùng một lúc, không tịnh tiến từng tin</text>
+      <Arrow d="M 546 174 L 546 222" tone="brand" />
+      <text x={562} y={192} fontSize={11} fontWeight={700} fill={BR}>BƯỚC 3 · bốc 30 chỗ đầu, 5 phút một lượt</text>
+      <text x={562} y={210} fontSize={11} fill={MUT}>BƯỚC 4 · xáo thứ tự, xác suất công bằng</text>
 
-      <text x={22} y={246} fontSize={11} fontWeight={800} letterSpacing="0.04em" fill={MUT}>BƯỚC 3 · TRÊN MÀN HÌNH — vẫn đúng 30 tin đó, thứ tự đã xáo</text>
-      {row(30, 258, SCREEN_HOT)}
-
+      <text x={22} y={244} fontSize={11} fontWeight={800} letterSpacing="0.04em" fill={MUT}>TRÊN MÀN HÌNH — lưới 3 cột, 10 dòng, đúng 30 thẻ đó</text>
+      {Array.from({ length: 30 }, (_, n) => {
+        const r = Math.floor(n / 3), c = n % 3, hot = SCREEN_HOT.includes(n)
+        return (
+          <g key={n}>
+            <rect x={GX + c * (GW + GGAP)} y={256 + r * GROW} width={GW} height={GH} rx={5}
+                  fill={hot ? 'var(--color-brand-soft)' : 'var(--color-surface)'} stroke={hot ? BR : 'var(--color-line)'} strokeWidth={1.2} />
+            {hot && <text x={GX + c * (GW + GGAP) + GW / 2} y={256 + r * GROW + 14} fontSize={10.5} fontWeight={700} textAnchor="middle" fill={BR}>A</text>}
+          </g>
+        )
+      })}
+      <text x={GX - 12} y={270} fontSize={10} textAnchor="end" fill={MUT}>1</text>
+      <text x={GX - 12} y={270 + 9 * GROW} fontSize={10} textAnchor="end" fill={MUT}>10</text>
     </Frame>
   )
 }
