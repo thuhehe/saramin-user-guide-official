@@ -85,6 +85,21 @@
  * invented, but staging is not the requirement. The number lives in ONE place
  * now, section 1's table, so it is a one-line change when she answers.
  *
+ * TWO DIFFERENT 10% ON ONE PAGE, now spelled out. Section 3's is 10% OF THE
+ * CARDS in a round (3 of 30, 4 of 40); section 4's is 10% OF THE POOL, the
+ * point past which the 1-in-10 spacing cannot fit all of a company's jobs into
+ * one cycle. Same rule behind both, different sets counted, and the page said
+ * "10%" for each. Found by running the Logic chung session's probe — read a
+ * page's own claims against each other ACROSS sections, not only within one —
+ * after they found their §2 selling frequency off tier while their §8 listed
+ * exactly that under do-not-promise.
+ *
+ * AND THIS PAGE NO LONGER HAS A DO-NOT-PROMISE LIST to check the rest against.
+ * Thu removed it with the sales section on purpose ("để sales tự nói"), which
+ * is her call, but it means the self-check that caught their contradiction
+ * does not exist here. Claims on this page have to be checked against the
+ * group page instead.
+ *
  * AND IT IS SHORT ON PURPOSE — ~5.000 characters, about the length of her own
  * Notion page. She asked twice: "theo đúng bố cục của notion", then "ngắn gọn
  * hơn!!!". The first pass kept her six blocks but filled them with our tables
@@ -554,7 +569,7 @@ export const JOB_DISPLAY_PAGE_DOCS: Record<string, PageDoc> = {
         items: [
           'Gom job thành nhóm theo trục của trang: tỉnh/TP, ngành nghề, hoặc ngành.',
           'Trong mỗi nhóm, job làm mới gần nhất đứng trước. Job mới vào hàng cũng xếp theo đúng thứ tự đó.',
-          'Rải job cùng công ty ra, hai job của một công ty luôn cách nhau ít nhất 10 chỗ. Đây chính là trần 10%: section 30 thẻ thì một công ty nhiều nhất 3 thẻ.',
+          'Rải job cùng công ty ra, hai job của một công ty luôn cách nhau ít nhất 10 chỗ. Đây chính là trần 10% số thẻ: section 30 thẻ thì một công ty nhiều nhất 3 thẻ, section 40 thẻ thì 4 thẻ.',
         ],
       },
       {
@@ -577,7 +592,7 @@ export const JOB_DISPLAY_PAGE_DOCS: Record<string, PageDoc> = {
         items: [
           'Section lấy đúng số thẻ của mình từ đầu hàng, rồi thay cả cụm một lúc chứ không tịnh tiến từng job.',
           'Hết 5 phút lại bốc lượt kế tiếp. Ai mở trang trong cùng 5 phút đó đều thấy cùng một lượt.',
-          'Đi hết hàng là hết một vòng, rồi xếp hàng lại từ bể job tại thời điểm đó. Trong một vòng mỗi job được lên đúng một lần, trừ công ty giữ hơn 10% bể thì job của họ thay phiên nhau nên thưa hơn.',
+          'Đi hết hàng là hết một vòng, rồi xếp hàng lại từ bể job tại thời điểm đó. Trong một vòng mỗi job được lên đúng một lần, trừ công ty đang giữ hơn 10% tổng số job trong bể thì job của họ thay phiên nhau nên thưa hơn. Đây là 10% của bể job, khác với trần 10% số thẻ ở bước 2.',
         ],
       },
 
