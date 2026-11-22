@@ -483,6 +483,7 @@ export const JOB_DISPLAY_PAGE_DOCS: Record<string, PageDoc> = {
         kind: 'list',
         items: [
           'Mọi tin trong cùng một lượt có **cơ hội như nhau** được đứng ở ô đầu, ô giữa hay ô cuối.',
+          'Xáo **một lần cho mỗi lượt**, không phải mỗi người một kiểu. Hai ứng viên mở trang trong cùng một chu kỳ 5 phút thấy **đúng cùng thứ tự** — nên khi khách gọi lên hỏi, Sales mở ra thấy y như khách.',
           'Xáo ngẫu nhiên **không được phá luật khoảng cách**: xáo xong mà hai thẻ cùng công ty rơi cạnh nhau thì đổi chỗ một thẻ, cho tới khi không còn cặp nào liền nhau.',
           'Vì thứ tự đổi mỗi lượt nên **không bán được “ô số 1”**. Trên hai dải này không tồn tại vị trí cố định để bán.',
           'Nghiệm thu: theo một tin qua 10 vòng liên tiếp — vị trí của nó phải khác nhau, không nằm nguyên một chỗ.',
@@ -805,7 +806,7 @@ export const JOB_DISPLAY_MODULE_DOCS: Record<string, ModuleDoc> = {
         rows: [
           ['**8 dải trang chủ · Hàn Quốc · nước ngoài**', 'Kho tin đã mua đúng ô đó', 'Không', 'Rải đều theo công ty, xếp lại mỗi vòng — **làm mới không đổi được thứ tự**', 'Có'],
           ['**Top search**', 'Ô tìm kiếm, lọc trong các tin đã mua ô', '**Có**', 'Làm mới gần nhất', 'Có'],
-          ['**Trending jobs · Don’t miss these jobs**', 'Ô tìm kiếm của trang danh sách việc làm', '**Có** — theo trang đang mở', 'Hàng xếp theo nhóm đông tin nhất, rồi lần làm mới. Rồi **chia bài** ra các lượt — trần 10% và luật không đứng cạnh nhau áp **trong từng lượt**. **Bậc tin không xếp thứ tự**', 'Có'],
+          ['**Trending jobs · Don’t miss these jobs**', 'Ô tìm kiếm của trang danh sách việc làm', '**Có** — theo trang đang mở', 'Hàng gom theo nhóm của trang, trong nhóm theo lần làm mới, rồi **rải tin cùng công ty cách nhau 10 chỗ** — nên mỗi lượt 30 thẻ không công ty nào quá 3 thẻ. Lên màn hình thì **xáo ngẫu nhiên** trong lượt. **Bậc tin không xếp thứ tự**', 'Có'],
           ['**Danh sách kết quả tìm kiếm**', 'Toàn bộ tin đang mở, lọc theo từ khoá và bộ lọc', '**Có**', 'Mặc định *Đề xuất*: **bậc tin trước**, rồi độ khớp từ khoá, rồi làm mới. Chọn *Mới nhất* thì xếp theo vòng công ty', 'Không'],
           ['**Banner · popup**', 'Đơn đặt chỗ đã duyệt', 'Không', 'Theo nhịp của ô', 'Có'],
           ['**Việc làm gợi ý theo hồ sơ** *(không bán)*', 'Toàn bộ tin đang mở, chấm theo hồ sơ ứng viên', 'Không', 'Điểm phù hợp', 'Đổi mỗi ngày'],
