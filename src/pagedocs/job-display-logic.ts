@@ -572,7 +572,7 @@ export const JOB_DISPLAY_PAGE_DOCS: Record<string, PageDoc> = {
       },
       {
         kind: 'p',
-        text: 'Khi mọi tin đều chắc chắn được lên và không ai mua được vị trí, thứ phân biệt tin này với tin kia chỉ còn là **tần suất**:\n\n**Một vòng = (số tin đủ điều kiện ÷ số thẻ của dải) × 5 phút**\n\nBảng dưới đúng cho tin của công ty giữ **từ 10% bể trở xuống** — tức gần như mọi khách.',
+        text: 'Khi mọi tin đều chắc chắn được lên và không ai mua được vị trí, thứ phân biệt tin này với tin kia chỉ còn là **tần suất**:\n\n**Một vòng = (số tin trong hàng ÷ số thẻ của dải) × 5 phút**\n\n**Trong hàng**, không phải trong bể. Hai con số này bằng nhau khi **không công ty nào giữ quá 10% bể tin** — tức gần như mọi trang, và khi đó bảng dưới đúng nguyên. Nếu có một công ty vượt mức đó thì hàng **ngắn hơn bể** vì phần tin dư của họ chờ các vòng sau (mục 3): vòng chạy **nhanh hơn** con số trong bảng, nhưng tin của chính công ty đó lại lên **thưa hơn**.',
       },
       {
         kind: 'table',
