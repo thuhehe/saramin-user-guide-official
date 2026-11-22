@@ -136,6 +136,22 @@
  * comment blocks in as page text. The targeted check for one clause is what
  * answered it. An enumeration is only as good as what it enumerates over.
  *
+ * TWO MORE FOUND BY READING THE WHOLE PAGE AGAINST ITSELF, 22/11, after the
+ * Logic chung session found a SECOND cross-section contradiction on their page
+ * and argued the rate is too high to treat as anecdote. The page is short
+ * enough now to read end to end, and that beat every regex written today.
+ *   - "Placement đang chạy là cái còn hạn và CAO NHẤT" — caused by the rename.
+ *     The sentence was about the posting TIER, which really is ordered; putting
+ *     "placement" in its place moved "cao nhất" onto a noun that has no
+ *     ordering at all. Now the PRODUCT is what has a level and the placement is
+ *     what it sells. Family F, self-inflicted by find-and-replace.
+ *   - The shuffle said "ngẫu nhiên, xác suất công bằng" in one sentence and
+ *     "xáo xong vẫn không để hai thẻ cùng công ty cạnh nhau" two sentences
+ *     later. That reads as a repair after the fact and hands a developer the
+ *     wrong algorithm; it is uniform over the arrangements that KEEP the gap.
+ *     Said in one breath now — and note this is the shuffle-side twin of the
+ *     construction-not-repair warning further up.
+ *
  * AND IT IS SHORT ON PURPOSE — ~5.000 characters, about the length of her own
  * Notion page. She asked twice: "theo đúng bố cục của notion", then "ngắn gọn
  * hơn!!!". The first pass kept her six blocks but filled them with our tables
@@ -595,7 +611,7 @@ export const JOB_DISPLAY_PAGE_DOCS: Record<string, PageDoc> = {
           'Job đang mở và đang hiển thị trên site.',
           'Job có placement của đúng section đó. Hai section không giao nhau, một job chỉ nằm ở một trong hai.',
           'Nếu ứng viên đã gõ hoặc đã lọc thì job còn phải khớp với tìm kiếm.',
-          'Một job có thể giữ nhiều placement. Placement đang chạy là cái còn hạn và cao nhất, và nó quyết định job vào section nào.',
+          'Một job có thể đang giữ nhiều product cùng lúc. Product còn hạn và ở mức cao nhất là cái quyết định job vào section nào, qua placement mà product đó bán.',
           'Product đã archive thì job rớt khỏi cả hai section, dù placement còn hạn.',
           'Section không mượn job của section kia để lấp cho đủ thẻ. Ít job đủ điều kiện thì hiện bấy nhiêu, và không còn job nào thì section ẩn hẳn.',
         ],
@@ -639,7 +655,7 @@ export const JOB_DISPLAY_PAGE_DOCS: Record<string, PageDoc> = {
       { kind: 'h', text: '5. Bước 4 — Xáo chỗ trước khi lên màn hình' },
       {
         kind: 'p',
-        text: 'Thứ tự trên màn hình là xáo trộn ngẫu nhiên, nhưng có xác suất thống kê công bằng: mọi job trong lượt đều có cơ hội đứng đầu, đứng giữa hay đứng cuối như nhau.\n\nXáo một lần cho cả lượt và dùng chung cho mọi người, không phải mỗi người một thứ tự. Xáo xong vẫn không để hai thẻ cùng công ty đứng cạnh nhau. Và vì thứ tự đổi mỗi lượt nên không có “ô số 1” để bán.',
+        text: 'Thứ tự trên màn hình là xáo trộn ngẫu nhiên, nhưng có xác suất thống kê công bằng: mọi job trong lượt đều có cơ hội đứng đầu, đứng giữa hay đứng cuối như nhau.\n\nXáo trong số các cách xếp không có hai thẻ cùng công ty đứng cạnh nhau — luật khoảng cách vẫn giữ, chứ không phải xáo xong rồi mới sửa.\n\nXáo một lần cho cả lượt và dùng chung cho mọi người, không phải mỗi người một thứ tự. Và vì thứ tự đổi mỗi lượt nên không có “ô số 1” để bán.',
       },
 
     ],
