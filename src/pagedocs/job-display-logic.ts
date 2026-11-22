@@ -790,7 +790,7 @@ export const JOB_DISPLAY_MODULE_DOCS: Record<string, ModuleDoc> = {
         kind: 'list',
         items: [
           '**Một vòng dài bao lâu = số tin trong hàng ÷ số tin đổi mỗi nhịp × nhịp.** VD dải 30 thẻ đang có 80 tin → 3 nhịp là hết một vòng, tức **15 phút**. Ở hai dải trang danh sách việc làm, khi có công ty vượt 10% bể tin thì **“số tin trong hàng” ít hơn cả bể** — tin chưa vào được hàng thì chưa tính vào vòng này.',
-          'Ô càng bán được nhiều tin thì vòng càng dài. Đây là câu trả lời thật cho *“bao lâu tin tôi được hiện”*: **mỗi vòng một lần**, chứ không phải lúc nào cũng có mặt — trừ tin của công ty đang vượt 10% bể tin ở hai dải trang danh sách việc làm, phải qua vài vòng mới tới lượt.',
+          'Ô càng bán được nhiều tin thì vòng càng dài. Đây là câu trả lời thật cho *“bao lâu tin tôi được hiện”*: **mỗi vòng một lần**, chứ không phải lúc nào cũng có mặt — trừ tin của công ty đang vượt 10% bể tin ở hai dải trang danh sách việc làm: tin của họ lên **thưa hơn hẳn**, và **đừng nói với khách một con số** — chờ bao nhiêu vòng còn tuỳ cách hệ thống xếp hàng, chênh nhau vài lần.',
           'Nhịp đặt trên **từng ô**, người vận hành sửa được, không cần dev.',
           'Ô **không xoay vòng** thì tin nằm ngoài số thẻ đầu hàng **không được hiện** cho tới khi hàng đổi — hàng chỉ đổi khi có tin được làm mới hoặc có tin mới mua ô.',
           'Top search **chốt hàng ở đầu mỗi vòng**: tin đăng hoặc làm mới giữa vòng vào hàng từ **vòng sau**, để tin đang chờ không bị cướp lượt.',
@@ -826,7 +826,7 @@ export const JOB_DISPLAY_MODULE_DOCS: Record<string, ModuleDoc> = {
         rows: [
           ['**Showing now**', 'Ô đang hiện tin này ngay lúc này', '*Tin đang hiện*'],
           ['**Waiting for a turn**', 'Tin sẽ tới lượt ở một nhịp sau', '*Tin đang trong hàng, tới lượt trong vòng này*'],
-          ['**Never shown**', 'Tin đủ điều kiện nhưng hết cả một vòng vẫn không tới lượt', 'Nhóm này **phải trống** ở gần hết các ô — **trừ một trường hợp**: ở hai dải trang danh sách việc làm, tin của công ty đang giữ **hơn 10% bể tin** của dải có thể qua vài vòng mới tới lượt, và đó là **chủ ý của luật rải**, không phải lỗi (mục 4). Ngoài trường hợp đó, thấy tin nằm đây thì **báo lại**, đừng giải thích với khách là bình thường. Câu hỏi đúng bây giờ không còn là *“tin có được hiện không”* mà là ***“bao lâu một lần”*** — mục 5'],
+          ['**Never shown**', 'Tin đủ điều kiện nhưng hết cả một vòng vẫn không tới lượt', 'Nhóm này **phải trống** ở gần hết các ô — **trừ một trường hợp**: ở hai dải trang danh sách việc làm, tin của công ty đang giữ **hơn 10% bể tin** của dải lên **thưa hơn hẳn** — có thể nhiều vòng mới tới lượt, và **đừng đoán ra một con số** cho khách. Đó là **chủ ý của luật rải**, không phải lỗi (mục 4). Ngoài trường hợp đó, thấy tin nằm đây thì **báo lại**, đừng giải thích với khách là bình thường. Câu hỏi đúng bây giờ không còn là *“tin có được hiện không”* mà là ***“bao lâu một lần”*** — mục 5'],
           ['**Empty slot**', 'Ô còn chỗ trống vì chưa đủ tin', '*Ô này còn chỗ bán*'],
         ],
       },
