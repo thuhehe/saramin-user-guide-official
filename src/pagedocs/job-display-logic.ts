@@ -108,6 +108,25 @@
  * Deriving from the clock is also what lets the response stay byte-identical
  * for the rest of the period and be cached for exactly that long.
  *
+ * THE SPACING RULE COSTS "EVERY POSTING ONCE PER CYCLE", AND THE REWRITE OWED
+ * THAT DEBT FOR HALF A DAY. Separating F postings of one company by 10 places
+ * needs 9 others between each pair, so a queue holds at most (others / 9) + 1
+ * of them. Run Thu's own example through it — 100 postings, 50 from one
+ * company — and only about 6 of those 50 fit in a cycle; each of them surfaces
+ * once in roughly 8 cycles while everyone else surfaces every cycle. That IS
+ * her "chấp nhận xác xuất xuất hiện của job công ty đó sẽ thấp hơn", so the
+ * rule is hers and correct; what was wrong was section 6 still promising every
+ * eligible posting exactly one turn per cycle, and section 8's formula quietly
+ * assuming the same. Both now carry the ≤10%-of-pool qualifier.
+ * At the far end the arithmetic decides a question that looked like a product
+ * decision: a pool of 55 where 50 belong to one company admits ONE of them, so
+ * the strip shows about 6 cards, not 30. Running short is not an extra rule to
+ * choose — it is what the spacing rule already says when there is nothing left
+ * to separate with, which is why "dải hiện ít thẻ hơn, không nới luật" is back
+ * on the page after the rewrite dropped it. Raised by the Logic chung session
+ * on 2026-11-22 as a question for Thu; it did not need her, it needed the
+ * arithmetic, and the answer agrees with the group page's existing §4 cell.
+ *
  * REWRITTEN FOR SALES ON 2026-11-22 from Thu's own Notion page "Job placement"
  * (app.notion.com/p/Job-placement-420b88bd999780849341c969c3b019b9), which she
  * wrote as the explanation a salesperson should be able to give. Her text is
@@ -453,6 +472,7 @@ export const JOB_DISPLAY_PAGE_DOCS: Record<string, PageDoc> = {
           '**Công ty đăng càng nhiều tin thì mỗi tin của họ càng ít được hiện.** Hàng chỉ nhận 1 tin của họ mỗi 10 chỗ, nên số tin còn lại phải chờ các lượt sau. Đây là điều **đã được chấp nhận** khi chốt luật — Sales cần biết để không hứa ngược.',
           '**Đăng thêm tin không mua được thêm chỗ trên dải.** Phần của một công ty bị chặn ở 10% dù họ có 5 tin hay 500 tin. Muốn tin lên thường xuyên hơn thì **lên bậc cao hơn**, không phải đăng thêm — mục 8 nói vì sao.',
           '**Bậc tin không xếp thứ tự trong hàng.** Bậc chỉ quyết định tin vào được dải nào (mục 3); vào rồi thì Premium và Basic Plus đứng chung một hàng. Nếu để bậc xếp trước thì tin của công ty bậc cao bị kéo về sát nhau ở đầu dải — vẫn đúng trần 10% nhưng phá luật khoảng cách.',
+          '**Bể mỏng tới mức gần như chỉ còn một công ty** thì không đủ tin của công ty khác để chen vào giữa. Khi đó dải **hiện ít thẻ hơn** — có khi chỉ vài thẻ — chứ **không** nới luật ra để lấp cho đủ 30 ô. Gặp ở trang tỉnh nhỏ hoặc ngành hẹp, và đây là lý do một dải đôi khi trông ngắn.',
         ],
       },
       {
@@ -466,7 +486,7 @@ export const JOB_DISPLAY_PAGE_DOCS: Record<string, PageDoc> = {
           ['Ứng viên thấy một trang toàn một thương hiệu', 'Ứng viên thấy 30 thẻ của **nhiều công ty**'],
           ['Các công ty nhỏ gần như không lên được', '50 tin còn lại **chia nhau** các chỗ còn trống'],
         ],
-        note: 'Hệ quả cho công ty đăng 50 tin: họ vẫn giữ 3 thẻ mỗi lượt **như mọi công ty khác**, nhưng 50 tin của họ phải **thay phiên nhau** dùng 3 chỗ đó — nên **mỗi tin tới lượt chậm hơn** tin của một công ty chỉ đăng vài tin. Đây là chủ ý, không phải lỗi.',
+        note: 'Hệ quả cho công ty đăng 50 tin: họ vẫn giữ 3 thẻ mỗi lượt **như mọi công ty khác**, nhưng cả 50 tin phải **thay phiên nhau** dùng những chỗ đó. Với bể 100 tin này, mỗi vòng chỉ khoảng **6 trong 50 tin** của họ lên được, nên **mỗi tin lên một lần mỗi khoảng 8 vòng**, trong khi tin của một công ty nhỏ lên **mỗi vòng một lần**. Đây là chủ ý, không phải lỗi — và là lý do đăng thêm tin không mua được thêm chỗ.',
       },
 
       /* ───────────────────────────────────────────────────────────────── */
@@ -479,6 +499,7 @@ export const JOB_DISPLAY_PAGE_DOCS: Record<string, PageDoc> = {
           'Mọi người mở trang **trong cùng một chu kỳ 5 phút** đều thấy **cùng một lượt**. Không có chuyện mỗi người một kết quả.',
           'Đi hết hàng là **hết một vòng**, rồi xếp hàng lại từ bể tin **tại thời điểm đó** — tin mới vào bể, tin hết hạn rời bể.',
           'Trong một vòng, **mỗi tin đủ điều kiện được lên đúng một lần** — kể cả tin ở tỉnh ít việc, kể cả tin ở bậc thấp nhất của dải. Đây là lời hứa bán được: **chắc chắn được lên**.',
+          '**Một ngoại lệ, và chỉ một**: công ty đang giữ **hơn 10% bể tin** của trang. Luật cách nhau 10 chỗ không xếp hết số tin của họ vào một vòng được, nên các tin đó **thay phiên nhau qua nhiều vòng** — vẫn được lên, nhưng **thưa hơn** tin của công ty nhỏ. Đây đúng là điều đã chấp nhận ở mục 5, và nó chỉ chạm tới công ty đăng rất nhiều tin.',
         ],
       },
       {
@@ -512,7 +533,7 @@ export const JOB_DISPLAY_PAGE_DOCS: Record<string, PageDoc> = {
       { kind: 'h', text: '8. Mỗi tin được hiện bao lâu một lần' },
       {
         kind: 'p',
-        text: 'Khi mọi tin đều chắc chắn được lên và không ai mua được vị trí, thứ phân biệt tin này với tin kia chỉ còn là **tần suất**. Con số đó tính được:\n\n**Một vòng = (số tin đủ điều kiện ÷ số thẻ của dải) × 5 phút**\n\nMỗi tin lên **5 phút mỗi vòng**. Bể càng đông thì vòng càng dài, tin càng ít được hiện.',
+        text: 'Khi mọi tin đều chắc chắn được lên và không ai mua được vị trí, thứ phân biệt tin này với tin kia chỉ còn là **tần suất**. Con số đó tính được:\n\n**Một vòng = (số tin đủ điều kiện ÷ số thẻ của dải) × 5 phút**\n\nMỗi tin lên **5 phút mỗi vòng**. Bể càng đông thì vòng càng dài, tin càng ít được hiện.\n\nBảng dưới đúng cho tin của công ty đang giữ **từ 10% bể trở xuống** — tức gần như mọi khách. Công ty giữ nhiều hơn thế thì tin của họ thay phiên nhau nên lên **thưa hơn** con số trong bảng; mục 5 có ví dụ.',
       },
       {
         kind: 'table',
