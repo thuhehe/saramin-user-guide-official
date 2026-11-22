@@ -644,6 +644,11 @@ export const JOB_DISPLAY_PAGE_DOCS: Record<string, PageDoc> = {
  * them unrotated.
  *
  * KEPT OUT OF THE PAGE, deliberately:
+ *   - "công ty đang hoạt động và đã có mã số thuế" as display conditions, cut
+ *     from law 1 on 2026-11-22. Thu's ruling on the strips page: a posting
+ *     cannot be created unless both already hold, so listing them as display
+ *     rules is noise for Sales ("hiển nhiên"). The laws here cover every
+ *     placement, so the ruling reaches this page. Do not restore the clause.
  *   - Counts of placement rows (47 / 28 / 19) and any production measurement.
  *     They date the page and sales does not sell by them.
  *   - That the strip asks the search for 8 cards in today's build while the
@@ -717,7 +722,7 @@ export const JOB_DISPLAY_MODULE_DOCS: Record<string, ModuleDoc> = {
       {
         kind: 'list',
         items: [
-          '**Tin phải đang hiển thị bình thường**: tin đang mở, đang bật hiển thị, chưa hết hạn; công ty đang hoạt động và đã có mã số thuế. Rớt một điều là không vào ô nào cả.',
+          '**Tin phải đang hiển thị bình thường**: tin đang mở, đang bật hiển thị, chưa hết hạn. Rớt một điều là không vào ô nào cả.',
           '**Tin phải đã mua đúng ô đó** — qua bậc tin đang chạy, hoặc qua add-on hiển thị. Bậc đang chạy là bậc **cao nhất** tin đang giữ và còn trong hạn. Bậc tin quyết định tin **vào được ô nào**; ở các ô hiển thị — dải, slide, banner — bậc **không** quyết định tin đứng thứ mấy, thứ tự ở đó do luật riêng của từng ô. **Ngoại lệ duy nhất: danh sách kết quả tìm kiếm** ở chế độ mặc định *Đề xuất*, nơi bậc tin xếp trước, rồi tới độ khớp từ khoá và lần làm mới.',
           '**Không lấp chỗ.** Ô thiếu tin thì hiện ít thẻ hơn; dải trên trang chủ không còn tin nào thì trang **ẩn luôn dải**. Không bao giờ lấy tin chưa mua ô vào cho đủ.',
           '**Thứ tự không bốc thăm theo từng người.** Cùng một thời điểm, hai ứng viên mở cùng một trang thấy **cùng một danh sách** — nên khách báo gì cũng tra lại được. Hai dải *Trending · Đừng bỏ lỡ* có xáo ngẫu nhiên, nhưng **xáo một lần cho cả lượt**, không phải mỗi người một kiểu: trong cùng một chu kỳ 5 phút, Sales mở ra thấy y như khách.',
