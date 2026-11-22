@@ -814,7 +814,7 @@ export const JOB_DISPLAY_MODULE_DOCS: Record<string, ModuleDoc> = {
       {
         kind: 'list',
         items: [
-          '**Một vòng dài bao lâu = số tin trong hàng ÷ số tin đổi mỗi nhịp × nhịp.** VD dải 30 thẻ đang có 80 tin → 3 nhịp là hết một vòng, tức **15 phút**. Ở hai dải trang danh sách việc làm, khi có công ty vượt 10% bể tin thì **“số tin trong hàng” ít hơn cả bể** — tin chưa vào được hàng thì chưa tính vào vòng này.',
+          '**Một vòng dài bao lâu = số tin trong hàng ÷ số tin đổi mỗi nhịp × nhịp.** VD dải 30 thẻ, **hàng** đang có 80 tin → 3 nhịp là hết một vòng, tức **15 phút**. Ở hai dải trang danh sách việc làm, khi có công ty vượt 10% bể tin thì **“số tin trong hàng” ít hơn cả bể** — tin chưa vào được hàng thì chưa tính vào vòng này. **Đừng thay số của cả bể tin vào công thức** — làm vậy ra vòng dài hơn thực tế. Thực tế là **vòng ngắn lại** cho mọi người, còn tin của chính công ty vượt trần thì **lên thưa hơn**: hai điều này đúng cùng một lúc.',
           'Ô càng bán được nhiều tin thì vòng càng dài. Đây là câu trả lời thật cho *“bao lâu tin tôi được hiện”*: **mỗi vòng một lần**, chứ không phải lúc nào cũng có mặt — trừ tin của công ty đang vượt 10% bể tin ở hai dải trang danh sách việc làm: tin của họ lên **thưa hơn hẳn**, và **đừng nói với khách một con số** — chờ bao nhiêu vòng còn tuỳ cách hệ thống xếp hàng, chênh nhau vài lần.',
           'Nhịp đặt trên **từng ô**, người vận hành sửa được, không cần dev.',
           'Ô **không xoay vòng** thì tin nằm ngoài số thẻ đầu hàng **không được hiện** cho tới khi hàng đổi — hàng chỉ đổi khi có tin được làm mới hoặc có tin mới mua ô.',
