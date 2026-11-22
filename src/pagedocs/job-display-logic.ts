@@ -119,6 +119,23 @@
  * elsewhere (D-3, every public read). A salesperson will not distinguish the
  * two, so whoever answers one should be asked about the other.
  *
+ * AND A FIFTH, LOST EARLIER AND BY A DIFFERENT MECHANISM: "làm tròn xuống,
+ * thấp nhất 1 thẻ" was in the cap sentence at 6509f15 and went out inside
+ * a1e8645, the Sales rewrite — not cut, but dropped while the sentence around
+ * it was being rebuilt. Nothing on the page carried it afterwards, the cap
+ * still read correctly for 30 and 40, and three later audits read that exact
+ * line without being able to see it, because every one of them asks whether
+ * what is there is true. The Logic chung session lost the identical clause the
+ * same way and found it first.
+ * It matters more now than when it was written: it is what answers Thu's open
+ * 30-or-40 question for any card count that is not a multiple of ten — a
+ * 25-card section gives a company 2, not 2.5, and a 5-card section gives 1,
+ * not 0.
+ * NOTE ON METHOD: the full sentence-level diff I ran to look for this flooded
+ * — 175 of 217 units reported missing, because the extractor pulled the file's
+ * comment blocks in as page text. The targeted check for one clause is what
+ * answered it. An enumeration is only as good as what it enumerates over.
+ *
  * AND IT IS SHORT ON PURPOSE — ~5.000 characters, about the length of her own
  * Notion page. She asked twice: "theo đúng bố cục của notion", then "ngắn gọn
  * hơn!!!". The first pass kept her six blocks but filled them with our tables
@@ -591,7 +608,7 @@ export const JOB_DISPLAY_PAGE_DOCS: Record<string, PageDoc> = {
         items: [
           'Gom job thành nhóm theo trục của trang: tỉnh/TP, ngành nghề, hoặc ngành.',
           'Trong mỗi nhóm, job làm mới gần nhất đứng trước. Job mới vào hàng cũng xếp theo đúng thứ tự đó.',
-          'Rải job cùng công ty ra, hai job của một công ty luôn cách nhau ít nhất 10 chỗ. Đây chính là trần 10% số thẻ: section 30 thẻ thì một công ty nhiều nhất 3 thẻ, section 40 thẻ thì 4 thẻ.',
+          'Rải job cùng công ty ra, hai job của một công ty luôn cách nhau ít nhất 10 chỗ. Đây chính là trần 10% số thẻ, làm tròn xuống và thấp nhất 1 thẻ: section 30 thẻ thì một công ty nhiều nhất 3 thẻ, section 40 thẻ thì 4 thẻ.',
         ],
       },
       {
