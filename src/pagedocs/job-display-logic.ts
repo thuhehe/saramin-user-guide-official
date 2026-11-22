@@ -850,7 +850,7 @@ export const JOB_DISPLAY_MODULE_DOCS: Record<string, ModuleDoc> = {
         cols: ['Nhóm', 'Nghĩa', 'Nói với khách'],
         rows: [
           ['**Showing now**', 'Ô đang hiện tin này ngay lúc này', '*Tin đang hiện*'],
-          ['**Waiting for a turn**', 'Tin sẽ tới lượt ở một nhịp sau', '*Tin đang trong hàng, tới lượt trong vòng này*'],
+          ['**Waiting for a turn**', 'Tin sẽ tới lượt ở một nhịp sau', '*Tin đang trong hàng, tới lượt trong vòng này* — **trừ** tin của công ty đang vượt 10% bể tin ở hai dải trang danh sách việc làm: tin đó có thể phải chờ sang vòng sau, **đừng hẹn khách trong vòng này** (mục 4)'],
           ['**Never shown**', 'Tin đủ điều kiện nhưng hết cả một vòng vẫn không tới lượt', 'Nhóm này **phải trống** ở gần hết các ô — **trừ một trường hợp**: ở hai dải trang danh sách việc làm, tin của công ty đang giữ **hơn 10% bể tin** của dải lên **thưa hơn hẳn** — có thể nhiều vòng mới tới lượt, và **đừng đoán ra một con số** cho khách. Đó là **chủ ý của luật rải**, không phải lỗi (mục 4). Ngoài trường hợp đó, thấy tin nằm đây thì **báo lại**, đừng giải thích với khách là bình thường. Câu hỏi đúng bây giờ không còn là *“tin có được hiện không”* mà là ***“bao lâu một lần”*** — mục 5'],
           ['**Empty slot**', 'Ô còn chỗ trống vì chưa đủ tin', '*Ô này còn chỗ bán*'],
         ],
