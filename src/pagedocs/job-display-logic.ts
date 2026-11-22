@@ -634,7 +634,7 @@ export const JOB_DISPLAY_PAGE_DOCS: Record<string, PageDoc> = {
         cols: ['Khách hỏi', 'Trả lời'],
         rows: [
           ['“Tin tôi có được lên đầu không?”', 'Hai dải **không có vị trí cố định** — mỗi lượt thứ tự xáo lại. Đổi lại, tin **chắc chắn được lên**: vòng nào cũng một lần, trừ công ty đang giữ hơn 10% bể tin thì thưa hơn'],
-          ['“Sao tôi mở ra không thấy tin tôi?”', 'Dải chỉ hiện 30 (hoặc 40) tin một lúc và **đổi cả cụm mỗi 5 phút**. Tin đang chờ tới lượt — mục 4 có cách tính bao lâu'],
+          ['“Sao tôi mở ra không thấy tin tôi?”', 'Dải chỉ hiện 30 (hoặc 40) tin một lúc và **đổi cả cụm mỗi 5 phút** — tin đang chờ tới lượt, mục 4 có cách tính. Nhưng nếu công ty đang giữ **hơn 10% bể tin** thì tin có thể **chưa vào hàng của vòng này**, và mục 4 không tính ra được cho trường hợp đó (mục 3)'],
           ['“Tôi đăng 50 tin, sao không thấy nhiều?”', 'Một công ty tối đa **10% số thẻ** mỗi lượt. Đăng thêm **không** mở rộng phần đó — 50 tin thay phiên nhau dùng 3 chỗ'],
           ['“Mua bậc cao hơn thì được gì?”', '**Vào ô ít tin hơn**, nên **tới lượt nhanh hơn**. Đây là thứ thật sự mua được bằng tiền'],
           ['“Làm mới tin có tác dụng không?”', 'Có, và **không mất tiền**: tin đã vào hàng vòng này mà chưa lên thì sẽ lên sớm hơn. Không ăn thua với tin đã lên rồi, hoặc tin của công ty giữ hơn 10% bể mà vòng này chưa xếp tới'],
