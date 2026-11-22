@@ -414,7 +414,7 @@ export const JOB_DISPLAY_PAGE_DOCS: Record<string, PageDoc> = {
           ['Thứ tự trên màn hình', 'Ngẫu nhiên, xáo lại mỗi lượt', 'Ngẫu nhiên, xáo lại mỗi lượt'],
           ['Bậc tin xếp thứ tự', 'Không — chỉ quyết định ai vào dải', 'Không — chỉ quyết định ai vào dải'],
           ['Xoay vòng', 'Đổi cả 30 thẻ mỗi 5 phút', 'Đổi cả 40 thẻ mỗi 5 phút'],
-          ['Một vòng', 'Tới khi mọi tin đã lên đúng một lần', 'Như dải trên'],
+          ['Một vòng', 'Tới khi mọi tin đã lên một lần — trừ công ty giữ hơn 10% bể tin, xem mục 5', 'Như dải trên'],
           ['Nút Xem thêm', 'Không có', 'Không có'],
         ],
       },
@@ -620,7 +620,7 @@ export const JOB_DISPLAY_PAGE_DOCS: Record<string, PageDoc> = {
         heading: 'Khách hỏi gì, trả lời sao',
         cols: ['Khách hỏi', 'Trả lời'],
         rows: [
-          ['“Tin tôi có được lên đầu không?”', 'Hai dải **không có vị trí cố định** — mỗi lượt thứ tự xáo lại. Đổi lại, tin **chắc chắn được lên**, vòng nào cũng một lần'],
+          ['“Tin tôi có được lên đầu không?”', 'Hai dải **không có vị trí cố định** — mỗi lượt thứ tự xáo lại. Đổi lại, tin **chắc chắn được lên**: vòng nào cũng một lần, trừ công ty đang giữ hơn 10% bể tin thì thưa hơn'],
           ['“Sao tôi mở ra không thấy tin tôi?”', 'Dải chỉ hiện 30 (hoặc 40) tin một lúc và **đổi cả cụm mỗi 5 phút**. Tin đang chờ tới lượt — mục 8 có cách tính bao lâu'],
           ['“Tôi đăng 50 tin, sao không thấy nhiều?”', 'Một công ty tối đa **10% số thẻ** mỗi lượt. Đăng thêm **không** mở rộng phần đó — 50 tin thay phiên nhau dùng 3 chỗ'],
           ['“Mua bậc cao hơn thì được gì?”', '**Vào ô ít tin hơn**, nên **tới lượt nhanh hơn**. Đây là thứ thật sự mua được bằng tiền'],
@@ -633,7 +633,8 @@ export const JOB_DISPLAY_PAGE_DOCS: Record<string, PageDoc> = {
         heading: 'Ba điều không được hứa',
         items: [
           'Không hứa **vị trí** — không có ô số 1 để bán.',
-          'Không hứa **hiện liên tục** — tin lên theo lượt, mỗi vòng một lần.',
+          'Không hứa **hiện liên tục** — tin lên theo lượt.',
+          'Không hứa **một con số** cho câu “bao lâu tin tôi lên một lần”. Với công ty đăng nhiều tin thì không tính trước được (mục 5); chỉ nói được là **thưa hơn**.',
           'Không hứa **đăng nhiều thì hiện nhiều** — trần 10% chặn đúng chỗ đó.',
         ],
       },
