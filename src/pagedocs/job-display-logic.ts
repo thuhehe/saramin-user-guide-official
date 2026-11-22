@@ -477,7 +477,7 @@ export const JOB_DISPLAY_PAGE_DOCS: Record<string, PageDoc> = {
         cols: ['Thứ tự', 'Hệ thống làm gì', 'Nói với khách thế nào'],
         rows: [
           ['1', 'Gom tin thành nhóm theo trục của trang — tỉnh/TP, ngành nghề, hoặc ngành', 'Tin của anh/chị nằm trong nhóm của tỉnh (hoặc ngành) mà tin đó đăng'],
-          ['2', 'Trong mỗi nhóm, tin **làm mới gần đây nhất** đứng trước. Làm mới, không phải ngày đăng, cũng không phải lần sửa tin', 'Làm mới tin là cách đẩy tin lên sớm hơn — và nó **không mất tiền**'],
+          ['2', 'Trong mỗi nhóm, tin **làm mới gần đây nhất** đứng trước. Làm mới, không phải ngày đăng, cũng không phải lần sửa tin', 'Làm mới tin là cách đẩy tin lên sớm hơn, **không mất tiền** — trừ khi công ty đang giữ hơn 10% bể tin, lúc đó phải chờ vòng sau'],
           ['3', 'Rải tin cùng công ty ra: giữa hai tin của **cùng một công ty** luôn cách nhau **ít nhất 10 chỗ**', 'Không công ty nào chiếm được một mảng lớn của dải'],
         ],
       },
@@ -521,7 +521,7 @@ export const JOB_DISPLAY_PAGE_DOCS: Record<string, PageDoc> = {
       },
       {
         kind: 'table',
-        note: 'Làm mới tin **không** cho tin lên hai lần trong một vòng. Nó chỉ rút ngắn thời gian chờ tới lượt.',
+        note: 'Làm mới tin **không** cho tin lên hai lần trong một vòng; nó chỉ rút ngắn thời gian chờ tới lượt — **và chỉ khi tin đã được xếp vào hàng của vòng này**. Tin của công ty giữ hơn 10% bể có thể chưa vào hàng, làm mới lúc đó không đổi được gì cho tới vòng sau.',
         cols: ['Tin được làm mới lúc', 'Chuyện gì xảy ra'],
         rows: [
           ['Chưa lên trong vòng này', 'Tin nhảy lên **đầu phần hàng còn lại** → lên ở **lượt kế tiếp**, hoặc ngay sau đó nếu luật khoảng cách chưa cho, thay vì phải chờ hết vòng. **Đừng hứa số phút** — còn tuỳ hàng còn dài bao nhiêu'],
@@ -569,7 +569,7 @@ export const JOB_DISPLAY_PAGE_DOCS: Record<string, PageDoc> = {
         heading: 'Muốn tin được hiện thường xuyên hơn thì làm gì',
         items: [
           '**Lên bậc cao hơn để vào ô ít tin hơn.** Dải *Nổi bật* chỉ nhận Basic Plus trở lên, nên bể của nó nhỏ hơn hẳn bể của dải dưới — ít tin vào được thì vòng ngắn lại cho tất cả những tin đã vào. Đây là đòn bẩy mạnh nhất, và là cách bậc tin còn tác dụng **trên hai dải này**.',
-          '**Làm mới tin.** Không rút ngắn vòng, nhưng đưa tin lên sớm hơn trong vòng đang chạy, và không mất tiền.',
+          '**Làm mới tin.** Không rút ngắn vòng, nhưng đưa tin lên sớm hơn **trong vòng đang chạy**, và không mất tiền. Không ăn thua với tin chưa được xếp vào vòng này — xem mục 5.',
           '**Tăng số thẻ** của dải trong Admin. Nhưng tăng số thẻ là tăng luôn trần một công ty, vì trần là 10% số thẻ.',
           'Rút ngắn chu kỳ 5 phút thì **không** ăn thua: cả vòng chạy nhanh hơn nhưng mỗi tin vẫn chỉ lên một lượt mỗi vòng, và lượt đó ngắn lại đúng bằng phần rút.',
         ],
@@ -624,7 +624,7 @@ export const JOB_DISPLAY_PAGE_DOCS: Record<string, PageDoc> = {
           ['“Sao tôi mở ra không thấy tin tôi?”', 'Dải chỉ hiện 30 (hoặc 40) tin một lúc và **đổi cả cụm mỗi 5 phút**. Tin đang chờ tới lượt — mục 8 có cách tính bao lâu'],
           ['“Tôi đăng 50 tin, sao không thấy nhiều?”', 'Một công ty tối đa **10% số thẻ** mỗi lượt. Đăng thêm **không** mở rộng phần đó — 50 tin thay phiên nhau dùng 3 chỗ'],
           ['“Mua bậc cao hơn thì được gì?”', '**Vào ô ít tin hơn**, nên **tới lượt nhanh hơn**. Đây là thứ thật sự mua được bằng tiền'],
-          ['“Làm mới tin có tác dụng không?”', 'Có, và **không mất tiền**: tin chưa lên trong vòng này sẽ lên sớm hơn. Nhưng không lên được hai lần trong một vòng'],
+          ['“Làm mới tin có tác dụng không?”', 'Có, và **không mất tiền**: tin đã vào hàng vòng này mà chưa lên thì sẽ lên sớm hơn. Hai trường hợp **không** ăn thua: tin đã lên rồi trong vòng này, và tin của công ty giữ hơn 10% bể mà vòng này chưa xếp tới'],
           ['“Tìm kiếm có ưu tiên tin tôi không?”', 'Có — ở **danh sách kết quả tìm kiếm** (mục 9), bậc cao đứng trước ở chế độ *Đề xuất*. Hai dải thì không'],
         ],
       },
