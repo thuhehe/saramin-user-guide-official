@@ -90,6 +90,24 @@
  *     stops being true while both the page and the cap still look correct.
  * Reached with the Home session on 2026-11-21, each of us holding one half.
  *
+ * THE SHUFFLE MUST BE DERIVED FROM THE ROUND, NOT ROLLED AT RENDER TIME. Same
+ * shape of trap as the construction-above: the rule on the page is sound and
+ * only the implementation can lose it. Section 7 says the order is random and
+ * that everyone inside one 5-minute period sees the SAME order — those two
+ * clauses are one rule, not a rule plus a nicety. The order has to be a pure
+ * function of (area, period index); a shuffle rolled per request looks like it
+ * satisfies "ngẫu nhiên, đổi mỗi vòng" and quietly breaks two things at once:
+ *   - CACHING. Every CDN / ISR copy gets a different page, and whichever copy
+ *     happens to be cached then serves that one order for its whole lifetime.
+ *     The rotation stops rotating for most visitors while the code still looks
+ *     correct. The rotation class in svn-be is emphatic about this and gives
+ *     exactly this reason; the Home session surfaced it on 2026-11-22.
+ *   - THE EQUAL-AIRTIME CLAIM the shuffle was introduced to deliver. A frozen
+ *     cached copy puts one posting back in a fixed slot — the precise failure
+ *     Thu's "thứ tự xuất hiện random, có xác suất công bằng" was meant to end.
+ * Deriving from the clock is also what lets the response stay byte-identical
+ * for the rest of the period and be cached for exactly that long.
+ *
  * REWRITTEN FOR SALES ON 2026-11-22 from Thu's own Notion page "Job placement"
  * (app.notion.com/p/Job-placement-420b88bd999780849341c969c3b019b9), which she
  * wrote as the explanation a salesperson should be able to give. Her text is
