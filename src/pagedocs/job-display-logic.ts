@@ -447,115 +447,79 @@ export const JOB_DISPLAY_PAGE_DOCS: Record<string, PageDoc> = {
   'top-search': {
     blocks: [
       {
-        kind: 'p',
-        text: 'Dải **Top search** là hàng thẻ việc làm nằm trên đầu trang kết quả tìm kiếm, phía trên danh sách kết quả. Đây là một ô có bán: job chỉ lên dải khi bậc tin của job, hoặc add-on hiển thị gắn vào job, có bán ô này.\n\nTrang này nói: khi nào dải hiện, lấy job nào, xếp theo gì, hiện bao nhiêu thẻ, xoay vòng ra sao, và trên màn hình dải gồm những gì.',
-      },
-      {
         kind: 'shot',
         src: '/shots/job-display/top-search-on-page.jpg',
         where: 'Jobseeker site',
-        caption: 'Dải Top search là khung đỏ. Nó nằm **trên** khối *Kết quả tìm kiếm*.',
-        note: 'Ảnh để thấy **vị trí** của dải trên trang.',
+        caption: 'Dải Top search là khung đỏ. Nằm trên đầu trang kết quả tìm kiếm, phía trên khối *Kết quả tìm kiếm*.',
+        note: 'Ảnh để thấy vị trí của dải trên trang.',
       },
 
       /* ───────────────────────────────────────────────────────────────── */
-      { kind: 'h', text: '1. Tóm lại' },
+      { kind: 'h', text: '1. Tổng quan' },
+      {
+        kind: 'p',
+        text: 'Dải Top search là hàng thẻ việc làm trên đầu trang kết quả tìm kiếm. Đây là một ô có bán: job chỉ lên dải khi đã mua ô này.\n\nDải luôn hiện, trừ khi không còn job nào vào được dải.',
+      },
       {
         kind: 'table',
-        note: '**“Đủ điều kiện”** ở trang này nghĩa là job đạt **cả ba** điều: đang hiển thị bình thường trên site, khớp từ khoá và bộ lọc ứng viên đang dùng, và đã mua ô Top search — qua bậc tin đang chạy của job, hoặc add-on hiển thị gắn vào job. Mục 3 nói rõ từng điều.',
+        note: 'Tên bộ lọc không ghép vào tiêu đề, dù ứng viên đã chọn bộ lọc hay chưa.',
         cols: ['Hạng mục', 'Dải chạy thế nào'],
         rows: [
-          ['Khi nào hiện', 'Luôn hiện, trừ khi không còn job nào **đủ điều kiện**'],
+          ['Số thẻ', '20, chia 5 slide × 4 thẻ'],
           ['Lọc theo', 'Từ khoá và bộ lọc trên thanh tìm kiếm'],
-          ['Số thẻ', '20'],
-          ['Chia slide', '5 slide × 4 thẻ'],
           ['Thứ tự', 'Job làm mới gần nhất đứng trước'],
           ['Một công ty trong 1 slide', 'Nhiều nhất 1 thẻ'],
           ['Xoay vòng', '5 phút tịnh tiến 4 job'],
+          ['Tiêu đề', 'Có từ khoá: *Việc {từ khoá} dành cho bạn*. Không gõ từ khoá: *Việc làm dành cho bạn*'],
           ['Nút Xem thêm', 'Không có'],
         ],
       },
 
       /* ───────────────────────────────────────────────────────────────── */
-      { kind: 'h', text: '2. Khi nào dải hiện, và tiêu đề là gì' },
-      {
-        kind: 'table',
-        cols: ['Người dùng', 'Dải lấy job nào', 'Tiêu đề dải'],
-        rows: [
-          ['Có từ khoá', 'Khớp từ khoá + bộ lọc', '*Việc {từ khoá} dành cho bạn*'],
-          ['Chỉ có bộ lọc', 'Khớp bộ lọc', '*Việc làm dành cho bạn*'],
-          ['Không gõ, không lọc', 'Tất cả', '*Việc làm dành cho bạn*'],
-          ['Không còn job nào', '—', 'Không hiện dải'],
-        ],
-      },
+      { kind: 'h', text: '2. Bước 1 — Lọc: job nào vào được dải' },
       {
         kind: 'list',
         items: [
-          'Dải **luôn hiện**. Chỉ ẩn khi không còn job nào đủ điều kiện — tức không còn job nào vừa đang hiển thị, vừa khớp tìm kiếm, vừa đã mua ô này.',
-          'Bộ lọc ở đây là đúng các bộ lọc của trang kết quả: khu vực, ngành nghề, vị trí, kỹ năng, cấp bậc, mức lương, loại hợp đồng, kinh nghiệm.',
-          'Dải và danh sách kết quả bên dưới luôn trả lời **cùng một câu hỏi**. Đổi một bộ lọc thì cả hai đổi theo.',
-        ],
-      },
-      {
-        kind: 'p',
-        text: 'Tên bộ lọc **không** ghép vào tiêu đề. Người dùng thường đặt nhiều bộ lọc một lúc — hai khu vực, ba ngành nghề là bình thường — ghép hết vào thì tiêu đề không đọc nổi. Nên không có từ khoá thì tiêu đề để trung tính, dù đã chọn bộ lọc hay chưa.',
-      },
-
-      /* ───────────────────────────────────────────────────────────────── */
-      { kind: 'h', text: '3. Job nào đủ điều kiện lên dải' },
-      {
-        kind: 'table',
-        note: 'Job phải đạt **cả ba**. Rớt một điều kiện là không lên dải, dù job mới đăng đến đâu.',
-        cols: ['Điều kiện', 'Nội dung'],
-        rows: [
-          ['1. Đang hiển thị bình thường', 'Job đang mở, đang bật hiển thị, chưa hết hạn. Công ty đang hoạt động và đã có mã số thuế'],
-          ['2. Khớp từ khoá và bộ lọc', 'Theo đúng luật tìm kiếm thường. Không gõ, không lọc thì không loại ai'],
-          ['3. Đã mua ô Top search', 'Bậc tin đang chạy có bán ô này, **hoặc** job có add-on hiển thị còn hạn'],
-        ],
-      },
-      {
-        kind: 'list',
-        items: [
-          'Bậc đang chạy: bậc **cao nhất** job đang giữ, còn trong hạn.',
-          'Product đã archive: job rớt khỏi dải, dù bậc còn hạn.',
-          'Add-on hiển thị: mua kèm vào job đang chạy bậc bất kỳ, **không cần đổi bậc**.',
+          'Job đang mở và đang hiển thị trên site.',
+          'Job đã mua ô Top search: bậc tin đang chạy có bán ô này, **hoặc** job có add-on hiển thị còn hạn. Add-on mua kèm vào job đang chạy bậc bất kỳ, không cần đổi bậc.',
+          'Product đã archive thì job rớt khỏi dải, dù bậc còn hạn.',
+          'Nếu ứng viên đã gõ hoặc đã lọc thì job còn phải khớp với tìm kiếm. Bộ lọc ở đây đúng là bộ lọc của trang kết quả: khu vực, ngành nghề, vị trí, kỹ năng, cấp bậc, mức lương, loại hợp đồng, kinh nghiệm.',
+          'Dải và danh sách kết quả bên dưới luôn trả lời cùng một câu hỏi: đổi một bộ lọc thì cả hai đổi theo.',
         ],
       },
 
       /* ───────────────────────────────────────────────────────────────── */
-      { kind: 'h', text: '4. Xếp theo gì, hiện bao nhiêu thẻ' },
+      { kind: 'h', text: '3. Bước 2 — Xếp hàng chờ lên dải' },
       {
         kind: 'list',
         items: [
-          'Thứ tự: job **làm mới gần nhất** đứng trước. Không phải ngày đăng.',
-          'Menu sắp xếp của người dùng (VD *Lương cao nhất*) **không** đổi thứ tự dải. Nó chỉ đổi danh sách kết quả bên dưới.',
-          'Hàng job được **chốt ở đầu mỗi chu kỳ**. Job làm mới giữa chu kỳ vào hàng từ chu kỳ sau — không cướp lượt của job đang chờ.',
-          'Số thẻ: **20**, chia **5 slide × 4 thẻ**.',
-          'Ít hơn 20 job thì hiện bấy nhiêu. VD: 7 job đủ điều kiện → 2 slide, slide sau 3 thẻ.',
-          '**Không** lấy job chưa mua ô này vào cho đủ 20.',
+          'Mọi job vào được dải xếp thành một hàng, job làm mới gần nhất đứng trước — không phải ngày đăng.',
+          'Menu sắp xếp của ứng viên (VD *Lương cao nhất*) không đổi thứ tự dải. Nó chỉ đổi danh sách kết quả bên dưới.',
+          'Luật: trong một slide 4 thẻ, mỗi công ty nhiều nhất **1 thẻ**; trên cả 20 thẻ nhiều nhất **5 thẻ**.',
+          'Nếu không đủ công ty để chia như vậy thì rải xa nhất có thể: còn công ty chưa dùng trong slide thì ưu tiên công ty đó, hết mới chấp nhận một công ty xuất hiện hai lần. Không bỏ job ra khỏi dải để giữ luật này, cũng không để slide thiếu thẻ.',
         ],
       },
 
       /* ───────────────────────────────────────────────────────────────── */
-      { kind: 'h', text: '5. Mỗi slide tối đa một job của một công ty' },
+      { kind: 'h', text: '4. Bước 3 — Bốc 20 job, chia 5 slide' },
       {
         kind: 'list',
         items: [
-          'Trong một slide 4 thẻ, mỗi công ty nhiều nhất **1 thẻ**.',
-          'Trên cả 20 thẻ, một công ty nhiều nhất **5 thẻ**.',
-          'Nếu số công ty đang có job trong dải **không đủ** để chia như vậy: rải xa nhất có thể. Còn công ty chưa dùng trong slide thì ưu tiên công ty đó; hết mới chấp nhận một công ty xuất hiện hai lần.',
-          '**Không bỏ job** ra khỏi dải để giữ luật này, cũng **không để slide thiếu thẻ**.',
+          'Dải lấy 20 job từ đầu hàng, chia 5 slide × 4 thẻ.',
+          'Ít hơn 20 job thì hiện bấy nhiêu. VD: 7 job → 2 slide, slide sau 3 thẻ.',
+          'Không lấy job chưa mua ô này vào cho đủ 20.',
+          'Hàng job được chốt ở đầu mỗi chu kỳ. Job làm mới giữa chu kỳ vào hàng từ chu kỳ sau — không cướp lượt của job đang chờ.',
         ],
       },
 
       /* ───────────────────────────────────────────────────────────────── */
-      { kind: 'h', text: '6. Xoay vòng: 5 phút tịnh tiến 4 job' },
+      { kind: 'h', text: '5. Bước 4 — 5 phút tịnh tiến 4 job' },
       {
         kind: 'list',
         items: [
-          'Toàn bộ job đủ điều kiện xếp thành **một hàng**. 20 job đầu hàng là 5 slide đang hiện.',
-          'Mỗi **5 phút**, cả hàng tịnh tiến **4 chỗ**: slide 2 lên slide 1, 4 job kế tiếp vào slide 5.',
-          'Đi hết hàng thì **quay lại đầu hàng**.',
+          'Mỗi 5 phút cả hàng tịnh tiến 4 chỗ: slide 2 lên slide 1, 4 job kế tiếp vào slide 5.',
+          'Ai mở trang trong cùng 5 phút đó đều thấy cùng một lượt.',
+          'Đi hết hàng thì quay lại đầu hàng, nên mọi job trong hàng đều tới lượt, không chỉ 20 job đầu.',
         ],
       },
       {
@@ -570,19 +534,18 @@ export const JOB_DISPLAY_PAGE_DOCS: Record<string, PageDoc> = {
           ['Slide 4', 'Job 13–16', 'Job 17–20', 'Job 21–24'],
           ['Slide 5', 'Job 17–20', 'Job 21–24', 'Job 25–28'],
         ],
-        note: 'Mỗi nhịp cả bảng dịch lên một dòng. Hết job thứ 100 thì quay lại job 1. Nghĩa là **mọi job trong hàng đều tới lượt**, không chỉ 20 job đầu.',
+        note: 'Mỗi nhịp cả bảng dịch lên một dòng. Hết job thứ 100 thì quay lại job 1.',
       },
 
       /* ───────────────────────────────────────────────────────────────── */
-      { kind: 'h', text: '7. Giao diện dải' },
+      { kind: 'h', text: '6. Giao diện dải' },
       {
         kind: 'list',
         items: [
-          'Dải **tự chạy**, không cần bấm.',
-          'Có nút **tạm dừng / chạy tiếp**.',
-          'Có **bộ đếm vị trí slide**, dạng *2 / 5*.',
-          'Có **mũi tên trái phải**. Mỗi lần nhảy **trọn một slide** 4 thẻ, không trượt từng thẻ.',
-          '**Không có nút Xem thêm.**',
+          'Dải tự chạy, không cần bấm. Có nút tạm dừng / chạy tiếp.',
+          'Có bộ đếm vị trí slide, dạng *2 / 5*.',
+          'Mũi tên trái phải nhảy trọn một slide 4 thẻ, không trượt từng thẻ.',
+          'Không có nút Xem thêm.',
         ],
       },
 
