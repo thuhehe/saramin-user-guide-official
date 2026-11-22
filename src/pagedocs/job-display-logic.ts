@@ -644,11 +644,31 @@ export const JOB_DISPLAY_PAGE_DOCS: Record<string, PageDoc> = {
  * them unrotated.
  *
  * KEPT OUT OF THE PAGE, deliberately:
- *   - "công ty đang hoạt động và đã có mã số thuế" as display conditions, cut
- *     from law 1 on 2026-11-22. Thu's ruling on the strips page: a posting
- *     cannot be created unless both already hold, so listing them as display
- *     rules is noise for Sales ("hiển nhiên"). The laws here cover every
- *     placement, so the ruling reaches this page. Do not restore the clause.
+ *   - "công ty đang hoạt động và đã có mã số thuế" as an ENTRY condition, cut
+ *     from law 1 on 2026-11-22 under Thu's ruling for the strips page: a
+ *     posting cannot be created unless both already hold, so listing them as
+ *     entry rules is noise for Sales ("hiển nhiên"). The laws here cover every
+ *     placement, so the ruling reaches this page. Do not restore the row.
+ *
+ * OPEN — AND HER REASON DOES NOT REACH AS FAR AS THE CUT DID (2026-11-22):
+ *   Both conditions are re-evaluated on EVERY public read in today's build, not
+ *   checked once at posting time. PublicReadRepositoryAdapter.publiclyExposed
+ *   (read from svn-be origin/dev, 2026-11-22) is `status == ACTIVE AND (mst
+ *   IS NOT NULL OR (kind == FOREIGN AND foreign_tax_id IS NOT NULL))`, its
+ *   javadoc calls it decision D-3, and the placement slice
+ *   (findOpenJobsByTierCodes / findFeaturedCompaniesByTierCodes) applies the
+ *   SAME predicate — so it governs these two strips and the eight bands.
+ *   Consequence: archive a company and every posting it has bought leaves every
+ *   public surface at once, mid-campaign. The tax-code half is not a formality
+ *   either; the javadoc says that without it "every unverified lead would
+ *   surface publicly".
+ *   So "self-evident at posting time" is true of entry and false of the ongoing
+ *   state, and the cut removed both readings. Whether the AGREED rule should say
+ *   postings drop off when a company is archived — or run to expiry — is Thu's
+ *   call, not the build's. Nothing has been written onto the page either way.
+ *   If it is ever written: NOT "phải có mã số thuế" flatly. Foreign customers
+ *   have no mst and carry foreign_tax_id instead (V376, after the mst-only
+ *   spelling silently hid every foreign company until 2026-10-12).
  *   - Counts of placement rows (47 / 28 / 19) and any production measurement.
  *     They date the page and sales does not sell by them.
  *   - That the strip asks the search for 8 cards in today's build while the
