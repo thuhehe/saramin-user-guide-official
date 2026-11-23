@@ -52,6 +52,31 @@ async function run({ path, out, steps = [] }) {
         el.scrollBy(0, px)
       }, Number(v))
     else if (k === 'js') await page.evaluate(v)
+    else if (k === 'box')
+      // box:<css selector>[|<pad px>] — the red rectangle every guide shot uses to
+      // say "this part of the screen". Drawn as an overlay in page coordinates, so
+      // it survives the scroll the screenshot is taken at; several boxes stack.
+      await page.evaluate(({ sel, pad }) => {
+        const el = [...document.querySelectorAll(sel)].find((e) => e.getClientRects().length)
+        if (!el) throw new Error('box: nothing visible matches ' + sel)
+        const r = el.getBoundingClientRect()
+        const d = document.createElement('div')
+        d.dataset.guideBox = '1'
+        Object.assign(d.style, {
+          position: 'absolute',
+          left: `${r.left + scrollX - pad}px`,
+          top: `${r.top + scrollY - pad}px`,
+          width: `${r.width + pad * 2}px`,
+          height: `${r.height + pad * 2}px`,
+          border: '4px solid #e8192c',
+          borderRadius: '2px',
+          pointerEvents: 'none',
+          zIndex: '2147483647',
+        })
+        document.body.appendChild(d)
+      }, { sel: v.split('|')[0], pad: Number(v.split('|')[1] ?? 10) })
+    else if (k === 'unbox')
+      await page.evaluate(() => document.querySelectorAll('[data-guide-box]').forEach((e) => e.remove()))
     else if (k === 'fill') {
       // fill:<css selector>|<text> — types into the first visible match and presses Enter
       const [sel, ...t] = v.split('|')

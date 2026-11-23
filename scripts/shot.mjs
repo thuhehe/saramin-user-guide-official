@@ -12,6 +12,7 @@
  *   row:<n>        the n-th table body row (1-based)
  *   fill:<css>|<text>  type into a field and press Enter
  *   wait:<ms> · scroll:<px> (innermost scroller, dialog first) · js:<code> · full
+ *   box:<css>[|<pad>]  the guide's red rectangle around that element · unbox clears them
  * Path "-" keeps the current page; out "-" takes no picture.
  */
 const [, , a, b, ...steps] = process.argv
