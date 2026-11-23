@@ -528,6 +528,16 @@
  },
  {
   "group": "Content",
+  "key": "inquiries",
+  "label": "Email inquiries",
+  "path": "/content/inquiries",
+  "perm": "inquiry:read",
+  "flag": "",
+  "what": "Biểu mẫu liên hệ qua email: khai lý do và email nhận ở Admin, khách gửi liên hệ trên site, nhân viên trả lời ngay trong Admin.",
+  "sub": []
+ },
+ {
+  "group": "Content",
   "key": "pages",
   "label": "Pages",
   "path": "/content/pages",

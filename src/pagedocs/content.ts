@@ -14,6 +14,14 @@ import type { PageDoc, ModuleDoc } from '../docs'
  *   site-footer   — admin docs/features/site-footer.md; svn-web features/layout/footer/services/footer.service.ts.
  *   site-notices  — admin i18n notices.json, docs/features/notices.md; svn-be AdminSiteNoticeController,
  *                   PublicSiteNoticeController, NoticeCategory, NoticeAudience, V533.
+ *   inquiries     — WRITTEN AS A CLIENT USER GUIDE (no ticket codes, no gap lines — see
+ *                   .claude/skills/saramin-docs). Read 23/11/2026 from origin/dev: admin
+ *                   src/modules/content/inquiries/* + i18n en/inquiries.json; svn-be migrations
+ *                   V911/V913/V920/V921/V933 and docs/plans/srm-1701-email-inquiry.md; svn-web
+ *                   features/email-inquiry/* (inquiry-rules.ts holds the audience rule and the
+ *                   lock), features/my-inquiries/lib/viewer.ts, features/help/ui/help-home-page.tsx.
+ *                   The reply thread, the account link for both roles and the help-tab default
+ *                   shipped 20-23/11/2026; the two reason lists shipped with the first version.
  *   faq           — admin docs/features/faq.md, i18n siteFaq.json, faq-row-actions.tsx; svn-be V457.
  *   pages/boards/blog — admin configs/modules.config.ts, navigation.config.tsx, routes.config.tsx,
  *                   admin-pages.config.ts, docs/be-blocked.md (D-CONT-1).
@@ -1662,6 +1670,259 @@ export const CONTENT_PAGE_DOCS: Record<string, PageDoc> = {
     ],
   },
 
+  /* ── Email inquiries ─────────────────────────────────────────────────────── */
+  inquiries: {
+    blocks: [
+      {
+        kind: 'shot',
+        src: '/shots/inquiries/form-guest.jpg',
+        where: 'Jobseeker site',
+        caption: 'Biểu mẫu *Liên hệ qua email* trên site ứng viên. Hai ô trong khung đỏ — *Email* và *Phân loại* — thay đổi theo người đang mở trang, xem mục 5.',
+        note: 'Ảnh chụp ngày 23/11/2026 trên môi trường dev, giao diện tiếng Việt, khi chưa đăng nhập.',
+      },
+
+      /* ───────────────────────────────────────────────────────────────── */
+      { kind: 'h', text: '1. Tổng quan' },
+      {
+        kind: 'p',
+        text: 'Liên hệ qua email là biểu mẫu để khách gửi câu hỏi cho Saramin, thay cho việc tự soạn một email. Khách điền biểu mẫu trên site, liên hệ về thẳng Admin, và nhân viên trả lời ngay trong Admin.\n\nBiểu mẫu chạy được hay không phụ thuộc vào phần khai trong Admin: chưa có lý do liên hệ nào đang bật thì khách mở biểu mẫu ra cũng không gửi được.',
+      },
+      {
+        kind: 'table',
+        note: 'Hai tab *List* và *Settings* nằm trong cùng một màn hình *Email inquiries*.',
+        cols: ['Việc', 'Làm ở đâu'],
+        rows: [
+          ['Khai email nhận và trang điều khoản', 'Admin — *Content → Email inquiries*, tab *Settings*'],
+          ['Khai danh sách lý do liên hệ', 'Admin — cùng tab *Settings*, phần *Inquiry reasons*'],
+          ['Đọc và trả lời liên hệ', 'Admin — tab *List*, bấm vào một dòng'],
+          ['Đặt liên kết vào chân trang', 'Admin — *Content → Site footer*'],
+          ['Gửi liên hệ', 'Site ứng viên — *Liên hệ qua email*, địa chỉ `/ho-tro/lien-he-qua-email`'],
+          ['Xem lại liên hệ đã gửi', 'Site ứng viên — Trung tâm trợ giúp, mục *Liên hệ của tôi*'],
+        ],
+      },
+
+      /* ───────────────────────────────────────────────────────────────── */
+      { kind: 'h', text: '2. Khai email nhận và trang điều khoản' },
+      {
+        kind: 'shot',
+        src: '/shots/inquiries/admin-settings-email.jpg',
+        where: 'Admin',
+        caption: 'Tab *Settings*, phần *Receiving email and terms* trong khung đỏ.',
+        note: 'Ảnh chụp ngày 23/11/2026 trên môi trường staging. Địa chỉ email trong ảnh đã thay bằng địa chỉ ví dụ.',
+      },
+      {
+        kind: 'table',
+        note: 'Mỗi địa chỉ CC nhận **một email riêng**, không phải một email chung — người này không nhìn thấy địa chỉ người kia.',
+        cols: ['Ô', 'Điền gì', 'Để trống thì sao'],
+        rows: [
+          ['*Receiving email*', 'Một địa chỉ nhận mọi liên hệ', 'Liên hệ vẫn lưu vào tab *List*, nhưng không email nào được gửi đi'],
+          ['*CC*', 'Nhiều nhất 10 địa chỉ, cách nhau bằng dấu phẩy', 'Không ai nhận bản sao'],
+          ['*Terms page*', 'Một trang nội dung đã xuất bản, gắn vào ô đồng ý của biểu mẫu', 'Ô đồng ý hiện câu mặc định, không có liên kết'],
+        ],
+      },
+      {
+        kind: 'list',
+        items: [
+          'Chưa khai *Receiving email* thì đầu màn hình có dòng nhắc, và trang chi tiết của từng liên hệ ghi rõ là chưa gửi email đi vì chưa có địa chỉ nhận.',
+          'Chọn *Terms page* cần quyền đọc trang nội dung. Không có quyền thì ô bị khoá, trang đã chọn trước đó vẫn giữ nguyên.',
+          'Trang điều khoản đã chọn mà sau đó bị gỡ xuất bản thì Admin báo ngay tại ô đó, và biểu mẫu quay về câu đồng ý mặc định.',
+        ],
+      },
+
+      /* ───────────────────────────────────────────────────────────────── */
+      { kind: 'h', text: '3. Khai lý do liên hệ' },
+      {
+        kind: 'shot',
+        src: '/shots/inquiries/admin-settings-reasons.jpg',
+        where: 'Admin',
+        caption: 'Phần *Inquiry reasons*, ngay dưới phần email nhận. Nút *Jobseeker* / *Company* đổi giữa hai danh sách.',
+        note: 'Ảnh chụp ngày 23/11/2026 trên môi trường staging, đang mở danh sách của ứng viên.',
+      },
+      {
+        kind: 'p',
+        text: 'Lý do liên hệ là danh sách trong ô *Lý do liên hệ* của biểu mẫu. Có **hai danh sách tách rời nhau**: một cho ứng viên, một cho nhà tuyển dụng. Chuyển qua lại bằng nút *Jobseeker* / *Company* ngay trên bảng.',
+      },
+      {
+        kind: 'table',
+        cols: ['Ô', 'Nghĩa'],
+        rows: [
+          ['*Name (Vietnamese)* · *Name (English)*', 'Bắt buộc cả hai. Khách đọc ngôn ngữ nào thì thấy tên ngôn ngữ đó'],
+          ['*Display order*', 'Số nhỏ đứng trước trong biểu mẫu'],
+          ['*Active*', 'Tắt thì lý do rời khỏi biểu mẫu. Liên hệ cũ vẫn giữ tên lý do đó'],
+          ['*Receiving email for this reason*', 'Liên hệ chọn lý do này đi về địa chỉ riêng. Để trống thì dùng email nhận chung'],
+        ],
+      },
+      {
+        kind: 'list',
+        heading: 'Bốn điều cần biết',
+        items: [
+          'Lý do **đã có liên hệ thì không xoá được** — chỉ tắt. Nút xoá tự ẩn và Admin nói rõ lý do.',
+          'Sửa tên một lý do thì **các liên hệ cũ cũng hiện tên mới**, vì tên được đọc thẳng từ danh sách này. Muốn đổi hẳn ý nghĩa thì nên tắt lý do cũ và thêm lý do mới.',
+          'Thêm hay sửa lý do cho ứng viên không ảnh hưởng gì tới danh sách của nhà tuyển dụng.',
+          'Danh sách của một phân loại mà trống thì phân loại đó **không gửi được liên hệ** — khách thấy dòng mời dùng kênh hỗ trợ khác.',
+        ],
+      },
+
+      /* ───────────────────────────────────────────────────────────────── */
+      { kind: 'h', text: '4. Khách điền gì trên biểu mẫu' },
+      {
+        kind: 'table',
+        note: 'Ô *Nội dung* chỉ gõ được sau khi đã chọn lý do liên hệ.',
+        cols: ['Ô', 'Giới hạn'],
+        rows: [
+          ['*Email*', 'Nơi nhận phản hồi'],
+          ['*Phân loại*', '*Ứng viên* hoặc *Doanh nghiệp* — xem mục 5'],
+          ['*Lý do liên hệ*', 'Chọn trong danh sách của phân loại đang chọn'],
+          ['*Tiêu đề*', 'Nhiều nhất 100 ký tự'],
+          ['*Nội dung*', 'Nhiều nhất 2.000 ký tự'],
+          ['*Tệp đính kèm*', 'Một tệp, nhiều nhất 10MB: pdf, doc, docx, xls, xlsx, ppt, pptx, zip, jpg, jpeg, png, gif, bmp'],
+          ['Ô đồng ý', 'Bắt buộc tích mới gửi được'],
+        ],
+      },
+      {
+        kind: 'list',
+        items: [
+          'Hệ thống đọc **định dạng thật của tệp**, không chỉ phần đuôi tên: đổi tên một tệp chạy thành `.pdf` vẫn bị từ chối.',
+          'Một người gửi được nhiều nhất **5 liên hệ mỗi ngày**. Quá mức thì biểu mẫu mời thử lại vào ngày hôm sau.',
+          'Gửi xong, khách thấy màn hình xác nhận kèm địa chỉ email sẽ nhận phản hồi.',
+        ],
+      },
+
+      /* ───────────────────────────────────────────────────────────────── */
+      { kind: 'h', text: '5. Biểu mẫu mở ra khác nhau theo người đang xem' },
+      {
+        kind: 'p',
+        text: 'Biểu mẫu nhận ra ai đang mở nó và mở sẵn đúng phân loại. Người đã đăng nhập **không đổi được phân loại**: ô của vai kia vẫn nhìn thấy nhưng bị khoá.',
+      },
+      {
+        kind: 'table',
+        note: 'Khoá phân loại là có chủ đích: liên hệ được lưu vào đúng tài khoản đã gửi nó, nên vai gửi phải là vai đang đăng nhập.',
+        cols: ['Ai đang mở', 'Phân loại mở sẵn', 'Ô Email', 'Đổi phân loại'],
+        rows: [
+          ['Chưa đăng nhập', '*Ứng viên*', 'Tự nhập', 'Được'],
+          ['Chưa đăng nhập, bấm sang từ site tuyển dụng', '*Doanh nghiệp*', 'Tự nhập', 'Được'],
+          ['Đã đăng nhập ứng viên', '*Ứng viên*', 'Email tài khoản, không sửa được', 'Không'],
+          ['Đã đăng nhập nhà tuyển dụng', '*Doanh nghiệp*', 'Email tài khoản, không sửa được', 'Không'],
+          ['Đăng nhập cả hai vai trên cùng trình duyệt', '*Doanh nghiệp*', 'Đổi theo ô đang chọn', 'Được'],
+        ],
+      },
+      {
+        kind: 'shot',
+        src: '/shots/inquiries/nudge.jpg',
+        where: 'Jobseeker site',
+        caption: 'Hộp nhắc đăng nhập, hiện khoảng 5 giây sau khi khách chưa đăng nhập mở biểu mẫu.',
+        note: 'Ảnh chụp ngày 23/11/2026 trên môi trường dev.',
+      },
+      {
+        kind: 'list',
+        heading: 'Nhắc đăng nhập — chỉ với khách chưa đăng nhập',
+        items: [
+          'Ở lại biểu mẫu khoảng **5 giây** thì hiện hộp nhắc *Đăng nhập để theo dõi liên hệ*, với hai nút *Đăng nhập* và *Để sau*.',
+          'Bấm *Để sau* thì trong phiên làm việc đó không hiện lại nữa.',
+          'Bấm *Đăng nhập* thì **nội dung đang gõ dở được giữ lại** và trả về sau khi đăng nhập xong. Riêng tệp đính kèm phải chọn lại.',
+          'Hộp nhắc đưa tới đúng trang đăng nhập của phân loại đang chọn: *Doanh nghiệp* thì sang đăng nhập nhà tuyển dụng.',
+          'Đã đăng nhập thì không bao giờ thấy hộp này.',
+        ],
+      },
+
+      /* ───────────────────────────────────────────────────────────────── */
+      { kind: 'h', text: '6. Nhân viên đọc và trả lời' },
+      {
+        kind: 'p',
+        text: 'Tab *List* là mọi liên hệ đã nhận, mới nhất trước. Lọc được theo ngày gửi, phân loại, lý do, trạng thái và trạng thái trả lời; ô tìm kiếm tìm theo tiêu đề hoặc email người gửi. Bấm một dòng để mở.',
+      },
+      {
+        kind: 'shot',
+        src: '/shots/inquiries/admin-list-sender-type.jpg',
+        where: 'Admin',
+        caption: 'Tab *List*. Cột *Sender type* trong khung đỏ cho biết liên hệ được gửi từ tài khoản nào.',
+        note: 'Ảnh chụp ngày 23/11/2026 trên môi trường staging; các địa chỉ email đã thay bằng địa chỉ ví dụ.',
+      },
+      {
+        kind: 'table',
+        note: 'Cột *Type* là phân loại **khách tự chọn** trên biểu mẫu. Cột *Sender type* là **tài khoản thật sự đã gửi**. Hai cột này khác nhau được: người chưa đăng nhập vẫn chọn được *Doanh nghiệp*, khi đó *Type* là *Company* còn *Sender type* là *Un logged in*.',
+        cols: ['Giá trị cột Sender type', 'Nghĩa'],
+        rows: [
+          ['*Jobseeker*', 'Gửi khi đang đăng nhập bằng tài khoản ứng viên'],
+          ['*Company*', 'Gửi khi đang đăng nhập bằng tài khoản nhà tuyển dụng. Dòng *Sent from* ở trang chi tiết có thêm tên công ty sau địa chỉ email'],
+          ['*Un logged in*', 'Gửi khi chưa đăng nhập. Liên hệ này không vào mục *Liên hệ của tôi* của bất kỳ ai'],
+        ],
+      },
+      {
+        kind: 'table',
+        heading: 'Trang chi tiết có gì',
+        cols: ['Khối', 'Dùng để'],
+        rows: [
+          ['*Details*', 'Ngày gửi, phân loại, lý do, *Sent from*, *Sender type*, ngôn ngữ khách đang đọc, và dòng cho biết email đã đi tới địa chỉ nhận hay chưa'],
+          ['*Content*', 'Toàn bộ nội dung khách gửi, kèm tệp đính kèm tải về được'],
+          ['*Status*', '*New* hoặc *In progress* — nhân viên tự đổi, khách không nhìn thấy'],
+          ['*Internal note*', 'Ghi chú chỉ nhân viên đọc. Không bao giờ gửi cho khách'],
+          ['*Replies*', 'Các câu trả lời đã gửi, và ô soạn câu trả lời mới'],
+        ],
+      },
+      {
+        kind: 'shot',
+        src: '/shots/inquiries/admin-reply.jpg',
+        where: 'Admin',
+        caption: 'Khối *Replies* trong khung đỏ: câu trả lời đã gửi ở trên, ô soạn câu trả lời mới ở dưới.',
+        note: 'Ảnh chụp ngày 23/11/2026 trên môi trường staging. Nội dung câu trả lời trong ảnh là dữ liệu chạy thử, địa chỉ email đã thay bằng địa chỉ ví dụ.',
+      },
+      {
+        kind: 'list',
+        heading: 'Trả lời',
+        items: [
+          'Gõ câu trả lời, đính kèm được nhiều nhất **3 ảnh** (mỗi ảnh 10MB), rồi bấm lưu.',
+          'Tích *Email this reply to the sender* thì khách nhận email ngay. Bỏ tích thì câu trả lời chỉ được lưu lại.',
+          'Email không gửi được thì Admin báo và có nút gửi lại.',
+          '**Sửa lại câu trả lời không gửi email lần nữa** — email đã đi rồi thì không thu về được. Chỗ đó ghi rõ ai sửa và sửa lúc nào.',
+          'Xoá câu trả lời cuối cùng thì liên hệ quay về *Đã tiếp nhận* ở phía khách.',
+          '*Đã trả lời* được suy ra từ việc liên hệ đã có câu trả lời hay chưa, không phải một trạng thái bấm tay.',
+        ],
+      },
+
+      /* ───────────────────────────────────────────────────────────────── */
+      { kind: 'h', text: '7. Khách xem lại liên hệ của mình' },
+      {
+        kind: 'p',
+        text: '*Liên hệ của tôi* nằm trong Trung tâm trợ giúp, ngay cạnh mục trợ giúp. Trang này **bắt đăng nhập**. Bảng có 5 cột: *STT*, *Lý do*, *Tiêu đề*, *Ngày gửi*, *Trạng thái*.',
+      },
+      {
+        kind: 'table',
+        note: 'Khách chỉ thấy hai trạng thái này. Trạng thái *New* / *In progress* của nhân viên không bao giờ lộ ra ngoài.',
+        cols: ['Trạng thái', 'Nghĩa'],
+        rows: [
+          ['*Đã tiếp nhận*', 'Chưa có câu trả lời nào'],
+          ['*Đã trả lời*', 'Nhân viên đã trả lời, nội dung trả lời hiện ngay trong trang chi tiết'],
+        ],
+      },
+      {
+        kind: 'list',
+        items: [
+          'Mỗi tài khoản **chỉ thấy liên hệ của chính mình**. Hai người cùng một công ty không thấy liên hệ của nhau.',
+          'Liên hệ gửi lúc **chưa đăng nhập** không vào danh sách này, kể cả khi đã điền đúng email của tài khoản.',
+          'Mở địa chỉ liên hệ của người khác thì ra trang không tìm thấy.',
+          'Ghi chú nội bộ của nhân viên không bao giờ hiện ở đây.',
+          'Trang mở theo vai đang đăng nhập. Vào từ tab *Doanh nghiệp* mà chưa đăng nhập thì sang trang đăng nhập nhà tuyển dụng; từ tab *Cá nhân* thì sang đăng nhập ứng viên.',
+        ],
+      },
+
+      /* ───────────────────────────────────────────────────────────────── */
+      { kind: 'h', text: '8. Trung tâm trợ giúp mở sẵn tab nào' },
+      {
+        kind: 'p',
+        text: 'Trung tâm trợ giúp có hai tab *Cá nhân* và *Doanh nghiệp*, mỗi tab một bộ câu hỏi riêng.',
+      },
+      {
+        kind: 'list',
+        items: [
+          'Địa chỉ trang đã ghi rõ tab nào thì mở tab đó.',
+          'Chưa ghi: đang đăng nhập nhà tuyển dụng thì mở *Doanh nghiệp*, còn lại mở *Cá nhân*.',
+          'Bấm tay sang tab kia thì địa chỉ trang ghi lại lựa chọn, nên tải lại trang hay gửi liên kết cho người khác vẫn đúng tab đã chọn.',
+          'Bảng *Thông báo & sự kiện* theo đúng quy tắc này.',
+        ],
+      },
+    ],
+  },
 }
 
 export const CONTENT_MODULE_DOCS: Record<string, ModuleDoc> = {
