@@ -53,7 +53,17 @@
  *     a sales argument, and Thu removed the sales section from the board
  *     strips page on 22/11 — "để sales tự nói".
  *
- * THE COMPANY CAP IS HALF A RULE HERE, and the missing half had to be said
+ * REVERSED 2026-11-23, LATER THE SAME DAY. Thu ruled that HOT 100 applies
+ * the full three-part 10% rule after all — cap at 10% (never below 1), never
+ * adjacent, and release the rule when there are not enough other companies.
+ * So the page no longer says two postings of one company may sit together; it
+ * carries the rule as its own section 5, in the same three parts the client
+ * states it in. The requirement and SRM-1711 were changed to match on the same
+ * day; before that they said to remove spacing from this board entirely.
+ * The note below is kept because the reasoning still holds in reverse — the
+ * two pages must not disagree about this rule, whichever way it is settled.
+ *
+ * THE COMPANY CAP WAS HALF A RULE HERE, and the missing half had to be said
  * out loud. The Jobs-page sections carry one rule in two parts: a company
  * holds at most 10% of the cards AND two of its cards are never adjacent.
  * HOT 100 keeps the cap (10 of 100) and DROPS the spacing — the requirement
@@ -98,6 +108,7 @@ export const HOT100_PAGE_DOCS: Record<string, PageDoc> = {
           ['Chốt lúc', '0h mỗi ngày, giờ Việt Nam. Trong ngày bảng không đổi'],
           ['Thứ tự dựa trên', 'Gói của tin, và mức ứng viên quan tâm tới tin trong 7 ngày gần nhất'],
           ['Tin chưa mua gói', 'Vẫn lên được bảng, xếp sau tin có gói'],
+          ['Một công ty giữ mấy dòng', 'Nhiều nhất 10 — tức 10% của bảng. Tin cùng công ty không đứng cạnh nhau'],
           ['Mũi tên', '▲ ▼ so với bảng hôm qua'],
           ['Khách chưa đăng nhập', 'Xem được 10 dòng đầu'],
           ['Ai thấy gì', 'Cùng một thời điểm, mọi ứng viên thấy cùng một bảng'],
@@ -111,8 +122,7 @@ export const HOT100_PAGE_DOCS: Record<string, PageDoc> = {
         items: [
           'Tin đang mở và đang hiển thị trên site.',
           'Sắp toàn bộ tin hợp lệ theo gói: gói cao đứng trước. Trong cùng một gói thì tin được làm mới gần đây hơn đứng trước.',
-          'Mỗi công ty nhiều nhất 10 tin trên bảng — tức 10% của 100 dòng. Tin thứ 11 trở đi nhường chỗ cho công ty khác.',
-          'Trong giới hạn đó, tin của cùng một công ty **được phép đứng liền kề nhau**. Bảng này không giãn tin cùng công ty ra xa nhau, khác với các section trên ba trang Jobs.',
+          'Mỗi công ty nhiều nhất 10 tin trên bảng — tức 10% của 100 dòng. Tin thứ 11 trở đi nhường chỗ cho công ty khác. Đây là vế đầu của luật 10%, xem mục 5.',
           'Lấy 101 tin đầu. Một tin trong số đó được nhấc ra làm dòng Gợi ý, nên bảng đánh số vẫn đủ 100 dòng.',
           'Số thứ tự trong danh sách này là **hạng theo gói** của tin — dòng đầu là 1, dòng thứ hai là 2. Đây chỉ là số dòng, không phải một phép tính.',
           'Tin đăng trong ngày chưa lên bảng ngay. Tin vào bảng từ lần chốt 0h kế tiếp.',
@@ -162,7 +172,7 @@ export const HOT100_PAGE_DOCS: Record<string, PageDoc> = {
           'Gói quyết định vùng mà tin đứng. Mức quan tâm quyết định tin nhích lên hay xuống trong vùng đó.',
           'Với tỉ lệ 90/10, một tin dịch nhiều nhất khoảng 11 bậc so với vị trí mà gói của nó mang lại.',
           'Tỉ lệ này là cấu hình, không viết cứng.',
-          'Sau bước này không còn bước xáo trộn nào nữa.',
+          'Sau bước này còn một bước cuối: giãn tin cùng công ty ra khỏi hai dòng liền nhau — mục 5.',
         ],
       },
       {
@@ -189,7 +199,31 @@ export const HOT100_PAGE_DOCS: Record<string, PageDoc> = {
       },
 
       /* ───────────────────────────────────────────────────────────────── */
-      { kind: 'h', text: '5. Dòng Gợi ý' },
+      { kind: 'h', text: '5. Luật 10% — mỗi công ty được mấy dòng' },
+      {
+        kind: 'p',
+        text: 'Đây là luật chung cho mọi chỗ hiện việc làm trên site, HOT 100 áp đúng như các section trên ba trang Jobs. Chỉ khác ở chỗ đếm trên cái gì: bên kia đếm trên số thẻ của section, ở đây đếm trên 100 dòng của bảng.',
+      },
+      {
+        kind: 'table',
+        cols: ['Vế', 'Nội dung'],
+        rows: [
+          ['1 — Trần', 'Trong số tin cùng hiện một lúc, mỗi công ty nhiều nhất 10%, thấp nhất 1 tin. Bảng 100 dòng nên trần là 10 tin'],
+          ['2 — Giãn', 'Tin của cùng một công ty không đứng cạnh nhau'],
+          ['3 — Nới', 'Không còn đủ công ty khác để xen vào thì bỏ luật, hiện hết'],
+        ],
+      },
+      {
+        kind: 'list',
+        items: [
+          'Vế 3 là lý do bảng không bao giờ thiếu dòng. Hàng chỉ còn một hai công ty thì giãn tới đâu hay tới đó, phần còn lại hiện theo đúng thứ tự điểm — không bỏ tin nào ra và không để trống dòng nào.',
+          'Vì vế 2, vị trí hiển thị có thể lệch một chút so với thứ tự điểm ở mục 4. Hai tin cùng công ty rơi vào hai dòng liền nhau thì một tin bị đẩy xuống dòng hợp lệ gần nhất.',
+          'Mũi tên ▲▼ tính trên vị trí sau khi đã giãn, tức đúng vị trí người đọc nhìn thấy.',
+        ],
+      },
+
+      /* ───────────────────────────────────────────────────────────────── */
+      { kind: 'h', text: '6. Dòng Gợi ý' },
       {
         kind: 'list',
         items: [
@@ -203,7 +237,7 @@ export const HOT100_PAGE_DOCS: Record<string, PageDoc> = {
       },
 
       /* ───────────────────────────────────────────────────────────────── */
-      { kind: 'h', text: '6. Mũi tên và chữ “new”' },
+      { kind: 'h', text: '7. Mũi tên và chữ “new”' },
       {
         kind: 'table',
         cols: ['Tình huống', 'Hiển thị'],
@@ -222,7 +256,7 @@ export const HOT100_PAGE_DOCS: Record<string, PageDoc> = {
       },
 
       /* ───────────────────────────────────────────────────────────────── */
-      { kind: 'h', text: '7. Bộ lọc và khách chưa đăng nhập' },
+      { kind: 'h', text: '8. Bộ lọc và khách chưa đăng nhập' },
       {
         kind: 'list',
         heading: 'Bộ lọc kinh nghiệm',
