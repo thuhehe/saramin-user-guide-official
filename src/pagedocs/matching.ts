@@ -63,6 +63,10 @@ export const MATCHING_PAGE_DOCS: Record<string, PageDoc> = {
         text: 'Và **job ứng viên đã nộp đơn thì không bao giờ xuất hiện lại** — kể cả khi đơn bị từ chối hoặc đã thu hồi. Job họ đã bấm bỏ qua cũng vậy. Hai điều kiện này nằm ngay trong câu truy vấn lấy job, nên job bị loại **trước** khi chấm điểm, không phải lọc lại sau.',
       },
       {
+        kind: 'warn',
+        text: '**Danh sách được tính lại từ đầu mỗi lần mở trang** — không có bản lưu sẵn ở đâu. Nên job vừa nộp đơn biến mất ngay ở lần hiện kế tiếp, và sửa Work preference là lần sau đã khác.\n\nRiêng **popup sau khi nộp đơn** còn tải lại danh sách sau **mỗi lượt** ứng tuyển ngay trong popup, nên job vừa ứng tuyển rời khỏi danh sách trước khi ứng viên chọn lượt tiếp theo.',
+      },
+      {
         kind: 'table',
         cols: ['Hệ thống đọc gì', 'Lọc thế nào'],
         rows: [
@@ -124,7 +128,7 @@ export const MATCHING_PAGE_DOCS: Record<string, PageDoc> = {
           'Giữ **30 job điểm cao nhất**.',
           '**Một công ty tối đa 3 job**, và hai job cùng công ty cách nhau ít nhất **6 vị trí** — nên dải 6 thẻ không bao giờ có hai job cùng công ty. Luật này áp ở onboarding, trang cá nhân và trang chi tiết job; **popup sau khi nộp đơn không áp**.',
           '**Ở những màn có xáo trộn, job đúng job role ứng viên khai luôn đứng trước** job chỉ cùng job category — dù job kia hơn điểm lương hay địa điểm. Xáo trộn chỉ diễn ra **bên trong từng nấc** ấy. Đây là phép sắp xếp, không loại job nào.',
-          '**Thứ tự ổn định trong ngày.** Thứ tự được gieo theo ứng viên + ngày + màn hình, nên ba màn hình không bao giờ ra cùng một bộ thẻ, tải lại trang không đổi, và sang hôm sau mới đảo bộ khác.',
+          '**Thứ tự ổn định trong ngày.** Thứ tự được gieo theo ứng viên + ngày + màn hình, nên ba màn hình không bao giờ ra cùng một bộ thẻ, tải lại trang không đổi, và sang hôm sau mới đảo bộ khác. Danh sách thì vẫn tính lại mỗi lần mở trang — chỉ **thứ tự** là gieo cố định, không phải nội dung.',
         ],
       },
 
