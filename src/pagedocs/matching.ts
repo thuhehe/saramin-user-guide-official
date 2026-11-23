@@ -126,7 +126,7 @@ export const MATCHING_PAGE_DOCS: Record<string, PageDoc> = {
         kind: 'list',
         items: [
           'Giữ **30 job điểm cao nhất**.',
-          '**Một công ty tối đa 3 job**, và hai job cùng công ty cách nhau ít nhất **6 vị trí** — nên dải 6 thẻ không bao giờ có hai job cùng công ty. Luật này áp ở onboarding, trang cá nhân và trang chi tiết job; **popup sau khi nộp đơn không áp**.',
+          '**Một công ty tối đa 3 job**, và hai job cùng công ty cách nhau ít nhất **6 vị trí** — nên dải 6 thẻ gần như không bao giờ có hai job cùng công ty. Chỉ khi không còn công ty nào khác để lấp, hệ thống mới chấp nhận lặp: bỏ trống một ô sẽ đẩy lùi mọi thẻ phía sau. Luật này áp ở onboarding, trang cá nhân và trang chi tiết job; **popup sau khi nộp đơn không áp**.',
           '**Ở những màn có xáo trộn, job đúng job role ứng viên khai luôn đứng trước** job chỉ cùng job category — dù job kia hơn điểm lương hay địa điểm. Xáo trộn chỉ diễn ra **bên trong từng nấc** ấy. Đây là phép sắp xếp, không loại job nào.',
           '**Thứ tự ổn định trong ngày.** Thứ tự được gieo theo ứng viên + ngày + màn hình, nên ba màn hình không bao giờ ra cùng một bộ thẻ, tải lại trang không đổi, và sang hôm sau mới đảo bộ khác. Danh sách thì vẫn tính lại mỗi lần mở trang — chỉ **thứ tự** là gieo cố định, không phải nội dung.',
         ],
