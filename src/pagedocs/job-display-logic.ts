@@ -768,9 +768,11 @@ export const JOB_DISPLAY_PAGE_DOCS: Record<string, PageDoc> = {
  *     They date the page and sales does not sell by them.
  *   - That the strip asks the search for 8 cards in today's build while the
  *     agreed rule is 20 across 5 slides. A build gap belongs in the ticket.
- *   - The premium band on the search page ("The choice that sets you apart",
- *     12 postings after the third result): it is not a registry placement, and
- *     it has no page in this group yet.
+ *   - A page of its own for the premium band on the search page ("The choice
+ *     that sets you apart", 12 postings after the third result). It is BECOMING
+ *     a registry placement, so the old reason for leaving it out is gone, and
+ *     its two company/rotation rules are now rows in sections 4 and 5. The
+ *     per-area page still has to be written.
  * ──────────────────────────────────────────────────────────────────────────── */
 
 export const JOB_DISPLAY_MODULE_DOCS: Record<string, ModuleDoc> = {
@@ -860,6 +862,7 @@ export const JOB_DISPLAY_MODULE_DOCS: Record<string, ModuleDoc> = {
           ['**8 dải trang chủ · Hàn Quốc · nước ngoài**', '**Không có trần.** Tin của một công ty được **rải đều cả hàng**, hai tin cùng công ty không đứng cạnh nhau — nhưng là **cố gắng tối đa**', 'Khi một công ty nắm **hơn nửa** số tin của dải thì không còn cách xếp nào tránh được, và dải chấp nhận hai thẻ đứng cạnh nhau'],
           ['**Trending jobs · Don’t miss these jobs** — các trang danh sách việc làm', 'Hàng chờ đã **rải tin cùng công ty cách nhau 10 chỗ** — nên mỗi lượt công ty đó nhiều nhất **10% số thẻ**, làm tròn xuống và ít nhất 1 thẻ (30 thẻ → 3 thẻ, 40 thẻ → 4 thẻ), và không hai thẻ nào của họ đứng cạnh nhau', 'Dải **hiện ít thẻ hơn**. Trần là luật cứng, không nới ra để lấp cho đầy'],
           ['**Gợi ý nhanh dưới thanh tìm kiếm** và dải **Công ty hàng đầu**', 'Cũng **10% số thẻ** — làm tròn xuống, ít nhất 1 thẻ — **và** hai thẻ đứng cạnh nhau không cùng một công ty khi còn công ty khác để xếp', 'Hết công ty khác thì mới chấp nhận đứng cạnh nhau'],
+          ['**Dải Premium** — giữa trang kết quả tìm kiếm', 'Không có trần. Tin của một công ty được **rải đều cả vòng**, nên trong 3 thẻ đang hiện hiếm khi có 2 thẻ cùng công ty', 'Công ty nắm **quá nửa** số tin của dải thì không cách xếp nào tránh được — dải **hiện đúng như vậy**, không bỏ bớt tin và không lặp tin của công ty khác cho đẹp'],
           ['**Danh sách kết quả tìm kiếm**, sắp xếp *Mới nhất*', 'Không có trần. Xếp **theo vòng**: tin mới nhất trong ngày của **mỗi** công ty trước, hết một lượt mới tới tin thứ hai của từng công ty', 'Không cần — cách xếp này tự cân'],
           ['**Việc làm gợi ý theo hồ sơ** *(không bán)*', 'Nhiều nhất **3 tin một công ty**, và hai tin cùng công ty cách nhau **ít nhất 6 vị trí**', 'Hết công ty khác thì vẫn lấp cho đủ thẻ'],
         ],
@@ -902,6 +905,7 @@ export const JOB_DISPLAY_MODULE_DOCS: Record<string, ModuleDoc> = {
           ['**Top search**', 'Có — **5 phút**', 'Hàng tịnh tiến **4 tin**: slide 2 lên slide 1, 4 tin kế tiếp vào slide cuối'],
           ['**Banner**', 'Có — theo nhịp đặt trên từng ô', 'Dịch **1 vị trí**: banner thứ hai lên đầu'],
           ['**Trending jobs · Don’t miss these jobs**', 'Có — **5 phút**', 'Đổi **cả cụm thẻ** sang lượt tiếp theo, và **xáo lại thứ tự** bên trong lượt; hết vòng thì xếp lại hàng từ bể tin **tại thời điểm đó**'],
+          ['**Dải Premium**', 'Có — **mỗi lượt tải trang**', 'Vòng tịnh tiến **3 tin**, đúng bằng số thẻ đang hiện. Sau **số tin ÷ 3** lượt là mọi tin trong vòng đã vào 3 thẻ đầu **đúng một lần**'],
           ['**Danh sách kết quả tìm kiếm**', '**Không**', 'Thứ tự chỉ đổi khi có tin được làm mới, hoặc có tin mới mua ô'],
           ['**Việc làm gợi ý theo hồ sơ** *(không bán)*', 'Đổi **mỗi ngày**', 'Mỗi ứng viên một thứ tự riêng, giữ nguyên trong ngày'],
         ],
@@ -926,6 +930,7 @@ export const JOB_DISPLAY_MODULE_DOCS: Record<string, ModuleDoc> = {
         rows: [
           ['**8 dải trang chủ · Hàn Quốc · nước ngoài**', 'Kho tin đã mua đúng ô đó', 'Không', 'Rải đều theo công ty, xếp lại mỗi vòng — **làm mới không đổi được thứ tự**', 'Có'],
           ['**Top search**', 'Ô tìm kiếm, lọc trong các tin đã mua ô', '**Có**', 'Làm mới gần nhất', 'Có'],
+          ['**Dải Premium**', 'Ô tìm kiếm, lọc trong các tin đã mua ô', '**Có**', 'Rải đều theo công ty — **không** theo độ mới', 'Có'],
           ['**Trending jobs · Don’t miss these jobs**', 'Ô tìm kiếm của trang danh sách việc làm', '**Có** — theo trang đang mở', 'Hàng gom theo nhóm của trang, trong nhóm theo lần làm mới, rồi **rải tin cùng công ty cách nhau 10 chỗ** — nên mỗi lượt 30 thẻ không công ty nào quá 3 thẻ. Lên màn hình thì **xáo ngẫu nhiên** trong lượt. **Bậc tin không xếp thứ tự**', 'Có'],
           ['**Danh sách kết quả tìm kiếm**', 'Toàn bộ tin đang mở, lọc theo từ khoá và bộ lọc', '**Có**', 'Mặc định *Đề xuất*: **bậc tin trước**, rồi độ khớp từ khoá, rồi làm mới. Chọn *Mới nhất* thì xếp theo vòng công ty', 'Không'],
           ['**Banner · popup**', 'Đơn đặt chỗ đã duyệt', 'Không', 'Theo nhịp của ô', 'Có'],
