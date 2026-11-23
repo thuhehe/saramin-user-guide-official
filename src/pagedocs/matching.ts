@@ -55,6 +55,14 @@ export const MATCHING_PAGE_DOCS: Record<string, PageDoc> = {
         text: 'Bước này đọc **Work preference** — phần ứng viên tự khai lúc đăng ký hoặc sửa trong hồ sơ — **cộng thêm** những gì hệ thống học được từ hành vi 90 ngày gần nhất. Không đọc tỉnh ứng viên đang sống.',
       },
       {
+        kind: 'p',
+        text: 'Trước khi xét bất cứ điều gì của ứng viên, hệ thống **chỉ lấy job đang tuyển**: trạng thái *Open*, đã tới ngày đăng, chưa hết hạn, đang được bật hiển thị, và công ty đăng tin còn hoạt động.',
+      },
+      {
+        kind: 'p',
+        text: 'Và **job ứng viên đã nộp đơn thì không bao giờ xuất hiện lại** — kể cả khi đơn bị từ chối hoặc đã thu hồi. Job họ đã bấm bỏ qua cũng vậy. Hai điều kiện này nằm ngay trong câu truy vấn lấy job, nên job bị loại **trước** khi chấm điểm, không phải lọc lại sau.',
+      },
+      {
         kind: 'table',
         cols: ['Hệ thống đọc gì', 'Lọc thế nào'],
         rows: [
