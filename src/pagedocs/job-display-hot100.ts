@@ -53,6 +53,18 @@
  *     a sales argument, and Thu removed the sales section from the board
  *     strips page on 22/11 — "để sales tự nói".
  *
+ * THE COMPANY CAP IS HALF A RULE HERE, and the missing half had to be said
+ * out loud. The Jobs-page sections carry one rule in two parts: a company
+ * holds at most 10% of the cards AND two of its cards are never adjacent.
+ * HOT 100 keeps the cap (10 of 100) and DROPS the spacing — the requirement
+ * removes it deliberately and adds, in as many words, "một công ty có thể
+ * chiếm nhiều vị trí liền kề, tối đa 10 trong 100. Đây là kết quả đúng,
+ * không phải lỗi." The page said the cap and was silent on adjacency, which
+ * is the worst of the three options: a tester who read the Trending page
+ * first carries its guarantee over and files a bug against correct
+ * behaviour. Both halves are now on the page. Thu asked for this on
+ * 2026-11-23 ("có rule 10% hiển thị của các job cùng 1 cty chưa?").
+ *
  * THE AMPLITUDE IS ~11 BẬC, NOT 10. It is 99w / (1 − w), not w × 100: raising
  * the interest share also shrinks what one tier place is worth, so the two
  * move together. At 0,1 that is 9,9 / 0,9 ≈ 11. The artifact and both other
@@ -99,7 +111,8 @@ export const HOT100_PAGE_DOCS: Record<string, PageDoc> = {
         items: [
           'Tin đang mở và đang hiển thị trên site.',
           'Sắp toàn bộ tin hợp lệ theo gói: gói cao đứng trước. Trong cùng một gói thì tin được làm mới gần đây hơn đứng trước.',
-          'Mỗi công ty nhiều nhất 10 tin. Tin thứ 11 trở đi nhường chỗ cho công ty khác.',
+          'Mỗi công ty nhiều nhất 10 tin trên bảng — tức 10% của 100 dòng. Tin thứ 11 trở đi nhường chỗ cho công ty khác.',
+          'Trong giới hạn đó, tin của cùng một công ty **được phép đứng liền kề nhau**. Bảng này không giãn tin cùng công ty ra xa nhau, khác với các section trên ba trang Jobs.',
           'Lấy 101 tin đầu. Một tin trong số đó được nhấc ra làm dòng Gợi ý, nên bảng đánh số vẫn đủ 100 dòng.',
           'Số thứ tự trong danh sách này là **hạng theo gói** của tin — dòng đầu là 1, dòng thứ hai là 2. Đây chỉ là số dòng, không phải một phép tính.',
           'Tin đăng trong ngày chưa lên bảng ngay. Tin vào bảng từ lần chốt 0h kế tiếp.',
