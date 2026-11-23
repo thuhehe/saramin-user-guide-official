@@ -467,7 +467,7 @@ export const JOB_DISPLAY_PAGE_DOCS: Record<string, PageDoc> = {
           ['Số thẻ', 'Nhiều nhất 20 — 5 slide × 4 thẻ. Mỗi slide đủ 4 thẻ, hàng ít job hơn thì ít slide hơn'],
           ['Lọc theo', 'Từ khoá và bộ lọc trên thanh tìm kiếm'],
           ['Thứ tự', 'Job làm mới gần nhất đứng trước'],
-          ['Một công ty trong 1 slide', 'Nhiều nhất 1 thẻ — trừ khi hàng chờ không đủ công ty'],
+          ['Một công ty trong 1 slide', 'Nhiều nhất 1 thẻ — là mức 10% của 4 thẻ đang thấy. Hết công ty khác để xếp thì bỏ luật'],
           ['Xoay vòng', '5 phút tịnh tiến 4 job'],
           ['Tiêu đề', 'Có từ khoá: *Việc {từ khoá} dành cho bạn*. Không gõ từ khoá: *Việc làm dành cho bạn*'],
           ['Nút Xem thêm', 'Không có'],
@@ -493,18 +493,18 @@ export const JOB_DISPLAY_PAGE_DOCS: Record<string, PageDoc> = {
         items: [
           'Mọi job vào được dải xếp thành một hàng, job làm mới gần nhất đứng trước — không phải ngày đăng.',
           'Menu sắp xếp của ứng viên (VD *Lương cao nhất*) không đổi thứ tự dải. Nó chỉ đổi danh sách kết quả bên dưới.',
-          'Luật: trong một slide 4 thẻ, mỗi công ty nhiều nhất **1 thẻ**; trên cả 20 thẻ nhiều nhất **5 thẻ**.',
+          'Luật 10%: job của cùng một công ty chỉ được chiếm **10% số thẻ đang thấy cùng lúc** — làm tròn xuống, thấp nhất 1 thẻ. Dải này thấy cùng lúc 4 thẻ (1 slide), 10% là 0,4, làm tròn xuống còn 0 nên lấy mức thấp nhất: **1 thẻ một công ty trong 1 slide**, tức nhiều nhất 5 thẻ trên cả 20.',
+          'Hai thẻ của cùng một công ty cũng không được đứng cạnh nhau. Ở dải này mỗi slide đã chỉ 1 thẻ nên điều đó tự thoả.',
         ],
       },
       {
         kind: 'table',
         heading: 'Khi hàng chờ không đủ công ty',
-        note: 'Luật một công ty một thẻ là **cố gắng tối đa**, không phải điều kiện bắt buộc. Hàng chờ mỏng tới đâu thì dải nhượng tới đó, theo thứ tự trên xuống. Dải **không bỏ job** nào ra và **không để slide thiếu thẻ**.',
+        note: 'Luật 10% là **cố gắng tối đa**, không phải điều kiện bắt buộc. Hết công ty khác để xếp thì dải **bỏ luật và hiện hết** — không bỏ job nào ra, không để slide thiếu thẻ, và cũng không lặp lại một thẻ đã hiện để né.',
         cols: ['Hàng chờ có gì', 'Dải xếp thế nào'],
         rows: [
-          ['Từ 4 công ty khác nhau trở lên', 'Mỗi slide 4 công ty khác nhau, mỗi công ty 1 thẻ'],
-          ['Còn công ty khác, nhưng không đủ để kê xen vào', 'Vòng lại lấy job đã hiện cho đủ 4 thẻ, chứ không cho một công ty 2 thẻ trong cùng một slide'],
-          ['Gần như chỉ còn một công ty — VD 4 job của công ty A, 1 job của công ty B', 'Chấp nhận job của A **đứng cạnh nhau** và chiếm **nhiều hơn 1 thẻ trong 4**'],
+          ['Còn đủ công ty khác để xếp', 'Mỗi slide 4 công ty khác nhau, mỗi công ty 1 thẻ'],
+          ['Không đủ công ty khác — VD 4 job của công ty A, 1 job của công ty B', 'Bỏ luật, hiện hết: chấp nhận job của A **đứng cạnh nhau** và chiếm **nhiều hơn 1 thẻ trong 4**'],
         ],
       },
 
