@@ -52,15 +52,16 @@ export const MATCHING_PAGE_DOCS: Record<string, PageDoc> = {
       { kind: 'h', text: '1. Bước 1 — Chọn ra nhóm job để xét' },
       {
         kind: 'p',
-        text: 'Bước này chỉ đọc **Work preference** — phần ứng viên tự khai lúc đăng ký hoặc sửa trong hồ sơ. Không đọc CV, không đọc tỉnh họ đang sống.',
+        text: 'Bước này đọc **Work preference** — phần ứng viên tự khai lúc đăng ký hoặc sửa trong hồ sơ — **cộng thêm** những gì hệ thống học được từ hành vi 90 ngày gần nhất. Không đọc tỉnh ứng viên đang sống.',
       },
       {
         kind: 'table',
-        cols: ['Ứng viên khai gì', 'Hệ thống lọc thế nào'],
+        cols: ['Hệ thống đọc gì', 'Lọc thế nào'],
         rows: [
           ['**Vị trí mong muốn** — tối đa 3 **job role**', 'Lấy **job category** của từng job role đó, rồi giữ mọi job thuộc các job category ấy'],
           ['**Địa điểm mong muốn**', 'Giữ job ở các tỉnh đó. Job **remote** luôn được giữ, dù ở tỉnh nào'],
-          ['**Không khai gì**', '**Không lọc gì.** Lấy toàn bộ job đang tuyển'],
+          ['**Hành vi 90 ngày** — nộp đơn 1 job, lưu 1 job, hoặc mở xem 3 job khác nhau', 'Cộng job category và tỉnh của những job đó vào tập lọc ở trên. Tối đa 3 job role · 3 job category · 3 tỉnh hay gặp nhất'],
+          ['**Không khai gì, chưa có hành vi gì**', '**Không lọc gì.** Lấy toàn bộ job đang tuyển'],
         ],
       },
       {
@@ -69,9 +70,10 @@ export const MATCHING_PAGE_DOCS: Record<string, PageDoc> = {
       },
       {
         kind: 'list',
-        heading: 'Hai luật còn lại của bước lọc',
+        heading: 'Ba luật còn lại của bước lọc',
         items: [
-          '**Lọc xong còn dưới 6 job thì bỏ điều kiện tỉnh, chạy lại.** Hệ thống **không bao giờ** bỏ điều kiện job category — nên ứng viên ở một nghề rất hẹp có thể thấy ít hơn 6 job. Đó là chủ ý: vài job đúng nghề vẫn hơn một màn đầy job nghề khác.',
+          '**Lọc xong còn dưới 6 job thì nới theo hai bước.** Bỏ điều kiện tỉnh, chạy lại; vẫn dưới 6 thì bỏ cả điều kiện job category. Riêng **trang chi tiết job không bao giờ nới** — dưới 6 job thì ẩn hẳn phần gợi ý.',
+          '**Job trùng nhau chỉ tính một.** Cùng công ty, cùng tiêu đề, cùng tỉnh là một tin đăng hai lần — giữ job mới đăng nhất.',
           '**Còn hơn 500 job thì chỉ 500 job được chấm.** Ưu tiên job trùng job role ứng viên quan tâm, sau đó job mới đăng.',
         ],
       },
@@ -80,28 +82,29 @@ export const MATCHING_PAGE_DOCS: Record<string, PageDoc> = {
       { kind: 'h', text: '2. Bước 2 — Chấm điểm, thang 100' },
       {
         kind: 'p',
-        text: 'Mỗi job còn lại được so với ứng viên trên **7 tiêu chí**. Càng khớp càng nhiều điểm. **Không có điểm sàn** — điểm chỉ quyết định thứ tự, không loại job nào.',
+        text: 'Mỗi job còn lại được so với ứng viên trên **7 tiêu chí**. Càng khớp càng nhiều điểm. **Không có điểm sàn** — điểm chỉ quyết định thứ tự, không loại job nào. Thiếu dữ liệu để so thì tiêu chí đó bằng **0**, và thang điểm **không** chia lại.',
       },
       {
         kind: 'table',
-        cols: ['Tiêu chí', 'Điểm', 'Được tối đa khi', 'Được một phần khi'],
+        cols: ['Tiêu chí', 'Điểm', 'Được tối đa khi', 'Các nấc thấp hơn'],
         rows: [
-          ['**Job role & job category**', '**42**', 'Job đúng **job role** ứng viên khai', 'Cùng **job category**, khác job role → **17**'],
-          ['**Địa điểm & job type**', '**20**', 'Đúng tỉnh **và** đúng job type. Job **remote** luôn được 20', 'Đúng tỉnh, khác job type → **14**'],
-          ['**Kinh nghiệm**', '**14**', 'Số năm của ứng viên nằm trong dải job yêu cầu, hoặc job ghi *không yêu cầu*', 'Thừa ≤ 2 năm → **10** · thiếu ≤ 1 năm → **7**'],
-          ['**Lương**', '**12**', 'Lương mong muốn nằm trong dải job trả, hoặc job trả cao hơn', 'Đòi hơn ≤ 10 % → **8** · một bên ghi *Thỏa thuận* → **6**'],
-          ['**Industry**', '**5**', 'Trùng industry ứng viên khai', 'Cùng ngành cha → **3**'],
-          ['**Kỹ năng**', '**4**', 'CV có đủ kỹ năng job yêu cầu', 'Khớp một phần → chia theo tỷ lệ'],
-          ['**Học vấn**', '**3**', 'Đạt hoặc hơn yêu cầu', 'Thấp hơn 1 bậc → **1**'],
+          ['**Job role & job category**', '**42**', 'Job đúng **job role** ứng viên khai', 'Cùng nhóm nghề → **30** · cùng **job category** → **17** · khác → **0**'],
+          ['**Địa điểm & job type**', '**20**', 'Đúng tỉnh **và** đúng job type. Job **remote** luôn được 20', 'Đúng tỉnh, khác job type → **14** · tỉnh lân cận → **10** · khác → **0**'],
+          ['**Kinh nghiệm**', '**14**', 'Số năm của ứng viên nằm trong dải job yêu cầu, hoặc job ghi *không yêu cầu*', 'Thừa ≤ 2 năm → **10** · thiếu ≤ 1 năm → **7** · thừa > 2 năm → **5** · thiếu > 1 năm → **0**'],
+          ['**Lương**', '**12**', 'Lương mong muốn nằm trong dải job trả, hoặc job trả cao hơn', 'Đòi hơn ≤ 10 % → **8** · hơn 10–20 % → **4** · một bên ghi *Thỏa thuận* → **6** · hơn 20 % → **0**'],
+          ['**Industry**', '**5**', 'Trùng industry ứng viên khai', 'Cùng ngành cha → **3** · khác → **0**'],
+          ['**Kỹ năng**', '**4**', 'CV có đủ kỹ năng job yêu cầu', 'Khớp một phần → chia theo tỷ lệ. Kỹ năng **bắt buộc** tính đôi'],
+          ['**Học vấn**', '**3**', 'Đạt yêu cầu, hoặc job ghi *không yêu cầu*', 'Thấp hơn 1 bậc → **1** · còn lại → **0**'],
           ['**Tổng**', '**100**', '', ''],
         ],
       },
       {
         kind: 'list',
-        heading: 'Hai luật cần nhớ',
+        heading: 'Ba luật cần nhớ',
         items: [
-          '**Tự khai ăn điểm đầy đủ, hệ thống tự đoán chỉ ăn 80 %.** Ngoài Work preference, hệ thống còn học từ hành vi 90 ngày gần nhất: job đã nộp, đã lưu, hoặc xem từ 3 job trở lên cùng một job role. Job khớp job role ứng viên **tự khai** được **42**; job khớp job role hệ thống **đoán ra** được **34**.',
-          '**Hai nguồn dùng cùng lúc, không thay nhau.** Không phải cứ không khai mới lấy hành vi — khai rồi thì hành vi vẫn được cộng thêm vào.',
+          '**Tự khai ăn điểm đầy đủ, hệ thống tự đoán chỉ ăn 80 %.** Job khớp job role ứng viên **tự khai** được **42**; job khớp job role hệ thống **đoán ra từ hành vi** được **34**. Các nấc khác cũng vậy: 30 → 24, 20 → 16, 17 → 14.',
+          '**Hai nguồn dùng cùng lúc, không thay nhau.** Không phải cứ không khai mới lấy hành vi — khai rồi thì hành vi vẫn được cộng thêm vào. Riêng **industry** thì không có nhánh đoán: chỉ lấy đúng ô *Ngành mong muốn*.',
+          '**Ứng viên có nhiều CV thì chấm từng CV**, mỗi job giữ điểm cao nhất trong các CV. Không gộp CV lại.',
         ],
       },
 
@@ -111,9 +114,9 @@ export const MATCHING_PAGE_DOCS: Record<string, PageDoc> = {
         kind: 'list',
         items: [
           'Giữ **30 job điểm cao nhất**.',
-          '**Một công ty tối đa 3 job** trong danh sách 30. Hai job cùng công ty cũng không đứng sát nhau — nên dải 6 thẻ không bao giờ có hai job cùng công ty.',
-          '**Job đúng job role ứng viên khai luôn đứng trước** job chỉ cùng job category — dù job kia hơn điểm lương hay địa điểm.',
-          '**Thứ tự ổn định trong ngày.** Tải lại trang không đổi; sang hôm sau mới đảo bộ khác. Thấy đúng 6 thẻ đó cả ngày là đúng thiết kế, không phải lỗi.',
+          '**Một công ty tối đa 3 job**, và hai job cùng công ty cách nhau ít nhất **6 vị trí** — nên dải 6 thẻ không bao giờ có hai job cùng công ty. Luật này áp ở onboarding, trang cá nhân và trang chi tiết job; **popup sau khi nộp đơn không áp**.',
+          '**Ở những màn có xáo trộn, job đúng job role ứng viên khai luôn đứng trước** job chỉ cùng job category — dù job kia hơn điểm lương hay địa điểm. Xáo trộn chỉ diễn ra **bên trong từng nấc** ấy. Đây là phép sắp xếp, không loại job nào.',
+          '**Thứ tự ổn định trong ngày.** Thứ tự được gieo theo ứng viên + ngày + màn hình, nên ba màn hình không bao giờ ra cùng một bộ thẻ, tải lại trang không đổi, và sang hôm sau mới đảo bộ khác.',
         ],
       },
 
@@ -121,14 +124,15 @@ export const MATCHING_PAGE_DOCS: Record<string, PageDoc> = {
       { kind: 'h', text: '4. Gợi ý hiện ra ở đâu' },
       {
         kind: 'table',
-        note: 'Cùng một phép tính, chỉ khác số thẻ và cách sắp. Dải chỉ có 6 thẻ thì mỗi công ty chỉ còn 1 job.',
+        note: 'Cùng một phép tính, chỉ khác số thẻ và cách sắp. Ứng viên **không bao giờ** thấy điểm, % phù hợp hay lý do khớp trên thẻ.',
         cols: ['Nơi hiển thị', 'Ai thấy', 'Số thẻ', 'Thứ tự'],
         rows: [
-          ['**Onboarding** — *những việc phù hợp nhất*', 'Ứng viên vừa xong wizard', 'tối đa 30, chia 6 thẻ một trang', 'Đúng thứ tự điểm'],
-          ['**Trang cá nhân** — *Việc làm phù hợp với bạn*', 'Đã đăng nhập', '6', 'Xáo trộn, nhưng job đúng job role vẫn lên trước'],
-          ['**Chi tiết job** — *Gợi ý việc làm cho bạn*', 'Đã đăng nhập', '6', 'Như trên'],
-          ['**Popup sau khi nộp đơn**', 'Người vừa nộp đơn', 'tối đa 30', 'Đúng thứ tự điểm'],
-          ['**Email gợi ý hằng tuần** — thứ Hai 07:00', 'Ứng viên chưa tắt công tắc nhận mail', '6', 'Đúng thứ tự điểm'],
+          ['**Onboarding** — *những việc phù hợp nhất*', 'Ứng viên vừa xong wizard', 'tối đa 30, mỗi trang 6 thẻ — nhiều nhất 5 trang', 'Đúng thứ tự điểm'],
+          ['**Trang cá nhân** — *Việc làm phù hợp với bạn*', 'Đã đăng nhập', '6, carousel hiện 3 thẻ một lúc', 'Xáo trộn theo ngày, nhưng job đúng job role vẫn lên trước'],
+          ['**Chi tiết job** — *Gợi ý việc làm cho bạn*', 'Đã đăng nhập', '6', 'Như trên, và bỏ hết job đang hiện ở phần *Similar jobs* ngay trên'],
+          ['**Chi tiết job** — *Có thể bạn quan tâm*', 'Chưa đăng nhập', '6', 'Lấy tiếp dòng 7–12 của *Similar jobs* — không chấm điểm theo người, vì hệ thống chưa biết họ là ai'],
+          ['**Popup sau khi nộp đơn**', 'Người vừa nộp đơn', 'tối đa 30', 'Đúng thứ tự điểm. Không giới hạn số job một công ty — chỉ không để hai job cùng công ty đứng liền nhau'],
+          ['**Email gợi ý hằng tuần**', 'Ứng viên chưa tắt công tắc nhận mail', '6', 'Đúng thứ tự điểm, và không gửi lại job đã nằm trong email trước'],
         ],
       },
 
