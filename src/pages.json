@@ -217,12 +217,12 @@
  {
   "group": "Matching",
   "key": "onboarding-role-strip",
-  "label": "Dải “Việc làm cho {vị trí}”",
+  "label": "Dải “Việc làm cho {các vị trí}”",
   "path": "/welcome",
   "perm": "",
   "flag": "",
   "site": "Jobseeker site",
-  "what": "Dải **thứ hai** ở màn kết quả onboarding: một lượt **tìm kiếm thuần** theo đúng vị trí đã chọn — không chấm điểm, không xáo trộn; dưới 3 tin thì **ẩn cả khối**.",
+  "what": "Dải **thứ hai** ở màn kết quả onboarding: một lượt **tìm kiếm thuần** theo đúng những vị trí **và** những nơi làm việc đã chọn — không chấm điểm, không xáo trộn; dưới 3 job thì **ẩn cả khối**.",
   "sub": [
    "/welcome"
   ]
