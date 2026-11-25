@@ -1095,6 +1095,13 @@ export const PRODUCT_SERVICE_PAGE_DOCS: Record<string, PageDoc> = {
     ],
     blocks: [
       {
+        kind: 'shot',
+        src: '/shots/system/manual-services.jpg',
+        where: 'Admin',
+        caption: 'Danh sách **Manual services**: mỗi dòng là một công ty × một dịch vụ × một PO. Cột **Quota** là số lượt đã giao trên tổng lượt, cột **Left** là số lượt còn lại.',
+        note: 'Ảnh môi trường staging ngày 25/11/2026.',
+      },
+      {
         kind: 'table',
         heading: 'Trạng thái — tính ra, không bao giờ chọn tay',
         note: 'svn-be tính trạng thái **mỗi lần tải trang**, từ số đã giao, tổng, và hạn. Rê chuột lên nhãn để đọc giải thích.',

@@ -55,6 +55,13 @@ export const NOTIF_SYSTEM_PAGE_DOCS: Record<string, PageDoc> = {
       'Quyền: xem `notification_workflow:read`; tạo / sửa / xoá là `create` / `update` / `delete`. Seed chỉ cấp cho **HQ Admin** — vai trò khác phải được tick ở *Roles & permissions*.',
     ],
     blocks: [
+      {
+        kind: 'shot',
+        src: '/shots/notif/rules.jpg',
+        where: 'Admin',
+        caption: 'Màn hình này trên console tên là **Automation rules**. Mỗi quy tắc nối một **sự kiện** với **kênh** và **nội dung**; cột **Active** cho biết quy tắc đang bật hay tắt.',
+        note: 'Ảnh môi trường staging ngày 25/11/2026. Trạng thái bật / tắt trong ảnh là của môi trường staging.',
+      },
       { kind: 'p', text: `Đối chiếu với build: ${CHECKED}.` },
       { kind: 'h', text: '§1 · Danh mục sự kiện — cái gì gửi gì, cho ai' },
       {
@@ -141,6 +148,13 @@ export const NOTIF_SYSTEM_PAGE_DOCS: Record<string, PageDoc> = {
       'Nội dung đi bằng **tiếng Việt**, kể cả khi đã soạn EN/KO (D-NOTI-13).',
     ],
     blocks: [
+      {
+        kind: 'shot',
+        src: '/shots/notif/send.jpg',
+        where: 'Admin',
+        caption: 'Màn hình này trên console tên là **Send manually**. Kênh chỉ có **Email**; ba kiểu đối tượng ở **Target**; công tắc **Force send** bỏ qua đồng ý nhận tin; **Message source** chọn gõ thẳng hay dùng mẫu.',
+        note: 'Ảnh môi trường staging ngày 25/11/2026.',
+      },
       { kind: 'p', text: `Đối chiếu với build: ${CHECKED}.` },
       {
         kind: 'table',
@@ -202,6 +216,13 @@ export const NOTIF_SYSTEM_PAGE_DOCS: Record<string, PageDoc> = {
       'Bảng chứa **địa chỉ và nội dung thật của người nhận** (dữ liệu cá nhân) và **chưa có hạn xoá** (D-NOTI-9).',
     ],
     blocks: [
+      {
+        kind: 'shot',
+        src: '/shots/notif/history.jpg',
+        where: 'Admin',
+        caption: 'Màn hình này trên console tên là **Delivery history**. Mỗi dòng là một email cho một người; cột **Status** và **Source** (*Rule* = tự động, *Manual* = gửi tay) trong khung đỏ. Nút **Filter** để lọc.',
+        note: 'Ảnh môi trường staging ngày 25/11/2026. Địa chỉ người nhận đã được thay bằng địa chỉ mẫu.',
+      },
       { kind: 'p', text: `Đối chiếu với build: ${CHECKED}.` },
       {
         kind: 'table',
@@ -254,6 +275,13 @@ export const NOTIF_SYSTEM_PAGE_DOCS: Record<string, PageDoc> = {
       'Tạo / sửa / xoá mẫu **không ghi vào Audit log**.',
     ],
     blocks: [
+      {
+        kind: 'shot',
+        src: '/shots/notif/templates.jpg',
+        where: 'Admin',
+        caption: 'Màn hình này trên console tên là **Message templates**. **Name** là tên hiện ở các ô chọn, đổi thoải mái; **Code** là khoá cố định hệ thống dùng.',
+        note: 'Ảnh môi trường staging ngày 25/11/2026.',
+      },
       { kind: 'p', text: `Đối chiếu với build: ${CHECKED}.` },
       {
         kind: 'table',
@@ -327,6 +355,13 @@ export const NOTIF_SYSTEM_PAGE_DOCS: Record<string, PageDoc> = {
       'Quyền: `zalo_template:read` để xem; `zalo_template:write` để lưu, test và Re-authorise. Seed chỉ cấp cho **HQ Admin** — không ai khác thấy mục menu này.',
     ],
     blocks: [
+      {
+        kind: 'shot',
+        src: '/shots/notif/zalo.jpg',
+        where: 'Admin',
+        caption: '**Zalo ZNS templates**: mỗi dòng là một hành động. Trong khung đỏ là **mã mẫu Zalo**, **ánh xạ tham số** và công tắc **bật / tắt**. Khối *Zalo connection* phía trên là kết nối tài khoản Zalo OA.',
+        note: 'Ảnh môi trường staging ngày 25/11/2026. Mã tài khoản Zalo OA đã được ẩn.',
+      },
       { kind: 'p', text: `Đối chiếu với build: ${CHECKED}.` },
       {
         kind: 'warn',
@@ -444,6 +479,13 @@ export const NOTIF_SYSTEM_PAGE_DOCS: Record<string, PageDoc> = {
       'Quyền: `system_settings:read` để xem, `system_settings:update` để lưu — seed chỉ **HQ Admin**.',
     ],
     blocks: [
+      {
+        kind: 'shot',
+        src: '/shots/system/company-information.jpg',
+        where: 'Admin',
+        caption: 'Màn hình này trên console tên là **Issuer identity**. Khối **Letterhead preview** cho xem trước phần đầu báo giá, PO và hoá đơn bằng VI hoặc EN; bên phải là số **Version** — mỗi lần Save tạo một phiên bản mới.',
+        note: 'Ảnh môi trường staging ngày 25/11/2026.',
+      },
       { kind: 'p', text: `Đối chiếu với build: ${CHECKED}.` },
       {
         kind: 'table',
@@ -506,6 +548,13 @@ export const NOTIF_SYSTEM_PAGE_DOCS: Record<string, PageDoc> = {
       'Quyền: xem `membership_programme:read` (seed: HQ Admin, Team leader, VN Sales — sale cần thấy bậc thang mình đang chào); lưu `membership_programme:update` — **chỉ HQ Admin**.',
     ],
     blocks: [
+      {
+        kind: 'shot',
+        src: '/shots/system/membership-tiers.jpg',
+        where: 'Admin',
+        caption: 'Trang **Membership tiers**. Bảng **Tier thresholds**: ô duy nhất sửa được là **From** (ngưỡng doanh thu cộng dồn); *Up to* đọc từ hạng kế tiếp; cột cuối đếm số công ty đang ở hạng đó. Bên dưới là **Benefits by tier** — ghi chú quyền lợi theo từng hạng.',
+        note: 'Ảnh môi trường staging ngày 25/11/2026.',
+      },
       { kind: 'p', text: `Đối chiếu với build: ${CHECKED}; logic theo svn-be \`docs/crm-company/membership-tier.md\`.` },
       {
         kind: 'table',
@@ -1042,6 +1091,13 @@ export const NOTIF_SYSTEM_PAGE_DOCS: Record<string, PageDoc> = {
       'Ô dropdown người thực hiện chỉ có nhân viên — muốn lọc theo người dùng công ty hay ứng viên thì dán id vào **Actor ID** / **Entity ID**.',
     ],
     blocks: [
+      {
+        kind: 'shot',
+        src: '/shots/system/audit-log.jpg',
+        where: 'Admin',
+        caption: '**Audit log**: mỗi dòng là ai (*Actor*), làm gì (*Action*), trên đối tượng nào (*Entity*, *Entity ID*) và lúc nào. Bấm **+** đầu dòng để xem chi tiết.',
+        note: 'Ảnh môi trường staging ngày 25/11/2026.',
+      },
       { kind: 'p', text: `Đối chiếu với build: ${CHECKED}.` },
       {
         kind: 'table',
@@ -1098,6 +1154,13 @@ export const NOTIF_SYSTEM_PAGE_DOCS: Record<string, PageDoc> = {
       'Quyền: `analytics_log:read` — seed chỉ **HQ Admin**.',
     ],
     blocks: [
+      {
+        kind: 'shot',
+        src: '/shots/system/analytics-logs.jpg',
+        where: 'Admin',
+        caption: 'Màn hình này trên console tên là **Search & card logs**. Trên cùng là **kỳ xem**, dưới là **tám thẻ đếm**, rồi hai tab **Search log** và **Card & behaviour log**.',
+        note: 'Ảnh môi trường staging ngày 25/11/2026.',
+      },
       { kind: 'p', text: `Đối chiếu với build: ${CHECKED}.` },
       {
         kind: 'open',
@@ -1127,6 +1190,13 @@ export const NOTIF_SYSTEM_PAGE_DOCS: Record<string, PageDoc> = {
       '**Applications** và **Talent pool** chỉ xuất được với người có phạm vi `all` (danh sách có liên hệ bị paywall — xuất cả hoặc không).',
     ],
     blocks: [
+      {
+        kind: 'shot',
+        src: '/shots/system/export-history.jpg',
+        where: 'Admin',
+        caption: '**Export history**: mỗi dòng là một lần bấm Export — danh sách nào, bộ lọc lúc bấm, trạng thái, lúc xong và lúc hết hạn.',
+        note: 'Ảnh môi trường staging ngày 25/11/2026.',
+      },
       { kind: 'p', text: `Đối chiếu với build: ${CHECKED}; svn-be ADR-0009.` },
       {
         kind: 'table',

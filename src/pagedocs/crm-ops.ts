@@ -434,6 +434,13 @@ export const CRM_OPS_PAGE_DOCS: Record<string, PageDoc> = {
       },
       { kind: 'h', text: '§3 Danh sách và các tab' },
       {
+        kind: 'shot',
+        src: '/shots/crm/call-logs.jpg',
+        where: 'Admin',
+        caption: 'Màn hình **Calls**, tab **All calls**. Bốn tab trên cùng: *Stats by rep* · *All calls* · *Needs assigning* · *Archived*. Cột **Phone** là số của khách — số này dùng để gắn cuộc gọi vào công ty (§2).',
+        note: 'Ảnh môi trường staging ngày 25/11/2026. Số điện thoại đã được thay bằng số mẫu.',
+      },
+      {
         kind: 'table',
         heading: 'Cột của All calls / Needs assigning / Archived',
         note: 'Định dạng thời gian `YYYY-MM-DD HH:mm:ss` và thời lượng `HH:mm:ss` cố ý giống CRM cũ, để đối chiếu từng dòng. Mặc định sắp **mới nhất trước**; bấm tiêu đề cột để server sắp lại.',

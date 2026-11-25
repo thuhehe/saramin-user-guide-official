@@ -352,6 +352,13 @@ export const CONTENT_PAGE_DOCS: Record<string, PageDoc> = {
         text: '§1 Bốn vùng menu',
       },
       {
+        kind: 'shot',
+        src: '/shots/content/site-navigation.jpg',
+        where: 'Admin',
+        caption: '**Site navigation**, tab **Mega menu**. Bốn tab là bốn vùng menu; cột **Points at** là đích của từng mục; ba cờ **Visible · PC · Mobile** bấm là lưu ngay.',
+        note: 'Ảnh môi trường staging ngày 25/11/2026.',
+      },
+      {
         kind: 'table',
         heading: 'Bốn tab = bốn vùng menu trên site jobseeker',
         cols: ['Tab', 'Surface (svn-be)', 'Là phần nào trên site', 'Ô trình bày riêng'],
