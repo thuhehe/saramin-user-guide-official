@@ -265,10 +265,17 @@ export const HOT100_PAGE_DOCS: Record<string, PageDoc> = {
       /* ───────────────────────────────────────────────────────────────── */
       { kind: 'h', text: '8. Bộ lọc và khách chưa đăng nhập' },
       {
+        kind: 'shot',
+        src: '/shots/job-display/hot-100-experience.jpg',
+        where: 'Jobseeker site',
+        caption: 'Khi đã đăng nhập: hai nút **Mới tốt nghiệp · Có kinh nghiệm** nằm giữa bộ lọc nghề và bảng. Luôn có một nút đang bật.',
+        note: 'Ảnh môi trường dev ngày 25/11/2026, đã đăng nhập.',
+      },
+      {
         kind: 'list',
         heading: 'Bộ lọc kinh nghiệm',
         items: [
-          'Hai nút: *Chưa có kinh nghiệm* và *Đã có kinh nghiệm*.',
+          'Hai nút: *Mới tốt nghiệp* và *Có kinh nghiệm*.',
           'Luôn có một nút đang bật, kể cả lúc vừa vào trang. Không có trạng thái “tất cả”, nên người xem không gặp bảng chưa lọc theo kinh nghiệm.',
         ],
       },

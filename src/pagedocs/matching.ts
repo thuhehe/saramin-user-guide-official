@@ -47,6 +47,13 @@ export const MATCHING_PAGE_DOCS: Record<string, PageDoc> = {
         kind: 'p',
         text: 'Hệ thống gợi ý việc làm làm ba việc, theo đúng thứ tự: chọn ra nhóm job để xét, chấm điểm từng job, rồi hiện ra những job điểm cao nhất. Trang này đi qua ba bước đó.',
       },
+      {
+        kind: 'shot',
+        src: '/shots/matching/recommended-profile.jpg',
+        where: 'Jobseeker site',
+        caption: 'Trang cá nhân của ứng viên đã đăng nhập. Khối **Việc làm phù hợp với bạn** trong khung đỏ là một chỗ hiện kết quả của trang này — mục 4 liệt kê đủ các chỗ còn lại.',
+        note: 'Ảnh môi trường dev ngày 25/11/2026. Tên tài khoản thử đã được thay bằng *Nguyễn Văn A*.',
+      },
 
       /* ───────────────────────────────────────────────────────────────── */
       { kind: 'h', text: '1. Bước 1 — Chọn ra nhóm job để xét' },
@@ -146,6 +153,14 @@ export const MATCHING_PAGE_DOCS: Record<string, PageDoc> = {
           ['**Popup sau khi nộp đơn**', 'Người vừa nộp đơn', 'tối đa 30', 'Đúng thứ tự điểm. Không giới hạn số job một công ty — chỉ không để hai job cùng công ty đứng liền nhau'],
           ['**Email gợi ý hằng tuần**', 'Ứng viên chưa tắt công tắc nhận mail', '6', 'Đúng thứ tự điểm, và không gửi lại job đã nằm trong email trước'],
         ],
+      },
+
+      {
+        kind: 'shot',
+        src: '/shots/matching/recommended-job-detail.jpg',
+        where: 'Jobseeker site',
+        caption: 'Cuối trang chi tiết job, khi đã đăng nhập. Khối dưới, tiêu đề **Gợi ý việc làm**, là danh sách theo hồ sơ của người xem — đúng phép tính trang này mô tả. Carousel **Các công việc tương tự** ở trên so job với job, xem trang *Similar jobs*; job nào đã có trong carousel thì không lặp lại ở khối dưới.',
+        note: 'Ảnh môi trường dev ngày 25/11/2026. Dữ liệu thử ít nên khối dưới chỉ còn 2 dòng.',
       },
 
       /* ───────────────────────────────────────────────────────────────── */
