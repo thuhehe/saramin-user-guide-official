@@ -203,7 +203,7 @@ const FLOWS: Flow[] = [
       { what: '**Recall** một đơn đã gửi (Admin / CS)', ok: 'Mọi đơn dùng cùng phiên bản CV → *Rejected · Recall*, ứng viên thấy *Application Withdrawn*; không hoàn tác', page: 'applicants' },
       { what: 'Nhà tuyển dụng kéo thẻ', ok: 'Mỗi tin một Kanban; *Passed / Not This Time* cố định nhưng kéo vào / ra được; ứng viên thấy trạng thái mới ngay', page: 'candidate-management' },
       { what: 'Khoá tài khoản ứng viên', ok: 'Khoá **không** từ chối CV, nhưng **rút** đơn đang xử lý (đơn đã xong ở lại)', page: 'jobseeker-users' },
-      { what: 'Ứng viên **xoá tài khoản** (Phase 1)', ok: 'Đơn **không bị rút** — NTD thấy *Tài khoản đã bị xóa*, không mở được CV (kể cả CV đã unlock); JS 8 + CO 11; dữ liệu huỷ sau 72 giờ', page: 'jobseeker-users' },
+      { what: 'Ứng viên **xoá tài khoản** (Phase 1)', ok: 'Đơn **không bị rút** — NTD vẫn mở được CV (kể cả CV đã unlock) nhưng thông tin cá nhân bị ẩn; JS 8 + CO 11; dữ liệu huỷ sau 72 giờ', page: 'jobseeker-users' },
     ],
     logic: { label: 'Logic chung — Job management', href: '/logic/job-management' },
   },

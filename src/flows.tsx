@@ -1184,17 +1184,17 @@ export function BoostSliderFlow() {
 export function DeleteAccountFlow() {
   const rows: [string, string, Tone][] = [
     ['JS 8 → ứng viên', 'xác nhận đã xoá tài khoản', 'brand'],
-    ['CO 11 → các công ty ứng viên đã ứng tuyển', 'vui lòng xoá hồ sơ ứng viên khỏi hệ thống của công ty', 'brand'],
+    ['CO 11 → công ty đã nhận đơn hoặc đã mở khoá CV', 'hồ sơ chuyển sang ẩn định danh; bản công ty đã tải về không bị ảnh hưởng', 'brand'],
     ['Ngừng mọi email gửi ứng viên', 'ngay tại T0 — không đợi hết 72 giờ', 'plain'],
-    ['Ẩn khỏi Talent Pool', 'NTD không tìm thấy ứng viên nữa', 'plain'],
-    ['Đơn ứng tuyển: “Tài khoản đã bị xóa”', 'đơn KHÔNG bị rút — NTD không xem được CV', 'wait'],
-    ['CV NTD đã unlock: không xem được', 'NTD mất lượt quota đã dùng (đã chấp nhận)', 'stop'],
+    ['Rời tìm kiếm Talent Pool', 'không mở khoá mới được', 'plain'],
+    ['Đơn ứng tuyển ở lại, KHÔNG bị rút', 'NTD mở CV đã nộp, thông tin cá nhân bị ẩn', 'wait'],
+    ['CV NTD đã unlock hoặc đã lưu', 'mở được, thông tin cá nhân bị ẩn · quota không hoàn', 'wait'],
   ]
   const y = (i: number) => 88 + i * 52
   return (
     <Frame label="Xoá tài khoản Phase 1: điều xảy ra tại T0 và sau 72 giờ" w={1200} h={560}>
       <Premise title="XOÁ TÀI KHOẢN — PHASE 1: mọi thứ xảy ra ngay tại T0, trừ việc xoá dữ liệu cá nhân (T0 + 72 giờ)">
-        T0 = lúc ứng viên <tspan fontWeight={700} fill={INK}>xác nhận</tspan> xoá. Từ T0 tài khoản không đăng nhập được và NTD không còn xem được CV ở bất kỳ đâu.
+        T0 = lúc ứng viên <tspan fontWeight={700} fill={INK}>xác nhận</tspan> xoá. Từ T0 tài khoản không đăng nhập được; NTD vẫn mở CV nhưng thông tin cá nhân bị ẩn.
       </Premise>
       <Box x={30} y={110} w={210} h={60} title="Ứng viên chọn" sub="Xóa tài khoản" />
       <Arrow d="M 135 170 L 135 208" />
@@ -1212,8 +1212,8 @@ export function DeleteAccountFlow() {
       <Arrow d="M 530 450 L 598 450" />
       <Box x={600} y={420} w={570} h={60} title="Không gửi email nào" sub="tại thời điểm xoá dữ liệu" tone="side" />
       <rect x={14} y={500} width={1172} height={48} rx={8} fill="#fffbeb" stroke={AMB} strokeWidth={1.2} />
-      <text x={30} y={521} fontSize={11} fill={MUT}><tspan fontWeight={800} fill={AMB}>Luật · </tspan>Đơn ứng tuyển <tspan fontWeight={700} fill={INK}>không bị rút</tspan>: dòng ở lại phía NTD với nhãn “Tài khoản đã bị xóa”, nhưng CV không mở được.</text>
-      <text x={30} y={539} fontSize={11} fill={MUT}>Chỉ gửi đúng hai email, đều tại T0: JS 8 cho ứng viên và CO 11 cho các công ty ứng viên đã ứng tuyển.</text>
+      <text x={30} y={521} fontSize={11} fill={MUT}><tspan fontWeight={800} fill={AMB}>Luật · </tspan>Đơn ứng tuyển <tspan fontWeight={700} fill={INK}>không bị rút</tspan>: dòng ở lại phía NTD, CV vẫn mở được với thông tin cá nhân bị ẩn — kể cả sau 72 giờ.</text>
+      <text x={30} y={539} fontSize={11} fill={MUT}>Chỉ gửi đúng hai email, đều tại T0: JS 8 cho ứng viên và CO 11 cho các công ty đã nhận đơn hoặc đã mở khoá CV.</text>
     </Frame>
   )
 }
@@ -1252,8 +1252,8 @@ export function CvActionsFlow() {
 export function CvHideAfterUnlockFlow() {
   return (
     <Frame label="NTD đã unlock CV, ứng viên tắt hiển thị: NTD còn thấy gì" w={1200} h={350}>
-      <Premise title="ẨN CV SAU KHI NTD ĐÃ UNLOCK — trường hợp duy nhất còn lại (ngoài xoá tài khoản) làm NTD mất CV đã mua">
-        NTD luôn thấy CV <tspan fontWeight={700} fill={INK}>đang được bật</tspan> của ứng viên. Không còn CV nào bật thì không còn gì để thấy.
+      <Premise title="ẨN CV SAU KHI NTD ĐÃ UNLOCK — NTD không mất CV đã mua">
+        NTD thấy CV <tspan fontWeight={700} fill={INK}>đang được bật</tspan> của ứng viên. Không còn CV nào bật thì NTD giữ bản lưu tại lúc ứng viên tắt.
       </Premise>
       <Box x={30} y={130} w={210} h={70} title="NTD đã unlock CV" sub="của ứng viên" tone="money" />
       <Arrow d="M 240 165 L 288 165" />
@@ -1261,11 +1261,11 @@ export function CvHideAfterUnlockFlow() {
       <Arrow d="M 520 165 L 568 165" />
       <Box x={570} y={130} w={220} h={70} title="Còn bật CV nào khác?" tone="wait" />
       <Arrow d="M 790 150 L 868 112" tone="brand" label="Có — bật CV khác" lx={830} ly={116} />
-      <Arrow d="M 790 180 L 868 222" tone="stop" label="Không — tắt hết" lx={830} ly={222} />
+      <Arrow d="M 790 180 L 868 222" label="Không — tắt hết" lx={830} ly={222} />
       <Box x={870} y={80} w={300} h={64} title="NTD thấy CV đang được bật" sub="bản mới nhất" tone="money" />
-      <Box x={870} y={190} w={300} h={80} title="NTD không xem được nữa" sub="UI: CV đã ngừng hiển thị" sub2="NTD mất quota đã unlock (chấp nhận)" tone="stop" />
+      <Box x={870} y={190} w={300} h={80} title="NTD đọc bản lưu lúc tắt" sub="có thông tin cá nhân, không cập nhật thêm" sub2="bật lại CV → thấy bản mới nhất" tone="wait" />
       <rect x={14} y={296} width={1172} height={40} rx={8} fill="#fffbeb" stroke={AMB} strokeWidth={1.2} />
-      <text x={30} y={320} fontSize={11} fill={MUT}><tspan fontWeight={800} fill={AMB}>Luật · </tspan>Không hoàn quota trong cả hai trường hợp mất CV: ứng viên tắt hết CV, hoặc ứng viên xoá tài khoản.</text>
+      <text x={30} y={320} fontSize={11} fill={MUT}><tspan fontWeight={800} fill={AMB}>Luật · </tspan>Không trừ thêm credit trong cả hai trường hợp. NTD chỉ lưu (chưa unlock) thì thấy “Không khả dụng” cho tới khi ứng viên bật lại CV.</text>
     </Frame>
   )
 }
@@ -1293,10 +1293,10 @@ export function DeleteAccountTimeline() {
       ))}
       {msg(170, UV, SYS, 'Xác nhận xoá tài khoản (T0)', 'stop')}
       {msg(220, SYS, UV, 'JS 8 — xoá tài khoản thành công (ngay tại T0)', 'brand', true)}
-      {msg(270, SYS, NTD, 'CO 11 — ứng viên đã xoá tài khoản (T0, chỉ công ty đã nhận đơn)', 'brand', true)}
+      {msg(270, SYS, NTD, 'CO 11 — ứng viên đã xoá tài khoản (T0, công ty đã nhận đơn / đã mở khoá)', 'brand', true)}
       <rect x={330} y={296} width={540} height={56} rx={8} fill="#fffbeb" stroke={AMB} strokeWidth={1.2} />
       <text x={600} y={318} fontSize={11} textAnchor="middle" fill={INK}>Từ T0: không đăng nhập được · ngừng mọi email</text>
-      <text x={600} y={336} fontSize={11} textAnchor="middle" fill={INK}>ẩn khỏi Talent Pool · NTD không xem được CV</text>
+      <text x={600} y={336} fontSize={11} textAnchor="middle" fill={INK}>rời Talent Pool · NTD mở CV, thông tin cá nhân bị ẩn</text>
       <path d={`M ${SYS} 384 L ${SYS + 70} 384 L ${SYS + 70} 414 L ${SYS + 6} 414`} fill="none" stroke="#e11d48" strokeWidth={1.8} markerEnd="url(#pf-s)" />
       <text x={SYS + 82} y={403} fontSize={11} fontWeight={600} fill="#be123c" {...HALO}>T0 + 72 giờ: xoá vĩnh viễn dữ liệu cá nhân</text>
       <rect x={330} y={436} width={540} height={40} rx={8} fill="var(--color-surface)" stroke="var(--color-line)" strokeWidth={1.2} strokeDasharray="5 4" />

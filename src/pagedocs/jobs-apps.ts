@@ -855,18 +855,14 @@ export const JOBS_APPS_PAGE_DOCS: Record<string, PageDoc> = {
       { kind: 'h', text: '§6 · Khoá tài khoản, xoá tài khoản' },
       {
         kind: 'table',
-        note: 'Khoá tài khoản theo build 08/10/2026: hồ sơ **đang chạy** bị rút khỏi bảng của NTD, hồ sơ đã ở cột cuối giữ nguyên. Xoá tài khoản theo **quy tắc Phase 1** (go-live 21/11/2026, **Jobseeker users §5**): **không rút hồ sơ nào**. Phase 1 **không có xoá CV**.',
+        note: 'Khoá tài khoản và xoá tài khoản đều **không rút hồ sơ nào** — hồ sơ ở nguyên cột cũ; hồ sơ đang chờ duyệt thì không được gửi đi (**Jobseeker users §4–§5**). Phase 1 **không có xoá CV**.',
         cols: ['Cách', 'Ai bấm', 'NTD được báo', 'Trên bảng này'],
         rows: [
           ['**Ứng viên tự khoá tài khoản**', 'Ứng viên', 'Có — mỗi hồ sơ đã gửi một thông báo *ngừng sử dụng dữ liệu*', 'Không nhãn riêng'],
           ['**Admin *Deactivate***', 'HQ ở *Jobseeker users*', 'Có, như trên', 'Không nhãn riêng'],
-          ['**Xoá tài khoản** (ứng viên tự xoá, hoặc Admin *Delete*) — Phase 1', 'Ứng viên / HQ', 'Có — email **CO 11** cho các công ty ứng viên đã ứng tuyển, ngay khi xác nhận xoá', 'Tag *Deleted account*; hồ sơ **không bị rút**. Phía NTD dòng hiện *“Tài khoản đã bị xóa”*, **không mở được CV**. Sau 72 giờ dữ liệu cá nhân bị xoá hẳn: tag thay cho tên'],
-          ['**Admin *Reactivate* / *Restore***', 'HQ', '—', '**Không khôi phục** hồ sơ đã bị rút do khoá'],
+          ['**Xoá tài khoản** (ứng viên tự xoá, hoặc Admin *Delete*) — Phase 1', 'Ứng viên / HQ', 'Có — email **CO 11** cho các công ty đã nhận đơn hoặc đã mở khoá CV, ngay khi xác nhận xoá', 'Tag *Deleted account*; hồ sơ **không bị rút**. Phía NTD CV vẫn mở được nhưng **thông tin cá nhân bị ẩn**; NTD không đổi cột được nữa. Sau 72 giờ dữ liệu cá nhân bị xoá hẳn: tag thay cho tên'],
+          ['**Admin *Reactivate* / *Restore***', 'HQ', '—', 'Không có hồ sơ nào cần khôi phục — khoá không rút hồ sơ'],
         ],
-      },
-      {
-        kind: 'open',
-        text: '**Hồ sơ bị rút do khoá tài khoản chưa có trong 9 trạng thái ứng viên thấy.** (Xoá tài khoản ở Phase 1 không rút hồ sơ; Phase 1 không có xoá CV.) *Application Withdrawn* trong tài liệu 14/10 chỉ dành cho hồ sơ bị **Recall**. Cần chốt: các hồ sơ này hiện trạng thái gì, Application Status là gì, và có nhãn riêng trên bảng này không.',
       },
       {
         kind: 'warn',
@@ -1230,7 +1226,7 @@ export const JOBS_APPS_MODULE_DOCS: Record<string, ModuleDoc> = {
           ['**NTD**', 'Hồ sơ chuyển sang **Sent** (CV đạt lúc nộp, hoặc Operator Approve)', 'Email báo có đơn ứng tuyển mới. Hồ sơ Not Sent không gửi email'],
           ['**NTD**', 'Hồ sơ bị thu hồi', '**Email** thông báo; thẻ mang nhãn thu hồi, thông tin CV bị khoá'],
           ['**NTD**', 'Ứng viên bị khoá / tự tạm dừng tài khoản (build 08/10)', 'Email + chuông *ngừng sử dụng dữ liệu* — chỉ công ty đang giữ hồ sơ đã gửi'],
-          ['**NTD**', 'Ứng viên **xoá tài khoản** (Phase 1)', 'Email **CO 11** — các công ty ứng viên đã ứng tuyển, ngay khi xác nhận xoá'],
+          ['**NTD**', 'Ứng viên **xoá tài khoản** (Phase 1)', 'Email **CO 11** — các công ty đã nhận đơn hoặc đã mở khoá CV, ngay khi xác nhận xoá'],
           ['**Ứng viên**', 'Xoá tài khoản (Phase 1)', 'Email **JS 8**; mọi email khác dừng ngay. Không có email lúc dữ liệu bị huỷ (72 giờ)'],
         ],
       },

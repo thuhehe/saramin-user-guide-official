@@ -14,9 +14,9 @@ export const USERS_ORG_PAGE_DOCS: Record<string, PageDoc> = {
       '**Một trạng thái tài khoản quyết định mọi cánh cửa phía ứng viên**: đăng nhập được không, ứng tuyển được không, nhà tuyển dụng có tìm thấy họ không.',
       '**Một mã, một quy tắc kênh.** Mọi bước nhạy cảm — tạo tài khoản, đặt lại mật khẩu, xoá tài khoản — được xác nhận bằng **mã 6 số**. Lúc đăng ký mã **luôn đi qua Zalo tới số điện thoại**; quên mật khẩu và xoá tài khoản thì chọn được email.',
       '**Tài khoản chỉ ra đời khi mã được nhập xong** — không có tài khoản “nửa vời”. Vì vậy **trạng thái đầu tiên một tài khoản từng có là Active**. Server vẫn có 4 giá trị (`ACTIVE` · `INACTIVE` · `DEACTIVATED` · `DELETED`) hiện thành 5 nhãn, nhưng *Chưa xác thực* (`INACTIVE`) giờ **chỉ còn sinh ra từ nút Create của HQ**.',
-      '**Deactivated là KHOÁ CỬA, không phải thùng rác** — hồ sơ còn nguyên, mở lại được. Nhưng ở bản dựng, khoá **có rút các đơn đang xử lý** (khác Notion — xem §4).',
+      '**Deactivated là KHOÁ CỬA, không phải thùng rác** — hồ sơ còn nguyên, mở lại được. Khoá **không rút** đơn ứng tuyển (xem §4).',
       '**Delete là cánh cửa một chiều duy nhất.** Dữ liệu cá nhân bị huỷ **trong vòng 72 giờ**, email đã xác thực **không bao giờ dùng lại được**, và HQ chỉ khôi phục được **trước khi lần huỷ chạy**.',
-      '**Phase 1 (go-live 21/11/2026):** xoá tài khoản **không rút đơn** — NTD thấy dòng *“Tài khoản đã bị xóa”* nhưng không mở được CV, kể cả CV đã unlock; ứng viên **không xoá được CV** (§5).',
+      '**Phase 1:** xoá tài khoản **không rút đơn** — NTD vẫn mở được CV, kể cả CV đã unlock, nhưng **thông tin cá nhân bị ẩn**; ứng viên **không xoá được CV** (§5).',
     ],
     how: [
       'Lọc theo tab trạng thái (**All · Active · Deactivated · Deleted**), tìm theo email hoặc tên; lọc thêm theo **cách đăng nhập** và **khoảng ngày đăng ký**.',
@@ -28,7 +28,7 @@ export const USERS_ORG_PAGE_DOCS: Record<string, PageDoc> = {
     watch: [
       'Một tài khoản **Active mà CV đang ẩn** là trạng thái **bình thường** — công tắc hiển thị CV độc lập hoàn toàn với trạng thái tài khoản.',
       'Lý do nhập khi khoá là **ghi chú nội bộ, ứng viên không bao giờ thấy**.',
-      '**Khoá rút các đơn đang xử lý, và mở lại KHÔNG trả chúng về.** Đừng khoá “thử” một ứng viên đang có đơn.',
+      '**Khoá không rút đơn, nhưng đơn đang chờ duyệt sẽ không được gửi đi** khi tài khoản còn bị khoá. Công ty đã mở khoá CV đọc bản lưu tại lúc khoá.',
       '**Khoá một người KHÔNG từ chối CV của họ.** Muốn gỡ CV khỏi vòng duyệt nữa thì đó là **một quyết định thứ hai, riêng biệt** ở màn hình CV review — hộp thoại khoá chỉ nhắc, nó không tự làm hộ.',
       'Lần huỷ đã chạy thì **không còn gì để khôi phục** — đó là thiết kế, không phải lỗi.',
     ],
@@ -165,7 +165,7 @@ export const USERS_ORG_PAGE_DOCS: Record<string, PageDoc> = {
         rows: [
           ['**Active**', '`ACTIVE`', 'Dùng site bình thường — **trạng thái đầu tiên một tài khoản từng có**', 'Hệ thống, khi đăng ký hoàn tất', '—', 'Bình thường'],
           ['**Chưa xác thực**', '`INACTIVE`', 'Tài khoản chưa có mật khẩu / chưa xác thực', '**Chỉ nút Create của HQ** — đăng ký tự phục vụ không còn tạo ra nó', 'Ứng viên hoàn tất qua link', '—'],
-          ['**Deactivated**', '`DEACTIVATED`', 'Cửa bị khoá. Không đăng nhập được; **hồ sơ còn nguyên**', 'HQ (khoá)', '**Có** — HQ mở lại', 'Đơn đang xử lý **bị rút**, mỗi công ty nhận thông báo rút đơn'],
+          ['**Deactivated**', '`DEACTIVATED`', 'Cửa bị khoá. Không đăng nhập được; **hồ sơ còn nguyên**', 'HQ (khoá)', '**Có** — HQ mở lại', 'Đơn **ở nguyên** cột cũ, công ty không nhận thông báo; công ty đã mở khoá CV đọc bản lưu tại lúc khoá'],
           ['**Withdrawn**', '`DEACTIVATED`', 'Như trên, nhưng do chính ứng viên tạm dừng', 'Chính ứng viên', 'HQ mở lại **khi ứng viên yêu cầu**', 'Như trên'],
           ['**Deleted**', '`DELETED`', 'Kết thúc hẳn. Dữ liệu cá nhân bị huỷ trong 72 giờ', 'Ứng viên (kèm bằng chứng) — hoặc HQ', '**Chỉ HQ, chỉ khi lần huỷ chưa chạy**', 'Phase 1: đơn **không bị rút**, dòng hiện *“Tài khoản đã bị xóa”*, **không mở được CV**; CV đã unlock cũng không xem được (§5)'],
         ],
@@ -181,7 +181,7 @@ export const USERS_ORG_PAGE_DOCS: Record<string, PageDoc> = {
       {
         kind: 'table',
         heading: 'Khoá tài khoản đổi gì và KHÔNG đổi gì',
-        note: 'Hiểu nhầm phổ biến nhất của module này. Khoá trả lời câu hỏi chính: người này còn đăng nhập được không — nhưng ở bản dựng nó **cũng rút các đơn đang chạy**.',
+        note: 'Hiểu nhầm phổ biến nhất của module này. Khoá chỉ trả lời một câu hỏi: người này còn đăng nhập được không. Nó **không rút** đơn và **không từ chối** CV.',
         cols: ['', 'Đổi', 'Không đổi'],
         rows: [
           ['Đăng nhập', 'Bị từ chối; **mọi phiên đang mở kết thúc ngay**', '—'],
@@ -195,16 +195,11 @@ export const USERS_ORG_PAGE_DOCS: Record<string, PageDoc> = {
         ],
       },
       {
-        kind: 'warn',
-        text:
-          '**Notion nói khoá “vô hình với nhà tuyển dụng” và đơn đã nộp “ở nguyên, đúng chặng cũ”.** Bản dựng làm khác: cả HQ khoá lẫn ứng viên tự tạm dừng đều gọi `withdrawActiveApplications` (FR-13) và gửi thông báo rút đơn cho từng công ty (`AdminCandidateService.deactivate`, `CandidateAuthService.deactivateMyAccount`). Mở lại thì **không** khôi phục đơn. Đây là khác biệt lớn nhất giữa Notion và bản dựng ở module này — cần client chốt bên nào đúng.',
-      },
-      {
         kind: 'table',
         heading: 'Ai khoá được, và mở lại thế nào',
         cols: ['Ai', 'Gọi là', 'Cần gì', 'Đảo ngược bằng'],
         rows: [
-          ['HQ', 'Deactivate (khoá)', 'Một lý do — **nội bộ, ứng viên không bao giờ thấy**. Bản dựng **không bắt buộc** nhập', 'HQ **Reactivate** — tài khoản về Active với mọi thứ nó có (trừ các đơn đã bị rút)'],
+          ['HQ', 'Deactivate (khoá)', 'Một lý do — **nội bộ, ứng viên không bao giờ thấy**. Bản dựng **không bắt buộc** nhập', 'HQ **Reactivate** — tài khoản về Active với mọi thứ nó có'],
           ['Chính ứng viên', 'Tạm dừng → nhãn **Withdrawn**', 'Notion: bước xác nhận + đăng nhập lại', 'HQ mở lại khi ứng viên yêu cầu'],
         ],
       },
@@ -225,16 +220,16 @@ export const USERS_ORG_PAGE_DOCS: Record<string, PageDoc> = {
       { kind: 'h', text: '§5 · Xoá tài khoản — quy tắc Phase 1', path: '/ho-tro/xoa-tai-khoan' },
       {
         kind: 'p',
-        text: 'Theo tài liệu *Xóa tài khoản & Xóa CV – Quy tắc áp dụng Phase 1* (cập nhật 10/11/2026, go-live **21/11/2026**). Nguồn quyết định: call 04/11/2026 Saramin VN (chị Huyền, anh Danh) – BurningBros (chị Thu, Nguyên); luồng xoá tài khoản ghi nhận 06/11. Trạng thái: **đã chốt**, còn điểm cần xác nhận ở cuối mục. Phần bước xác thực, lần huỷ 72 giờ và khôi phục giữ theo bản dựng. **Toàn bộ tài liệu Phase 1, kèm sơ đồ: trang Resume management › Delete account & Delete CV.**',
+        text: 'Theo tài liệu *Xóa tài khoản & Xóa CV – Quy tắc áp dụng Phase 1*. Nguồn quyết định: call 04/11/2026 Saramin VN (chị Huyền, anh Danh) – BurningBros (chị Thu, Nguyên); luồng xoá tài khoản ghi nhận 06/11; cách NTD xem CV sau khi xoá cập nhật 10–13/11. Trạng thái: **đã chốt**. Phần bước xác thực, lần huỷ 72 giờ và khôi phục giữ theo bản dựng. **Toàn bộ tài liệu Phase 1, kèm sơ đồ: trang Resume management › Delete account & Delete CV.**',
       },
       {
         kind: 'table',
         heading: 'Tóm tắt nhanh — ứng viên làm được gì ở Phase 1',
         cols: ['Hành động của ứng viên', 'Phase 1 có cho phép?', 'Ảnh hưởng chính'],
         rows: [
-          ['**Xoá tài khoản**', '✅ Có', 'Tài khoản bị vô hiệu hoá ngay; NTD không còn xem được CV (kể cả đơn đã nộp và CV đã unlock); NTD nhận email thông báo; dữ liệu cá nhân bị xoá vĩnh viễn sau 72 giờ'],
+          ['**Xoá tài khoản**', '✅ Có', 'Tài khoản bị vô hiệu hoá ngay; đơn ứng tuyển không bị rút; NTD vẫn mở được CV (đơn đã nộp, CV đã unlock hoặc đã lưu) nhưng thông tin cá nhân bị ẩn; NTD nhận email thông báo; dữ liệu cá nhân bị xoá vĩnh viễn sau 72 giờ'],
           ['**Xoá CV**', '❌ Không', 'Ẩn nút Delete. Ứng viên chỉ **Edit** CV — xem **Create CV**'],
-          ['**Tắt hiển thị CV với NTD**', '✅ Có', 'NTD đã unlock: còn thấy CV nếu ứng viên đang bật 1 CV khác; không thấy nữa nếu ứng viên tắt hết — xem **Talent pool**'],
+          ['**Tắt hiển thị CV với NTD**', '✅ Có', 'NTD đã unlock: thấy CV đang bật nếu ứng viên còn bật 1 CV khác; tắt hết thì NTD đọc bản lưu tại lúc tắt — xem **Talent pool**'],
         ],
       },
       {
@@ -257,14 +252,16 @@ export const USERS_ORG_PAGE_DOCS: Record<string, PageDoc> = {
       {
         kind: 'table',
         heading: '5.3 Ảnh hưởng theo từng khu vực',
+        note: '**Thông tin cá nhân** = họ tên, tuổi, quốc tịch, giới tính, email, số điện thoại, địa chỉ, ảnh, đường link và mạng xã hội. Kinh nghiệm, học vấn, kỹ năng **không** bị ẩn. Bản CV đã ẩn thông tin cá nhân vẫn mở được sau mốc 72 giờ.',
         cols: ['Khu vực', 'Trước khi xoá', 'Sau khi ứng viên xác nhận xoá (T0)'],
         rows: [
           ['**Tài khoản ứng viên**', 'Hoạt động', 'Bị vô hiệu hoá **ngay**, không đăng nhập được; mọi phiên kết thúc'],
           ['**Email gửi ứng viên**', 'Theo lịch (JS 1–7)', 'Ngừng **ngay** khi xác nhận xoá (không đợi hết 72 giờ). Chỉ gửi **JS 8**'],
-          ['**Đơn ứng tuyển** (Candidate management của NTD)', 'NTD xem được CV trong đơn', 'Dòng ứng tuyển chuyển sang UI **“Tài khoản đã bị xóa”**; NTD **không xem được CV** nữa. Đơn **không bị rút**'],
-          ['**Talent Pool**', 'Ứng viên hiển thị nếu đang bật CV', 'Ứng viên **bị ẩn** khỏi Talent Pool'],
-          ['**CV NTD đã unlock**', 'NTD xem được CV', 'NTD **không xem được** nữa; **NTD mất lượt quota** đã dùng để unlock (đã chấp nhận)'],
-          ['**Thông báo cho NTD**', '—', '**CO 11**: ứng viên đã xoá tài khoản, NTD vui lòng xoá hồ sơ ứng viên khỏi hệ thống / thư mục của công ty'],
+          ['**Đơn ứng tuyển** (Candidate management của NTD)', 'NTD xem được CV trong đơn', 'Đơn **không bị rút**, giữ nguyên cột. NTD vẫn mở **CV đã nộp**, nhưng **thông tin cá nhân bị ẩn**. NTD không chuyển cột, không đánh đậu / trượt được nữa; vẫn gắn sao, ghi chú, gỡ khỏi bảng'],
+          ['**Talent Pool**', 'Ứng viên hiển thị nếu đang bật CV', 'Ứng viên không còn trong kết quả tìm kiếm; **không mở khoá mới** được'],
+          ['**CV NTD đã unlock**', 'NTD xem được CV', 'NTD vẫn mở **bản CV mới nhất**, thông tin cá nhân bị ẩn; lượt quota đã dùng **không hoàn** (đã chấp nhận)'],
+          ['**CV NTD chỉ lưu, chưa unlock**', 'Tên và liên hệ bị che', 'Mở được như CV đã unlock — thông tin cá nhân bị ẩn, **không tốn credit**'],
+          ['**Thông báo cho NTD**', '—', '**CO 11**: hồ sơ ứng viên đã chuyển sang **ẩn định danh**; thông tin cá nhân ngừng hiển thị trên Saramin; bản CV công ty đã tải về trước đó không bị ảnh hưởng'],
           ['**Dữ liệu cá nhân**', 'Lưu trữ', 'Xoá vĩnh viễn sau **72 giờ** kể từ lúc xác nhận'],
         ],
       },
@@ -274,20 +271,16 @@ export const USERS_ORG_PAGE_DOCS: Record<string, PageDoc> = {
         cols: ['Mã', 'Tên', 'Người nhận', 'Thời điểm'],
         rows: [
           ['**JS 8**', 'Xoá tài khoản thành công', 'Ứng viên', 'Ngay khi xác nhận xoá'],
-          ['**CO 11**', 'Ứng viên đã xoá tài khoản', 'Các công ty ứng viên **đã ứng tuyển**', 'Ngay khi xác nhận xoá'],
+          ['**CO 11**', 'Ứng viên đã xoá tài khoản', 'Các công ty **đã nhận đơn** hoặc **đã mở khoá CV** của ứng viên', 'Ngay khi xác nhận xoá'],
           ['—', '(không có)', '—', 'Thời điểm xoá dữ liệu sau 72 giờ: **không gửi email**'],
         ],
-      },
-      {
-        kind: 'warn',
-        text: '**Nội dung JS 8 đang sai.** Bản hiện tại có câu *“Các đơn ứng tuyển bạn đã thực hiện đã được rút lại”*. Theo quyết định 04/11, đơn ứng tuyển **không bị rút** mà hiển thị trạng thái **“Tài khoản đã bị xóa”** phía NTD — câu này cần sửa.',
       },
       {
         kind: 'list',
         heading: '5.5 Trong vòng 72 giờ — lần huỷ (theo bản dựng)',
         items: [
           '**Huỷ:** họ tên, email gốc, mật khẩu, số điện thoại, ngày sinh, giới tính, ảnh đại diện · toàn bộ nội dung hồ sơ và mọi file CV · ghi chú nhà tuyển dụng viết về ứng viên · việc đã lưu, thông báo, lịch sử xem.',
-          '**Giữ, đã ẩn danh:** ID nội bộ, ngày xoá, mã lý do · **mã băm của email** (để chặn đăng ký lại) · **bản ghi đã mua lượt mở CV** — giữ sự kiện mua, bỏ nội dung (NTD không hoàn quota) · số liệu tổng hợp.',
+          '**Giữ, đã ẩn danh:** **bản CV đã ẩn thông tin cá nhân** cho các công ty đã nhận đơn, đã mở khoá hoặc đã lưu ứng viên · ID nội bộ, ngày xoá, mã lý do · **mã băm của email** (để chặn đăng ký lại) · **bản ghi đã mua lượt mở CV** — giữ sự kiện mua, bỏ nội dung (NTD không hoàn quota) · số liệu tổng hợp.',
           'Dòng dữ liệu **ở lại nhưng rỗng người** — để email vẫn bị khoá và HQ chứng minh được đã xoá những gì.',
           'Job huỷ chạy **mỗi 5 phút** và xử lý mọi tài khoản đã quá hạn 72 giờ; tài khoản lỗi được **tự thử lại** ở lần chạy sau. **Không gửi email** lúc huỷ.',
         ],
@@ -311,26 +304,18 @@ export const USERS_ORG_PAGE_DOCS: Record<string, PageDoc> = {
       {
         kind: 'table',
         heading: '5.7 Khoá và Xoá, đặt cạnh nhau',
-        note: 'Cột *Deactivate* theo bản dựng 08/10 — tài liệu Phase 1 không nói về khoá tài khoản.',
+        note: 'Cột *Deactivate* theo bản dựng 25/11 — tài liệu Phase 1 không nói về khoá tài khoản.',
         cols: ['', 'Deactivate', 'Delete (Phase 1)'],
         rows: [
           ['Ai làm', 'HQ (khoá) hoặc ứng viên (tạm dừng)', 'Ứng viên — hoặc HQ'],
           ['Hồ sơ', 'Nguyên vẹn', 'Dữ liệu cá nhân **bị huỷ sau 72 giờ**; giữ lại dòng đã ẩn danh'],
           ['Quay lại được?', 'Có — HQ mở lại', '**Chỉ HQ, chỉ khi lần huỷ chưa chạy**'],
-          ['Đơn ứng tuyển', '**Đơn đang xử lý bị rút** (bản dựng)', '**Không bị rút** — dòng hiện *“Tài khoản đã bị xóa”*, NTD không xem được CV'],
-          ['CV nhà tuyển dụng đã mở khoá', 'Vẫn đọc được', '**Không xem được nữa**; NTD mất quota'],
-          ['Nhà tuyển dụng có được báo?', 'Thông báo rút đơn cho mỗi đơn bị rút', '**CO 11** cho các công ty ứng viên đã ứng tuyển'],
+          ['Đơn ứng tuyển', '**Không bị rút**; đơn đang chờ duyệt không được gửi đi', '**Không bị rút** — NTD mở CV đã nộp, thông tin cá nhân bị ẩn'],
+          ['CV nhà tuyển dụng đã mở khoá', 'Đọc **bản lưu tại lúc khoá**', 'Vẫn mở được, **thông tin cá nhân bị ẩn**; quota không hoàn'],
+          ['Nhà tuyển dụng có được báo?', 'Không', '**CO 11** cho các công ty đã nhận đơn hoặc đã mở khoá CV'],
           ['Email gửi ứng viên', 'Dừng hết', 'Dừng ngay; chỉ gửi **JS 8**'],
           ['Email tài khoản', 'Vẫn là của tài khoản này', 'Giữ **mã băm**; không đăng ký lại được **nếu đã xác thực**'],
         ],
-      },
-      {
-        kind: 'open',
-        text: '**Còn cần xác nhận (tài liệu Phase 1 §6).** (1) **NTD có còn thấy CV không?** Quyết định 04/11: NTD **không xem được** CV (đơn đã nộp và CV đã unlock). Saramin VN có nhắc một rule khác: NTD vẫn thấy CV nhưng **ẩn thông tin định danh** (tên, email, SĐT, địa chỉ, link MXH) — cần Saramin VN xác nhận bản nào là bản chốt cuối. (2) **Nội dung JS 8:** bỏ câu *“Các đơn ứng tuyển đã được rút lại do việc xóa tài khoản”*, thay bằng nội dung đúng với §5.3. **Có rút đơn khi xoá tài khoản hay không phụ thuộc hai điểm này** (tài liệu §6 #5).',
-      },
-      {
-        kind: 'warn',
-        text: '**Build cũ chưa theo quyết định 04/11 (tài liệu Phase 1 §6 #5).** Build 08/10 **rút các đơn đang xử lý** khi xoá tài khoản (`withdrawActiveApplications`) — đúng với câu hiện tại trong JS 8, nhưng khác quyết định 04/11 (NTD thấy *“Tài khoản đã bị xóa”*, đơn không bị rút). **Đừng đổi phần rút đơn của build cho tới khi Saramin VN chốt điểm (1)–(2) ở trên.** Email **mỗi công ty một thư** là đúng: **CO 11** gửi tới từng công ty ứng viên đã ứng tuyển.',
       },
 
       /* §6 */
@@ -443,11 +428,11 @@ export const USERS_ORG_PAGE_DOCS: Record<string, PageDoc> = {
           ['Gõ sai mã 3 lần', 'Mã bị huỷ, màn hình mời lấy mã mới; mã sai thứ 4 và 5 (trên mã mới) **khoá số 24 giờ**, kể cả việc gửi mã'],
           ['Gửi lại, rồi gõ mã đầu tiên', '“Dùng tin nhắn mới nhất” — không mất lượt đoán'],
           ['Quên mật khẩu trên tài khoản chỉ có Google', 'Luồng đặt được mật khẩu; sau đó đăng nhập được bằng email'],
-          ['HQ khoá một tài khoản Active có đơn đang chạy', 'Đăng nhập bị từ chối kèm thông báo hỗ trợ; phiên kết thúc; **đơn đang chạy bị rút và công ty nhận thông báo**; CV đã mở khoá vẫn đọc được'],
-          ['HQ mở lại tài khoản đó', 'Về Active; **các đơn đã bị rút không quay lại**'],
+          ['HQ khoá một tài khoản Active có đơn đang chạy', 'Đăng nhập bị từ chối kèm thông báo hỗ trợ; phiên kết thúc; **đơn ở nguyên cột cũ**, công ty không nhận thông báo; công ty đã mở khoá đọc bản lưu tại lúc khoá'],
+          ['HQ mở lại tài khoản đó', 'Về Active; công ty đã mở khoá thấy lại hồ sơ mới nhất'],
           ['Bỏ dở màn nhập mã giữa chừng', 'Không tạo gì; email chưa bị giữ; đăng ký lại từ form'],
-          ['Ứng viên xoá, có một đơn đang chạy và một đơn bị loại (Phase 1)', 'Cả hai dòng **ở lại** bảng nhà tuyển dụng với UI *“Tài khoản đã bị xóa”*, **không mở được CV**; công ty nhận **CO 11**; ứng viên nhận **JS 8**; ứng viên rời Talent Pool ngay'],
-          ['Ứng viên xoá, có công ty đã unlock CV (Phase 1)', 'Công ty đó **không xem được CV nữa**; lượt quota **không hoàn**'],
+          ['Ứng viên xoá, có một đơn đang chạy và một đơn bị loại (Phase 1)', 'Cả hai dòng **ở lại** bảng nhà tuyển dụng; CV mở được nhưng **thông tin cá nhân bị ẩn**, công ty không đổi cột được nữa; công ty nhận **CO 11**; ứng viên nhận **JS 8**; ứng viên rời Talent Pool ngay'],
+          ['Ứng viên xoá, có công ty đã unlock CV (Phase 1)', 'Công ty đó vẫn mở được CV, **thông tin cá nhân bị ẩn**; nhận **CO 11**; lượt quota **không hoàn**'],
           ['Ứng viên xoá, rồi chờ đủ 72 giờ (Phase 1)', 'Ứng viên **không nhận thêm email nào** sau JS 8 — kể cả lúc dữ liệu bị huỷ'],
           ['Đăng ký lại bằng email đã xoá (đã xác thực), và bằng biến thể Gmail có dấu chấm', 'Cả hai bị từ chối'],
           ['Đăng ký lại bằng email đã xoá chưa từng xác thực', 'Được phép'],
@@ -1338,7 +1323,7 @@ export const USERS_ORG_MODULE_DOCS: Record<string, ModuleDoc> = {
     headline: [
       '**Ba loại tài khoản, ba thế giới.** Một email có thể là ứng viên, là thành viên công ty, và là nhân viên Saramin **cùng lúc** — ba tài khoản, ba mật khẩu. Không quyền nào, vai trò nào, trạng thái nào chảy từ loại này sang loại kia.',
       '**Khoá thì đảo ngược được; Xoá là cánh cửa một chiều sau 72 giờ.** Ứng viên và thành viên công ty: dữ liệu cá nhân huỷ **72 giờ** sau khi xoá, chỉ HQ khôi phục được **trước** lần huỷ. Khác nhau ở email: email **đã xác thực** của ứng viên bị **chặn vĩnh viễn**; email thành viên công ty bị **giữ 30 ngày** sau lần huỷ. Nhân viên Saramin thì **không có xoá mềm**: xoá là mất hẳn, và chỉ xoá được người chưa từng làm gì.',
-      '**Khoá ứng viên rút đơn của họ; tắt một thành viên công ty thì công việc ở lại với công ty.** Ứng viên bị khoá (hoặc tự tạm dừng) → mọi đơn đang xử lý **bị rút** và mở lại không trả về. Thành viên công ty bị tắt → tin, ứng viên, CV đã mở khoá **vẫn của công ty**.',
+      '**Khoá ứng viên hay tắt một thành viên công ty đều không làm mất việc đang dở.** Ứng viên bị khoá (hoặc tự tạm dừng) → đơn **ở nguyên** cột cũ; đơn đang chờ duyệt không được gửi đi cho tới khi mở lại. Thành viên công ty bị tắt → tin, ứng viên, CV đã mở khoá **vẫn của công ty**.',
     ],
     blocks: [
       {

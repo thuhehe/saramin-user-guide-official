@@ -209,7 +209,7 @@ export const RULE_DETAIL: Record<string, DocBlock[]> = {
 
     rule('Rule — Bốn trạng thái tài khoản và cửa sổ 72 giờ', [
       '**Active · Deactivated · Deleted · Erased.**',
-      '**Deactivate là rút lui, không phải xoá.** Tài khoản ngừng hoạt động, CV rời CV search ngay, nhưng đơn đã gửi vẫn ở lại phía NTD. Đơn đang xử lý bị rút và công ty nhận **thông báo rút đơn thường**, không phải thông báo xoá tài khoản. Thời gian lưu dữ liệu theo quy định pháp luật chứ không theo thời điểm bấm nút.',
+      '**Deactivate là rút lui, không phải xoá.** Tài khoản ngừng hoạt động, CV rời CV search ngay, nhưng đơn đã gửi vẫn ở lại phía NTD. Đơn **không bị rút** và công ty không nhận thông báo nào; đơn đang chờ duyệt không được gửi đi khi tài khoản còn tắt. Thời gian lưu dữ liệu theo quy định pháp luật chứ không theo thời điểm bấm nút.',
       '**Delete là cửa một chiều.** Dòng tài khoản giữ vĩnh viễn — chính nó giữ chỗ địa chỉ email, nên **email đó không bao giờ đăng ký lại được**, kể cả qua Google, Facebook, LinkedIn hay GitHub.',
       '**Khôi phục chỉ làm được trong 72 giờ** và chỉ HQ admin mới làm được. Job quét chạy **mỗi 5 phút** và lấy mọi tài khoản sẽ quá 72 giờ trước lần chạy kế tiếp — nên thực tế cửa sổ khôi phục là 72 giờ trừ tối đa 5 phút. Hiển thị mốc này là “xoá trước ngày…”, không phải “xoá lúc…”.',
       'Trạng thái độc lập với hiển thị CV: tắt hiển thị CV không làm tài khoản ngừng hoạt động, và ngược lại.',

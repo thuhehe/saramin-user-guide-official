@@ -39,7 +39,7 @@ export const RESUME_PAGE_DOCS: Record<string, PageDoc> = {
       '**Bật *Show CV to employers* trên một CV là tự tắt CV đang hiển thị trước đó** — không hỏi xác nhận.',
       '**CV *Unfinished* bị làm mờ ở bước nộp đơn** và không bật hiển thị được. Ứng viên phải bổ sung rồi lưu, hoặc dùng CV khác.',
       '**Không có nút Delete** (Phase 1). Ứng viên muốn bỏ một CV thì **Edit** nó, hoặc tắt hiển thị. Chạm giới hạn 20 của một loại thì phải Edit CV cũ của loại đó.',
-      '**Tắt hết CV là NTD đã unlock cũng mất CV** — họ không xem được nữa và không được hoàn quota (§6).',
+      '**Tắt hết CV không làm NTD đã unlock mất CV** — họ đọc bản lưu tại lúc tắt, không trừ thêm credit (§6).',
     ],
     blocks: [
       { kind: 'p', text: 'Theo tài liệu *Resume Management · Create CV*, cập nhật 15/10/2026, ảnh chụp trên dev ngày 15/10/2026 — cộng quy tắc **Phase 1** từ tài liệu *Xóa tài khoản & Xóa CV* (10/11/2026): không xoá CV, giới hạn 20 + 20, Edit Upload CV = thay file (§9).' },
@@ -317,7 +317,7 @@ export const RESUME_PAGE_DOCS: Record<string, PageDoc> = {
         cols: ['Tình huống', 'Điều gì xảy ra'],
         rows: [
           ['**Bật trên một CV**', 'Chọn **Show CV to employers** ở dòng CV. CV đó lên thẻ **Employers see this CV**; CV đang hiển thị trước đó tự tắt. Không hỏi xác nhận'],
-          ['**Tắt**', 'Hệ thống hỏi trước: *If you’re job hunting right now, keep offers open too*, với 2 lựa chọn **Keep my CV visible** (mặc định) và **Hide my CV**. NTD đã unlock: còn bật CV khác thì họ thấy **CV đang bật**; **tắt hết** thì họ **không xem được nữa** và mất quota (sơ đồ dưới)'],
+          ['**Tắt**', 'Hệ thống hỏi trước: *If you’re job hunting right now, keep offers open too*, với 2 lựa chọn **Keep my CV visible** (mặc định) và **Hide my CV**. NTD đã unlock: còn bật CV khác thì họ thấy **CV đang bật**; **tắt hết** thì họ đọc **bản lưu tại lúc tắt** (sơ đồ dưới)'],
           ['**Không CV nào đang hiển thị**', 'Khung **CV hidden from employers**, chọn CV ở ô *Choose a CV* rồi bấm **Let employers find me**'],
           ['**File tải lên đầu tiên**', 'Nếu ứng viên chưa có CV nào đang hiển thị, file tải lên đầu tiên đọc xong được **tự đặt làm CV hiển thị**'],
           ['**Phía NTD**', 'Ứng viên có CV đang hiển thị — và CV đó *Qualified* — thì xuất hiện trong Talent Pool của NTD. Tên và thông tin liên hệ được che tới khi NTD mở khoá (xem **Talent pool**)'],
@@ -333,7 +333,8 @@ export const RESUME_PAGE_DOCS: Record<string, PageDoc> = {
         cols: ['Trường hợp', 'NTD đã unlock sẽ thấy'],
         rows: [
           ['Ứng viên tắt CV 1 và **bật CV 2** (còn ít nhất 1 CV đang hiển thị)', 'Bản **CV đang được bật** (mới nhất)'],
-          ['Ứng viên **tắt hết** tất cả CV', '**Không xem được nữa**, hiển thị UI *CV đã ngừng hiển thị*; NTD mất quota'],
+          ['Ứng viên **tắt hết** tất cả CV', 'Hồ sơ và CV **như lúc ứng viên tắt** — vẫn có thông tin cá nhân, không cập nhật thêm, không trừ thêm credit. Ứng viên bật lại CV thì NTD thấy lại bản mới nhất'],
+          ['Ứng viên **tắt hết**, NTD **chỉ lưu**, chưa unlock', 'Thẻ hiện *Không khả dụng*, không mở khoá được cho tới khi ứng viên bật lại CV'],
         ],
       },
 
@@ -858,7 +859,7 @@ export const RESUME_PAGE_DOCS: Record<string, PageDoc> = {
       '**Reject một CV đã gửi tới NTD sẽ thu hồi đơn ở mọi công ty đang giữ phiên bản CV đó.** Đọc kỹ khối ảnh hưởng trước khi bấm.',
       '**Ghi chú nội bộ luôn bắt buộc:** ghi rõ vì sao quyết định và đã thấy gì trong file.',
       '**Approve một file không đọc được** vẫn làm CV đạt, nhưng NTD không tìm thấy CV đó khi tìm theo kỹ năng, vì hệ thống không lấy được chữ từ file.',
-      '**Ứng viên đã xoá tài khoản (Phase 1):** ứng viên bị ẩn khỏi kho ngay; công ty chưa mở khoá thì không mở khoá được nữa; thẻ đang lưu không chuyển ra khỏi cột *Saved* được. **Công ty đã mở khoá từ trước cũng không xem được CV nữa** và **mất lượt quota** đã dùng (xem **Jobseeker users §5**).',
+      '**Ứng viên đã xoá tài khoản (Phase 1):** ứng viên rời kết quả tìm kiếm ngay và không mở khoá mới được nữa; thẻ đang lưu không chuyển ra khỏi cột *Saved* được. Công ty **đã mở khoá hoặc đã lưu** ứng viên vẫn mở được CV, **thông tin cá nhân bị ẩn**, không tốn credit; lượt quota đã dùng **không hoàn** (xem **Jobseeker users §5**).',
     ],
     blocks: [
       { kind: 'p', text: 'Theo tài liệu *Resume Management · Talent pool*, cập nhật 16/10/2026 (phiên bản sau khi sửa).' },
@@ -1336,8 +1337,8 @@ export const RESUME_PAGE_DOCS: Record<string, PageDoc> = {
         rows: [
           ['**Hết credit**', 'Báo hết credit, mời nạp thêm'],
           ['**Gói đã hết hạn**', 'Báo gói hết hạn. Credit còn lại được giữ, không mất'],
-          ['**Ứng viên đã xoá tài khoản**', 'Không mở khoá được. Phase 1: công ty **đã mở khoá từ trước cũng không xem được CV nữa** và mất quota'],
-          ['**Ứng viên tắt hết CV** (sau khi công ty đã mở khoá)', 'Phase 1: công ty **không xem được CV nữa**, UI *CV đã ngừng hiển thị*, mất quota. Ứng viên còn bật một CV khác thì công ty thấy **CV đang bật**'],
+          ['**Ứng viên đã xoá tài khoản**', 'Không mở khoá được. Công ty đã mở khoá hoặc đã lưu từ trước vẫn mở được CV, **thông tin cá nhân bị ẩn**; quota không hoàn'],
+          ['**Ứng viên tắt hết CV** (sau khi công ty đã mở khoá)', 'Công ty đọc hồ sơ và CV **như lúc ứng viên tắt**, không trừ thêm credit. Ứng viên còn bật một CV khác thì công ty thấy **CV đang bật**'],
           ['**Ứng viên không còn CV nào đang bật**', 'Không mở khoá được, trừ khi đã mở khoá từ trước, hoặc ứng viên đã nộp đơn tới công ty'],
         ],
       },
@@ -1968,7 +1969,7 @@ export const RESUME_PAGE_DOCS: Record<string, PageDoc> = {
           'Mở khoá **một lần, dùng vĩnh viễn** cho cả công ty. Ứng viên đã mở khoá ở folder này thì ở folder khác cũng **không bị trừ lại**.',
           '**Hết credit:** hệ thống báo không đủ credit và mời mua thêm.',
           '**Gói tìm kiếm CV đã hết hạn:** không mở khoá được; credit còn lại được giữ, không mất.',
-          '**Ứng viên đã xoá tài khoản (Phase 1):** nếu công ty chưa mở khoá thì không mở khoá được nữa và thẻ không chuyển ra khỏi Saved được. **Công ty đã mở khoá từ trước cũng không xem được CV nữa** và mất lượt quota đã dùng (xem **Jobseeker users §5**).',
+          '**Ứng viên đã xoá tài khoản (Phase 1):** không mở khoá mới được nữa và thẻ không chuyển ra khỏi Saved được. Công ty **đã mở khoá hoặc đã lưu** vẫn mở được CV, **thông tin cá nhân bị ẩn**; lượt quota đã dùng không hoàn (xem **Jobseeker users §5**).',
           'Nếu sau đó Saramin **từ chối CV** của ứng viên đã mở khoá, credit đã trả được **hoàn** vào số dư (xem **Talent pool §2.5**).',
         ],
       },
@@ -2046,19 +2047,19 @@ export const RESUME_PAGE_DOCS: Record<string, PageDoc> = {
     logic: [
       '**Phạm vi:** tài liệu mô tả **hệ thống đang làm cho Phase 1** (go-live **21/11/2026**), không phải các đề xuất cho giai đoạn sau.',
       '**Nguyên tắc Phase 1:** hạn chế thay đổi Policy nhiều nhất có thể. Vì vậy **ứng viên KHÔNG được xoá CV** ở Phase 1. Các phương án xoá CV đã từng đề xuất ghi ở §5 để tham khảo, **không áp dụng**.',
-      '**Xoá tài khoản:** tài khoản bị vô hiệu hoá **ngay**; NTD không còn xem được CV (kể cả đơn đã nộp và CV đã unlock); NTD nhận email **CO 11**; ứng viên nhận **JS 8**; dữ liệu cá nhân bị xoá vĩnh viễn sau **72 giờ**.',
+      '**Xoá tài khoản:** tài khoản bị vô hiệu hoá **ngay**; đơn ứng tuyển **không bị rút**; NTD vẫn mở được CV đã nhận, đã unlock hoặc đã lưu, nhưng **thông tin cá nhân bị ẩn**; NTD nhận email **CO 11**; ứng viên nhận **JS 8**; dữ liệu cá nhân bị xoá vĩnh viễn sau **72 giờ**.',
       '**Xoá CV:** không có — ẩn nút Delete, ứng viên chỉ **Edit**. Giới hạn **20 Saramin CV + 20 Upload CV**.',
-      '**Tắt hiển thị CV:** NTD đã unlock còn thấy CV nếu ứng viên đang bật 1 CV khác; **không thấy nữa** nếu ứng viên tắt hết.',
+      '**Tắt hiển thị CV:** NTD đã unlock thấy CV đang bật nếu ứng viên còn bật 1 CV khác. Ứng viên **tắt hết** thì NTD vẫn đọc hồ sơ và CV **như lúc ứng viên tắt** — không cập nhật thêm, không trừ thêm credit.',
     ],
     how: [
       'Trả lời ứng viên hỏi **“xoá CV thế nào?”**: Phase 1 không xoá được — hướng dẫn **Edit** CV (Upload CV thì thay file), hoặc tắt hiển thị.',
-      'Trả lời NTD hỏi **“vì sao không mở được CV đã unlock?”**: ứng viên đã **xoá tài khoản**, hoặc đã **tắt hết CV** (§4). Quota không hoàn — đã chấp nhận.',
+      'Trả lời NTD hỏi **“vì sao CV bị che tên, email, số điện thoại?”**: ứng viên đã **xoá tài khoản**. NTD vẫn đọc được kinh nghiệm, học vấn, kỹ năng; chỉ thông tin cá nhân bị ẩn. Quota không hoàn — đã chấp nhận.',
       'Màn hình và thao tác cụ thể: xoá tài khoản ở **Jobseeker users §5** (Admin, HQ khôi phục, lần huỷ 72 giờ); CV ở **Create CV §9**.',
     ],
     watch: [
-      '**Mọi email đều gửi tại T0**: JS 8 cho ứng viên, CO 11 cho các công ty ứng viên đã ứng tuyển. Lúc xoá dữ liệu sau 72 giờ **không gửi email nào**.',
+      '**Mọi email đều gửi tại T0**: JS 8 cho ứng viên, CO 11 cho các công ty đã nhận đơn hoặc đã mở khoá CV của ứng viên. Lúc xoá dữ liệu sau 72 giờ **không gửi email nào**.',
       '**CO 10** chỉ dùng cho trường hợp ứng viên **rút đơn ứng tuyển** — không phải xoá CV.',
-      '**Build cũ chưa theo quyết định 04/11:** build 08/10 rút đơn khi xoá tài khoản; ảnh 15/10 còn nút Delete CV, ghi chú “không giới hạn CV”, chưa có màn thay file.',
+      '**Bản CV NTD đã tải về trước đó không bị ảnh hưởng** — CO 11 nói rõ điều này. Saramin chỉ ẩn thông tin cá nhân **trên hệ thống Saramin**.',
     ],
     blocks: [
       {
@@ -2068,7 +2069,8 @@ export const RESUME_PAGE_DOCS: Record<string, PageDoc> = {
         rows: [
           ['**Nguồn quyết định**', 'Call 04/11/2026 (16:55–17:28): Saramin VN (chị Huyền, anh Danh) – BurningBros (chị Thu, Nguyên)'],
           ['**Cập nhật luồng xoá tài khoản**', 'Ghi nhận ngày 06/11/2026'],
-          ['**Ngày cập nhật tài liệu**', '10/11/2026'],
+          ['**Cập nhật cách NTD xem CV sau khi xoá**', 'Ghi nhận 10–13/11/2026: NTD vẫn mở CV, thông tin cá nhân bị ẩn'],
+          ['**Ngày cập nhật tài liệu**', '25/11/2026'],
           ['**Trạng thái**', 'Xoá CV: **đã chốt**. Xoá tài khoản: **đã chốt**'],
           ['**Tài liệu gốc**', '`docs/xoa-tai-khoan-va-xoa-cv-phase-1.md`'],
         ],
@@ -2080,14 +2082,21 @@ export const RESUME_PAGE_DOCS: Record<string, PageDoc> = {
         kind: 'table',
         cols: ['Hành động của ứng viên', 'Phase 1 có cho phép?', 'Ảnh hưởng chính'],
         rows: [
-          ['**Xoá tài khoản**', '✅ Có', 'Tài khoản bị vô hiệu hoá ngay; NTD không còn xem được CV (kể cả đơn đã nộp và CV đã unlock); NTD nhận email thông báo; dữ liệu cá nhân bị xoá vĩnh viễn sau 72 giờ'],
+          ['**Xoá tài khoản**', '✅ Có', 'Tài khoản bị vô hiệu hoá ngay; đơn ứng tuyển không bị rút; NTD vẫn mở được CV (đơn đã nộp, CV đã unlock hoặc đã lưu) nhưng thông tin cá nhân bị ẩn; NTD nhận email thông báo; dữ liệu cá nhân bị xoá vĩnh viễn sau 72 giờ'],
           ['**Xoá CV**', '❌ Không', 'Ẩn nút Delete. Ứng viên chỉ **Edit** CV. Đơn ứng tuyển và Talent Pool không bị ảnh hưởng bởi thao tác xoá'],
-          ['**Tắt hiển thị CV với NTD**', '✅ Có', 'NTD đã unlock: còn thấy CV nếu ứng viên đang bật 1 CV khác; không thấy nữa nếu ứng viên tắt hết'],
+          ['**Tắt hiển thị CV với NTD**', '✅ Có', 'NTD đã unlock: thấy CV đang bật nếu ứng viên còn bật 1 CV khác; tắt hết thì NTD đọc bản lưu tại lúc tắt'],
         ],
       },
 
       /* ── §2 ─────────────────────────────────────────────────────────────── */
       { kind: 'h', text: '§2 · Xoá tài khoản (Delete Account)', path: '/ho-tro/xoa-tai-khoan' },
+      {
+        kind: 'shot',
+        src: '/shots/cv/delete-account.jpg',
+        where: 'Jobseeker site',
+        caption: '*Trung tâm hỗ trợ → Xoá tài khoản*, bước đầu tiên ứng viên thấy. **1** Hồ sơ đã nộp được giữ lại, giữ nguyên trạng thái; nhà tuyển dụng chỉ còn thấy CV với **thông tin cá nhân đã được ẩn**.',
+        note: 'Ảnh môi trường dev ngày 25/11/2026, tài khoản ứng viên thử; tên đã thay bằng tên mẫu.',
+      },
       {
         kind: 'diagram',
         id: 'del-account',
@@ -2101,15 +2110,17 @@ export const RESUME_PAGE_DOCS: Record<string, PageDoc> = {
       {
         kind: 'table',
         heading: '2.3 Ảnh hưởng theo từng khu vực',
+        note: '**Thông tin cá nhân** = họ tên, tuổi, quốc tịch, giới tính, email, số điện thoại, địa chỉ, ảnh, đường link và mạng xã hội. Kinh nghiệm, học vấn, kỹ năng **không** bị ẩn.',
         cols: ['Khu vực', 'Trước khi xoá', 'Sau khi ứng viên xác nhận xoá'],
         rows: [
           ['**Tài khoản ứng viên**', 'Hoạt động', 'Bị vô hiệu hoá ngay, không đăng nhập được'],
           ['**Email gửi ứng viên**', 'Theo lịch (JS 1–7)', 'Ngừng **ngay** khi xác nhận xoá (không đợi hết 72 giờ). Chỉ gửi JS 8'],
-          ['**Đơn ứng tuyển** (Candidate management của NTD)', 'NTD xem được CV trong đơn', 'Dòng ứng tuyển chuyển sang UI **“Tài khoản đã bị xóa”**; NTD **không xem được CV** nữa'],
-          ['**Talent Pool**', 'Ứng viên hiển thị nếu đang bật CV', 'Ứng viên bị ẩn khỏi Talent Pool'],
-          ['**CV NTD đã unlock**', 'NTD xem được CV', 'NTD **không xem được** nữa; **NTD mất lượt quota** đã dùng để unlock (đã chấp nhận)'],
-          ['**Thông báo cho NTD**', '—', '**CO 11**: ứng viên đã xoá tài khoản, NTD vui lòng xoá hồ sơ ứng viên khỏi hệ thống / thư mục của công ty'],
-          ['**Dữ liệu cá nhân**', 'Lưu trữ', 'Xoá vĩnh viễn sau **72 giờ** kể từ lúc xác nhận'],
+          ['**Đơn ứng tuyển** (Candidate management của NTD)', 'NTD xem được CV trong đơn', 'Đơn **không bị rút**, giữ nguyên cột. NTD vẫn mở **CV đã nộp**, nhưng **thông tin cá nhân bị ẩn**. NTD không chuyển cột, không đánh đậu / trượt được nữa; vẫn gắn sao, ghi chú, gỡ khỏi bảng'],
+          ['**Talent Pool**', 'Ứng viên hiển thị nếu đang bật CV', 'Ứng viên không còn trong kết quả tìm kiếm; **không mở khoá mới** được'],
+          ['**CV NTD đã unlock**', 'NTD xem được CV', 'NTD vẫn mở **bản CV mới nhất**, thông tin cá nhân bị ẩn; lượt quota đã dùng **không hoàn** (đã chấp nhận)'],
+          ['**CV NTD chỉ lưu, chưa unlock**', 'Tên và liên hệ bị che', 'Mở được như CV đã unlock — thông tin cá nhân bị ẩn, **không tốn credit**'],
+          ['**Thông báo cho NTD**', '—', '**CO 11**: hồ sơ ứng viên đã chuyển sang **ẩn định danh**; thông tin cá nhân ngừng hiển thị trên Saramin; bản CV công ty đã tải về trước đó không bị ảnh hưởng'],
+          ['**Dữ liệu cá nhân**', 'Lưu trữ', 'Xoá vĩnh viễn sau **72 giờ** kể từ lúc xác nhận. Bản CV đã ẩn thông tin cá nhân **vẫn mở được** sau mốc này'],
         ],
       },
       {
@@ -2118,7 +2129,7 @@ export const RESUME_PAGE_DOCS: Record<string, PageDoc> = {
         cols: ['Mã', 'Tên', 'Người nhận', 'Thời điểm'],
         rows: [
           ['**JS 8**', 'Xoá tài khoản thành công', 'Ứng viên', 'Ngay khi xác nhận xoá'],
-          ['**CO 11**', 'Ứng viên đã xoá tài khoản', 'Các công ty ứng viên **đã ứng tuyển**', 'Ngay khi xác nhận xoá'],
+          ['**CO 11**', 'Ứng viên đã xoá tài khoản', 'Các công ty **đã nhận đơn** hoặc **đã mở khoá CV** của ứng viên', 'Ngay khi xác nhận xoá'],
           ['—', '(không có)', '—', 'Thời điểm xoá dữ liệu sau 72 giờ: **không gửi email**'],
         ],
       },
@@ -2186,7 +2197,7 @@ export const RESUME_PAGE_DOCS: Record<string, PageDoc> = {
       { kind: 'h', text: '§4 · Ẩn CV trên Talent Pool sau khi NTD đã unlock' },
       {
         kind: 'p',
-        text: 'Đây là **trường hợp duy nhất còn lại** làm NTD mất quyền xem CV đã unlock (ngoài xoá tài khoản).',
+        text: 'Ứng viên tắt hiển thị CV **không làm NTD đã unlock mất CV đã mua**.',
       },
       {
         kind: 'diagram',
@@ -2197,7 +2208,8 @@ export const RESUME_PAGE_DOCS: Record<string, PageDoc> = {
         cols: ['Trường hợp', 'NTD đã unlock sẽ thấy'],
         rows: [
           ['Ứng viên tắt CV 1 và **bật CV 2** (còn ít nhất 1 CV đang hiển thị)', 'Bản **CV đang được bật** (mới nhất)'],
-          ['Ứng viên **tắt hết** tất cả CV', '**Không xem được nữa**, hiển thị UI *CV đã ngừng hiển thị*; NTD mất quota'],
+          ['Ứng viên **tắt hết** tất cả CV', 'Hồ sơ và CV **như lúc ứng viên tắt** — vẫn có thông tin cá nhân, không cập nhật thêm, không trừ thêm credit. Ứng viên bật lại CV thì NTD thấy lại bản mới nhất'],
+          ['Ứng viên **tắt hết**, NTD **chỉ lưu**, chưa unlock', 'Thẻ hiện *Không khả dụng*, không mở khoá được cho tới khi ứng viên bật lại CV'],
         ],
       },
 
@@ -2242,7 +2254,7 @@ export const RESUME_PAGE_DOCS: Record<string, PageDoc> = {
         rows: [
           ['**Jobseeker users §5**', 'Các bước xoá tài khoản trên site, lần huỷ 72 giờ, chặn email đăng ký lại, HQ khôi phục, so sánh Khoá / Xoá'],
           ['**Create CV §9**', 'Menu ⋯ không có Delete, Edit Upload CV = thay file, giới hạn 20 + 20 trên màn My CVs'],
-          ['**Talent pool** · **Candidate management §10**', 'NTD mất CV đã unlock khi ứng viên xoá tài khoản hoặc tắt hết CV'],
+          ['**Talent pool** · **Candidate management §10**', 'NTD thấy gì khi ứng viên xoá tài khoản hoặc tắt hết CV'],
           ['**Applications §6**', 'Admin thấy gì khi ứng viên xoá tài khoản (tag *Deleted account*)'],
           ['**Help center §10**', 'Màn *Xoá tài khoản* trong Trung tâm hỗ trợ'],
         ],

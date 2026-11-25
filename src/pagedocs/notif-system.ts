@@ -419,42 +419,32 @@ export const NOTIF_SYSTEM_PAGE_DOCS: Record<string, PageDoc> = {
   /* ── System ──────────────────────────────────────────────────────────────── */
   'general-settings': {
     logic: [
-      'Một mục menu, **hai tab**: **Recommended job** (trọng số gợi ý việc) và **Currency** (tỉ giá USD→VND). Hai tab cùng đọc một bản ghi ở server nhưng **lưu riêng từng nửa**. Tab đang mở nằm trên URL (`?tab=recommended-jobs` / `?tab=currency`).',
-      '**Không sửa tại chỗ — mỗi lần Publish là một phiên bản mới.** Mỗi điểm gợi ý lưu kèm phiên bản trọng số đã sinh ra nó, nên câu hỏi “vì sao điểm khớp tụt từ 92 xuống 84” vẫn trả lời được nhiều tháng sau. Không có nút xoá hay hoàn tác: muốn quay lại thì Publish lại bộ số cũ (thành phiên bản mới).',
-      '**Bảy tín hiệu, tổng đúng 100 điểm.** Server từ chối bộ số không tròn 100; tổng chạy hiện liên tục và nút *Publish new version* bị khoá cho tới khi đủ 100.',
+      'Một mục menu, **một tab**: **Currency** — tỉ giá USD→VND (*Exchange rate — 1 USD in VND*).',
+      '**Trọng số gợi ý việc không còn chỉnh ở đây.** Chúng nằm cố định trong hệ thống — xem trang **Recommended jobs**.',
+      '**Không sửa tại chỗ — mỗi lần Publish là một phiên bản mới**, hiện thành nhãn bên cạnh tiêu đề. Điểm gợi ý đã tính giữ tỉ giá lúc tính. Không có nút xoá hay hoàn tác: muốn quay lại thì Publish lại số cũ (thành phiên bản mới).',
       'Tỉ giá **chỉ dùng cho tín hiệu lương của gợi ý việc**: so lương mong muốn của ứng viên với khung lương tin đăng khi hai bên khác đơn vị tiền.',
-      'Ba đường dẫn cũ vẫn chuyển hướng về đây: `/system/matching-settings`, `/system/recommended-jobs`, `/system/currency`.',
+      'Ba đường dẫn cũ vẫn mở trang này: `/system/matching-settings`, `/system/recommended-jobs`, `/system/currency`.',
     ],
     how: [
-      '**Recommended job**: sửa điểm từng tín hiệu (đọc gợi ý dưới mỗi ô) → khi tổng = 100/100 → **Publish new version** → xác nhận *“Scores computed from now on use these weights. A published version cannot be edited.”*',
-      '**Currency**: gõ số đồng cho 1 USD (tối thiểu 1) → **Publish new rate** → xác nhận *“Salary comparisons from now on use 1 USD = {rate} ₫.”*',
+      'Gõ số đồng cho 1 USD (tối thiểu 1) → **Publish new rate** → xác nhận *“Salary comparisons from now on use 1 USD = {rate} ₫. A published rate cannot be edited.”*',
     ],
     watch: [
-      'Đổi trọng số / tỉ giá chỉ áp cho **điểm tính từ giờ trở đi** — điểm đã tính giữ phiên bản cũ.',
+      'Đổi tỉ giá chỉ áp cho **điểm tính từ giờ trở đi** — điểm đã tính giữ phiên bản cũ.',
       'Chưa từng publish tỉ giá thì ô hiện chip *none*: tín hiệu lương **không so được hai đơn vị tiền và cho trọn điểm** — an toàn nhưng mù.',
-      'Quyền: `matching_settings:read` để mở, `matching_settings:update` để publish; seed chỉ **HQ Admin**. Một quyền cho cả hai tab.',
-      'Publish **không ghi vào Audit log** — lịch sử nằm ở các phiên bản đã lưu, hiện **không có màn hình xem lại**.',
+      'Quyền: `matching_settings:read` để mở, `matching_settings:update` để publish; mặc định chỉ **HQ Admin**. Không có quyền publish thì nút ẩn hẳn.',
+      'Publish **không ghi vào Audit log** — lịch sử nằm ở các phiên bản đã lưu, không có màn hình xem lại.',
     ],
     blocks: [
-      { kind: 'p', text: `Đối chiếu với build: ${CHECKED}.` },
       {
-        kind: 'table',
-        heading: 'Bảy tín hiệu gợi ý việc (bộ mặc định v3)',
-        note: 'Thứ tự trên màn hình là thứ tự độ lớn. Tín hiệu thứ tám *Foreign language* đã bỏ ở v3: tin đăng không có trường yêu cầu ngoại ngữ, nên nó luôn ra 0 — 2 điểm của nó chuyển sang Category/Role.',
-        cols: ['Tín hiệu (nhãn trên màn hình)', 'Mặc định', 'Tính thế nào'],
-        rows: [
-          ['*Skills*', '20', 'Tỉ lệ kỹ năng tin yêu cầu mà CV có. Tin không liệt kê kỹ năng thì điểm chia cho các tín hiệu khác'],
-          ['*Years of experience + level*', '22', 'Trọn điểm khi nằm trong khung năm kinh nghiệm của tin, giảm dần dưới mức tối thiểu; tin không có khung thì so cấp bậc'],
-          ['*Location + work type*', '21', 'Thành phố ứng viên muốn, hoặc remote khi cả hai bên chấp nhận'],
-          ['*Desired job role + category*', '20', 'Đúng vai trò ứng viên chọn; chỉ khớp nhóm ngành thì được một nửa'],
-          ['*Expected salary*', '9', 'Mức lương mong muốn nằm trong khung lương tin — **đổi tiền trước** nếu khác đơn vị, bằng tỉ giá tab Currency'],
-          ['*Industry*', '5', 'Ngành ứng viên muốn; ngành lân cận được một phần'],
-          ['*Education level*', '3', 'Bằng hoặc cao hơn yêu cầu của tin'],
-        ],
+        kind: 'shot',
+        src: '/shots/system/general-settings.jpg',
+        where: 'Admin',
+        caption: '*System → General settings*. **1** tab **Currency** — tab duy nhất: ô tỉ giá, nhãn phiên bản đang dùng (*v1*) và nút **Publish new rate** (sáng lên khi đổi số).',
+        note: 'Ảnh môi trường staging ngày 25/11/2026.',
       },
       {
         kind: 'warn',
-        text: '**Tỉ giá ở đây KHÔNG đổi sắp xếp / lọc lương trên trang tìm việc.** Khoá sắp xếp lương của tin đăng dùng một **hằng số cấu hình riêng** của svn-be (`svn.recruitment.salary.usd-to-vnd`, mặc định 25.000, tính lúc lưu tin — D-SAL-2), và công cụ quy đổi lương / tìm ứng viên phía NTD dùng nguồn tỉ giá khác nữa. Đổi số trên tab Currency chỉ đổi **gợi ý việc**. (Bản cũ của trang này nói chung chung “ảnh hưởng cách hệ thống so sánh mức lương” — chính xác là chỉ phần gợi ý.)',
+        text: '**Tỉ giá ở đây KHÔNG đổi sắp xếp / lọc lương trên trang tìm việc.** Khoá sắp xếp lương của tin đăng dùng một **hằng số cấu hình riêng** của svn-be (`svn.recruitment.salary.usd-to-vnd`, mặc định 25.000, tính lúc lưu tin — D-SAL-2), và công cụ quy đổi lương / tìm ứng viên phía NTD dùng nguồn tỉ giá khác nữa. Đổi số trên tab Currency chỉ đổi **gợi ý việc**.',
       },
     ],
   },
@@ -1119,7 +1109,7 @@ export const NOTIF_SYSTEM_PAGE_DOCS: Record<string, PageDoc> = {
         heading: 'Những gì KHÔNG được ghi (đã kiểm trong svn-be)',
         items: [
           'Sửa / bật / tắt **quy tắc thông báo** và **mẫu tin**.',
-          'Publish **trọng số gợi ý việc** và **tỉ giá** (General settings — lịch sử nằm ở các phiên bản đã lưu).',
+          'Publish **tỉ giá** (General settings — lịch sử nằm ở các phiên bản đã lưu).',
           'Thêm / sửa / xoá **từng dòng Master data** (chỉ Import và duyệt Missing skills được ghi).',
         ],
       },
@@ -1319,7 +1309,7 @@ export const NOTIF_SYSTEM_MODULE_DOCS: Record<string, ModuleDoc> = {
         heading: 'Bảy trang trong nhóm',
         cols: ['Trang', 'Trả lời câu hỏi', 'Quyền mở', 'Ai giữ (seed)'],
         rows: [
-          ['**General settings**', 'Gợi ý việc chấm điểm thế nào; 1 USD bằng bao nhiêu đồng (cho gợi ý)', '`matching_settings:read`', 'HQ Admin'],
+          ['**General settings**', '1 USD bằng bao nhiêu đồng (cho tín hiệu lương của gợi ý việc)', '`matching_settings:read`', 'HQ Admin'],
           ['**Issuer identity**', 'Chứng từ in gì về chúng ta', '`system_settings:read`', 'HQ Admin'],
           ['**Membership tiers**', 'Bao nhiêu doanh thu thì lên hạng nào', '`membership_programme:read`', 'HQ Admin, Team leader, VN Sales (sửa: chỉ HQ Admin)'],
           ['**Master data**', 'Các ô chọn liệt kê những giá trị nào', 'Theo từng tab (`job_category`, `skill`, `region`…)', 'HQ Admin'],
@@ -1369,7 +1359,7 @@ export const NOTIF_SYSTEM_MODULE_DOCS: Record<string, ModuleDoc> = {
         items: [
           '**Master data** là danh mục dùng chung: ngành nghề, vai trò, chuyên môn, ngành công nghiệp, cấp bậc, kỹ năng, khu vực, thẻ công ty, thẻ tin… Mỗi tab một nhóm và **mỗi nhóm một quyền riêng** — thiếu quyền một tab thì chỉ tab đó vắng, cả trang vẫn chạy.',
           'Tab **Missing skills** lấy đầu vào từ **CV đã đọc**: kỹ năng CV ghi mà danh mục chưa có. Duyệt một dòng là thêm alias / kỹ năng **và** sàng lại các CV đó.',
-          '**General settings** giữ trọng số gợi ý việc và **tỉ giá USD→VND** — tỉ giá này **chỉ** tín hiệu lương của gợi ý việc đọc; sắp xếp / lọc lương trên trang tìm việc dùng hằng số cấu hình riêng.',
+          '**General settings** giữ **tỉ giá USD→VND** — tỉ giá này **chỉ** tín hiệu lương của gợi ý việc đọc; sắp xếp / lọc lương trên trang tìm việc dùng hằng số cấu hình riêng.',
         ],
       },
     ],

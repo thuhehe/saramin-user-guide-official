@@ -127,7 +127,7 @@
   "perm": "",
   "flag": "",
   "site": "Jobseeker site",
-  "what": "Quy tắc **Phase 1** (go-live 21/11/2026): ứng viên **xoá được tài khoản** — NTD không còn xem được CV, email JS 8 + CO 11, dữ liệu huỷ sau 72 giờ — nhưng **không xoá được CV** (chỉ Edit, giới hạn 20 + 20); và NTD mất CV đã unlock khi ứng viên tắt hết CV.",
+  "what": "Quy tắc **Phase 1**: ứng viên **xoá được tài khoản** — đơn không bị rút, NTD vẫn mở CV nhưng thông tin cá nhân bị ẩn, email JS 8 + CO 11, dữ liệu huỷ sau 72 giờ — nhưng **không xoá được CV** (chỉ Edit, giới hạn 20 + 20).",
   "sub": [
    "/my-profile/cv-resume"
   ]
@@ -603,7 +603,7 @@
   "perm": "",
   "flag": "",
   "site": "Jobseeker site",
-  "what": "Bảng tin chia đôi theo quốc gia của nhà tuyển dụng: công ty có *CRM → Company → Country* = Hàn Quốc vào **Korea**, mọi nước khác — **kể cả để trống** — vào **Global**.",
+  "what": "Hai trang dựng như trang chủ, chia theo quốc gia của công ty: *CRM → Company → Country* = Hàn Quốc vào **Korea**, mọi nước khác — **kể cả để trống** — vào **Global**. Mỗi trang có bộ ô bán riêng.",
   "sub": [
    "/jobs/global"
   ]
@@ -761,7 +761,7 @@
   "path": "/system/general-settings",
   "perm": "matching_settings:read",
   "flag": "",
-  "what": "Thiết lập chung: trọng số gợi ý việc và tỉ giá USD→VND.",
+  "what": "Thiết lập chung: tỉ giá USD→VND cho tín hiệu lương của gợi ý việc.",
   "sub": []
  },
  {
