@@ -648,13 +648,13 @@ export const MATCHING_PAGE_DOCS: Record<string, PageDoc> = {
     blocks: [
       {
         kind: 'p',
-        text: 'Màn kết quả onboarding có **hai khối**. Khối trên là *những việc phù hợp nhất* — bộ máy gợi ý có chấm điểm. Khối dưới là dải **“Việc làm cho {các vị trí}”**, và đó là thứ trang này mô tả.\n\nDải này **không chấm điểm**. Nó là một lượt **tìm kiếm thường** với đúng hai bộ lọc, lấy thẳng từ câu trả lời của ứng viên ở wizard: **vị trí muốn làm** và **nơi muốn làm**. Mới nhất trước.',
+        text: 'Màn kết quả onboarding có **hai khối**. Khối trên là *những việc phù hợp nhất* — bộ máy gợi ý có chấm điểm. Khối dưới là dải **“Việc làm cho {vị trí}”**, và đó là thứ trang này mô tả.\n\nDải này **không chấm điểm**. Nó chỉ lọc rồi liệt kê, bằng đúng hai câu trả lời ứng viên vừa đưa lúc đăng ký: **muốn làm vị trí gì** và **muốn làm ở tỉnh nào**. Tin mới đăng nằm trên, nhiều nhất **9 tin**.',
       },
       {
         kind: 'shot',
         src: '/shots/matching/onboarding-role-strip.jpg',
         where: 'Jobseeker site',
-        caption: 'Màn kết quả onboarding. Khối trong khung đỏ là dải *“Việc làm cho {các vị trí}”*.',
+        caption: 'Màn kết quả onboarding. Khối trong khung đỏ là dải *“Việc làm cho {vị trí}”*.',
         note: 'Nó nằm dưới lưới *những việc phù hợp nhất* và trên nút *Hoàn tất CV và ứng tuyển*.',
       },
 
@@ -662,13 +662,13 @@ export const MATCHING_PAGE_DOCS: Record<string, PageDoc> = {
       { kind: 'h', text: '1. Hai khối, hai nguồn khác hẳn nhau' },
       {
         kind: 'table',
-        note: 'Hai khối nằm sát nhau nên rất dễ bị đọc là một. Chúng **không** chia sẻ luật nào — ngoài việc khối 2 phải bỏ những job khối 1 đang hiện.',
-        cols: ['', 'Khối 1 — những việc phù hợp nhất', 'Khối 2 — Việc làm cho {các vị trí}'],
+        note: 'Nói ngắn: khối 1 trả lời *“job nào hợp với bạn nhất”*, khối 2 trả lời *“job mới nhất đúng vị trí bạn chọn”*. Hai khối nằm sát nhau nên rất dễ bị đọc là một, nhưng chúng **không** chia sẻ luật nào — ngoài việc khối 2 phải bỏ những job khối 1 đang hiện.',
+        cols: ['', 'Khối 1 — những việc phù hợp nhất', 'Khối 2 — Việc làm cho {vị trí}'],
         rows: [
-          ['Nguồn', 'Bộ máy **Recommended jobs** (có chấm điểm)', '**Tìm kiếm thuần**'],
-          ['Đọc gì của ứng viên', 'CV · hồ sơ · hành vi · trọng số', '**Đúng hai thứ**: vị trí và nơi làm việc đã chọn ở wizard'],
-          ['Thứ tự', 'Điểm cao nhất trước', '**Mới nhất trước**'],
-          ['Số thẻ', 'tối đa 30, chia 6 thẻ một trang', '3 thẻ một hàng, có phân trang'],
+          ['Chọn job kiểu gì', 'Hệ thống **chấm điểm** từng job theo mức độ hợp với ứng viên, rồi lấy những job điểm cao nhất', '**Lọc rồi liệt kê, không chấm điểm** — y như chính ứng viên vào trang *Tìm việc*, chọn đúng vị trí và tỉnh của mình rồi xem kết quả'],
+          ['Dùng thông tin gì của ứng viên', 'CV · hồ sơ · những job họ đã xem, lưu, ứng tuyển · điểm nặng nhẹ của từng tiêu chí', '**Đúng hai câu trả lời** lúc đăng ký: muốn làm **vị trí gì**, ở **tỉnh/thành nào**. Không đọc CV, không nhìn lịch sử'],
+          ['Thứ tự thẻ', 'Điểm cao nhất trước', '**Tin đăng mới nhất lên trước**'],
+          ['Số thẻ', 'tối đa 30, chia 6 thẻ một trang', '**tối đa 9**, chia 3 thẻ một trang'],
         ],
       },
 
@@ -682,34 +682,34 @@ export const MATCHING_PAGE_DOCS: Record<string, PageDoc> = {
           '**Không bao giờ nới lên nghề.** Không lấy thêm job của các vị trí anh em cùng nghề, không lấy thêm job ở tỉnh lân cận.',
           'Ứng viên **không chọn tỉnh/thành nào** → không lọc nơi làm việc, chỉ lọc theo vị trí.',
           'Job **không ghi nơi làm việc nào** thì không vào dải — hệ thống tìm theo tỉnh của tin hoặc tỉnh của chi nhánh làm việc, tin không có cả hai thì không khớp tỉnh nào.',
-          'Không đọc CV, không đọc hồ sơ, không xáo trộn, không ưu tiên gói dịch vụ.',
+          'Những job khối 1 phía trên **đang hiện** thì khối 2 bỏ ra hết, để hai khối không bao giờ trùng tin.',
         ],
       },
 
       /* ───────────────────────────────────────────────────────────────── */
-      { kind: 'h', text: '3. Tiêu đề in tên tất cả vị trí đã chọn' },
+      { kind: 'h', text: '3. Tiêu đề in vị trí nào — mở dần từng vị trí một' },
       {
         kind: 'list',
         items: [
-          'Ứng viên chọn được tối đa **3 vị trí** ở bước 1, và tiêu đề in **đủ cả ba**, cách nhau bằng dấu phẩy, theo đúng thứ tự họ chọn: *“Việc làm cho Hành chính marketing, Nhân viên kinh doanh, Content marketing”*.',
-          'Dải bên dưới **gộp job của cả ba vị trí**, không phải chỉ một.',
-          'Một job khớp hai vị trí chỉ hiện **một thẻ**, không nhân đôi.',
-          'Bước 1 không chọn vị trí nào → **không có dải này**; khối 1 vẫn hiện bình thường.',
+          'Ứng viên chọn được tối đa **3 vị trí**, nhưng dải **không** lấy cả ba ngay. Nó lấy **vị trí còn nhiều job nhất** trước.',
+          '“Còn nhiều nhất” tính trên **số job còn lại sau khi đã lọc tỉnh và đã bỏ job khối 1** — tức là số job vị trí đó thật sự lấp được, không phải tổng số tin của vị trí đó trên toàn site.',
+          'Vị trí đó **một mình đủ 9 job** → dừng ở đó, tiêu đề chỉ có **một tên**.',
+          'Chưa đủ 9 → lấy thêm **vị trí nhiều thứ hai**. Vẫn chưa đủ → lấy thêm **vị trí thứ ba**.',
+          'Tiêu đề in **đúng những vị trí đã lấy**, cách nhau bằng dấu phẩy và chữ **và** trước tên cuối: *“Việc làm cho A”* · *“Việc làm cho A và B”* · *“Việc làm cho A, B và C”*. Vị trí không được lấy thì không lên tiêu đề.',
+          'Vì ngưỡng mở rộng đúng bằng số thẻ tối đa, nên **mọi vị trí có tên trên tiêu đề đều có ít nhất một thẻ bên dưới** — tiêu đề không bao giờ hứa một vị trí mà ứng viên không thấy.',
         ],
       },
       {
         kind: 'example',
-        heading: 'Một ứng viên, ba vị trí, hai tỉnh',
-        scenario: 'Ứng viên chọn ở wizard ba vị trí — **Hành chính marketing**, **Nhân viên kinh doanh**, **Content marketing** — và hai nơi làm việc: **Hồ Chí Minh**, **Bình Dương**.',
-        cols: ['Job đang tuyển', 'Vị trí', 'Nơi làm việc', 'Vào dải?'],
+        heading: 'Chọn ba vị trí, tiêu đề chỉ in một',
+        scenario: 'Ứng viên chọn ba vị trí — **Hành chính marketing**, **Nhân viên kinh doanh**, **Content marketing** — và hai nơi làm việc: **Hồ Chí Minh**, **Bình Dương**.',
+        cols: ['Vị trí đã chọn', 'Job còn lại sau khi lọc tỉnh và bỏ job khối 1', 'Vào dải?'],
         rows: [
-          ['Chuyên viên hành chính marketing', 'Hành chính marketing', 'Hồ Chí Minh', '**Có**'],
-          ['Nhân viên kinh doanh khu vực miền Nam', 'Nhân viên kinh doanh', 'Bình Dương', '**Có**'],
-          ['Nhân viên kinh doanh dự án', 'Nhân viên kinh doanh', 'Hà Nội', 'Không — tỉnh không nằm trong hai tỉnh đã chọn'],
-          ['Content marketing (mảng beauty)', 'Content marketing', 'Hồ Chí Minh', 'Không — **khối 1 phía trên đang hiện job này rồi**'],
-          ['Trưởng phòng marketing', 'Quản lý marketing', 'Hồ Chí Minh', 'Không — vị trí không nằm trong ba vị trí đã chọn'],
+          ['Nhân viên kinh doanh', '**11**', '**Có** — một mình đã quá 9'],
+          ['Hành chính marketing', '6', 'Không cần tới'],
+          ['Content marketing', '2', 'Không cần tới'],
         ],
-        note: 'Tiêu đề in cả ba vị trí: *“Việc làm cho Hành chính marketing, Nhân viên kinh doanh, Content marketing”*.\n\nSau khi lọc chỉ còn **2 job** → theo mục 4, **không hiện dải nào cả**. Ứng viên thấy khối 1 rồi tới thẳng nút *Hoàn tất CV và ứng tuyển*.',
+        note: 'Tiêu đề in *“Việc làm cho Nhân viên kinh doanh”* — một tên thôi, và dải hiện 9 job mới nhất của vị trí đó, chia 3 trang.\n\nNếu *Nhân viên kinh doanh* chỉ còn **4** job: 4 chưa đủ 9 → lấy thêm *Hành chính marketing* (6 job) → tổng 10, cắt còn 9, tiêu đề thành *“Việc làm cho Nhân viên kinh doanh và Hành chính marketing”*.',
       },
 
       /* ───────────────────────────────────────────────────────────────── */
@@ -718,7 +718,7 @@ export const MATCHING_PAGE_DOCS: Record<string, PageDoc> = {
         kind: 'list',
         items: [
           'Đếm **sau khi** đã lọc vị trí, lọc nơi làm việc và bỏ những job khối 1 đang hiện.',
-          'Còn **0, 1 hoặc 2 job thì không hiện gì cả** — không tiêu đề, không lưới, không khoảng trắng.',
+          'Cả ba vị trí gộp lại mà vẫn còn **0, 1 hoặc 2 job thì không hiện gì cả** — không tiêu đề, không lưới, không khoảng trắng.',
           'Lưới ba cột đứng mỗi một thẻ trông như trang bị hỏng.',
         ],
       },
@@ -728,8 +728,8 @@ export const MATCHING_PAGE_DOCS: Record<string, PageDoc> = {
       {
         kind: 'list',
         items: [
-          '**Vì sao tiêu đề có mấy cái tên?** Vì ứng viên chọn mấy vị trí ở bước 1, và dải gộp job của tất cả. Chọn một vị trí thì tiêu đề chỉ có một tên.',
-          '**Vì sao con số ở wizard không khớp số thẻ ở dải này?** Con số ở bước 3 / bước 4 của wizard đếm theo **nghề** và giữ cả những tin bỏ trống thông tin; dải này lọc chặt theo **vị trí + nơi làm việc**. Hai phép đếm khác nhau, và đó là đúng thiết kế.',
+          '**Vì sao có người thấy tiêu đề một tên, có người thấy ba tên?** Vì dải mở dần: một vị trí đủ 9 job thì dừng ở đó, không đủ mới lấy thêm vị trí tiếp theo. Tiêu đề dài hay ngắn là theo số job còn lại, không phải theo số vị trí ứng viên chọn.',
+          '**Vì sao con số ở bước 3 / bước 4 lúc đăng ký không khớp số thẻ ở dải này?** Con số đó đếm theo **nghề** và giữ cả những tin bỏ trống thông tin; dải này lọc chặt theo **vị trí + nơi làm việc**, lại còn bỏ bớt job khối 1 và cắt ở 9. Hai phép đếm khác nhau, và đó là đúng thiết kế.',
           '**Vì sao hai khối trên màn kết quả cho job khác nhau?** Khối 1 chấm điểm theo hồ sơ, khối 2 chỉ lọc theo vị trí và nơi làm việc. Hai câu hỏi khác nhau.',
         ],
       },
@@ -760,7 +760,7 @@ export const MATCHING_MODULE_DOCS: Record<string, ModuleDoc> = {
           ['**Các công việc tương tự**\n`/trang/similar-jobs`', 'Carousel dưới trang chi tiết job', 'Nhìn **job đang mở** → tìm ra **job khác** giống nó', 'Không'],
           ['**Recommended talent**\n`/trang/recommended-candidates`', 'Company Home của nhà tuyển dụng · % trên bảng ứng viên', 'Nhìn **job đang tuyển** → tìm ra **ứng viên** hợp với job', 'Có — chỉ phần ứng viên tự khai'],
           ['**Số việc ở onboarding**\n`/trang/onboarding-job-count`', 'Câu dẫn ở bước 3 và bước 4 của wizard', 'Không tìm ai cả, chỉ **đếm**: có bao nhiêu job lọt qua bộ lọc', 'Không'],
-          ['**Dải “Việc làm cho {các vị trí}”**\n`/trang/onboarding-role-strip`', 'Màn kết quả onboarding, dưới lưới *những việc phù hợp nhất*', 'Nhìn **những vị trí và nơi làm việc ứng viên vừa chọn** → tìm ra **job** đúng vị trí đó, đúng tỉnh đó, mới nhất trước', 'Không'],
+          ['**Dải “Việc làm cho {vị trí}”**\n`/trang/onboarding-role-strip`', 'Màn kết quả onboarding, dưới lưới *những việc phù hợp nhất*', 'Nhìn **vị trí và nơi làm việc ứng viên vừa chọn** → tìm ra **job** đúng vị trí đó, đúng tỉnh đó, mới nhất trước, tối đa 9', 'Không'],
           ['**Việc gợi ý trong email sau khi nộp đơn**\n*chưa có trang riêng*', 'Email *Bạn đã ứng tuyển thành công*', 'Nhìn **job vừa nộp đơn** → tìm ra **job khác** giống nó', 'Không'],
         ],
       },
