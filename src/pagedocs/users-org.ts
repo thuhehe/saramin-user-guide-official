@@ -814,6 +814,19 @@ export const USERS_ORG_PAGE_DOCS: Record<string, PageDoc> = {
 
       { kind: 'h', text: '§1 · Danh sách', path: '/system/departments' },
       {
+        kind: 'shot',
+        src: '/shots/org/01-departments-list.jpg',
+        where: 'Admin',
+        caption: 'Danh sách **Departments**: mỗi dòng là một phòng ban hoặc team, với bốn cột *Department · Teams · Members · Leader* giải thích ở bảng dưới. Nút **New department** ở góc trên phải.',
+        note: 'Ảnh production ngày 12/11/2026.',
+      },
+      {
+        kind: 'shot',
+        src: '/shots/org/03-department-row-menu.jpg',
+        where: 'Admin',
+        caption: 'Menu **⋮** của một dòng phòng ban: **View detail · Add team · Edit · Delete**. Dòng *team* không có *Add team*.',
+      },
+      {
         kind: 'table',
         heading: 'Các cột trong danh sách',
         note: 'Cây được dựng **trước khi** chia trang, nên một trang chứa N phòng ban **cùng các team của chúng** — không bao giờ cắt đôi một phòng ban.',
@@ -836,7 +849,21 @@ export const USERS_ORG_PAGE_DOCS: Record<string, PageDoc> = {
         ],
       },
 
+      {
+        kind: 'shot',
+        src: '/shots/org/02-new-department.jpg',
+        where: 'Admin',
+        caption: 'Hộp **New department** — chỉ **Name** và **Leader**. Dòng chữ dưới ô Leader nhắc: đặt làm leader **không tự cấp quyền**; muốn leader xem được việc của team thì gán vai trò có phạm vi team.',
+      },
+
       { kind: 'h', text: '§2 · Trang một nút', path: '/system/departments/:id' },
+      {
+        kind: 'shot',
+        src: '/shots/org/04-department-detail.jpg',
+        where: 'Admin',
+        caption: 'Trang của một phòng ban. Trái: **Details** (*Name*, *Leader* — hai ô sửa được) và **Placement** (chỉ đọc). Phải: **Actions** (*Add team*, *Delete*) và **Members**.',
+        note: 'Ảnh production ngày 12/11/2026.',
+      },
       {
         kind: 'table',
         cols: ['Vùng', 'Có gì'],
@@ -980,6 +1007,12 @@ export const USERS_ORG_PAGE_DOCS: Record<string, PageDoc> = {
 
       { kind: 'h', text: '§2 · Mời một người' },
       {
+        kind: 'shot',
+        src: '/shots/org/21-invite-user.jpg',
+        where: 'Admin',
+        caption: 'Hộp **Invite user**: *Full name* và *Email* bắt buộc, các ô còn lại tuỳ chọn; dưới cùng là khối **Roles & edit and sales reach**, cần ít nhất một vai trò. Không có ô mật khẩu.',
+      },
+      {
         kind: 'table',
         heading: 'Form Invite user',
         cols: ['Ô', 'Bắt buộc', 'Luật / ghi chú'],
@@ -1045,6 +1078,13 @@ export const USERS_ORG_PAGE_DOCS: Record<string, PageDoc> = {
       },
 
       { kind: 'h', text: '§4 · Trang của một người', path: '/system/users/:id' },
+      {
+        kind: 'shot',
+        src: '/shots/org/27-user-detail.jpg',
+        where: 'Admin',
+        caption: 'Trang một tài khoản. Trái: **Profile** (email không đổi được). Phải trên: **Account** — câu giải thích trạng thái và các nút *Resend invite link · Deactivate · Delete user*. Phải dưới: **Roles & edit and sales reach**, lưu bằng nút riêng.',
+        note: 'Ảnh production ngày 12/11/2026.',
+      },
       {
         kind: 'table',
         cols: ['Vùng', 'Có gì'],
@@ -1148,6 +1188,13 @@ export const USERS_ORG_PAGE_DOCS: Record<string, PageDoc> = {
 
       { kind: 'h', text: '§1 · Danh sách', path: '/system/roles' },
       {
+        kind: 'shot',
+        src: '/shots/org/10-roles-list.jpg',
+        where: 'Admin',
+        caption: 'Danh sách **Roles & permissions**: tên và mô tả, **Grants** (số quyền vai trò cấp), **Operators** (số người đang giữ — bấm để xem tên), menu **⋮** ở cột Actions.',
+        note: 'Ảnh production ngày 12/11/2026.',
+      },
+      {
         kind: 'table',
         cols: ['Cột', 'Nghĩa'],
         rows: [
@@ -1159,6 +1206,18 @@ export const USERS_ORG_PAGE_DOCS: Record<string, PageDoc> = {
       },
 
       { kind: 'h', text: '§2 · Tạo và sửa một vai trò', path: '/system/roles/:id' },
+      {
+        kind: 'shot',
+        src: '/shots/org/11-new-role.jpg',
+        where: 'Admin',
+        caption: 'Trang **Create a new role**: tên, mô tả, và lưới quyền theo từng trang, chia nhóm đúng như sidebar. Mỗi trang là một dòng với *None · Create · Read · Update · Delete · Export*; dấu **—** nghĩa là hành động đó không có ở trang này.',
+      },
+      {
+        kind: 'shot',
+        src: '/shots/org/12-matrix-companies.jpg',
+        where: 'Admin',
+        caption: 'Lưới quyền lọc bằng ô **Search pages** với chữ `compan`: dòng **Companies** và các dòng con thụt vào bên dưới. Khi đang lọc, dải tick hàng loạt chỉ áp cho các dòng đang hiện.',
+      },
       {
         kind: 'table',
         heading: 'Các ô',

@@ -1136,6 +1136,13 @@ export const CONTENT_PAGE_DOCS: Record<string, PageDoc> = {
         text: '§1 Ba trang, một màn hình',
       },
       {
+        kind: 'shot',
+        src: '/shots/job-display/jobs-pages-roles.jpg',
+        where: 'Jobseeker site',
+        caption: 'Trang **Theo ngành nghề**. Từ trên xuống: ba tab của ba trang (tab HOT 100 là trang khác) → **thanh tìm kiếm** với panel ngành nghề mở sẵn → **Băng 1 · Tin tuyển dụng nổi bật** (3 cột) → **Băng 2 · Đừng bỏ lỡ những tin này!** (4 cột). *Theo khu vực* và *Theo ngành* giống hệt, chỉ khác ô mở sẵn và trục nhóm.',
+        note: 'Ảnh môi trường dev ngày 25/11/2026, trước khi bấm tìm — danh sách kết quả chỉ hiện sau khi bấm.',
+      },
+      {
         kind: 'table',
         heading: 'Ba trang và chỗ chúng khác nhau',
         cols: ['Trang', 'Đường dẫn (VI · EN/KO)', 'Tiêu đề h1', 'Trục nhóm của hai băng', 'Ô bắt buộc khi bấm tìm'],

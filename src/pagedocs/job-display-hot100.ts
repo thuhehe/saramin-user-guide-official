@@ -97,6 +97,13 @@ export const HOT100_PAGE_DOCS: Record<string, PageDoc> = {
       /* ───────────────────────────────────────────────────────────────── */
       { kind: 'h', text: '1. Tổng quan' },
       {
+        kind: 'shot',
+        src: '/shots/job-display/hot-100.jpg',
+        where: 'Jobseeker site',
+        caption: 'Trang HOT 100. **Bộ lọc** ở trên, **bảng xếp hạng** ở dưới. Mỗi dòng mở đầu bằng **hạng và mũi tên** (mục 7). Khách chưa đăng nhập dừng ở dòng 10 và thấy nút *Hoàn thiện CV và xem HOT100* (mục 8).',
+        note: 'Ảnh môi trường dev ngày 25/11/2026, chưa đăng nhập. Hôm đó không có dòng Gợi ý (mục 6) và mọi dòng đang hiện “-”.',
+      },
+      {
         kind: 'p',
         text: 'HOT 100 là bảng xếp hạng 100 tin tuyển dụng. Bảng được chốt một lần mỗi đêm và giữ nguyên suốt ngày hôm đó.\n\nMỗi dòng có một số thứ tự và một mũi tên so với hôm qua. Ở trang này thứ tự chính là nội dung, không chỉ là cách sắp xếp.',
       },

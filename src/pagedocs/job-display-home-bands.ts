@@ -191,6 +191,13 @@ export const HOME_BANDS_PAGE_DOCS: Record<string, PageDoc> = {
       /* ───────────────────────────────────────────────────────────────── */
       { kind: 'h', text: '2. Tám dải trên một trang' },
       {
+        kind: 'shot',
+        src: '/shots/job-display/home-bands.jpg',
+        where: 'Jobseeker site',
+        caption: 'Trang chủ, từ trên xuống. Số trên mỗi khung đỏ là cột **#** của bảng dưới: **1** Việc làm Premium · **2 · 3** Top Việc Làm Hấp Dẫn (thẻ lớn mở đầu, rồi các thẻ ảnh) · **4 · 5** khối không tiêu đề · **6** Việc làm Tiêu Điểm · **7** Việc Làm Mới Nhất · **8** Mạng Lưới Việc Làm.',
+        note: 'Ảnh môi trường dev ngày 25/11/2026, chưa đăng nhập. Dữ liệu thử ít nên các dải chưa đủ số thẻ — số thẻ ở cột cuối của bảng là trần, không phải số luôn có.',
+      },
+      {
         kind: 'table',
         note: 'Cột Placement là tên ô đúng như trong Admin → System → Placements. Hai trang kia dùng tám ô cùng tên nhưng mang tiền tố Korea - và Global -, ví dụ Korea - Top job, mọi thiết lập giống hệt.',
         cols: ['#', 'Placement', 'Tiêu đề ứng viên thấy', 'Số thẻ'],
