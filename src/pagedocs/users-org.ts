@@ -336,6 +336,13 @@ export const USERS_ORG_PAGE_DOCS: Record<string, PageDoc> = {
       /* §6 */
       { kind: 'h', text: '§6 · Admin (HQ)', path: '/users/jobseekers' },
       {
+        kind: 'shot',
+        src: '/shots/users/jobseekers-list.jpg',
+        where: 'Admin',
+        caption: 'Trang **Jobseeker users**: hàng **thẻ số liệu** trên cùng, dưới là **tab trạng thái** *All · Active · Deactivated · Deleted · Inactive*, rồi ô tìm, bộ lọc cách đăng nhập, khoảng ngày và *Export Excel*.',
+        note: 'Ảnh môi trường staging ngày 25/11/2026. Tên, email và số điện thoại ứng viên đã được thay bằng dữ liệu mẫu.',
+      },
+      {
         kind: 'table',
         heading: 'Quyền cần có',
         note: '**Trên lưới quyền không có dòng “Jobseeker users”.** Các quyền `candidate:*` nằm ở dòng **Talent pool** (nhóm Recruitment). Theo seed **chỉ HQ Admin** có `candidate:*` — trên vai trò khác ô *Update* / *Export* của Talent pool thường hiện **Partial**; tick ô đó là cấp luôn quyền khoá / xoá tài khoản ứng viên.',
@@ -358,7 +365,7 @@ export const USERS_ORG_PAGE_DOCS: Record<string, PageDoc> = {
       {
         kind: 'table',
         heading: '6.1 Jobseeker users — thao tác theo trạng thái',
-        note: 'Đầu trang có **4 thẻ số liệu**: Accounts · Active · Deactivated · New this month. Ngoài ra còn **Create**, **Edit profile**, **Export** và **Resend verification**.',
+        note: 'Đầu trang có **5 thẻ số liệu**: Accounts · Active · Inactive · Deactivated · New this month. Ngoài ra còn **Create**, **Edit profile**, **Export** và **Resend verification**.',
         cols: ['Trạng thái của dòng', 'Thao tác'],
         rows: [
           ['Active', '**Deactivate** (lý do không bắt buộc) · **Send password reset** · **Delete** (ở trang chi tiết)'],
@@ -375,7 +382,7 @@ export const USERS_ORG_PAGE_DOCS: Record<string, PageDoc> = {
       {
         kind: 'warn',
         text:
-          'Notion mô tả **6 thẻ** (thêm Withdrawn, Deleted), lọc theo **nguồn đăng ký**, cột **số nhà tuyển dụng đã mở khoá** mỗi CV, và audit riêng cho việc **mở CV / bỏ che liên hệ**. Bản dựng: **4 thẻ**, **không** có bộ lọc nguồn đăng ký (backend có `signupSource` nhưng UI chưa dùng), **không** có số lượt mở khoá (nằm ở billing), và **không che email** — chỉ ghi audit khi mở trang chi tiết.',
+          'Notion mô tả **6 thẻ** (thêm Withdrawn, Deleted), lọc theo **nguồn đăng ký**, cột **số nhà tuyển dụng đã mở khoá** mỗi CV, và audit riêng cho việc **mở CV / bỏ che liên hệ**. Bản dựng: **5 thẻ** (có Inactive, không có Withdrawn / Deleted), **không** có bộ lọc nguồn đăng ký (backend có `signupSource` nhưng UI chưa dùng), **không** có số lượt mở khoá (nằm ở billing), và **không che email** — chỉ ghi audit khi mở trang chi tiết.',
       },
       {
         kind: 'table',
@@ -391,6 +398,13 @@ export const USERS_ORG_PAGE_DOCS: Record<string, PageDoc> = {
           ['Email block', 'Địa chỉ có bị chặn đăng ký lại không'],
           ['Reason', 'Lý do ứng viên chọn, hoặc ghi chú của HQ'],
         ],
+      },
+      {
+        kind: 'shot',
+        src: '/shots/users/jobseekers-deleted.jpg',
+        where: 'Admin',
+        caption: 'Tab **Deleted**. Ba cột trong khung đỏ trả lời ba câu hỏi hay gặp: **ai xoá** (*Withdrawn* = chính ứng viên, hoặc HQ), **lần huỷ 72 giờ đã chạy chưa** (*Pending* / *Erased*), và **email có bị chặn đăng ký lại không**. Nút **Check email block** ở góc trên để tra và gỡ chặn một email.',
+        note: 'Ảnh môi trường staging ngày 25/11/2026.',
       },
       {
         kind: 'list',
@@ -980,6 +994,13 @@ export const USERS_ORG_PAGE_DOCS: Record<string, PageDoc> = {
       },
 
       { kind: 'h', text: '§1 · Danh sách', path: '/system/users' },
+      {
+        kind: 'shot',
+        src: '/shots/org/20-users-list.jpg',
+        where: 'Admin',
+        caption: 'Danh sách **Users**. Tab trạng thái, ô tìm, lọc phòng ban và lọc vai trò trong khung đỏ — tất cả nằm trên URL, gửi link là người nhận thấy đúng view đó.',
+        note: 'Ảnh môi trường staging ngày 25/11/2026. Tên và email nhân viên đã được thay bằng dữ liệu mẫu.',
+      },
       {
         kind: 'table',
         heading: 'Cột',
@@ -1618,7 +1639,7 @@ export const USERS_ORG_MODULE_DOCS: Record<string, ModuleDoc> = {
         src: '/shots/org/20-users-list.jpg',
         where: 'Admin',
         caption:
-          'Danh sách Users trên production: **214 tài khoản**, tab **All · Pending · Active · Inactive**, lọc theo **phòng ban** (chọn một phòng ban là **gồm cả các team của nó**) và theo **vai trò**. Ô tìm kiếm theo tên hoặc email **không phân biệt dấu**.',
+          'Danh sách Users: tab **All · Pending · Active · Inactive**, lọc theo **phòng ban** (chọn một phòng ban là **gồm cả các team của nó**) và theo **vai trò**. Ô tìm kiếm theo tên hoặc email **không phân biệt dấu**.',
       },
       {
         kind: 'table',

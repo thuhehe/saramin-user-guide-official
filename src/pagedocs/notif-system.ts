@@ -626,6 +626,13 @@ export const NOTIF_SYSTEM_PAGE_DOCS: Record<string, PageDoc> = {
       /* ── §2 Danh sách tab ───────────────────────────────────────────────── */
       { kind: 'h', text: '§2 · Danh sách tab' },
       {
+        kind: 'shot',
+        src: '/shots/system/master-data-taxonomy.jpg',
+        where: 'Admin',
+        caption: 'Master data mở ở tab **Job taxonomy**. Trên cùng là dải tab — mỗi tab một danh mục (tab cuối nằm sau nút **…**). Bên phải: **Import / Export** để sửa hàng loạt và **New** để thêm một giá trị. Bảng là cây 3 cấp, bấm mũi tên để mở cấp con (mục 3).',
+        note: 'Ảnh môi trường staging ngày 25/11/2026.',
+      },
+      {
         kind: 'table',
         heading: '17 tab và nơi chúng được đọc',
         note: 'Thứ tự tab theo chủ đề: phân loại công việc → điều kiện một tin → mô tả ứng viên → mô tả công ty → vị trí.',
@@ -827,6 +834,13 @@ export const NOTIF_SYSTEM_PAGE_DOCS: Record<string, PageDoc> = {
       },
 
       { kind: 'h', text: '§9 · Skills' },
+      {
+        kind: 'shot',
+        src: '/shots/system/master-data-skills.jpg',
+        where: 'Admin',
+        caption: 'Tab **Skills**. Cột **Aliases** giữ các cách viết khác của cùng một kỹ năng; cột **Used in roles** đếm số job role đang gợi ý kỹ năng này.',
+        note: 'Ảnh môi trường staging ngày 25/11/2026.',
+      },
       mdTab([
         ['Gồm', 'Kỹ năng, kèm **alias** (các cách viết khác của cùng một kỹ năng). Chỉ Skills có alias'],
         ['Đọc ở đâu', 'Form tin · CV · **đọc CV / sàng CV**: khi đọc CV, hệ thống so chữ tự do trong CV với danh sách kỹ năng và alias'],
@@ -848,6 +862,13 @@ export const NOTIF_SYSTEM_PAGE_DOCS: Record<string, PageDoc> = {
       },
 
       { kind: 'h', text: '§10 · Missing skills' },
+      {
+        kind: 'shot',
+        src: '/shots/system/master-data-missing-skills.jpg',
+        where: 'Admin',
+        caption: 'Tab **Missing skills**: kỹ năng có trong CV thật nhưng chưa có trong danh mục. Cột **What to add** là gợi ý của hệ thống — *Alias of …* hoặc *New skill* — và nút **Approve** ngay cạnh.',
+        note: 'Ảnh môi trường staging ngày 25/11/2026.',
+      },
       {
         kind: 'table',
         cols: ['Mục', 'Logic'],

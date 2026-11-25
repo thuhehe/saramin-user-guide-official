@@ -597,6 +597,13 @@ export const PRODUCT_SERVICE_PAGE_DOCS: Record<string, PageDoc> = {
           '**Trang này vừa được thay hoàn toàn** — bản `v1.0.13`, gắn thẻ 10/11/2026. Kho ảnh cũ — ảnh rời, trường *Frame* với *Wordmark / Thumbnail / Photo — portrait*, *Topics*, và luồng **import .xlsx** kèm *Download template* — **không còn nữa**. Thay vào đó là cụm ảnh ba khung, tag tự tạo, và một **bảng nhập hàng loạt ngay trong admin** thay cho file Excel. Ai đọc bản hướng dẫn trước đó xin bỏ toàn bộ phần import .xlsx.',
       },
       {
+        kind: 'shot',
+        src: '/shots/ps/gallery-library.jpg',
+        where: 'Admin',
+        caption: '**Thư viện**: mỗi thẻ là một cụm, vẽ đủ ba khung *Landscape · Portrait · Circle* đúng hình thật. Thanh lọc ở trên; hai nút tạo ở góc phải.',
+        note: 'Ảnh môi trường staging ngày 25/11/2026.',
+      },
+      {
         kind: 'table',
         heading: 'Ba khung — kích thước thật, và khung nào in ở đâu',
         note: 'Đây là kích thước **đã nhân đôi** mà thẻ công khai thu nhỏ xuống, nên file khung không bao giờ bị kéo giãn. Ảnh phải **lớn hơn hoặc bằng** khung; sai tỉ lệ quá **2 %** thì phải cắt.',
@@ -622,6 +629,13 @@ export const PRODUCT_SERVICE_PAGE_DOCS: Record<string, PageDoc> = {
         ],
       },
       {
+        kind: 'shot',
+        src: '/shots/ps/gallery-set-detail.jpg',
+        where: 'Admin',
+        caption: '**Chi tiết một cụm**: mục **Frames** cho từng khung *Crop · Replace · Remove*; mục **Details** sửa hạn bản quyền, ngành và tag rồi lưu một lần; nút **Archive** ở góc trên — không có Delete.',
+        note: 'Ảnh môi trường staging ngày 25/11/2026. Nút Crop mờ vì các khung của cụm này được tải lên không kèm ảnh gốc.',
+      },
+      {
         kind: 'table',
         heading: 'Vòng đời một cụm',
         cols: ['Tình trạng', 'Nghĩa', 'Vào bằng cách', 'Còn được chào cho tin mới?', 'Tin đang dùng'],
@@ -631,6 +645,13 @@ export const PRODUCT_SERVICE_PAGE_DOCS: Record<string, PageDoc> = {
           ['**Archived**', 'Đã nghỉ hưu', 'Nút *Archive* (cần `content_gallery:update`)', '**Không**', 'Vẫn hiện'],
         ],
         note: 'Thư viện mặc định chỉ hiện cụm **Active**; bật *Show archived* thì **chỉ** hiện cụm đã lưu trữ — hai tập không trộn, và con số tổng ở chân bảng đếm riêng từng tập. Cụm **Expired** vẫn nằm trong danh sách Active để người gia hạn còn thấy.',
+      },
+      {
+        kind: 'shot',
+        src: '/shots/ps/gallery-bulk.jpg',
+        where: 'Admin',
+        caption: '**Bulk create image sets**: mỗi dòng là một cụm. Thả ảnh vào ô khung; **Industry** là cột bắt buộc duy nhất. *Copy · Paste · Fill down* chỉ dùng cho ô chữ; cặp nút *Use file as is / Open crop frame* quyết định điều gì xảy ra khi thả ảnh sai hình.',
+        note: 'Ảnh môi trường staging ngày 25/11/2026.',
       },
       {
         kind: 'table',
@@ -653,11 +674,6 @@ export const PRODUCT_SERVICE_PAGE_DOCS: Record<string, PageDoc> = {
           '**Nhóm chọn chế độ thả ảnh** — `Use file as is` / `Open crop frame` (góc phải, trên bảng): quyết định điều gì xảy ra **khi thả một ảnh sai hình**. *Use file as is* lấy luôn; *Open crop frame* mở khung cắt để chọn vùng. Đổi lúc nào cũng được, áp cho lần thả tiếp theo.',
           '**Clear created rows** (chân bảng, chỉ hiện khi đã tạo được dòng nào): dọn các dòng đã tạo xong ra khỏi bảng để nhập tiếp, mà không phải tải lại trang.',
         ],
-      },
-      {
-        kind: 'open',
-        text:
-          '**Chưa có ảnh chụp màn hình thật cho trang này** — tính năng vừa lên `v1.0.13` ngày 10/11/2026 và `docs/qa/screenshots/` trong repo admin chưa có bộ mới. Ảnh cũ `/shots/ps/gallery.jpg` chụp **kho ảnh đời trước** nên đã gỡ khỏi trang này. Cần chụp lại: thư viện, hộp thoại *Create set*, bảng nhập hàng loạt, và trang chi tiết cụm.',
       },
     ],
   },
