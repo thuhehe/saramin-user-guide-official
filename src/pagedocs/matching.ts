@@ -77,7 +77,7 @@ export const MATCHING_PAGE_DOCS: Record<string, PageDoc> = {
         kind: 'table',
         cols: ['Hệ thống đọc gì', 'Lọc thế nào'],
         rows: [
-          ['**Vị trí mong muốn** — tối đa 3 **job role**', 'Lấy **job category** của từng job role đó, rồi giữ mọi job thuộc các job category ấy'],
+          ['**Vị trí mong muốn** — tối đa 5 **job role**', 'Lấy **job category** của từng job role đó, rồi giữ mọi job thuộc các job category ấy'],
           ['**Địa điểm mong muốn**', 'Giữ job ở các tỉnh đó. Job **remote** luôn được giữ, dù ở tỉnh nào'],
           ['**Hành vi 90 ngày** — nộp đơn 1 job, lưu 1 job, hoặc mở xem 3 job khác nhau', 'Cộng job category và tỉnh của những job đó vào tập lọc ở trên. Tối đa 3 job role · 3 job category · 3 tỉnh hay gặp nhất'],
           ['**Không khai gì, chưa có hành vi gì**', '**Không lọc gì.** Lấy toàn bộ job đang tuyển'],
@@ -107,8 +107,8 @@ export const MATCHING_PAGE_DOCS: Record<string, PageDoc> = {
         kind: 'table',
         cols: ['Tiêu chí', 'Điểm', 'Được tối đa khi', 'Các nấc thấp hơn'],
         rows: [
-          ['**Job role & job category**', '**42**', 'Job đúng **job role** ứng viên khai', 'Cùng **job group** → **30** · chỉ cùng **job category** → **17** · khác → **0**. Bảng ngay dưới giải thích kỹ'],
-          ['**Địa điểm & job type**', '**20**', 'Đúng tỉnh **và** đúng job type. Job **remote** luôn được 20', 'Đúng tỉnh, khác job type → **14** · tỉnh lân cận → **10** · khác → **0**'],
+          ['**Job role & job category**', '**42**', 'Job đúng **job role** ứng viên khai', 'Chỉ cùng **job category** → **17** · khác → **0**. Bảng ngay dưới giải thích kỹ'],
+          ['**Địa điểm & job type**', '**20**', 'Đúng tỉnh **và** đúng job type. Job **remote** được đủ 20 dù ở tỉnh nào', 'Đúng tỉnh, khác job type → **14** · khác tỉnh → **0**'],
           ['**Kinh nghiệm**', '**14**', 'Số năm của ứng viên nằm trong dải job yêu cầu, hoặc job ghi *không yêu cầu*', 'Thừa ≤ 2 năm → **10** · thiếu ≤ 1 năm → **7** · thừa > 2 năm → **5** · thiếu > 1 năm → **0**'],
           ['**Lương**', '**12**', 'Lương mong muốn nằm trong dải job trả, hoặc job trả cao hơn', 'Đòi hơn ≤ 10 % → **8** · hơn 10–20 % → **4** · một bên ghi *Thỏa thuận* → **6** · hơn 20 % → **0**'],
           ['**Industry**', '**5**', 'Trùng industry ứng viên khai', 'Cùng ngành cha → **3** · khác → **0**'],
@@ -124,11 +124,10 @@ export const MATCHING_PAGE_DOCS: Record<string, PageDoc> = {
       {
         kind: 'table',
         heading: 'Tiêu chí nghề nghiệp — 42 điểm, chấm theo nấc',
-        note: 'Master data có ba tầng, từ hẹp tới rộng: **job role** là vị trí cụ thể (*Senior Backend Engineer*) · **job group** là nhóm vị trí gần nhau (*Backend*) · **job category** là nhóm nghề lớn (*Lập trình / Phần mềm*). Hệ thống chỉ lấy **nấc cao nhất khớp được**, không cộng dồn các nấc.',
+        note: 'Master data có hai tầng dùng để chấm: **job role** là vị trí cụ thể (*Senior Backend Engineer*) · **job category** là nhóm nghề lớn chứa nó (*Lập trình / Phần mềm*). Hệ thống chỉ lấy **nấc cao nhất khớp được**, không cộng dồn hai nấc.',
         cols: ['Job đang xét khớp với ứng viên ở mức nào', 'Ứng viên TỰ KHAI', 'Hệ thống ĐOÁN RA từ hành vi'],
         rows: [
           ['Đúng **job role**', '**42**', '**34**'],
-          ['Cùng **job group**', '**30**', '**24**'],
           ['Chỉ cùng **job category**', '**17**', '**14**'],
           ['Khác hẳn', '**0**', '**0**'],
         ],
@@ -137,7 +136,7 @@ export const MATCHING_PAGE_DOCS: Record<string, PageDoc> = {
         kind: 'example',
         heading: 'Cùng một job, hai ứng viên — vì sao điểm nghề chênh gấp đôi',
         scenario:
-          'Job đang xét: **Senior Backend Engineer** — job group *Backend*, job category *Lập trình / Phần mềm*.\n\n**An** khai trong Work preference: job category *Lập trình / Phần mềm*. Không khai job role cụ thể nào. Chưa xem, chưa lưu, chưa ứng tuyển job nào.\n\n**Bình** không khai gì về nghề. Nhưng 90 ngày qua đã **lưu 2 job** và **xem 4 job**, tất cả đều là *Senior Backend Engineer*.',
+          'Job đang xét: **Senior Backend Engineer**, thuộc job category *Lập trình / Phần mềm*.\n\n**An** khai trong Work preference: job category *Lập trình / Phần mềm*. Không khai job role cụ thể nào. Chưa xem, chưa lưu, chưa ứng tuyển job nào.\n\n**Bình** không khai gì về nghề. Nhưng 90 ngày qua đã **lưu 2 job** và **xem 4 job**, tất cả đều là *Senior Backend Engineer*.',
         cols: ['', 'An — tự khai job category', 'Bình — chỉ có hành vi'],
         rows: [
           ['Hệ thống biết gì về nghề của họ', 'Job category *Lập trình / Phần mềm*, do An tự gõ vào', 'Job role *Senior Backend Engineer*, đoán ra từ job đã lưu và đã xem'],
