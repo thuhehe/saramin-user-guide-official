@@ -199,16 +199,17 @@ export const MATCHING_PAGE_DOCS: Record<string, PageDoc> = {
         kind: 'example',
         heading: 'Ứng viên đổi job role từ HR sang Thiết kế mà danh sách gần như không đổi',
         scenario:
-          'Khách mở Work preference, đổi job role từ **HR** sang **Thiết kế**, lưu lại, rồi mở dashboard — vẫn thấy ba job IT như trước khi sửa, và kết luận là hệ thống không cập nhật. Thực tế có **hai** nguyên nhân chồng lên nhau, cả hai đều đúng thiết kế.',
+          'Khách mở Work preference, đổi job role từ **HR** sang **Thiết kế**, lưu lại, rồi mở dashboard — vẫn thấy ba job IT như trước khi sửa, và kết luận là hệ thống không cập nhật. Hệ thống **có** nhận ngành mới ngay lúc bấm lưu. Job IT còn ở đó vì một lý do khác hẳn, và nó nằm ở **bước chấm điểm**.',
         cols: ['Điều khách nhìn thấy', 'Điều thực sự xảy ra'],
         rows: [
-          ['Sửa xong, danh sách vẫn y như cũ', 'Danh sách **có** được tính lại — nó không lưu sẵn ở đâu. Nhưng cả lần trước lẫn lần sau đều rơi vào **cùng một nhóm job lấp chỗ trống**, nên nhìn thì giống hệt'],
-          ['“Vậy hệ thống không nhận ngành mới?”', 'Job **HR** và **Thiết kế** đang còn hạn rất ít. Lọc xong dưới 6 job → **bỏ điều kiện tỉnh**; vẫn dưới 6 → **bỏ luôn điều kiện job category**, lấy job toàn hệ thống. Phần lớn job đang tuyển là IT, nên chỗ trống được lấp bằng job IT'],
-          ['“Sao ra job IT, tôi có chọn IT đâu?”', 'Tài khoản này đã **ứng tuyển 8 job** và **lưu 13 job**, phần lớn là IT. Hành vi đó đưa job category IT vào tập lọc, và job IT đoán ra từ hành vi được **34 điểm** — cao hơn job Thiết kế chỉ cùng job category (**17 điểm**) — nên nó đứng trên'],
+          ['Sửa xong, danh sách vẫn y như cũ', 'Danh sách **có** được tính lại — nó không lưu sẵn ở đâu. Nhưng tập job đem ra chấm gần như không đổi, vì **hành vi 90 ngày vẫn còn nguyên** sau khi sửa Work preference, nên kết quả nhìn giống hệt'],
+          ['“Vậy hệ thống không nhận ngành mới?”', '**Có nhận — nhưng nhận THÊM, chứ không thay thế.** Tập lọc là job category khách khai **cộng** job category học được từ hành vi. Tài khoản này đã ứng tuyển và lưu hàng chục job IT, nên IT nằm trong tập lọc bên cạnh Thiết kế. Job IT vào danh sách hoàn toàn hợp lệ'],
+          ['“Sao job IT lại đứng TRÊN job Thiết kế?”', 'Job IT khớp **đúng job role** đoán ra từ hành vi → **34 điểm**. Job Thiết kế chỉ **cùng job category** với vị trí khách vừa khai → **17 điểm**. 34 hơn 17, nên job IT lên trước'],
+          ['“Ngành Thiết kế đang có hơn 30 job mà?”', 'Đúng, và chính vì thế **luật nới điều kiện không hề chạy ở ca này**. Luật đó chỉ kích hoạt khi lọc xong còn **dưới 6 job**; ở đây pool vượt 6 từ lâu nên job category không bị bỏ. Nguyên nhân nằm ở **điểm**, không phải ở bước lọc'],
           ['Chỉ thấy có 3 job', 'Dải trên dashboard lấy **6 job**, carousel hiện **3 thẻ** một lúc. Bấm mũi tên sẽ thấy ba job còn lại'],
         ],
         note:
-          '**Cách kiểm chứng nhanh.** Mở bằng một tài khoản mới — chưa ứng tuyển, chưa lưu, chưa xem job nào. Tài khoản đó không có hành vi nào để đọc, nên chỉ còn luật nới điều kiện. Nếu danh sách vẫn ra job ngoài ngành, thì đúng là do ngành đó ít job đang tuyển, chứ không phải hệ thống không cập nhật.',
+          '**Chỗ cần kiểm đầu tiên khi gặp lại ca này: trong số job của ngành mới, có job nào mang đúng job role khách đã chọn không?** Job khớp đúng job role ứng viên **tự khai** được **42 điểm** — hơn cả 34 điểm của hành vi, nên nó sẽ lên đầu. Nếu không job nào mang đúng job role đó, mọi job ngành mới chỉ được **17 điểm** và luôn thua job đoán ra từ hành vi.\n\n**Cách khách tự xử lý:** vào Work preference chọn thêm **job role cụ thể** (tối đa 5), đừng chỉ chọn nhóm ngành. Hành vi cũ cũng tự hết hiệu lực sau **90 ngày**.',
       },
 
       /* ───────────────────────────────────────────────────────────────── */
