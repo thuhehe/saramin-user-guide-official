@@ -51,7 +51,7 @@ export const MATCHING_PAGE_DOCS: Record<string, PageDoc> = {
         kind: 'shot',
         src: '/shots/matching/recommended-profile.jpg',
         where: 'Jobseeker site',
-        caption: 'Trang cá nhân của ứng viên đã đăng nhập. Khối **Việc làm phù hợp với bạn** trong khung đỏ là một chỗ hiện kết quả của trang này — mục 4 liệt kê đủ các chỗ còn lại.',
+        caption: 'Trang cá nhân của ứng viên đã đăng nhập. Khối **Việc làm phù hợp với bạn** trong khung đỏ là một chỗ hiện kết quả của trang này — mục 5 liệt kê đủ các chỗ còn lại.',
         note: 'Ảnh môi trường dev ngày 25/11/2026. Tên tài khoản thử đã được thay bằng *Nguyễn Văn A*.',
       },
 
@@ -140,7 +140,48 @@ export const MATCHING_PAGE_DOCS: Record<string, PageDoc> = {
       },
 
       /* ───────────────────────────────────────────────────────────────── */
-      { kind: 'h', text: '4. Gợi ý hiện ra ở đâu' },
+      { kind: 'h', text: '4. Hành vi 90 ngày — thứ ứng viên không khai mà hệ thống vẫn đọc' },
+      {
+        kind: 'p',
+        text: 'Ngoài những gì ứng viên tự khai, hệ thống còn đọc **việc họ đã làm trên site trong 90 ngày gần nhất**. Đây là phần khách hàng thắc mắc nhiều nhất, vì nó giải thích những job *“ở đâu ra”* trong danh sách.',
+      },
+      {
+        kind: 'table',
+        note: 'Mỗi job chỉ tính một lần, dù mở bao nhiêu lần. Hệ thống giữ lại **3 job role · 3 job category · 3 tỉnh** hay gặp nhất.',
+        cols: ['Ứng viên làm gì', 'Đủ khi', 'Hệ thống lấy gì từ job đó'],
+        rows: [
+          ['**Ứng tuyển**', '1 job', 'job role · job category · tỉnh'],
+          ['**Lưu job**', '1 job', 'như trên'],
+          ['**Mở xem**', '3 job khác nhau', 'như trên'],
+        ],
+      },
+      {
+        kind: 'list',
+        heading: 'Hành vi được dùng ở hai chỗ, và chỉ hai chỗ',
+        items: [
+          '**Ở bước lọc.** Job category và tỉnh học được từ hành vi được **cộng thêm** vào tập lọc — nên job ngoài ngành ứng viên khai vẫn có thể vào danh sách một cách hợp lệ.',
+          '**Ở bước chấm điểm.** Giá trị đoán ra từ hành vi ăn **80 %** điểm: job khớp job role **đoán ra** được **34**, trong khi job chỉ cùng job category được **17**. Nghĩa là một job ngành khác mà ứng viên hay xem **có thể xếp trên** một job đúng ngành họ vừa khai.',
+          '**Hành vi không bao giờ là điểm thưởng**, và không thay thế những gì ứng viên tự khai — hai nguồn chạy song song.',
+        ],
+      },
+      {
+        kind: 'example',
+        heading: 'Ứng viên đổi job role từ HR sang Thiết kế mà danh sách gần như không đổi',
+        scenario:
+          'Khách mở Work preference, đổi job role từ **HR** sang **Thiết kế**, lưu lại, rồi mở dashboard — vẫn thấy ba job IT như trước khi sửa, và kết luận là hệ thống không cập nhật. Thực tế có **hai** nguyên nhân chồng lên nhau, cả hai đều đúng thiết kế.',
+        cols: ['Điều khách nhìn thấy', 'Điều thực sự xảy ra'],
+        rows: [
+          ['Sửa xong, danh sách vẫn y như cũ', 'Danh sách **có** được tính lại — nó không lưu sẵn ở đâu. Nhưng cả lần trước lẫn lần sau đều rơi vào **cùng một nhóm job lấp chỗ trống**, nên nhìn thì giống hệt'],
+          ['“Vậy hệ thống không nhận ngành mới?”', 'Job **HR** và **Thiết kế** đang còn hạn rất ít. Lọc xong dưới 6 job → **bỏ điều kiện tỉnh**; vẫn dưới 6 → **bỏ luôn điều kiện job category**, lấy job toàn hệ thống. Phần lớn job đang tuyển là IT, nên chỗ trống được lấp bằng job IT'],
+          ['“Sao ra job IT, tôi có chọn IT đâu?”', 'Tài khoản này đã **ứng tuyển 8 job** và **lưu 13 job**, phần lớn là IT. Hành vi đó đưa job category IT vào tập lọc, và job IT đoán ra từ hành vi được **34 điểm** — cao hơn job Thiết kế chỉ cùng job category (**17 điểm**) — nên nó đứng trên'],
+          ['Chỉ thấy có 3 job', 'Dải trên dashboard lấy **6 job**, carousel hiện **3 thẻ** một lúc. Bấm mũi tên sẽ thấy ba job còn lại'],
+        ],
+        note:
+          '**Cách kiểm chứng nhanh.** Mở bằng một tài khoản mới — chưa ứng tuyển, chưa lưu, chưa xem job nào. Tài khoản đó không có hành vi nào để đọc, nên chỉ còn luật nới điều kiện. Nếu danh sách vẫn ra job ngoài ngành, thì đúng là do ngành đó ít job đang tuyển, chứ không phải hệ thống không cập nhật.',
+      },
+
+      /* ───────────────────────────────────────────────────────────────── */
+      { kind: 'h', text: '5. Gợi ý hiện ra ở đâu' },
       {
         kind: 'table',
         note: 'Cùng một phép tính, chỉ khác số thẻ và cách sắp. Ứng viên **không bao giờ** thấy điểm, % phù hợp hay lý do khớp trên thẻ.',
@@ -164,7 +205,7 @@ export const MATCHING_PAGE_DOCS: Record<string, PageDoc> = {
       },
 
       /* ───────────────────────────────────────────────────────────────── */
-      { kind: 'h', text: '5. Một ví dụ' },
+      { kind: 'h', text: '6. Một ví dụ' },
       {
         kind: 'example',
         heading: 'Linh và ba job',
