@@ -624,6 +624,17 @@
  },
  {
   "group": "Job display logic",
+  "key": "main-search",
+  "label": "Main search",
+  "path": "/tim-kiem",
+  "perm": "",
+  "flag": "",
+  "site": "Jobseeker site",
+  "what": "Danh sách *Kết quả tìm kiếm* ngay dưới Top search: job nào vào danh sách, xếp theo gì khi có từ khoá, có bộ lọc và khi không gõ gì.",
+  "sub": []
+ },
+ {
+  "group": "Job display logic",
   "key": "home-job-bands",
   "label": "Dải job trang chủ · Korea · Global",
   "path": "/",

@@ -12,7 +12,21 @@
  * second file once, the copy silently lacked the italic pass, and that page
  * printed its asterisks — one owner is the fix.
  */
+/* `[label](https://…)` — an external link, e.g. the one Admin screen a guide
+   page sends the reader to. Absolute http(s) URLs only; opens in a new tab. */
+const LINK_SPLIT = /(\[[^\]\n]+\]\(https?:\/\/[^)\s]+\))/
+const LINK_ONE = /^\[([^\]\n]+)\]\((https?:\/\/[^)\s]+)\)$/
+
 function mdItalic(s: string, k: number) {
+  return s.split(LINK_SPLIT).flatMap((seg, n) => {
+    const m = LINK_ONE.exec(seg)
+    return m
+      ? [<a key={`${k}-l${n}`} href={m[2]} target="_blank" rel="noreferrer" className="text-brand underline underline-offset-2 hover:opacity-80">{m[1]}</a>]
+      : mdItalicOnly(seg, k * 100 + n)
+  })
+}
+
+function mdItalicOnly(s: string, k: number) {
   return s.split(/(\*[^*\n]+\*)/g).map((p, j) =>
     p.startsWith('*') && p.endsWith('*') && p.length > 2
       ? <i key={`${k}-${j}`} className="not-italic font-medium text-ink/90">{p.slice(1, -1)}</i>
