@@ -48,10 +48,6 @@ export const MATCHING_PAGE_DOCS: Record<string, PageDoc> = {
         text: 'Hệ thống gợi ý việc làm làm ba việc, theo đúng thứ tự: chọn ra nhóm job để xét, chấm điểm từng job, rồi hiện ra những job điểm cao nhất. Trang này đi qua ba bước đó.',
       },
       {
-        kind: 'warn',
-        text: '**Trang này mô tả luật đã chốt ngày 28/11/2026, áp dụng từ bản cập nhật sắp tới.** Hai điểm khác bản đang chạy: luật *một công ty tối đa 3 job* nay **lấp bù** bằng job điểm thấp hơn thay vì chỉ bỏ bớt, và trang chi tiết job hiện **10 thẻ** thay vì 6. Mở site hôm nay mà thấy dải ngắn hơn thì đó là bản cũ, không phải lỗi dữ liệu.',
-      },
-      {
         kind: 'shot',
         src: '/shots/matching/recommended-profile.jpg',
         where: 'Jobseeker site',
