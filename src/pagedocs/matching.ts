@@ -48,6 +48,10 @@ export const MATCHING_PAGE_DOCS: Record<string, PageDoc> = {
         text: 'Hệ thống gợi ý việc làm làm ba việc, theo đúng thứ tự: chọn ra nhóm job để xét, chấm điểm từng job, rồi hiện ra những job điểm cao nhất. Trang này đi qua ba bước đó.',
       },
       {
+        kind: 'warn',
+        text: '**Trang này mô tả luật đã chốt ngày 28/11/2026, áp dụng từ bản cập nhật sắp tới.** Hai điểm khác bản đang chạy: luật *một công ty tối đa 3 job* nay **lấp bù** bằng job điểm thấp hơn thay vì chỉ bỏ bớt, và trang chi tiết job hiện **10 thẻ** thay vì 6. Mở site hôm nay mà thấy dải ngắn hơn thì đó là bản cũ, không phải lỗi dữ liệu.',
+      },
+      {
         kind: 'shot',
         src: '/shots/matching/recommended-profile.jpg',
         where: 'Jobseeker site',
@@ -91,7 +95,7 @@ export const MATCHING_PAGE_DOCS: Record<string, PageDoc> = {
         kind: 'list',
         heading: 'Ba luật còn lại của bước lọc',
         items: [
-          '**Lọc xong còn dưới 6 job thì nới theo hai bước.** Bỏ điều kiện tỉnh, chạy lại; vẫn dưới 6 thì bỏ cả điều kiện job category. Riêng **trang chi tiết job không bao giờ nới** — dưới 6 job thì ẩn hẳn phần gợi ý.',
+          '**Lọc xong còn dưới 6 job thì nới theo hai bước.** Bỏ điều kiện tỉnh, chạy lại; vẫn dưới 6 thì bỏ cả điều kiện job category. Riêng **trang chi tiết job không bao giờ nới** — ở đó rổ ít job thì dải cứ ngắn, và **chỉ ẩn hẳn khi không còn job nào**.',
           '**Job trùng nhau chỉ tính một.** Cùng công ty, cùng tiêu đề, cùng tỉnh là một tin đăng hai lần — giữ job mới đăng nhất.',
           '**Còn hơn 500 job thì chỉ 500 job được chấm.** Ưu tiên job trùng job role ứng viên quan tâm, sau đó job mới đăng.',
         ],
@@ -163,27 +167,28 @@ export const MATCHING_PAGE_DOCS: Record<string, PageDoc> = {
       {
         kind: 'list',
         items: [
-          'Giữ **30 job điểm cao nhất**.',
-          '**Một công ty được tối đa 3 job trong một danh sách gợi ý.** Hệ thống đi từ job điểm cao nhất xuống dưới; khi gặp job thứ 4 của một công ty đã có đủ 3 job, nó **bỏ job đó ra khỏi danh sách**. Luật có để một nhà tuyển dụng đang đăng hàng trăm tin không chiếm hết dải gợi ý của ứng viên. Con số 3 là **10% của rổ 30 job**.',
-          '**Luật này chỉ bỏ bớt, không lấy job khác vào thay.** Nó chạy *sau* khi 30 job đã được chọn, nên job xếp thứ 31 — dù điểm chỉ kém một chút — không được gọi lên lấp chỗ trống. Rổ càng tập trung vào một công ty thì dải gợi ý càng ngắn. Đây là lý do thường gặp nhất khiến dải hiện ít thẻ hơn số chỗ nó có; bảng ngay dưới đếm từng bước.',
-          '**Hai job cùng công ty phải cách nhau ít nhất 6 vị trí** — đây là luật riêng, không phải luật trên. Nên dải 6 thẻ gần như không bao giờ có hai job cùng công ty. Chỉ khi không còn công ty nào khác để lấp, hệ thống mới chấp nhận lặp: bỏ trống một ô sẽ đẩy lùi mọi thẻ phía sau.',
-          '**Hai luật công ty trên áp ở onboarding, trang cá nhân và trang chi tiết job.** **Popup sau khi nộp đơn không áp luật “tối đa 3 job”** — ở đó ứng viên gặp nhiều job của cùng một nhà tuyển dụng là có ích. Popup chỉ có luật nhẹ hơn: không để hai job cùng công ty đứng liền nhau.',
+          '**Dựng rổ 30 job trong một lượt đi duy nhất.** Đi từ job điểm cao nhất xuống dưới, nhận job nào **không trùng** job đã nhận **và** công ty của nó **chưa đủ 3 job**. Dừng khi rổ đủ **30 job**, hoặc khi hết job để lấy.',
+          '**Một công ty được tối đa 3 job trong rổ.** Gặp job thứ 4 của một công ty đã đủ 3 thì bỏ qua job đó và **đi tiếp xuống dưới lấy job của công ty khác vào thay** — kể cả job điểm thấp hơn. Nên rổ vẫn đủ 30 job chừng nào còn job để lấy. Luật có để một nhà tuyển dụng đang đăng hàng trăm tin không chiếm hết dải gợi ý của ứng viên; con số 3 là **10% của rổ 30 job**.',
+          '**Job trùng nhau cũng được lấp bù y như vậy** — cùng công ty, cùng tiêu đề, cùng tỉnh là một tin đăng hai lần, giữ bản mới đăng nhất, và chỗ còn lại được job khác lấp vào.',
+          '**Hệ quả quan trọng: rổ 30 job luôn gồm ít nhất 10 công ty khác nhau** (30 chia cho 3). Đây chính là thứ làm cho dải 10 thẻ ở trang chi tiết job luôn đầy — có đủ công ty để mỗi chỗ lấy một job mà không phạm luật khoảng cách dưới đây.',
+          '**Hai job cùng công ty phải cách nhau ít nhất 6 vị trí** — đây là luật riêng, không phải luật trên. Nên dải 6 thẻ không bao giờ có hai job cùng công ty. Chỉ khi không còn công ty nào khác để lấp, hệ thống mới chấp nhận lặp: bỏ trống một ô sẽ đẩy lùi mọi thẻ phía sau.',
+          '**Cả hai luật công ty áp ở cả bốn chỗ hiện gợi ý**, kể cả popup sau khi nộp đơn.',
           '**Ở những màn có xáo trộn, job đúng job role ứng viên khai luôn đứng trước** job chỉ cùng job category — dù job kia hơn điểm lương hay địa điểm. Xáo trộn chỉ diễn ra **bên trong từng nấc** ấy. Đây là phép sắp xếp, không loại job nào.',
           '**Thứ tự ổn định trong ngày.** Thứ tự được gieo theo ứng viên + ngày + màn hình, nên ba màn hình không bao giờ ra cùng một bộ thẻ, tải lại trang không đổi, và sang hôm sau mới đảo bộ khác. Danh sách thì vẫn tính lại mỗi lần mở trang — chỉ **thứ tự** là gieo cố định, không phải nội dung.',
-          '**Không có sàn và không lấp đầy.** Rổ còn bao nhiêu job thì hiện bấy nhiêu thẻ — hệ thống không hạ tiêu chuẩn, không mượn job ngoài rổ, và không để lại ô trống. Dải ít thẻ nghĩa là rổ ít job, không phải lỗi hiển thị.',
+          '**Không có sàn điểm, và không mượn job ngoài bộ lọc.** Việc lấp bù chỉ lấy job đã lọt qua bộ lọc và đã được chấm điểm — hệ thống không hạ tiêu chuẩn để cho đủ thẻ. Nên dải vẫn có thể ngắn, nhưng chỉ khi **chính bộ lọc không đẻ ra đủ công ty**: cần ít nhất 4 công ty khác nhau mới đủ job cho 10 thẻ. Ở tỉnh chỉ có hai ba nhà tuyển dụng đang đăng tin thì đó là chuyện bình thường, không phải lỗi hiển thị.',
         ],
       },
       {
         kind: 'example',
-        heading: 'Vì sao một dải 6 thẻ có khi chỉ hiện 5',
+        heading: 'Khi một nhà tuyển dụng chiếm gần hết danh sách điểm cao',
         scenario:
-          'Ứng viên khai nghề *Chuyên viên tư vấn tài chính*. Lọc và chấm điểm xong, **30 job điểm cao nhất** gồm: **28 job của Ngân hàng A** — ngân hàng này đang đăng cùng một vị trí cho rất nhiều chi nhánh, nên job nào cũng khớp hồ sơ và điểm đều cao — cộng **1 job của công ty B** và **1 job của công ty C**.',
-        cols: ['Hệ thống làm gì', 'Còn lại bao nhiêu job'],
+          'Ứng viên khai nghề *Chuyên viên tư vấn tài chính*. Chấm điểm xong, **28 trong 30 job điểm cao nhất là của Ngân hàng A** — ngân hàng này đang đăng cùng một vị trí cho rất nhiều chi nhánh, nên job nào cũng khớp hồ sơ và điểm đều cao. Dưới nữa trong danh sách đã chấm còn job của nhiều công ty khác, điểm thấp hơn.',
+        cols: ['Hệ thống làm gì', 'Rổ có gì'],
         rows: [
-          ['Giữ 30 job điểm cao nhất', '**30 job** — 28 của A, 1 của B, 1 của C'],
-          ['Áp luật *một công ty tối đa 3 job*: giữ 3 job đầu của A, **bỏ 25 job còn lại của A**', '**5 job** — 3 của A, 1 của B, 1 của C'],
-          ['Job xếp thứ 31 trở đi **không** được gọi lên bù', '**vẫn 5 job**'],
-          ['Dải trên màn hình có 6 chỗ', '**hiện 5 thẻ**'],
+          ['Đi từ trên xuống, nhận 3 job đầu của Ngân hàng A', '3 job'],
+          ['Gặp job thứ 4 đến job thứ 28 của A → **bỏ qua, đi tiếp xuống dưới**', 'vẫn 3 job'],
+          ['Nhận job của các công ty khác, mỗi công ty tối đa 3, cho tới khi đủ', '**30 job**, ít nhất 10 công ty khác nhau'],
+          ['Dải 10 thẻ ở trang chi tiết job', '**hiện đủ 10 thẻ**'],
         ],
       },
 
@@ -233,14 +238,14 @@ export const MATCHING_PAGE_DOCS: Record<string, PageDoc> = {
       { kind: 'h', text: '5. Gợi ý hiện ra ở đâu' },
       {
         kind: 'table',
-        note: 'Cùng một phép tính, chỉ khác số thẻ và cách sắp. Ứng viên **không bao giờ** thấy điểm, % phù hợp hay lý do khớp trên thẻ.',
+        note: 'Cùng **một rổ 30 job**, chỉ khác số thẻ lấy ra và cách sắp. Ứng viên **không bao giờ** thấy điểm, % phù hợp hay lý do khớp trên thẻ.',
         cols: ['Nơi hiển thị', 'Ai thấy', 'Số thẻ', 'Thứ tự'],
         rows: [
           ['**Onboarding** — *những việc phù hợp nhất*', 'Ứng viên vừa xong wizard', 'tối đa 30, mỗi trang 6 thẻ — nhiều nhất 5 trang', 'Đúng thứ tự điểm'],
           ['**Trang cá nhân** — *Việc làm phù hợp với bạn*', 'Đã đăng nhập', '6, carousel hiện 3 thẻ một lúc', 'Xáo trộn theo ngày, nhưng job đúng job role vẫn lên trước'],
-          ['**Chi tiết job** — *Gợi ý việc làm cho bạn*', 'Đã đăng nhập', '6', 'Như trên, và bỏ hết job đang hiện ở phần *Similar jobs* ngay trên'],
+          ['**Chi tiết job** — *Gợi ý việc làm cho bạn*', 'Đã đăng nhập', '**10**', 'Như trên, và bỏ hết job đang hiện ở phần *Similar jobs* ngay trên. Các job đó bị bỏ **trước khi dựng rổ 30**, nên carousel ở trên không ăn vào rổ'],
           ['**Chi tiết job** — *Có thể bạn quan tâm*', 'Chưa đăng nhập', '6', 'Lấy tiếp dòng 7–12 của *Similar jobs* — không chấm điểm theo người, vì hệ thống chưa biết họ là ai'],
-          ['**Popup sau khi nộp đơn**', 'Người vừa nộp đơn', 'tối đa 30', 'Đúng thứ tự điểm. Không giới hạn số job một công ty — chỉ không để hai job cùng công ty đứng liền nhau'],
+          ['**Popup sau khi nộp đơn**', 'Người vừa nộp đơn', 'tối đa 30', 'Đúng thứ tự điểm. Dùng chung rổ 30 với ba chỗ trên, nên **cũng tối đa 3 job một công ty**'],
           ['**Email gợi ý hằng tuần**', 'Ứng viên chưa tắt công tắc nhận mail', '6', 'Đúng thứ tự điểm, và không gửi lại job đã nằm trong email trước'],
         ],
       },
@@ -250,7 +255,7 @@ export const MATCHING_PAGE_DOCS: Record<string, PageDoc> = {
         src: '/shots/matching/recommended-job-detail.jpg',
         where: 'Jobseeker site',
         caption: 'Cuối trang chi tiết job, khi đã đăng nhập. Khối dưới, tiêu đề **Gợi ý việc làm**, là danh sách theo hồ sơ của người xem — đúng phép tính trang này mô tả. Carousel **Các công việc tương tự** ở trên so job với job, xem trang *Similar jobs*; job nào đã có trong carousel thì không lặp lại ở khối dưới.',
-        note: 'Ảnh môi trường dev ngày 25/11/2026. Dữ liệu thử ít nên khối dưới chỉ còn 2 dòng — đúng luật “không lấp đầy” ở mục 3, không phải lỗi.',
+        note: 'Ảnh môi trường dev ngày 25/11/2026, chụp trên bản cũ nên khối dưới mới có 2 dòng; môi trường thử có rất ít nhà tuyển dụng nên bộ lọc không đẻ ra đủ công ty.',
       },
 
       /* ───────────────────────────────────────────────────────────────── */
